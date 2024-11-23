@@ -11,6 +11,10 @@ const SOUNDS = {
     src: "/mp3/hit-sound-effect-240898.mp3",
     volume: 0.5,
   },
+  select: {
+    src: "/mp3/beepd-86247.mp3",
+    volume: 0.5,
+  },
   collect: {
     src: "/mp3/collect-5930.mp3",
     volume: 0.5,
@@ -53,6 +57,8 @@ export function useSound() {
         volume: config.volume || 1,
       });
     });
+
+    // Start background music
 
     // Cleanup
     return () => {

@@ -1,7 +1,8 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useGameStore } from '../../stores/gameStore';
-import { Quest } from '../../types';
-import { MessageSquare, User, ChevronRight, X } from 'lucide-react';
+import { motion, AnimatePresence } from "framer-motion";
+import { useGameStore } from "../../stores/gameStore";
+import { Quest } from "../../types";
+import { MessageSquare, User, ChevronRight, X } from "lucide-react";
+import { useSound } from "../../hooks/useSound";
 
 interface DialogueModalProps {
   quest: Quest & { thumbnail?: string };
@@ -14,17 +15,21 @@ export function DialogueModal({ quest, dialogueId }: DialogueModalProps) {
   const setActiveDialogue = useGameStore((state) => state.setActiveDialogue);
   const setActiveQuest = useGameStore((state) => state.setActiveQuest);
   const completeQuest = useGameStore((state) => state.completeQuest);
-
+  const { playSound } = useSound();
   const handleChoice = (choiceIndex: number) => {
+    playSound("select");
     const choice = dialogue.choices?.[choiceIndex];
     if (!choice) return;
 
     // Check requirements
     if (choice.requirements) {
       if (
-        (choice.requirements.level && playerStats.level < choice.requirements.level) ||
-        (choice.requirements.energy && playerStats.energy < choice.requirements.energy) ||
-        (choice.requirements.money && playerStats.money < choice.requirements.money)
+        (choice.requirements.level &&
+          playerStats.level < choice.requirements.level) ||
+        (choice.requirements.energy &&
+          playerStats.energy < choice.requirements.energy) ||
+        (choice.requirements.money &&
+          playerStats.money < choice.requirements.money)
       ) {
         return;
       }
@@ -58,12 +63,12 @@ export function DialogueModal({ quest, dialogueId }: DialogueModalProps) {
             animate={{ opacity: 1, scale: 1 }}
             className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500/10 to-blue-700/10 flex items-center justify-center shadow-lg border-4 border-gray-900 overflow-hidden relative group"
           >
-            {dialogue.speaker === 'Player' ? (
+            {dialogue.speaker === "Player" ? (
               <User className="w-12 h-12 text-white" />
             ) : quest.thumbnail ? (
               <>
-                <img 
-                  src={quest.thumbnail} 
+                <img
+                  src={quest.thumbnail}
                   alt={dialogue.speaker}
                   className="w-full h-full object-cover transition-transform group-hover:scale-110"
                 />
@@ -78,7 +83,9 @@ export function DialogueModal({ quest, dialogueId }: DialogueModalProps) {
             animate={{ opacity: 1, x: 0 }}
             className="bg-black/90 backdrop-blur-sm px-4 py-2 rounded-t-xl border-t border-x border-gray-800/50 flex items-center justify-between gap-4"
           >
-            <h3 className="text-lg font-bold text-blue-400">{dialogue.speaker}</h3>
+            <h3 className="text-lg font-bold text-blue-400">
+              {dialogue.speaker}
+            </h3>
             <button
               onClick={handleClose}
               className="p-1.5 rounded-lg hover:bg-gray-800/50 transition-colors group"
@@ -96,35 +103,40 @@ export function DialogueModal({ quest, dialogueId }: DialogueModalProps) {
         >
           {/* Dialogue Text */}
           <div className="mb-6">
-            <p className="text-lg text-gray-100 leading-relaxed">{dialogue.text}</p>
+            <p className="text-lg text-gray-100 leading-relaxed">
+              {dialogue.text}
+            </p>
           </div>
 
           {/* Choices */}
           {dialogue.choices && (
             <div className="space-y-2">
               {dialogue.choices.map((choice, index) => {
-                const isDisabled = choice.requirements && (
-                  (choice.requirements.level && playerStats.level < choice.requirements.level) ||
-                  (choice.requirements.energy && playerStats.energy < choice.requirements.energy) ||
-                  (choice.requirements.money && playerStats.money < choice.requirements.money)
-                );
+                const isDisabled =
+                  choice.requirements &&
+                  ((choice.requirements.level &&
+                    playerStats.level < choice.requirements.level) ||
+                    (choice.requirements.energy &&
+                      playerStats.energy < choice.requirements.energy) ||
+                    (choice.requirements.money &&
+                      playerStats.money < choice.requirements.money));
 
                 return (
                   <motion.button
                     key={index}
                     initial={{ opacity: 0, x: -20 }}
-                    animate={{ 
-                      opacity: 1, 
+                    animate={{
+                      opacity: 1,
                       x: 0,
-                      transition: { delay: index * 0.1 } 
+                      transition: { delay: index * 0.1 },
                     }}
                     whileHover={!isDisabled ? { x: 10 } : {}}
                     onClick={() => handleChoice(index)}
                     disabled={isDisabled}
                     className={`w-full p-4 rounded-xl text-left transition-all flex items-center justify-between group ${
                       isDisabled
-                        ? 'bg-gray-800/30 text-gray-500 cursor-not-allowed'
-                        : 'bg-gray-800/50 hover:bg-blue-900/50 text-gray-100 hover:border-blue-500/30'
+                        ? "bg-gray-800/30 text-gray-500 cursor-not-allowed"
+                        : "bg-gray-800/50 hover:bg-blue-900/50 text-gray-100 hover:border-blue-500/30"
                     } border border-transparent`}
                   >
                     <div className="flex items-center gap-3">
@@ -132,17 +144,35 @@ export function DialogueModal({ quest, dialogueId }: DialogueModalProps) {
                       {choice.requirements && (
                         <div className="text-sm space-x-3">
                           {choice.requirements.level && (
-                            <span className={playerStats.level >= choice.requirements.level ? 'text-green-400' : 'text-red-400'}>
+                            <span
+                              className={
+                                playerStats.level >= choice.requirements.level
+                                  ? "text-green-400"
+                                  : "text-red-400"
+                              }
+                            >
                               Level {choice.requirements.level}
                             </span>
                           )}
                           {choice.requirements.energy && (
-                            <span className={playerStats.energy >= choice.requirements.energy ? 'text-green-400' : 'text-red-400'}>
+                            <span
+                              className={
+                                playerStats.energy >= choice.requirements.energy
+                                  ? "text-green-400"
+                                  : "text-red-400"
+                              }
+                            >
                               Energy {choice.requirements.energy}
                             </span>
                           )}
                           {choice.requirements.money && (
-                            <span className={playerStats.money >= choice.requirements.money ? 'text-green-400' : 'text-red-400'}>
+                            <span
+                              className={
+                                playerStats.money >= choice.requirements.money
+                                  ? "text-green-400"
+                                  : "text-red-400"
+                              }
+                            >
                               ${choice.requirements.money}
                             </span>
                           )}

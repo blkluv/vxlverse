@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Dialogue, DialogueChoice, Quest } from '../../types';
-import { Plus, Trash2, MessageSquare, ArrowRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from "react";
+import { Dialogue, DialogueChoice, Quest } from "../../types";
+import { Plus, Trash2, MessageSquare, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface DialogueEditorProps {
   quest: Quest;
@@ -14,18 +14,18 @@ export function DialogueEditor({ quest, onChange }: DialogueEditorProps) {
   const addDialogue = () => {
     const newDialogue: Dialogue = {
       id: quest.dialogues.length,
-      speaker: 'NPC',
-      text: 'New dialogue text',
+      speaker: "NPC",
+      text: "New dialogue text",
       choices: [
         {
-          text: 'Continue',
-          nextDialogue: quest.dialogues.length + 1
-        }
-      ]
+          text: "Continue",
+          nextDialogue: quest.dialogues.length + 1,
+        },
+      ],
     };
 
     onChange({
-      dialogues: [...quest.dialogues, newDialogue]
+      dialogues: [...quest.dialogues, newDialogue],
     });
   };
 
@@ -43,27 +43,33 @@ export function DialogueEditor({ quest, onChange }: DialogueEditorProps) {
   const addChoice = (dialogueIndex: number) => {
     const dialogue = quest.dialogues[dialogueIndex];
     const newChoice: DialogueChoice = {
-      text: 'New choice',
-      nextDialogue: dialogueIndex + 1
+      text: "New choice",
+      nextDialogue: dialogueIndex + 1,
     };
 
     updateDialogue(dialogueIndex, {
-      choices: [...(dialogue.choices || []), newChoice]
+      choices: [...(dialogue.choices || []), newChoice],
     });
   };
 
-  const updateChoice = (dialogueIndex: number, choiceIndex: number, updates: Partial<DialogueChoice>) => {
+  const updateChoice = (
+    dialogueIndex: number,
+    choiceIndex: number,
+    updates: Partial<DialogueChoice>
+  ) => {
     const dialogue = quest.dialogues[dialogueIndex];
     const newChoices = [...(dialogue.choices || [])];
     newChoices[choiceIndex] = { ...newChoices[choiceIndex], ...updates };
-    
+
     updateDialogue(dialogueIndex, { choices: newChoices });
   };
 
   const removeChoice = (dialogueIndex: number, choiceIndex: number) => {
     const dialogue = quest.dialogues[dialogueIndex];
-    const newChoices = (dialogue.choices || []).filter((_, i) => i !== choiceIndex);
-    
+    const newChoices = (dialogue.choices || []).filter(
+      (_, i) => i !== choiceIndex
+    );
+
     updateDialogue(dialogueIndex, { choices: newChoices });
   };
 
@@ -77,7 +83,9 @@ export function DialogueEditor({ quest, onChange }: DialogueEditorProps) {
         >
           <div
             className="p-3 cursor-pointer hover:bg-slate-700/30 transition-colors"
-            onClick={() => setExpandedDialogue(expandedDialogue === index ? null : index)}
+            onClick={() =>
+              setExpandedDialogue(expandedDialogue === index ? null : index)
+            }
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -102,26 +110,34 @@ export function DialogueEditor({ quest, onChange }: DialogueEditorProps) {
             {expandedDialogue === index && (
               <motion.div
                 initial={{ height: 0 }}
-                animate={{ height: 'auto' }}
+                animate={{ height: "auto" }}
                 exit={{ height: 0 }}
                 className="overflow-hidden border-t border-slate-700/30"
               >
                 <div className="p-3 space-y-4">
                   <div className="space-y-2">
-                    <label className="text-xs font-medium text-slate-400">Speaker</label>
+                    <label className="text-xs font-medium text-slate-400">
+                      Speaker
+                    </label>
                     <input
                       type="text"
                       value={dialogue.speaker}
-                      onChange={(e) => updateDialogue(index, { speaker: e.target.value })}
+                      onChange={(e) =>
+                        updateDialogue(index, { speaker: e.target.value })
+                      }
                       className="w-full px-3 py-2 bg-slate-800/50 border border-slate-600/50 rounded-lg text-sm"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-xs font-medium text-slate-400">Dialogue Text</label>
+                    <label className="text-xs font-medium text-slate-400">
+                      Dialogue Text
+                    </label>
                     <textarea
                       value={dialogue.text}
-                      onChange={(e) => updateDialogue(index, { text: e.target.value })}
+                      onChange={(e) =>
+                        updateDialogue(index, { text: e.target.value })
+                      }
                       rows={3}
                       className="w-full px-3 py-2 bg-slate-800/50 border border-slate-600/50 rounded-lg text-sm resize-none"
                     />
@@ -129,7 +145,9 @@ export function DialogueEditor({ quest, onChange }: DialogueEditorProps) {
 
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs font-medium text-slate-400">Choices</label>
+                      <label className="text-xs font-medium text-slate-400">
+                        Choices
+                      </label>
                       <button
                         onClick={() => addChoice(index)}
                         className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
@@ -149,7 +167,11 @@ export function DialogueEditor({ quest, onChange }: DialogueEditorProps) {
                             <input
                               type="text"
                               value={choice.text}
-                              onChange={(e) => updateChoice(index, choiceIndex, { text: e.target.value })}
+                              onChange={(e) =>
+                                updateChoice(index, choiceIndex, {
+                                  text: e.target.value,
+                                })
+                              }
                               className="w-full px-2 py-1 bg-slate-800/50 border border-slate-600/50 rounded text-sm"
                               placeholder="Choice text"
                             />
@@ -158,7 +180,11 @@ export function DialogueEditor({ quest, onChange }: DialogueEditorProps) {
                               <input
                                 type="number"
                                 value={choice.nextDialogue}
-                                onChange={(e) => updateChoice(index, choiceIndex, { nextDialogue: parseInt(e.target.value) })}
+                                onChange={(e) =>
+                                  updateChoice(index, choiceIndex, {
+                                    nextDialogue: parseInt(e.target.value),
+                                  })
+                                }
                                 className="w-20 px-2 ml-auto py-1 bg-slate-800/50 border border-slate-600/50 rounded text-sm"
                                 placeholder="Next"
                               />

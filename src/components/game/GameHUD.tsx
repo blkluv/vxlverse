@@ -18,17 +18,17 @@ export function GameHUD() {
   const { playSound } = useSound();
 
   const handleInventoryClick = () => {
-    playSound("collect");
+    playSound("select");
     setInventoryOpen(true);
   };
 
   const handleQuestLogClick = () => {
-    playSound("collect");
+    playSound("select");
     setQuestLogOpen(true);
   };
 
   const handleMapClick = () => {
-    playSound("collect");
+    playSound("select");
     setMapOpen(true);
   };
 

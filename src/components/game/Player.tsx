@@ -33,7 +33,7 @@ const keyboardMap = [
 export function Player() {
   return (
     <KeyboardControls map={keyboardMap}>
-      <Ecctrl animated mode="FixedCamera">
+      <Ecctrl animated>
         <EcctrlAnimation
           characterURL={"/player.glb"} // Must have property
           animationSet={animationSet} // Must have property
