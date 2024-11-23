@@ -34,6 +34,7 @@ export function GameObject({
 }: GameObjectProps) {
   const { scene } = useGLTF(modelUrl);
   const setActiveQuest = useGameStore((state) => state.setActiveQuest);
+  const questLog = useGameStore((state) => state.questLog);
   const setActiveDialogue = useGameStore((state) => state.setActiveDialogue);
   const { playSound } = useSound();
   const clonedScene = scene.clone(true);
@@ -44,7 +45,9 @@ export function GameObject({
     e.stopPropagation();
 
     if (isGameMode && quests?.[0]) {
+      if (questLog?.active?.find((quest) => quest.id === quests[0].id)) return;
       playSound("npcGreeting");
+      playSound("questAccept");
       setActiveQuest({ ...quests[0], thumbnail });
       setActiveDialogue(0);
     } else if (!isGameMode && onClick) {
