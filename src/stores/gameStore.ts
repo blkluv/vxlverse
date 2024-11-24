@@ -37,6 +37,7 @@ interface GameState {
   questGiverOpen: boolean;
   travelMasterOpen: boolean;
   mapOpen: boolean;
+  showLevelUp: boolean;
 
   // Actions
   setCurrentSceneId: (id: string) => void;
@@ -52,6 +53,7 @@ interface GameState {
   getItemCount: (itemId: string) => number;
 
   // UI Actions
+  setShowLevelUp: (show: boolean) => void;
   setInventoryOpen: (open: boolean) => void;
   setQuestLogOpen: (open: boolean) => void;
   setMerchantOpen: (open: boolean) => void;
@@ -87,6 +89,7 @@ export const useGameStore = create<GameState>()(
       },
 
       // UI State
+      showLevelUp: false,
       inventoryOpen: false,
       questLogOpen: false,
       merchantOpen: false,
@@ -249,6 +252,7 @@ export const useGameStore = create<GameState>()(
       },
 
       // UI Actions
+      setShowLevelUp: (show) => set({ showLevelUp: show }),
       setInventoryOpen: (open) => set({ inventoryOpen: open }),
       setQuestLogOpen: (open) => set({ questLogOpen: open }),
       setMerchantOpen: (open) => set({ merchantOpen: open }),

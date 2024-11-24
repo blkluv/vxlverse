@@ -45,35 +45,6 @@ export const useEnemyStore = create<EnemyState>()(
       let attempts = 0;
       const maxAttempts = 10;
 
-      do {
-        const angle = Math.random() * Math.PI * 2;
-        const radius = SPAWN_RADIUS * Math.sqrt(Math.random()); // Better distribution
-        position = {
-          x: Math.cos(angle) * radius,
-          y: 0,
-          z: Math.sin(angle) * radius,
-        };
-
-        // Check distance from all NPCs
-        const isFarEnough = npcPositions.every((npc) => {
-          const dx = npc.x - position.x;
-          const dz = npc.z - position.z;
-          const distance = Math.sqrt(dx * dx + dz * dz);
-          return distance > MIN_DISTANCE_FROM_NPC;
-        });
-
-        // Also check distance from other enemies
-        const isFarFromEnemies = enemies.every((enemy) => {
-          const dx = enemy.position.x - position.x;
-          const dz = enemy.position.z - position.z;
-          const distance = Math.sqrt(dx * dx + dz * dz);
-          return distance > 5; // Minimum distance between enemies
-        });
-
-        if (isFarEnough && isFarFromEnemies) break;
-        attempts++;
-      } while (attempts < maxAttempts);
-
       // If we couldn't find a good position after max attempts, don't spawn
       if (attempts >= maxAttempts) return;
 
@@ -85,7 +56,11 @@ export const useEnemyStore = create<EnemyState>()(
         id: nanoid(),
         type,
         name: enemyType.name,
-        position,
+        position: {
+          x: Math.random() * SPAWN_RADIUS * 2 - SPAWN_RADIUS,
+          z: Math.random() * SPAWN_RADIUS * 2 - SPAWN_RADIUS,
+          y: 0,
+        },
         health: enemyType.health,
         maxHealth: enemyType.health,
         damage: enemyType.damage,
@@ -140,6 +115,10 @@ export const useEnemyStore = create<EnemyState>()(
       const currentStats = gameStore.playerStats;
       const newXP = currentStats.xp + enemy.xp;
       const newLevel = calculateLevel(newXP);
+
+      if (newLevel > currentStats.level) {
+        gameStore.setShowLevelUp(true);
+      }
 
       gameStore.updatePlayerStats({
         xp: newXP,

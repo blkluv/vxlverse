@@ -11,6 +11,8 @@ import { Suspense, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEnemyStore } from "../stores/enemyStore";
 import { EnemyRewardModal } from "../components/game/EnemyReward";
+import { LevelUpModal } from "../components/game/LevelUpModal";
+import { useSound } from "../hooks/useSound";
 
 export function Game() {
   const currentSceneId = useGameStore((state) => state.currentSceneId);
@@ -18,6 +20,7 @@ export function Game() {
   const currentScene = scenes.find((scene) => scene.id === currentSceneId);
   const [showSceneName, setShowSceneName] = useState(false);
   const activeQuest = useGameStore((state) => state.activeQuest);
+  const showLevelUp = useGameStore((state) => state.showLevelUp);
   const activeDialogue = useGameStore((state) => state.activeDialogue);
   const inventoryOpen = useGameStore((state) => state.inventoryOpen);
   const questLogOpen = useGameStore((state) => state.questLogOpen);
@@ -103,7 +106,11 @@ export function Game() {
         <DialogueModal quest={activeQuest} dialogueId={activeDialogue} />
       )}
       {/* Reward Modal */}
-      {rewards && <EnemyRewardModal rewards={rewards} onClose={clearRewards} />}
+      {rewards && !showLevelUp && (
+        <EnemyRewardModal rewards={rewards} onClose={clearRewards} />
+      )}
+
+      {showLevelUp && <LevelUpModal />}
     </div>
   );
 }

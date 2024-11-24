@@ -3,6 +3,7 @@ import { Portal } from "../Portal";
 import { Trophy, Star } from "lucide-react";
 import { GAME_ITEMS } from "../../types";
 import { useEffect } from "react";
+import { useSound } from "../../hooks/useSound";
 
 interface EnemyRewardModalProps {
   rewards: { itemId: string; amount: number; xp: number };
@@ -13,7 +14,9 @@ export function EnemyRewardModal({ rewards, onClose }: EnemyRewardModalProps) {
   const item = GAME_ITEMS.find((i) => i.id === rewards.itemId);
   if (!item) return null;
 
+  const { playSound } = useSound();
   useEffect(() => {
+    playSound("loot");
     setTimeout(() => {
       onClose();
     }, 2000);

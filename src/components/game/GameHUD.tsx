@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 import { useGameStore } from "../../stores/gameStore";
 import { Map } from "./Map";
 import { useSound } from "../../hooks/useSound";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { LevelUpModal } from "./LevelUpModal";
 
 const baseXP = 100; // Base XP for the first level
 const increment = 50; // Increment factor
@@ -53,10 +54,6 @@ export function GameHUD() {
     playSound("select");
     setMapOpen(true);
   };
-
-  useEffect(() => {
-    if (level > 1) playSound("levelUp");
-  }, [level]);
 
   // Calculate XP progress
   const currentLevelXP = getXPForLevel(level);

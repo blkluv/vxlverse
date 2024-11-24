@@ -9,7 +9,7 @@ const SOUNDS = {
   },
   hit: {
     src: "/mp3/hit-sound-effect-240898.mp3",
-    volume: 0.1,
+    volume: 0.2,
   },
   select: {
     src: "/mp3/beepd-86247.mp3",
@@ -25,11 +25,15 @@ const SOUNDS = {
   },
   npcGreeting: {
     src: "/mp3/what-can-i-do-for-you-npc-british-male-99751.mp3",
-    volume: 0.4,
+    volume: 0.5,
   },
   questAccept: {
     src: "/mp3/level-passed-142971.mp3",
-    volume: 0.4,
+    volume: 0.5,
+  },
+  loot: {
+    src: "/mp3/loot.mp3",
+    volume: 0.6,
   },
   questComplete: {
     src: "/mp3/game-level-complete-143022.mp3",
@@ -48,7 +52,7 @@ const SOUNDS = {
     volume: 0.5,
   },
   levelUp: {
-    src: "/mp3/goodresult-82807.mp3",
+    src: "/mp3/levelup.mp3",
     volume: 0.6,
   },
 };

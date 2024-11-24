@@ -37,7 +37,13 @@ export function Enemy({ enemy }: EnemyProps) {
   });
 
   return (
-    <group position={[enemy.position.x, enemy.position.y, enemy.position.z]}>
+    <group
+      position={[
+        enemy.position.x,
+        enemy.position.y + enemy.type === "skeleton" ? 2 : 0,
+        enemy.position.z,
+      ]}
+    >
       <primitive
         ref={ref}
         object={scene.clone()}

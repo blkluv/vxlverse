@@ -33,8 +33,8 @@ export const ENEMY_TYPES = {
 
     damage: 10,
     model:
-      "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_2TXu5Mesap.glb",
-    scale: 0.5,
+      "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_iNknFCKZ5J.glb",
+    scale: 1,
     loot: items.map((item) => ({
       itemId: item.id,
       chance: 0.1 * Math.random(),
@@ -48,7 +48,7 @@ export const ENEMY_TYPES = {
     xp: 90,
     model:
       "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_UwHJLq89uV.glb",
-    scale: 0.8,
+    scale: 1,
     loot: items.map((item) => ({
       itemId: item.id,
       chance: 0.2 * Math.random(),
@@ -62,7 +62,7 @@ export const ENEMY_TYPES = {
     damage: 20,
     model:
       "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_PNlrY0F4pW.glb",
-    scale: 1,
+    scale: 3,
     loot: items.map((item) => ({
       itemId: item.id,
       chance: 0.3 * Math.random(),
