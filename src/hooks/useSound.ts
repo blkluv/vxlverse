@@ -19,6 +19,10 @@ const SOUNDS = {
     src: "/mp3/collect-5930.mp3",
     volume: 0.5,
   },
+  teleport: {
+    src: "/mp3/teleport-90137.mp3",
+    volume: 0.5,
+  },
   npcGreeting: {
     src: "/mp3/what-can-i-do-for-you-npc-british-male-99751.mp3",
     volume: 0.4,

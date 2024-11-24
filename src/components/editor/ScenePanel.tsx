@@ -1,9 +1,18 @@
-import { useState } from 'react';
-import { useEditorStore } from '../../stores/editorStore';
-import { Plus, Trash2, Layout, Edit3, FolderPlus, Box, ChevronRight, ChevronDown } from 'lucide-react';
-import { ModelSelector } from './ModelSelector';
-import { motion, AnimatePresence } from 'framer-motion';
-import * as THREE from 'three';
+import { useState } from "react";
+import { useEditorStore } from "../../stores/editorStore";
+import {
+  Plus,
+  Trash2,
+  Layout,
+  Edit3,
+  FolderPlus,
+  Box,
+  ChevronRight,
+  ChevronDown,
+} from "lucide-react";
+import { ModelSelector } from "./ModelSelector";
+import { motion, AnimatePresence } from "framer-motion";
+import * as THREE from "three";
 
 export function ScenePanel() {
   const {
@@ -19,22 +28,24 @@ export function ScenePanel() {
     setShowModelSelector,
     editingSceneName,
     setEditingSceneName,
-    updateSceneName
+    updateSceneName,
   } = useEditorStore();
 
-  const [expandedScenes, setExpandedScenes] = useState<Set<string>>(new Set([currentSceneId || '']));
+  const [expandedScenes, setExpandedScenes] = useState<Set<string>>(
+    new Set([currentSceneId || ""])
+  );
 
   const handleAddScene = () => {
     const newScene = {
       id: new THREE.Object3D().uuid,
       name: `Scene ${scenes.length + 1}`,
-      objects: []
+      objects: [],
     };
     addScene(newScene);
   };
 
   const toggleSceneExpanded = (sceneId: string) => {
-    setExpandedScenes(prev => {
+    setExpandedScenes((prev) => {
       const next = new Set(prev);
       if (next.has(sceneId)) {
         next.delete(sceneId);
@@ -66,8 +77,8 @@ export function ScenePanel() {
             <div
               className={`group rounded-lg transition-all ${
                 currentSceneId === scene.id
-                  ? 'bg-blue-500/10 border border-blue-500/30'
-                  : 'hover:bg-slate-800/70 border border-transparent'
+                  ? "bg-blue-500/10 border border-blue-500/30"
+                  : "hover:bg-slate-800/70 border border-transparent"
               }`}
             >
               <div className="flex items-center p-2">
@@ -84,7 +95,10 @@ export function ScenePanel() {
 
                 <button
                   className="flex-1 flex items-center gap-2 min-w-0 ml-1"
-                  onClick={() => setCurrentScene(scene.id)}
+                  onClick={() => {
+                    setSelectedObject(null);
+                    setCurrentScene(scene.id);
+                  }}
                 >
                   <Layout className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
                   {editingSceneName === scene.id ? (
@@ -94,9 +108,9 @@ export function ScenePanel() {
                       defaultValue={scene.name}
                       onBlur={(e) => updateSceneName(scene.id, e.target.value)}
                       onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
+                        if (e.key === "Enter") {
                           updateSceneName(scene.id, e.currentTarget.value);
-                        } else if (e.key === 'Escape') {
+                        } else if (e.key === "Escape") {
                           setEditingSceneName(null);
                         }
                       }}
@@ -134,7 +148,7 @@ export function ScenePanel() {
                 {expandedScenes.has(scene.id) && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
+                    animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     className="overflow-hidden"
                   >
@@ -146,15 +160,20 @@ export function ScenePanel() {
                           animate={{ x: 0, opacity: 1 }}
                           className={`group p-2 rounded-lg cursor-pointer ${
                             selectedObjectId === object.id
-                              ? 'bg-blue-500/10 border border-blue-500/30'
-                              : 'hover:bg-slate-800/70 border border-transparent'
+                              ? "bg-blue-500/10 border border-blue-500/30"
+                              : "hover:bg-slate-800/70 border border-transparent"
                           }`}
-                          onClick={() => setSelectedObject(object.id)}
+                          onClick={() => {
+                            setCurrentScene(scene.id);
+                            setSelectedObject(object.id);
+                          }}
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               <Box className="w-3.5 h-3.5 text-blue-400" />
-                              <span className="text-xs text-slate-100 truncate">{object.name}</span>
+                              <span className="text-xs text-slate-100 truncate">
+                                {object.name}
+                              </span>
                             </div>
                             <button
                               onClick={(e) => {

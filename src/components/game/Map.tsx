@@ -1,11 +1,12 @@
-import { motion } from 'framer-motion';
-import { useEditorStore } from '../../stores/editorStore';
-import { useGameStore } from '../../stores/gameStore';
-import { X, Compass } from 'lucide-react';
-import { Portal } from '../Portal';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment } from '@react-three/drei';
-import { Scene } from '../Scene';
+import { motion } from "framer-motion";
+import { useEditorStore } from "../../stores/editorStore";
+import { useGameStore } from "../../stores/gameStore";
+import { X, Compass } from "lucide-react";
+import { Portal } from "../Portal";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, Environment } from "@react-three/drei";
+import { Scene } from "../Scene";
+import { useSound } from "../../hooks/useSound";
 
 interface MapProps {
   onClose: () => void;
@@ -16,9 +17,13 @@ export function Map({ onClose }: MapProps) {
   const currentSceneId = useGameStore((state) => state.currentSceneId);
   const setCurrentSceneId = useGameStore((state) => state.setCurrentSceneId);
 
+  const { playSound } = useSound();
   const handleTeleport = (sceneId: string) => {
-    setCurrentSceneId(sceneId);
-    onClose();
+    playSound("teleport");
+    setTimeout(() => {
+      setCurrentSceneId(sceneId);
+      onClose();
+    }, 1200);
   };
 
   return (
@@ -62,8 +67,8 @@ export function Map({ onClose }: MapProps) {
                   onClick={() => handleTeleport(scene.id)}
                   className={`group relative h-[300px] rounded-xl border transition-all ${
                     currentSceneId === scene.id
-                      ? 'bg-emerald-500/20 border-emerald-500/30 ring-1 ring-emerald-500/30'
-                      : 'bg-gray-800/50 border-gray-700/50 hover:bg-gray-800'
+                      ? "bg-emerald-500/20 border-emerald-500/30 ring-1 ring-emerald-500/30"
+                      : "bg-gray-800/50 border-gray-700/50 hover:bg-gray-800"
                   }`}
                 >
                   {/* Scene Preview */}
@@ -73,35 +78,41 @@ export function Map({ onClose }: MapProps) {
                       gl={{ preserveDrawingBuffer: true }}
                     >
                       <Scene sceneData={scene} isPreview />
-                      <OrbitControls 
+                      <OrbitControls
                         enableZoom={false}
                         enablePan={false}
                         autoRotate
                         autoRotateSpeed={1}
                       />
-                      <Environment preset={scene.environment || 'sunset'} />
+                      <Environment preset={scene.environment || "sunset"} />
                     </Canvas>
                   </div>
 
                   {/* Overlay Content */}
                   <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/90 via-black/70 to-transparent">
-                    <h3 className="text-xl font-bold text-white mb-2">{scene.name}</h3>
+                    <h3 className="text-xl font-bold text-white mb-2">
+                      {scene.name}
+                    </h3>
                     {currentSceneId === scene.id ? (
                       <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-sm w-fit">
                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                         Current Location
                       </div>
                     ) : (
-                      <div className="text-sm text-gray-400">Click to travel</div>
+                      <div className="text-sm text-gray-400">
+                        Click to travel
+                      </div>
                     )}
                   </div>
 
                   {/* Hover Effect */}
-                  <div className={`absolute inset-0 border-2 rounded-xl transition-colors ${
-                    currentSceneId === scene.id
-                      ? 'border-emerald-400/50'
-                      : 'border-transparent group-hover:border-white/20'
-                  }`} />
+                  <div
+                    className={`absolute inset-0 border-2 rounded-xl transition-colors ${
+                      currentSceneId === scene.id
+                        ? "border-emerald-400/50"
+                        : "border-transparent group-hover:border-white/20"
+                    }`}
+                  />
                 </motion.button>
               ))}
             </div>
