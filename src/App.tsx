@@ -6,7 +6,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Editor />} />
+        <Route path="/" element={<Game />} />
         <Route path="/editor" element={<Editor />} />
         <Route path="/game" element={<Game />} />
       </Routes>

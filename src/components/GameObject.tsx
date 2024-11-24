@@ -38,12 +38,11 @@ export function GameObject({
   const setActiveDialogue = useGameStore((state) => state.setActiveDialogue);
   const { playSound } = useSound();
   const clonedScene = scene.clone(true);
-  const isGameMode = window.location.pathname === "/game";
+  const isGameMode = window.location.pathname === "/game" || "/";
   const groupRef = useRef<THREE.Group>(null);
 
   const handleClick = (e: THREE.Event) => {
-    e?.stopPropagation();
-
+    e.stopPropagation();
     if (isGameMode && quests?.[0]) {
       if (questLog?.active?.find((quest) => quest.id === quests[0].id)) return;
       playSound("npcGreeting");
