@@ -19,7 +19,7 @@ export function Scene({ sceneData, isPreview }: SceneProps) {
   const { playSound } = useSound();
 
   useEffect(() => {
-    playSound("background");
+    // playSound("background");
     if (sceneData?.fog) {
       scene.fog = new THREE.Fog(
         sceneData.fog.color,

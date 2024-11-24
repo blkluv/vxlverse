@@ -115,13 +115,14 @@ export function DialogueModal({
   const [showRewards, setShowRewards] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
-  const { playSound } = useSound();
+  const { playSound, stopSound } = useSound();
 
   // Optimized text typing effect
   useEffect(() => {
     let mounted = true;
     let timeoutId: number;
     let currentIndex = 0;
+    if (currentIndex % 3 === 0) playSound("typing");
 
     if (mounted) {
       setIsTyping(true);
@@ -134,10 +135,10 @@ export function DialogueModal({
       if (currentIndex < dialogue.text.length) {
         setDisplayedText((prev) => prev + dialogue.text[currentIndex]);
         currentIndex++;
-        // if (currentIndex % 3 === 0) playSound("dialogueType");
         timeoutId = window.setTimeout(typeNextCharacter, TYPING_SPEED);
       } else {
         setIsTyping(false);
+        stopSound("typing");
       }
     };
 

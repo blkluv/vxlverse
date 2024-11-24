@@ -39,6 +39,10 @@ const SOUNDS = {
     src: "/mp3/male-death-sound-128357.mp3",
     volume: 0.5,
   },
+  typing: {
+    src: "/mp3/typing.mp3",
+    volume: 0.5,
+  },
   levelUp: {
     src: "/mp3/goodresult-82807.mp3",
     volume: 0.6,
@@ -77,5 +81,12 @@ export function useSound() {
     }
   }, []);
 
-  return { playSound };
+  const stopSound = useCallback((type: SoundType) => {
+    const sound = soundsRef.current[type];
+    if (sound) {
+      sound.stop();
+    }
+  }, []);
+
+  return { playSound, stopSound };
 }
