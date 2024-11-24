@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { Environment, Sky } from "@react-three/drei";
 import { Physics, RigidBody } from "@react-three/rapier";
 import { GameObject } from "../GameObject";
@@ -7,6 +7,9 @@ import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { Player } from "./Player";
 import { useSound } from "../../hooks/useSound";
+import { useEnemyStore } from "../../stores/enemyStore";
+import { Enemy } from "./Enemy";
+import { EnemyRewardModal } from "./EnemyReward";
 
 interface SceneProps {
   sceneData?: SceneType;
@@ -19,19 +22,19 @@ export function Scene({ sceneData, isPreview }: SceneProps) {
   const { playSound } = useSound();
 
   useEffect(() => {
-    // playSound("background");
-    if (sceneData?.fog) {
-      scene.fog = new THREE.Fog(
-        sceneData.fog.color,
-        sceneData.fog.near || 1,
-        sceneData.fog.far || 100
-      );
-    } else {
-      scene.fog = null;
-    }
+    playSound("background");
   }, [sceneData?.fog, scene]);
 
   if (!sceneData) return null;
+  const enemies = useEnemyStore((state) => state.enemies);
+
+  const startSpawning = useEnemyStore((state) => state.startSpawning);
+  const stopSpawning = useEnemyStore((state) => state.stopSpawning);
+
+  useEffect(() => {
+    startSpawning();
+    return () => stopSpawning();
+  }, [startSpawning, stopSpawning]);
 
   return (
     <>
@@ -55,7 +58,12 @@ export function Scene({ sceneData, isPreview }: SceneProps) {
         </RigidBody>
 
         {!isPreview && <Player />}
-
+        {/* Spawn Enemies */}
+        <Suspense fallback={null}>
+          {enemies.map((enemy) => (
+            <Enemy key={enemy.id} enemy={enemy} />
+          ))}
+        </Suspense>
         {/* Scene Objects */}
         {sceneData.objects.map((object) => (
           <GameObject

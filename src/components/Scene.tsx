@@ -22,17 +22,7 @@ export function Scene({ sceneData, isPreview }: SceneProps) {
   const setSelectedObject = useEditorStore((state) => state.setSelectedObject);
   const { scene } = useThree();
 
-  useEffect(() => {
-    if (currentScene?.fog) {
-      scene.fog = new THREE.Fog(
-        currentScene.fog.color,
-        currentScene.fog.near || 1,
-        currentScene.fog.far || 100
-      );
-    } else {
-      scene.fog = null;
-    }
-  }, [currentScene?.fog, scene]);
+  useEffect(() => {}, [currentScene?.fog, scene]);
 
   const handleBackgroundClick = (e: THREE.Event) => {
     if (e.target === e?.currentTarget && !isPreview) {
@@ -84,7 +74,7 @@ export function Scene({ sceneData, isPreview }: SceneProps) {
           quests={object.quests}
           onClick={() => !isPreview && setSelectedObject(object.id)}
           onTransform={(newPosition, newRotation, newScale) => {
-            if (!isPreview) {
+            if (!isPreview && currentSceneId) {
               updateObject(currentSceneId, object.id, {
                 position: newPosition,
                 rotation: newRotation,

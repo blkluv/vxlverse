@@ -373,6 +373,15 @@ export function DialogueModal({
                 {dialogue.speaker}
               </h3>
             </motion.div>
+            <button
+              onClick={() => {
+                setActiveQuest(null);
+                setActiveDialogue(null);
+              }}
+              className="p-2 ml-auto rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 hover:text-blue-400 transition-colors"
+            >
+              Close
+            </button>
           </div>
 
           {/* Main Dialogue Box */}

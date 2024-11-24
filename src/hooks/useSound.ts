@@ -9,7 +9,7 @@ const SOUNDS = {
   },
   hit: {
     src: "/mp3/hit-sound-effect-240898.mp3",
-    volume: 0.5,
+    volume: 0.1,
   },
   select: {
     src: "/mp3/beepd-86247.mp3",
@@ -37,6 +37,10 @@ const SOUNDS = {
   },
   enemyDeath: {
     src: "/mp3/male-death-sound-128357.mp3",
+    volume: 0.5,
+  },
+  cash: {
+    src: "/mp3/cash.mp3",
     volume: 0.5,
   },
   typing: {

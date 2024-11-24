@@ -1,34 +1,75 @@
+import { items } from "./stores/items";
+
 export interface Item {
   id: string;
   name: string;
   emoji: string;
   description: string;
   value: number;
-  type: 'weapon' | 'armor' | 'potion' | 'material' | 'quest' | 'food';
+  type: "weapon" | "armor" | "potion" | "material" | "quest" | "food";
 }
 
-export const GAME_ITEMS: Item[] = [
-  { id: 'sword', name: 'Steel Sword', emoji: '⚔️', description: 'A sharp blade', value: 100, type: 'weapon' },
-  { id: 'bow', name: 'Wooden Bow', emoji: '🏹', description: 'For ranged attacks', value: 80, type: 'weapon' },
-  { id: 'staff', name: 'Magic Staff', emoji: '🪄', description: 'Channels magical power', value: 120, type: 'weapon' },
-  { id: 'shield', name: 'Iron Shield', emoji: '🛡️', description: 'Solid protection', value: 90, type: 'armor' },
-  { id: 'helmet', name: 'Knight Helmet', emoji: '⛑️', description: 'Head protection', value: 70, type: 'armor' },
-  { id: 'chestplate', name: 'Steel Armor', emoji: '🥋', description: 'Body protection', value: 150, type: 'armor' },
-  { id: 'boots', name: 'Leather Boots', emoji: '👢', description: 'Fast movement', value: 50, type: 'armor' },
-  { id: 'health_potion', name: 'Health Potion', emoji: '❤️', description: 'Restores health', value: 30, type: 'potion' },
-  { id: 'mana_potion', name: 'Mana Potion', emoji: '🌟', description: 'Restores mana', value: 30, type: 'potion' },
-  { id: 'strength_potion', name: 'Strength Potion', emoji: '💪', description: 'Increases strength', value: 40, type: 'potion' },
-  { id: 'wood', name: 'Wood', emoji: '🪵', description: 'Building material', value: 10, type: 'material' },
-  { id: 'stone', name: 'Stone', emoji: '🪨', description: 'Building material', value: 15, type: 'material' },
-  { id: 'iron_ore', name: 'Iron Ore', emoji: '⛰️', description: 'Metal resource', value: 25, type: 'material' },
-  { id: 'gold_ore', name: 'Gold Ore', emoji: '💎', description: 'Precious metal', value: 50, type: 'material' },
-  { id: 'ancient_scroll', name: 'Ancient Scroll', emoji: '📜', description: 'Contains secrets', value: 200, type: 'quest' },
-  { id: 'magic_crystal', name: 'Magic Crystal', emoji: '💎', description: 'Magical power source', value: 150, type: 'quest' },
-  { id: 'dragon_scale', name: 'Dragon Scale', emoji: '🐉', description: 'Rare material', value: 300, type: 'quest' },
-  { id: 'bread', name: 'Fresh Bread', emoji: '🍞', description: 'Restores energy', value: 15, type: 'food' },
-  { id: 'apple', name: 'Apple', emoji: '🍎', description: 'Healthy food', value: 10, type: 'food' },
-  { id: 'meat', name: 'Cooked Meat', emoji: '🍖', description: 'Protein rich', value: 25, type: 'food' }
-];
+export const GAME_ITEMS: Item[] = items;
+
+export interface Enemy {
+  id: string;
+  type: "slime" | "goblin" | "skeleton";
+  position: { x: number; y: number; z: number };
+  health: number;
+  maxHealth: number;
+  damage: number;
+  xp: number;
+  loot: { itemId: string; chance: number; amount: number }[];
+  model: string;
+  scale: number;
+  name: string;
+}
+
+export const ENEMY_TYPES = {
+  slime: {
+    name: "Slime",
+    health: 50,
+    xp: 90,
+
+    damage: 10,
+    model:
+      "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_2TXu5Mesap.glb",
+    scale: 0.5,
+    loot: items.map((item) => ({
+      itemId: item.id,
+      chance: 0.1 * Math.random(),
+      amount: 1,
+    })),
+  },
+  goblin: {
+    name: "Goblin",
+    health: 80,
+    damage: 15,
+    xp: 90,
+    model:
+      "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_UwHJLq89uV.glb",
+    scale: 0.8,
+    loot: items.map((item) => ({
+      itemId: item.id,
+      chance: 0.2 * Math.random(),
+      amount: 1,
+    })),
+  },
+  skeleton: {
+    name: "Skeleton",
+    health: 100,
+    xp: 10,
+    damage: 20,
+    model:
+      "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_PNlrY0F4pW.glb",
+    scale: 1,
+    loot: items.map((item) => ({
+      itemId: item.id,
+      chance: 0.3 * Math.random(),
+      amount: 1,
+    })),
+  },
+} as const;
 
 export interface Model3D {
   id: string;
@@ -63,7 +104,14 @@ export interface DialogueChoice {
 }
 
 export interface QuestAction {
-  type: 'complete' | 'fail' | 'update_stage' | 'give_item' | 'remove_item' | 'teleport' | 'spawn_npc';
+  type:
+    | "complete"
+    | "fail"
+    | "update_stage"
+    | "give_item"
+    | "remove_item"
+    | "teleport"
+    | "spawn_npc";
   params: {
     itemId?: string;
     amount?: number;
@@ -83,7 +131,7 @@ export interface Quest {
     level: number;
     energy: number;
     money: number;
-    timeOfDay: ('morning' | 'noon' | 'evening' | 'night')[];
+    timeOfDay: ("morning" | "noon" | "evening" | "night")[];
     items: { id: string; amount: number }[];
   };
   rewards: {
@@ -110,7 +158,7 @@ export interface Scene {
   name: string;
   objects: GameObject[];
   environment?: string;
-  background?: 'environment' | 'sky' | 'none';
+  background?: "environment" | "sky" | "none";
   ambientLight?: number;
   fog?: {
     color: string;

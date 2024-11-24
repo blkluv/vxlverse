@@ -1,10 +1,10 @@
-import { create } from 'zustand';
-import { subscribeWithSelector } from 'zustand/middleware';
-import { persist } from 'zustand/middleware';
-import { Quest } from '../types';
+import { create } from "zustand";
+import { subscribeWithSelector } from "zustand/middleware";
+import { persist } from "zustand/middleware";
+import { Quest } from "../types";
 
 // Default scene ID
-const DEFAULT_SCENE_ID = 'village-scene';
+const DEFAULT_SCENE_ID = "village-scene";
 
 interface GameState {
   playerStats: {
@@ -14,7 +14,7 @@ interface GameState {
     health: number;
     maxHealth: number;
   };
-  timeOfDay: 'morning' | 'noon' | 'evening' | 'night';
+  timeOfDay: "morning" | "noon" | "evening" | "night";
   gameTime: {
     hours: number;
     minutes: number;
@@ -40,7 +40,7 @@ interface GameState {
 
   // Actions
   setCurrentSceneId: (id: string) => void;
-  updatePlayerStats: (updates: Partial<GameState['playerStats']>) => void;
+  updatePlayerStats: (updates: Partial<GameState["playerStats"]>) => void;
   advanceTime: (minutes: number) => void;
   setActiveQuest: (quest: Quest | null) => void;
   setActiveDialogue: (dialogueId: number | null) => void;
@@ -70,7 +70,7 @@ export const useGameStore = create<GameState>()(
         health: 100,
         maxHealth: 100,
       },
-      timeOfDay: 'morning',
+      timeOfDay: "morning",
       gameTime: {
         hours: 6,
         minutes: 0,
@@ -96,10 +96,12 @@ export const useGameStore = create<GameState>()(
 
       // Actions
       setCurrentSceneId: (id) => set({ currentSceneId: id }),
-      updatePlayerStats: (updates) =>
+      updatePlayerStats: (updates) => {
+        console.log("Updating player stats", updates);
         set((state) => ({
           playerStats: { ...state.playerStats, ...updates },
-        })),
+        }));
+      },
 
       advanceTime: (minutes) =>
         set((state) => {
@@ -109,11 +111,11 @@ export const useGameStore = create<GameState>()(
           const newMinutes = totalMinutes % 60;
           const addedDays = Math.floor(totalMinutes / (24 * 60));
 
-          let timeOfDay: GameState['timeOfDay'] = state.timeOfDay;
-          if (newHours >= 5 && newHours < 12) timeOfDay = 'morning';
-          else if (newHours >= 12 && newHours < 17) timeOfDay = 'noon';
-          else if (newHours >= 17 && newHours < 20) timeOfDay = 'evening';
-          else timeOfDay = 'night';
+          let timeOfDay: GameState["timeOfDay"] = state.timeOfDay;
+          if (newHours >= 5 && newHours < 12) timeOfDay = "morning";
+          else if (newHours >= 12 && newHours < 17) timeOfDay = "noon";
+          else if (newHours >= 17 && newHours < 20) timeOfDay = "evening";
+          else timeOfDay = "night";
 
           return {
             gameTime: {
@@ -125,36 +127,36 @@ export const useGameStore = create<GameState>()(
           };
         }),
 
-      setActiveQuest: (quest) => 
+      setActiveQuest: (quest) =>
         set((state) => {
-          if (quest && !state.questLog.active.find(q => q.id === quest.id)) {
+          if (quest && !state.questLog.active.find((q) => q.id === quest.id)) {
             return {
               activeQuest: quest,
               questLog: {
                 ...state.questLog,
-                active: [...state.questLog.active, quest]
-              }
+                active: [...state.questLog.active, quest],
+              },
             };
           }
           return { activeQuest: quest };
         }),
-      
+
       setActiveDialogue: (dialogueId) => set({ activeDialogue: dialogueId }),
-      
+
       completeQuest: (questId) =>
         set((state) => {
-          const quest = state.questLog.active.find(q => q.id === questId);
+          const quest = state.questLog.active.find((q) => q.id === questId);
           if (!quest) return state;
 
           const newStats = { ...state.playerStats };
           const newInventory = [...state.inventory];
-          
+
           if (quest.rewards.xp) newStats.xp += quest.rewards.xp;
           if (quest.rewards.money) newStats.money += quest.rewards.money;
-          
+
           if (quest.rewards.items) {
             quest.rewards.items.forEach(({ id, amount }) => {
-              const existingItem = newInventory.find(item => item.id === id);
+              const existingItem = newInventory.find((item) => item.id === id);
               if (existingItem) {
                 existingItem.amount += amount;
               } else {
@@ -162,7 +164,7 @@ export const useGameStore = create<GameState>()(
               }
             });
           }
-          
+
           if (newStats.xp >= 100) {
             const levelsGained = Math.floor(newStats.xp / 100);
             newStats.level += levelsGained;
@@ -178,9 +180,12 @@ export const useGameStore = create<GameState>()(
             activeDialogue: null,
             questLog: {
               ...state.questLog,
-              active: state.questLog.active.filter(q => q.id !== questId),
-              completed: [...state.questLog.completed, { ...quest, completed: true }]
-            }
+              active: state.questLog.active.filter((q) => q.id !== questId),
+              completed: [
+                ...state.questLog.completed,
+                { ...quest, completed: true },
+              ],
+            },
           };
         }),
 
@@ -188,56 +193,58 @@ export const useGameStore = create<GameState>()(
         set((state) => ({
           questLog: {
             ...state.questLog,
-            active: state.questLog.active.filter(q => q.id !== questId),
+            active: state.questLog.active.filter((q) => q.id !== questId),
             failed: [
               ...state.questLog.failed,
-              state.questLog.active.find(q => q.id === questId)!
-            ]
+              state.questLog.active.find((q) => q.id === questId)!,
+            ],
           },
           activeQuest: null,
-          activeDialogue: null
+          activeDialogue: null,
         })),
 
       addToInventory: (itemId, amount) =>
         set((state) => {
           const newInventory = [...state.inventory];
-          const existingItem = newInventory.find(item => item.id === itemId);
-          
+          const existingItem = newInventory.find((item) => item.id === itemId);
+
           if (existingItem) {
             existingItem.amount += amount;
           } else {
             newInventory.push({ id: itemId, amount });
           }
-          
+
           return { inventory: newInventory };
         }),
 
       removeFromInventory: (itemId, amount) => {
         const state = get();
-        const item = state.inventory.find(i => i.id === itemId);
-        
+        const item = state.inventory.find((i) => i.id === itemId);
+
         if (!item || item.amount < amount) return false;
-        
+
         set((state) => ({
-          inventory: state.inventory.map(item =>
-            item.id === itemId
-              ? { ...item, amount: item.amount - amount }
-              : item
-          ).filter(item => item.amount > 0)
+          inventory: state.inventory
+            .map((item) =>
+              item.id === itemId
+                ? { ...item, amount: item.amount - amount }
+                : item
+            )
+            .filter((item) => item.amount > 0),
         }));
-        
+
         return true;
       },
 
       hasItem: (itemId, amount = 1) => {
         const state = get();
-        const item = state.inventory.find(i => i.id === itemId);
+        const item = state.inventory.find((i) => i.id === itemId);
         return item ? item.amount >= amount : false;
       },
 
       getItemCount: (itemId) => {
         const state = get();
-        const item = state.inventory.find(i => i.id === itemId);
+        const item = state.inventory.find((i) => i.id === itemId);
         return item ? item.amount : 0;
       },
 
@@ -250,13 +257,13 @@ export const useGameStore = create<GameState>()(
       setMapOpen: (open) => set({ mapOpen: open }),
     })),
     {
-      name: 'game-storage',
+      name: "game-storage",
       partialize: (state) => ({
         playerStats: state.playerStats,
         inventory: state.inventory,
         questLog: state.questLog,
-        currentSceneId: state.currentSceneId
-      })
+        currentSceneId: state.currentSceneId,
+      }),
     }
   )
 );

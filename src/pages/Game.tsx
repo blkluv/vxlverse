@@ -9,6 +9,8 @@ import { Scene } from "../components/game/Scene";
 import { OrbitControls, Sky } from "@react-three/drei";
 import { Suspense, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEnemyStore } from "../stores/enemyStore";
+import { EnemyRewardModal } from "../components/game/EnemyReward";
 
 export function Game() {
   const currentSceneId = useGameStore((state) => state.currentSceneId);
@@ -20,6 +22,16 @@ export function Game() {
   const inventoryOpen = useGameStore((state) => state.inventoryOpen);
   const questLogOpen = useGameStore((state) => state.questLogOpen);
   const timeOfDay = useGameStore((state) => state.timeOfDay);
+  const rewards = useEnemyStore((state) => state.rewards);
+  const clearRewards = useEnemyStore((state) => state.clearRewards);
+
+  useEffect(() => {
+    setShowSceneName(true);
+    const timeout = setTimeout(() => {
+      setShowSceneName(false);
+    }, 2000);
+    return () => clearTimeout(timeout);
+  }, [currentSceneId]);
 
   const getSunPosition = () => {
     switch (timeOfDay) {
@@ -37,7 +49,7 @@ export function Game() {
   };
 
   return (
-    <div className="w-full h-screen relative">
+    <div className="w-full h-screen relative select-none">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSceneId}
@@ -90,6 +102,8 @@ export function Game() {
       {activeQuest && activeDialogue !== null && (
         <DialogueModal quest={activeQuest} dialogueId={activeDialogue} />
       )}
+      {/* Reward Modal */}
+      {rewards && <EnemyRewardModal rewards={rewards} onClose={clearRewards} />}
     </div>
   );
 }

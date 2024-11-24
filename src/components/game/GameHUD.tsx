@@ -2,6 +2,28 @@ import { motion } from "framer-motion";
 import { useGameStore } from "../../stores/gameStore";
 import { Map } from "./Map";
 import { useSound } from "../../hooks/useSound";
+import { useEffect } from "react";
+
+const baseXP = 100; // Base XP for the first level
+const increment = 50; // Increment factor
+
+// Function to calculate XP required for a given level
+function getXPForLevel(level: number) {
+  return baseXP + increment * Math.pow(level, 2);
+}
+
+// Function to calculate the current level based on total XP
+function calculateLevel(totalXP: number) {
+  let level = 1;
+  let xpForNextLevel = getXPForLevel(level);
+
+  while (totalXP >= xpForNextLevel) {
+    level++;
+    xpForNextLevel = getXPForLevel(level);
+  }
+
+  return level - 1; // Adjust to the correct level
+}
 
 export function GameHUD() {
   const { level, xp, money, health, maxHealth } = useGameStore(
@@ -32,6 +54,16 @@ export function GameHUD() {
     setMapOpen(true);
   };
 
+  useEffect(() => {
+    if (level > 1) playSound("levelUp");
+  }, [level]);
+
+  // Calculate XP progress
+  const currentLevelXP = getXPForLevel(level);
+  const nextLevelXP = getXPForLevel(level + 1);
+  const xpProgress =
+    ((xp - currentLevelXP) / (nextLevelXP - currentLevelXP)) * 100;
+
   return (
     <>
       {/* Top Left - Level & Health */}
@@ -43,19 +75,22 @@ export function GameHUD() {
           className="bg-black/80 backdrop-blur-sm rounded-lg p-3 border border-yellow-500/20"
         >
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center text-xl font-bold">
-              ⭐
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br text-xs from-yellow-400 to-yellow-600 flex items-center justify-center  font-bold">
+              {level}
             </div>
             <div className="flex-1">
-              <div className="text-xs text-yellow-400 font-medium mb-1">
-                LEVEL {level}
+              <div className="flex items-center justify-between text-xs mb-1">
+                <span className="text-yellow-500/70">
+                  {Math.max(xp - currentLevelXP, 0)}/
+                  {nextLevelXP - currentLevelXP} XP
+                </span>
               </div>
               <div className="h-2 bg-black/50 rounded-full overflow-hidden">
                 <motion.div
                   className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500"
-                  style={{ width: `${xp % 100}%` }}
+                  style={{ width: `${xpProgress}%` }}
                   initial={{ width: 0 }}
-                  animate={{ width: `${xp % 100}%` }}
+                  animate={{ width: `${xpProgress}%` }}
                   transition={{ duration: 0.5 }}
                 />
               </div>
@@ -71,14 +106,14 @@ export function GameHUD() {
           className="bg-black/80 backdrop-blur-sm rounded-lg p-3 border border-red-500/20"
         >
           <div className="flex items-center gap-3">
-            <div className="text-2xl">❤️</div>
+            <div className="text-2xl">🔋</div>
             <div className="flex-1">
-              <div className="text-xs text-red-400 font-medium mb-1">
-                HP {health}/{maxHealth}
+              <div className="text-xs text-green-400 font-medium mb-1">
+                Energy {health}/{maxHealth}
               </div>
               <div className="h-2 bg-black/50 rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-red-500 to-red-600"
+                  className="h-full bg-gradient-to-r from-green-500 to-green-600"
                   style={{ width: `${(health / maxHealth) * 100}%` }}
                   initial={{ width: 0 }}
                   animate={{ width: `${(health / maxHealth) * 100}%` }}

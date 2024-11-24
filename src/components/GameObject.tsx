@@ -42,7 +42,7 @@ export function GameObject({
   const groupRef = useRef<THREE.Group>(null);
 
   const handleClick = (e: THREE.Event) => {
-    e.stopPropagation();
+    e?.stopPropagation();
 
     if (isGameMode && quests?.[0]) {
       if (questLog?.active?.find((quest) => quest.id === quests[0].id)) return;
