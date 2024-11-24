@@ -82,12 +82,15 @@ export const useEnemyStore = create<EnemyState>()(
 
       // Calculate dropped loot
       const droppedLoot: { itemId: string; amount: number }[] = [];
-      enemy.loot.forEach(({ itemId, chance, amount }) => {
-        if (Math.random() <= chance) {
-          droppedLoot.push({ itemId, amount });
-          useGameStore.getState().addToInventory(itemId, amount);
-        }
-      });
+      const randomLoot =
+        enemy.loot[Math.floor(Math.random() * enemy.loot.length)];
+      console.log(randomLoot);
+      if (Math.random() <= randomLoot.chance) {
+        const itemId = randomLoot.itemId;
+        const amount = randomLoot.amount * Math.floor(Math.random() * 5);
+        droppedLoot.push({ itemId, amount });
+        useGameStore.getState().addToInventory(itemId, amount);
+      }
 
       const baseXP = 100; // Base XP for the first level
       const increment = 50; // Increment factor

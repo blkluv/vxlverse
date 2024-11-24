@@ -37,7 +37,7 @@ export const ENEMY_TYPES = {
     scale: 1,
     loot: items.map((item) => ({
       itemId: item.id,
-      chance: 0.1 * Math.random(),
+      chance: Math.random(),
       amount: 1,
     })),
   },
@@ -51,7 +51,7 @@ export const ENEMY_TYPES = {
     scale: 1,
     loot: items.map((item) => ({
       itemId: item.id,
-      chance: 0.2 * Math.random(),
+      chance: Math.random(),
       amount: 1,
     })),
   },
@@ -65,7 +65,7 @@ export const ENEMY_TYPES = {
     scale: 3,
     loot: items.map((item) => ({
       itemId: item.id,
-      chance: 0.3 * Math.random(),
+      chance: Math.random(),
       amount: 1,
     })),
   },

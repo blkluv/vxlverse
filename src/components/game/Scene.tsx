@@ -48,7 +48,7 @@ export function Scene({ sceneData, isPreview }: SceneProps) {
       <ambientLight intensity={sceneData.ambientLight || 0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
 
-      <Physics debug={false}>
+      <Physics debug>
         {/* Ground */}
         <RigidBody type="fixed" colliders="trimesh">
           <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>

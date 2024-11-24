@@ -12,7 +12,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEnemyStore } from "../stores/enemyStore";
 import { EnemyRewardModal } from "../components/game/EnemyReward";
 import { LevelUpModal } from "../components/game/LevelUpModal";
-import { useSound } from "../hooks/useSound";
 
 export function Game() {
   const currentSceneId = useGameStore((state) => state.currentSceneId);
@@ -67,11 +66,6 @@ export function Game() {
             <Suspense fallback={null}>
               <Scene sceneData={currentScene} />
               <Sky sunPosition={getSunPosition()} />
-              <OrbitControls
-                maxPolarAngle={Math.PI / 2}
-                minDistance={5}
-                maxDistance={20}
-              />
             </Suspense>
           </Canvas>
 

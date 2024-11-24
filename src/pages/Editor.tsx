@@ -7,9 +7,6 @@ import { useEffect } from "react";
 import { useEditorStore } from "../stores/editorStore";
 import * as THREE from "three";
 
-// Clear localStorage
-localStorage.clear();
-
 export function Editor() {
   const { scenes, addScene } = useEditorStore();
 
@@ -25,10 +22,10 @@ export function Editor() {
   }, [scenes.length, addScene]);
 
   return (
-    <div className="w-full h-screen flex bg-slate-900">
+    <div className="flex w-full h-screen bg-slate-900">
       <ScenePanel />
 
-      <div className="flex-1 relative">
+      <div className="relative flex-1">
         <Canvas
           shadows
           gl={{ preserveDrawingBuffer: true }}

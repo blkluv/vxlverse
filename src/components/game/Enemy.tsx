@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
@@ -7,13 +7,21 @@ import { Html } from "@react-three/drei";
 import { motion } from "framer-motion";
 import { useEnemyStore } from "../../stores/enemyStore";
 import { useSound } from "../../hooks/useSound";
+import { SkeletonUtils } from "three-stdlib";
+
+// same url multiple GLTF instances
+function useGltfMemo(url: string) {
+  const gltf = useGLTF(url);
+  const scene = useMemo(() => SkeletonUtils.clone(gltf.scene), [gltf.scene]);
+  return { ...gltf, animations: [...gltf.animations], scene: scene };
+}
 
 interface EnemyProps {
   enemy: EnemyType;
 }
 
 export function Enemy({ enemy }: EnemyProps) {
-  const { scene } = useGLTF(enemy.model);
+  const { scene } = useGltfMemo(enemy.model);
   const ref = useRef<any>();
   const damageEnemy = useEnemyStore((state) => state.damageEnemy);
   const dyingEnemies = useEnemyStore((state) => state.dyingEnemies);
@@ -46,7 +54,7 @@ export function Enemy({ enemy }: EnemyProps) {
     >
       <primitive
         ref={ref}
-        object={scene.clone()}
+        object={scene}
         scale={enemy.scale}
         onClick={handleClick}
         onPointerOver={() =>
@@ -57,7 +65,7 @@ export function Enemy({ enemy }: EnemyProps) {
 
       {/* Enemy UI */}
       {!isDying && (
-        <Html position={[0, 2, 0]} center>
+        <Html position={[0, 3, 0]} center zIndexRange={[0, 0]}>
           <div className="flex z-20 flex-col items-center gap-1">
             {/* Name Tag */}
             <div className="px-3 py-1 bg-black/70 rounded-lg backdrop-blur-sm text-sm font-medium text-white">

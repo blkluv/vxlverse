@@ -1,9 +1,18 @@
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useGameStore } from "../stores/gameStore";
 import * as THREE from "three";
 import { PivotControls } from "@react-three/drei";
 import { useSound } from "../hooks/useSound";
+
+import { SkeletonUtils } from "three-stdlib";
+
+// same url multiple GLTF instances
+function useGltfMemo(url: string) {
+  const gltf = useGLTF(url);
+  const scene = useMemo(() => SkeletonUtils.clone(gltf.scene), [gltf.scene]);
+  return { ...gltf, animations: [...gltf.animations], scene: scene };
+}
 
 interface GameObjectProps {
   modelUrl: string;
@@ -32,19 +41,24 @@ export function GameObject({
   onClick,
   onTransform,
 }: GameObjectProps) {
-  const { scene } = useGLTF(modelUrl);
+  const { scene } = useGltfMemo(modelUrl);
   const setActiveQuest = useGameStore((state) => state.setActiveQuest);
   const questLog = useGameStore((state) => state.questLog);
   const setActiveDialogue = useGameStore((state) => state.setActiveDialogue);
   const { playSound } = useSound();
-  const clonedScene = scene.clone(true);
   const isGameMode = window.location.pathname === "/game" || "/";
+  const isEditor = window.location.pathname === "/editor";
   const groupRef = useRef<THREE.Group>(null);
 
   const handleClick = (e: THREE.Event) => {
     e.stopPropagation();
+    onClick?.();
+
     if (isGameMode && quests?.[0]) {
-      if (questLog?.active?.find((quest) => quest.id === quests[0].id)) return;
+      if (
+        questLog?.active?.find((quest) => quest.id === quests[0].id)?.completed
+      )
+        return;
       playSound("npcGreeting");
       playSound("questAccept");
       setActiveQuest({ ...quests[0], thumbnail });
@@ -84,7 +98,7 @@ export function GameObject({
           }}
         >
           <primitive
-            object={clonedScene}
+            object={scene}
             onClick={handleClick}
             onPointerOver={() => {
               document.body.style.cursor = "pointer";
@@ -97,7 +111,7 @@ export function GameObject({
       ) : (
         <group position={position} rotation={rotation} scale={scale}>
           <primitive
-            object={clonedScene}
+            object={scene}
             onClick={handleClick}
             onPointerOver={() => {
               document.body.style.cursor = "pointer";

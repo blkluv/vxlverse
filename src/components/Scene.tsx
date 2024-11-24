@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { useEffect } from "react";
 import { Scene as SceneType } from "../types";
+import { Hero } from "./game/Hero";
 
 interface SceneProps {
   sceneData?: SceneType;
@@ -20,9 +21,6 @@ export function Scene({ sceneData, isPreview }: SceneProps) {
     sceneData || scenes.find((scene) => scene.id === currentSceneId);
   const updateObject = useEditorStore((state) => state.updateObject);
   const setSelectedObject = useEditorStore((state) => state.setSelectedObject);
-  const { scene } = useThree();
-
-  useEffect(() => {}, [currentScene?.fog, scene]);
 
   const handleBackgroundClick = (e: THREE.Event) => {
     if (e.target === e?.currentTarget && !isPreview) {
@@ -47,7 +45,11 @@ export function Scene({ sceneData, isPreview }: SceneProps) {
 
       <ambientLight intensity={currentScene.ambientLight || 0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
-
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]} receiveShadow>
+        <planeGeometry args={[100, 100]} />
+        <meshStandardMaterial color="#1a1a1a" />
+      </mesh>
+      <Hero position={[0, 2, 0]} />
       {!isPreview && (
         <Grid
           infiniteGrid
@@ -72,7 +74,9 @@ export function Scene({ sceneData, isPreview }: SceneProps) {
           scale={object.scale}
           isSelected={selectedObjectId === object.id && !isPreview}
           quests={object.quests}
-          onClick={() => !isPreview && setSelectedObject(object.id)}
+          onClick={() => {
+            !isPreview && setSelectedObject(object.id);
+          }}
           onTransform={(newPosition, newRotation, newScale) => {
             if (!isPreview && currentSceneId) {
               updateObject(currentSceneId, object.id, {

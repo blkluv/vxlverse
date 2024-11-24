@@ -100,7 +100,6 @@ export const useGameStore = create<GameState>()(
       // Actions
       setCurrentSceneId: (id) => set({ currentSceneId: id }),
       updatePlayerStats: (updates) => {
-        console.log("Updating player stats", updates);
         set((state) => ({
           playerStats: { ...state.playerStats, ...updates },
         }));
