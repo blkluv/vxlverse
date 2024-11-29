@@ -120,35 +120,38 @@ export function DialogueModal({
   // Optimized text typing effect
   useEffect(() => {
     let mounted = true;
-    let timeoutId: number;
     let currentIndex = 0;
-    if (currentIndex % 3 === 0) playSound("typing");
-
-    if (mounted) {
-      setIsTyping(true);
-      setDisplayedText("");
-    }
+    let timeoutId: NodeJS.Timeout;
 
     const typeNextCharacter = () => {
       if (!mounted) return;
 
       if (currentIndex < dialogue.text.length) {
-        setDisplayedText((prev) => prev + dialogue.text[currentIndex]);
+        if (currentIndex % 3 === 0) {
+          playSound("typing");
+        }
+        
+        setDisplayedText(dialogue.text.slice(0, currentIndex + 1));
         currentIndex++;
-        timeoutId = window.setTimeout(typeNextCharacter, TYPING_SPEED);
+        timeoutId = setTimeout(typeNextCharacter, TYPING_SPEED);
       } else {
         setIsTyping(false);
         stopSound("typing");
       }
     };
 
-    timeoutId = window.setTimeout(typeNextCharacter, TYPING_SPEED);
+    setIsTyping(true);
+    setDisplayedText("");
+    timeoutId = setTimeout(typeNextCharacter, TYPING_SPEED);
 
     return () => {
       mounted = false;
-      clearTimeout(timeoutId);
+      stopSound("typing");
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     };
-  }, [dialogue.text, playSound]);
+  }, [dialogue.text, playSound, stopSound]);
 
   // Memoized handlers
   const handleChoice = useCallback(
@@ -167,11 +170,18 @@ export function DialogueModal({
         choice.nextDialogue === undefined || choice.nextDialogue === null;
 
       if (isLastDialogue) {
-        const canComplete = checkQuestCompletion(quest);
-        if (canComplete) {
-          playSound("questComplete");
-          setShowRewards(true);
+        // Only show rewards for actual quests (not greetings)
+        if (quest.id !== 'greeting') {
+          const canComplete = checkQuestCompletion(quest);
+          if (canComplete) {
+            playSound("questComplete");
+            setShowRewards(true);
+          } else {
+            setActiveQuest(null);
+            setActiveDialogue(null);
+          }
         } else {
+          // For greetings, just close the dialog
           setActiveQuest(null);
           setActiveDialogue(null);
         }
@@ -207,22 +217,25 @@ export function DialogueModal({
         return false;
       }
 
+      // Check level requirement
       if (
-        quest.requirements.level &&
+        quest.requirements?.level &&
         playerStats.level < quest.requirements.level
       ) {
         return false;
       }
 
+      // Check energy requirement
       if (
-        quest.requirements.energy &&
-        playerStats.energy < quest.requirements.energy
+        quest.requirements?.energy &&
+        Math.min(100, playerStats.energy) < quest.requirements.energy
       ) {
         return false;
       }
 
+      // Check money requirement
       if (
-        quest.requirements.money &&
+        quest.requirements?.money &&
         playerStats.money < quest.requirements.money
       ) {
         return false;
@@ -238,23 +251,27 @@ export function DialogueModal({
     const missing = [];
 
     if (
-      quest.requirements.level &&
+      quest.requirements?.level &&
       playerStats.level < quest.requirements.level
     ) {
       missing.push(`Level ${quest.requirements.level}`);
     }
+
+    const currentEnergy = Math.min(100, playerStats.energy);
     if (
-      quest.requirements.energy &&
-      playerStats.energy < quest.requirements.energy
+      quest.requirements?.energy &&
+      currentEnergy < quest.requirements.energy
     ) {
-      missing.push(`${quest.requirements.energy} Energy`);
+      missing.push(`${quest.requirements.energy} Energy (you have ${Math.floor(currentEnergy)})`);
     }
+
     if (
-      quest.requirements.money &&
+      quest.requirements?.money &&
       playerStats.money < quest.requirements.money
     ) {
       missing.push(`${quest.requirements.money} Coins`);
     }
+
     if (quest.completion.conditions.items) {
       quest.completion.conditions.items.forEach((item) => {
         if (!hasItem(item.id, item.amount)) {

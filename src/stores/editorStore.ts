@@ -6,171 +6,347 @@ import { Scene, GameObject } from "../types";
 
 const DEFAULT_SCENES = [
   {
-    id: "village-scene",
-    name: "Village",
+    id: "tutorial-scene",
+    name: "Welcome to VXLverse",
     objects: [
       {
-        id: "house-1",
-        name: "Main House",
-        modelUrl:
-          "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_61UyhW3CPc.glb",
-        position: new THREE.Vector3(-5, 0, -5),
-        rotation: new THREE.Euler(0, Math.PI / 4, 0),
-        scale: new THREE.Vector3(1, 1, 1),
-        quests: [
-          {
-            id: "village-quest",
-            title: "Village Mystery",
-            description: "Investigate the strange occurrences in the village.",
-            dialogues: [
-              {
-                id: 0,
-                speaker: "Village Elder",
-                text: "Welcome, traveler. Our village has been experiencing some... unusual events.",
-                choices: [
-                  { text: "Tell me more", nextDialogue: 1 },
-                  { text: "Not interested", nextDialogue: null },
-                ],
-              },
-              {
-                id: 1,
-                speaker: "Village Elder",
-                text: "Strange lights have been seen at night, and items have gone missing.",
-                choices: [{ text: "I'll help investigate", nextDialogue: 2 }],
-              },
-              {
-                id: 2,
-                speaker: "Village Elder",
-                text: "Thank you! First, we need to gather some evidence. Find 3 mysterious objects around the village.",
-                choices: [{ text: "I'll start looking", nextDialogue: null }],
-              },
-            ],
-            requirements: {
-              level: 1,
-              energy: 20,
-              money: 0,
-              timeOfDay: ["evening", "night"],
-              items: [],
-            },
-            rewards: {
-              xp: 200,
-              money: 150,
-              energy: 0,
-              items: [{ id: "magic_crystal", amount: 1 }],
-            },
-            completion: {
-              conditions: {
-                items: [{ id: "mysterious_object", amount: 3 }],
-              },
-              actions: [
-                {
-                  type: "complete",
-                  params: { message: "You've solved the village mystery!" },
-                },
-              ],
-            },
-            completed: false,
-          },
-        ],
-      },
-      {
-        id: "house-2",
-        name: "Open House",
-        modelUrl:
-          "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_ZOxj74x3At.glb",
-        position: new THREE.Vector3(5, 0, -5),
-        rotation: new THREE.Euler(0, -Math.PI / 4, 0),
-        scale: new THREE.Vector3(1, 1, 1),
-        quests: [],
-      },
-      {
-        id: "bush-1",
-        name: "Garden Bush",
-        modelUrl:
-          "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_4p3ub4DfTl.glb",
-        position: new THREE.Vector3(-3, 0, -3),
-        rotation: new THREE.Euler(0, 0, 0),
-        scale: new THREE.Vector3(1, 1, 1),
-        quests: [],
-      },
-      {
-        id: "merchant",
-        name: "Village Merchant",
-        modelUrl:
-          "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_6wg76XCtWr.glb",
-        position: new THREE.Vector3(0, 0, 0),
+        id: "tutorial-guide",
+        name: "VXLverse Guide",
+        modelUrl: "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_6wg76XCtWr.glb",
+        position: new THREE.Vector3(0, 0, -2),
         rotation: new THREE.Euler(0, Math.PI, 0),
         scale: new THREE.Vector3(1, 1, 1),
         quests: [
           {
-            id: "merchant-quest",
-            title: "The Art of Trade",
-            description: "Learn about trading from the village merchant.",
+            id: "welcome-tutorial",
+            title: "Welcome to VXLverse!",
+            description: "Learn the basics of VXLverse and how to create your own virtual worlds.",
             dialogues: [
               {
                 id: 0,
-                speaker: "Merchant",
-                text: "Ah, a potential customer! Would you like to learn the art of trade?",
+                speaker: "VXLverse Guide",
+                text: "Welcome to VXLverse! I'm your guide to this amazing platform. Ready to learn how to create and explore virtual worlds?",
                 choices: [
-                  { text: "Yes, teach me", nextDialogue: 1 },
+                  { text: "Yes, teach me!", nextDialogue: 1 },
+                  { text: "Tell me more", nextDialogue: 2 }
+                ]
+              },
+              {
+                id: 1,
+                speaker: "VXLverse Guide",
+                text: "Great! First, let's learn about movement. Use WASD keys to move around, and your mouse to look around. Try moving to the Creation Station ahead!",
+                choices: [{ text: "Got it!", nextDialogue: 3 }]
+              },
+              {
+                id: 2,
+                speaker: "VXLverse Guide",
+                text: "VXLverse is a platform where you can create, share, and explore virtual worlds. You can build games, create interactive experiences, and connect with others!",
+                choices: [{ text: "Let's start learning!", nextDialogue: 1 }]
+              },
+              {
+                id: 3,
+                speaker: "VXLverse Guide",
+                text: "Perfect! Now let's learn about interacting with objects. Press 'E' to interact with objects and NPCs. Try interacting with the Creation Station.",
+                choices: [{ text: "Will do!", nextDialogue: null }]
+              }
+            ],
+            requirements: {
+              level: 1,
+              energy: 0,
+              money: 0,
+              timeOfDay: ["morning", "noon", "evening", "night"],
+              items: []
+            },
+            rewards: {
+              xp: 100,
+              money: 0,
+              energy: 100,
+              items: []
+            },
+            completion: {
+              conditions: {
+                objectInteract: ["creation-station"]
+              },
+              actions: [
+                {
+                  type: "complete",
+                  params: { message: "You've learned the basics of movement and interaction!" }
+                }
+              ]
+            },
+            completed: false
+          }
+        ]
+      },
+      {
+        id: "creation-station",
+        name: "Creation Station",
+        modelUrl: "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_m7jN5RbDsK.glb",
+        position: new THREE.Vector3(3, 0, -2),
+        rotation: new THREE.Euler(0, -Math.PI / 4, 0),
+        scale: new THREE.Vector3(1.5, 1.5, 1.5),
+        quests: [
+          {
+            id: "creation-basics",
+            title: "World Creation 101",
+            description: "Learn how to create and customize your own virtual world.",
+            dialogues: [
+              {
+                id: 0,
+                speaker: "Creation Station",
+                text: "Welcome to the Creation Station! Here you'll learn how to build your own worlds. Would you like to start with the basics?",
+                choices: [
+                  { text: "Yes, show me how!", nextDialogue: 1 },
+                  { text: "What can I create?", nextDialogue: 2 }
+                ]
+              },
+              {
+                id: 1,
+                speaker: "Creation Station",
+                text: "To create a world, you'll use the Editor. You can add objects, set up quests, and create interactive stories. Let's start by learning about the object library.",
+                choices: [{ text: "Show me the library", nextDialogue: 3 }]
+              },
+              {
+                id: 2,
+                speaker: "Creation Station",
+                text: "In VXLverse, you can create games, interactive stories, educational experiences, virtual galleries, and much more! The possibilities are endless.",
+                choices: [{ text: "Let's start creating!", nextDialogue: 1 }]
+              },
+              {
+                id: 3,
+                speaker: "Creation Station",
+                text: "The object library contains 3D models you can use in your world. Try clicking the 'Assets' button to browse available models!",
+                choices: [{ text: "I'll check it out", nextDialogue: null }]
+              }
+            ],
+            requirements: {
+              level: 1,
+              energy: 0,
+              money: 0,
+              timeOfDay: ["morning", "noon", "evening", "night"],
+              items: []
+            },
+            rewards: {
+              xp: 200,
+              money: 100,
+              energy: 50,
+              items: []
+            },
+            completion: {
+              conditions: {},
+              actions: [
+                {
+                  type: "complete",
+                  params: { message: "You've learned about world creation!" }
+                }
+              ]
+            },
+            completed: false
+          }
+        ]
+      }
+    ],
+    environment: "sunset",
+    background: "environment",
+    ambientLight: 1.0,
+    fog: {
+      color: "#c9e3ff",
+      near: 5,
+      far: 30
+    },
+    music: {
+      url: "/music/tutorial-theme.mp3",
+      volume: 0.3,
+      loop: true
+    }
+  },
+  {
+    id: "village-scene",
+    name: "Peaceful Village",
+    objects: [
+      {
+        id: "village-center",
+        name: "Village Square",
+        modelUrl: "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_61UyhW3CPc.glb",
+        position: new THREE.Vector3(0, 0, 0),
+        rotation: new THREE.Euler(0, 0, 0),
+        scale: new THREE.Vector3(2, 2, 2),
+        quests: [
+          {
+            id: "welcome-quest",
+            title: "Welcome to VXLverse",
+            description: "Learn the basics of the village and meet key characters.",
+            dialogues: [
+              {
+                id: 0,
+                speaker: "Village Elder",
+                text: "Welcome to our village, traveler! I see you're new here. Would you like a tour?",
+                choices: [
+                  { text: "Yes, please!", nextDialogue: 1 },
                   { text: "Maybe later", nextDialogue: null },
                 ],
               },
               {
                 id: 1,
-                speaker: "Merchant",
-                text: "Excellent! Bring me some goods and I'll teach you the secrets of bargaining.",
-                choices: [{ text: "What do you need?", nextDialogue: 2 }],
-              },
-              {
-                id: 2,
-                speaker: "Merchant",
-                text: "Bring me 3 flowers and 2 bushes, and I'll make it worth your while.",
-                choices: [{ text: "I'll gather them", nextDialogue: null }],
-              },
+                speaker: "Village Elder",
+                text: "Excellent! First, visit our merchant at the marketplace. He has some supplies you might need.",
+                choices: [{ text: "I'll head there now", nextDialogue: null }],
+              }
             ],
             requirements: {
               level: 1,
               energy: 10,
               money: 0,
               timeOfDay: ["morning", "noon", "evening"],
-              items: [],
+              items: []
             },
             rewards: {
               xp: 100,
-              money: 200,
-              energy: 0,
-              items: [{ id: "gold_ore", amount: 1 }],
+              money: 50,
+              energy: 20,
+              items: [{ id: "basic_potion", amount: 1 }]
             },
             completion: {
               conditions: {
-                items: [],
+                npcTalk: ["merchant"]
               },
               actions: [
                 {
                   type: "complete",
-                  params: { message: "You've learned the basics of trading!" },
-                },
-              ],
+                  params: { message: "Welcome to the village!" }
+                }
+              ]
             },
-            completed: false,
-          },
-        ],
+            completed: false
+          }
+        ]
       },
+      {
+        id: "merchant",
+        name: "Village Merchant",
+        modelUrl: "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_6wg76XCtWr.glb",
+        position: new THREE.Vector3(5, 0, 5),
+        rotation: new THREE.Euler(0, -Math.PI / 4, 0),
+        scale: new THREE.Vector3(1, 1, 1),
+        quests: [
+          {
+            id: "trade-quest",
+            title: "Art of Trading",
+            description: "Learn how to trade with the village merchant.",
+            dialogues: [
+              {
+                id: 0,
+                speaker: "Merchant",
+                text: "Ah, a new face! Looking to trade?",
+                choices: [
+                  { text: "Yes, show me what you have", nextDialogue: 1 },
+                  { text: "Just browsing", nextDialogue: null },
+                ],
+              },
+              {
+                id: 1,
+                speaker: "Merchant",
+                text: "Here's what I have in stock. I'll give you a special discount on your first purchase!",
+                choices: [{ text: "Let's see what you have", nextDialogue: null }],
+              }
+            ],
+            requirements: {
+              level: 1,
+              energy: 5,
+              money: 0,
+              timeOfDay: ["morning", "noon", "evening"],
+              items: []
+            },
+            rewards: {
+              xp: 50,
+              money: 0,
+              energy: 10,
+              items: []
+            },
+            completion: {
+              conditions: {},
+              actions: [
+                {
+                  type: "complete",
+                  params: { message: "You've learned about trading!" }
+                }
+              ]
+            },
+            completed: false
+          }
+        ]
+      },
+      {
+        id: "mysterious-tower",
+        name: "Mysterious Tower",
+        modelUrl: "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_UwHJLq89uV.glb",
+        position: new THREE.Vector3(-8, 0, -8),
+        rotation: new THREE.Euler(0, Math.PI / 6, 0),
+        scale: new THREE.Vector3(1.5, 1.5, 1.5),
+        quests: [
+          {
+            id: "tower-mystery",
+            title: "The Tower's Secret",
+            description: "Investigate the mysterious tower on the edge of the village.",
+            dialogues: [
+              {
+                id: 0,
+                speaker: "???",
+                text: "This tower holds many secrets... but are you ready to discover them?",
+                choices: [
+                  { text: "I'm ready", nextDialogue: 1 },
+                  { text: "Not yet", nextDialogue: null },
+                ],
+              },
+              {
+                id: 1,
+                speaker: "???",
+                text: "Return when you've proven yourself worthy...",
+                choices: [{ text: "I'll be back", nextDialogue: null }],
+              }
+            ],
+            requirements: {
+              level: 5,
+              energy: 50,
+              money: 100,
+              timeOfDay: ["night"],
+              items: []
+            },
+            rewards: {
+              xp: 500,
+              money: 200,
+              energy: 100,
+              items: [{ id: "mysterious_key", amount: 1 }]
+            },
+            completion: {
+              conditions: {
+                items: [{ id: "magic_crystal", amount: 3 }]
+              },
+              actions: [
+                {
+                  type: "complete",
+                  params: { message: "You've unlocked the tower's secret!" }
+                }
+              ]
+            },
+            completed: false
+          }
+        ]
+      }
     ],
     environment: "sunset",
     background: "environment",
     ambientLight: 0.8,
     fog: {
-      color: "#b99f8e",
-      near: 10,
-      far: 30,
+      color: "#b9d5ff",
+      near: 1,
+      far: 100
     },
     music: {
-      url: "https://example.com/village-ambience.mp3",
+      url: "/music/village-theme.mp3",
       volume: 0.5,
-      loop: true,
-    },
+      loop: true
+    }
   },
   {
     id: "nature-scene",

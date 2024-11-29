@@ -54,15 +54,68 @@ export function GameObject({
     e.stopPropagation();
     onClick?.();
 
-    if (isGameMode && quests?.[0]) {
-      if (
-        questLog?.active?.find((quest) => quest.id === quests[0].id)?.completed
-      )
-        return;
-      playSound("npcGreeting");
-      playSound("questAccept");
-      setActiveQuest({ ...quests[0], thumbnail });
-      setActiveDialogue(0);
+    // Prevent multiple clicks while dialog is active
+    const activeQuest = useGameStore.getState().activeQuest;
+    const activeDialogue = useGameStore.getState().activeDialogue;
+    if (activeQuest !== null && activeDialogue !== null) {
+      return;
+    }
+
+    if (isGameMode) {
+      // Check if NPC has quests
+      if (quests?.length > 0) {
+        // Find the first incomplete quest
+        const nextQuest = quests?.find(
+          (quest) =>
+            !questLog?.active?.find((q) => q.id === quest.id)?.completed &&
+            !questLog?.completed?.find((q) => q.id === quest.id)
+        );
+
+        if (nextQuest) {
+          // Has an incomplete quest - start quest dialogue
+          playSound("npcGreeting");
+          playSound("questAccept");
+          setActiveQuest({ ...nextQuest, thumbnail });
+          setActiveDialogue(0);
+        } else {
+          // All quests completed - just show greeting
+          playSound("npcGreeting");
+          setActiveQuest({
+            id: "greeting",
+            title: "Friendly Greeting",
+            description: "A friendly chat",
+            rewards: {
+              xp: 0,
+              money: 0,
+              energy: 0,
+            },
+            completion: {
+              type: "talk",
+              conditions: {
+                items: [],
+              },
+            },
+            dialogues: [
+              {
+                id: 0,
+                speaker: "NPC",
+                text: "Hello! Thanks for all your help. Have a great day!",
+                choices: [
+                  {
+                    text: "Goodbye!",
+                    nextDialogue: null,
+                    action: () => {
+                      setActiveQuest(null);
+                      setActiveDialogue(null);
+                    },
+                  },
+                ],
+              },
+            ],
+          });
+          setActiveDialogue(0);
+        }
+      }
     } else if (!isGameMode && onClick) {
       onClick();
     }

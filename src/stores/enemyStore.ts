@@ -49,28 +49,59 @@ export const useEnemyStore = create<EnemyState>()(
       if (attempts >= maxAttempts) return;
 
       const types = Object.keys(ENEMY_TYPES) as (keyof typeof ENEMY_TYPES)[];
-      const type = types[Math.floor(Math.random() * types.length)];
-      const enemyType = ENEMY_TYPES[type];
+      const randomType = types[Math.floor(Math.random() * types.length)];
+      const baseEnemy = ENEMY_TYPES[randomType];
+
+      // Get player level and scale enemy accordingly
+      const playerLevel = useGameStore.getState().playerStats.level;
+      
+      // Enemy level will be -2 to +2 of player level
+      const levelDiff = Math.floor(Math.random() * 5) - 2;
+      const enemyLevel = Math.max(1, playerLevel + levelDiff);
+      
+      // Scale enemy stats based on level
+      const levelScale = enemyLevel / baseEnemy.level;
+      const health = Math.floor(baseEnemy.health * levelScale * 1.5); // 50% more HP than equivalent player level
+      const damage = Math.floor(baseEnemy.damage * levelScale);
+      const xp = Math.floor(baseEnemy.xp * levelScale);
+
+      do {
+        position = {
+          x: (Math.random() - 0.5) * SPAWN_RADIUS * 2,
+          y: 0,
+          z: (Math.random() - 0.5) * SPAWN_RADIUS * 2,
+        };
+
+        // Check distance from all NPCs
+        const isFarEnough = npcPositions.every((npcPos) => {
+          const dx = position.x - npcPos.x;
+          const dz = position.z - npcPos.z;
+          return Math.sqrt(dx * dx + dz * dz) >= MIN_DISTANCE_FROM_NPC;
+        });
+
+        if (isFarEnough) break;
+        attempts++;
+      } while (attempts < maxAttempts);
 
       const enemy: Enemy = {
         id: nanoid(),
-        type,
-        name: enemyType.name,
-        position: {
-          x: Math.random() * SPAWN_RADIUS * 2 - SPAWN_RADIUS,
-          z: Math.random() * SPAWN_RADIUS * 2 - SPAWN_RADIUS,
-          y: 0,
-        },
-        health: enemyType.health,
-        maxHealth: enemyType.health,
-        damage: enemyType.damage,
-        xp: enemyType.xp,
-        loot: enemyType.loot,
-        model: enemyType.model,
-        scale: enemyType.scale,
+        type: randomType,
+        position,
+        health,
+        maxHealth: health,
+        damage,
+        xp,
+        level: enemyLevel,
+        loot: baseEnemy.loot,
+        model: baseEnemy.model,
+        scale: baseEnemy.scale,
+        name: `${baseEnemy.name}`,
+        attackRange: baseEnemy.attackRange,
+        attackSpeed: baseEnemy.attackSpeed,
+        moveSpeed: baseEnemy.moveSpeed,
       };
 
-      set({ enemies: [...enemies, enemy] });
+      set((state) => ({ enemies: [...state.enemies, enemy] }));
     },
 
     removeEnemy: (id: string) => {
@@ -82,9 +113,8 @@ export const useEnemyStore = create<EnemyState>()(
 
       // Calculate dropped loot
       const droppedLoot: { itemId: string; amount: number }[] = [];
-      const randomLoot =
-        enemy.loot[Math.floor(Math.random() * enemy.loot.length)];
-      console.log(randomLoot);
+      const randomLoot = enemy.loot[Math.floor(Math.random() * enemy.loot.length)];
+      
       if (Math.random() <= randomLoot.chance) {
         const itemId = randomLoot.itemId;
         const amount = randomLoot.amount * Math.floor(Math.random() * 5);
@@ -92,56 +122,21 @@ export const useEnemyStore = create<EnemyState>()(
         useGameStore.getState().addToInventory(itemId, amount);
       }
 
-      const baseXP = 100; // Base XP for the first level
-      const increment = 50; // Increment factor
-
-      // Function to calculate XP required for a given level
-      function getXPForLevel(level: number) {
-        return baseXP + increment * Math.pow(level, 2);
-      }
-
-      // Function to calculate the current level based on total XP
-      function calculateLevel(totalXP: number) {
-        let level = 1;
-        let xpForNextLevel = getXPForLevel(level);
-
-        while (totalXP >= xpForNextLevel) {
-          level++;
-          xpForNextLevel = getXPForLevel(level);
-        }
-
-        return Math.max(level - 1, 1); // Adjust to the correct level
-      }
-
-      // Update player XP
+      // Add XP to player
       const gameStore = useGameStore.getState();
-      const currentStats = gameStore.playerStats;
-      const newXP = currentStats.xp + enemy.xp;
-      const newLevel = calculateLevel(newXP);
+      const currentXP = gameStore.playerStats.xp;
+      gameStore.updatePlayerStats({ xp: currentXP + enemy.xp });
 
-      if (newLevel > currentStats.level) {
-        gameStore.setShowLevelUp(true);
-      }
-
-      gameStore.updatePlayerStats({
-        xp: newXP,
-        level: newLevel,
-      });
-
-      // Remove enemy after death animation
+      // Remove enemy from list after delay and show rewards
       setTimeout(() => {
         set((state) => ({
           enemies: state.enemies.filter((e) => e.id !== id),
-          dyingEnemies: state.dyingEnemies.filter((eId) => eId !== id),
-          // Only show rewards after enemy disappears
-          rewards:
-            droppedLoot.length > 0
-              ? {
-                  itemId: droppedLoot[0].itemId,
-                  amount: droppedLoot[0].amount,
-                  xp: enemy.xp,
-                }
-              : null,
+          dyingEnemies: state.dyingEnemies.filter((e) => e !== id),
+          rewards: droppedLoot.length > 0 ? {
+            itemId: droppedLoot[0].itemId,
+            amount: droppedLoot[0].amount,
+            xp: enemy.xp
+          } : null
         }));
       }, 1000);
     },

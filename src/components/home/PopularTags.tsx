@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Tag } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const TAGS = [
   { name: "Action", count: 1234 },
@@ -13,6 +14,12 @@ const TAGS = [
 ];
 
 export function PopularTags() {
+  const navigate = useNavigate();
+
+  const handleTagClick = (tagName: string) => {
+    navigate(`/games?tag=${tagName.toLowerCase()}`);
+  };
+
   return (
     <section className="py-16 bg-gradient-to-b from-gray-900 to-black">
       <div className="container mx-auto px-4">
@@ -24,6 +31,7 @@ export function PopularTags() {
           {TAGS.map((tag, index) => (
             <motion.button
               key={tag.name}
+              onClick={() => handleTagClick(tag.name)}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}

@@ -6,14 +6,20 @@ import { Quest } from "../types";
 // Default scene ID
 const DEFAULT_SCENE_ID = "village-scene";
 
+interface PlayerStats {
+  level: number;
+  xp: number;
+  xpNeeded: number;
+  money: number;
+  health: number;
+  maxHealth: number;
+  energy: number;
+  maxEnergy: number;
+  damage: number;
+}
+
 interface GameState {
-  playerStats: {
-    level: number;
-    xp: number;
-    money: number;
-    health: number;
-    maxHealth: number;
-  };
+  playerStats: PlayerStats;
   timeOfDay: "morning" | "noon" | "evening" | "night";
   gameTime: {
     hours: number;
@@ -68,9 +74,13 @@ export const useGameStore = create<GameState>()(
       playerStats: {
         level: 1,
         xp: 0,
-        money: 100,
+        xpNeeded: 125,
+        money: 0,
         health: 100,
         maxHealth: 100,
+        energy: 100,
+        maxEnergy: 100,
+        damage: 10, // Starting damage
       },
       timeOfDay: "morning",
       gameTime: {
@@ -99,10 +109,39 @@ export const useGameStore = create<GameState>()(
 
       // Actions
       setCurrentSceneId: (id) => set({ currentSceneId: id }),
-      updatePlayerStats: (updates) => {
-        set((state) => ({
-          playerStats: { ...state.playerStats, ...updates },
-        }));
+      updatePlayerStats: (updates: Partial<PlayerStats>) => {
+        set((state) => {
+          const newStats = { ...state.playerStats };
+
+          // Update stats with validation
+          if (updates.level !== undefined) newStats.level = updates.level;
+          if (updates.xp !== undefined) newStats.xp = updates.xp;
+          if (updates.money !== undefined) newStats.money = Math.max(0, updates.money);
+          if (updates.energy !== undefined) {
+            const newEnergy = Number(updates.energy);
+            if (!isNaN(newEnergy)) {
+              newStats.energy = Math.max(0, Math.min(newEnergy, newStats.maxEnergy));
+            }
+          }
+          if (updates.damage !== undefined) newStats.damage = updates.damage;
+
+          // Calculate XP needed for next level
+          const xpForNextLevel = (level: number) => (level * 100) + (level * level * 25);
+          newStats.xpNeeded = xpForNextLevel(newStats.level);
+
+          // Level up logic
+          while (newStats.xp >= newStats.xpNeeded) {
+            newStats.xp -= newStats.xpNeeded;
+            newStats.level += 1;
+            newStats.energy = 100; // Restore energy to 100 on level up
+            newStats.maxEnergy = 100; // Set max energy to 100
+            newStats.damage += 5; // Increase damage by 5 per level
+            newStats.xpNeeded = xpForNextLevel(newStats.level);
+            get().setShowLevelUp(true);
+          }
+
+          return { playerStats: newStats };
+        });
       },
 
       advanceTime: (minutes) =>
@@ -153,9 +192,28 @@ export const useGameStore = create<GameState>()(
           const newStats = { ...state.playerStats };
           const newInventory = [...state.inventory];
 
+          // Add rewards
           if (quest.rewards.xp) newStats.xp += quest.rewards.xp;
           if (quest.rewards.money) newStats.money += quest.rewards.money;
+          if (quest.rewards.health !== undefined) {
+            newStats.health = Math.min(newStats.maxHealth, newStats.health + quest.rewards.health);
+          }
+          if (quest.rewards.energy !== undefined) {
+            newStats.energy = Math.min(newStats.maxEnergy, newStats.energy + quest.rewards.energy);
+          }
 
+          // Remove requirements
+          if (quest.requirements?.health) {
+            newStats.health = Math.max(0, newStats.health - quest.requirements.health);
+          }
+          if (quest.requirements?.money) {
+            newStats.money = Math.max(0, newStats.money - quest.requirements.money);
+          }
+          if (quest.requirements?.energy) {
+            newStats.energy = Math.max(0, newStats.energy - quest.requirements.energy);
+          }
+
+          // Add reward items
           if (quest.rewards.items) {
             quest.rewards.items.forEach(({ id, amount }) => {
               const existingItem = newInventory.find((item) => item.id === id);
@@ -167,12 +225,25 @@ export const useGameStore = create<GameState>()(
             });
           }
 
+          // Remove required items
+          if (quest.requirements?.items) {
+            quest.requirements.items.forEach(({ id, amount }) => {
+              const existingItem = newInventory.find((item) => item.id === id);
+              if (existingItem) {
+                existingItem.amount = Math.max(0, existingItem.amount - amount);
+                if (existingItem.amount === 0) {
+                  newInventory.splice(newInventory.indexOf(existingItem), 1);
+                }
+              }
+            });
+          }
+
           if (newStats.xp >= 100) {
             const levelsGained = Math.floor(newStats.xp / 100);
             newStats.level += levelsGained;
             newStats.xp = newStats.xp % 100;
-            newStats.maxHealth += levelsGained * 10;
-            newStats.health = newStats.maxHealth;
+            newStats.health = newStats.maxHealth; // Refill health on level up
+            newStats.energy = newStats.maxEnergy; // Refill energy on level up
           }
 
           return {

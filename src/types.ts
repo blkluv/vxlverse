@@ -13,7 +13,7 @@ export const GAME_ITEMS: Item[] = items;
 
 export interface Enemy {
   id: string;
-  type: "slime" | "goblin" | "skeleton";
+  type: "knight" | "mage" | "dragon" | "demon";
   position: { x: number; y: number; z: number };
   health: number;
   maxHealth: number;
@@ -23,50 +23,86 @@ export interface Enemy {
   model: string;
   scale: number;
   name: string;
+  level: number;
+  attackRange: number;
+  attackSpeed: number;
+  moveSpeed: number;
+  animations?: {
+    idle?: string;
+    walk?: string;
+    attack?: string;
+    hit?: string;
+    death?: string;
+  };
 }
 
 export const ENEMY_TYPES = {
-  slime: {
-    name: "Slime",
-    health: 50,
-    xp: 90,
-
-    damage: 10,
-    model:
-      "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_iNknFCKZ5J.glb",
-    scale: 1,
-    loot: items.map((item) => ({
-      itemId: item.id,
-      chance: Math.random(),
-      amount: 1,
-    })),
-  },
-  goblin: {
-    name: "Goblin",
-    health: 80,
-    damage: 15,
-    xp: 90,
-    model:
-      "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_UwHJLq89uV.glb",
-    scale: 1,
-    loot: items.map((item) => ({
-      itemId: item.id,
-      chance: Math.random(),
-      amount: 1,
-    })),
-  },
-  skeleton: {
-    name: "Skeleton",
+  knight: {
+    name: "Dark Knight",
     health: 100,
-    xp: 10,
-    damage: 20,
-    model:
-      "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_PNlrY0F4pW.glb",
-    scale: 3,
+    xp: 120,
+    damage: 15,
+    level: 5,
+    attackRange: 2,
+    attackSpeed: 1.5,
+    moveSpeed: 2,
+    model: "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_elPqhAENKG.glb",
+    scale: 1,
     loot: items.map((item) => ({
       itemId: item.id,
       chance: Math.random(),
       amount: 1,
+    })),
+  },
+  mage: {
+    name: "Evil Mage",
+    health: 80,
+    damage: 25,
+    xp: 150,
+    level: 7,
+    attackRange: 8,
+    attackSpeed: 1,
+    moveSpeed: 1.5,
+    model: "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_dnm6fkRN7J.glb",
+    scale: 1,
+    loot: items.map((item) => ({
+      itemId: item.id,
+      chance: Math.random(),
+      amount: 1,
+    })),
+  },
+  dragon: {
+    name: "Fire Dragon",
+    health: 200,
+    xp: 300,
+    damage: 35,
+    level: 12,
+    attackRange: 5,
+    attackSpeed: 0.8,
+    moveSpeed: 3,
+    model: "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_p49uuKHYJc.glb",
+    scale: 2,
+    loot: items.map((item) => ({
+      itemId: item.id,
+      chance: Math.random() * 0.5 + 0.5, // Higher chance for better loot
+      amount: Math.floor(Math.random() * 3) + 1,
+    })),
+  },
+  demon: {
+    name: "Demon Lord",
+    health: 300,
+    xp: 500,
+    damage: 45,
+    level: 15,
+    attackRange: 3,
+    attackSpeed: 1.2,
+    moveSpeed: 2.5,
+    model: "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_DQ3wuTlaxb.glb",
+    scale: 1.5,
+    loot: items.map((item) => ({
+      itemId: item.id,
+      chance: Math.random() * 0.7 + 0.3, // Highest chance for best loot
+      amount: Math.floor(Math.random() * 4) + 2,
     })),
   },
 } as const;

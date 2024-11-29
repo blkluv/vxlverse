@@ -55,6 +55,11 @@ const SOUNDS = {
     src: "/mp3/levelup.mp3",
     volume: 0.6,
   },
+  notAllowed:{
+    src: "/mp3/wrong-47985.mp3",
+    volume: 0.6,
+
+  }
 };
 
 type SoundType = keyof typeof SOUNDS;

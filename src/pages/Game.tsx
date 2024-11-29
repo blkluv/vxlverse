@@ -12,8 +12,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEnemyStore } from "../stores/enemyStore";
 import { EnemyRewardModal } from "../components/game/EnemyReward";
 import { LevelUpModal } from "../components/game/LevelUpModal";
+import { useParams } from "react-router-dom";
 
 export function Game() {
+  const { id } = useParams();
+  const setCurrentSceneId = useGameStore((state) => state.setCurrentSceneId);
   const currentSceneId = useGameStore((state) => state.currentSceneId);
   const scenes = useEditorStore((state) => state.scenes);
   const currentScene = scenes.find((scene) => scene.id === currentSceneId);
@@ -26,6 +29,12 @@ export function Game() {
   const timeOfDay = useGameStore((state) => state.timeOfDay);
   const rewards = useEnemyStore((state) => state.rewards);
   const clearRewards = useEnemyStore((state) => state.clearRewards);
+
+  useEffect(() => {
+    if (id) {
+      setCurrentSceneId(id);
+    }
+  }, [id, setCurrentSceneId]);
 
   useEffect(() => {
     setShowSceneName(true);

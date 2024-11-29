@@ -34,6 +34,7 @@ export function Player() {
   return (
     <KeyboardControls map={keyboardMap}>
       <Ecctrl
+        maxVelLimit={3}
         camCollision={false} // disable camera collision detect (useless in FP mode)
         camFollowMult={1000} // give a big number here, so the camera follows the target (character) instantly
         camLerpMult={1000} // give a big number here, so the camera lerp to the followCam position instantly

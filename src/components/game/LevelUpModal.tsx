@@ -12,6 +12,7 @@ export function LevelUpModal({}) {
   const oldLevel = level - 1;
   const newLevel = level;
   const healthIncrease = 10;
+  const playerStats = useGameStore((state) => state.playerStats);
   useEffect(() => {
     playSound("levelUp");
     setTimeout(() => {
@@ -80,37 +81,21 @@ export function LevelUpModal({}) {
                 </div>
               </motion.div>
 
-              {/* Health Increase */}
+              {/* Damage Increase */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.6 }}
                 className="flex items-center gap-2 bg-red-500/20 rounded-lg px-3 py-2 border border-red-500/30"
               >
-                <Heart className="w-5 h-5 text-red-400" />
+                <Sword className="w-5 h-5 text-red-400" />
                 <div className="flex flex-col">
                   <span className="text-sm font-medium text-red-200">
-                    Max Energy
-                  </span>
-                  <span className="text-xs text-red-400">
-                    +{healthIncrease}
-                  </span>
-                </div>
-              </motion.div>
-
-              {/* Damage Increase */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.7 }}
-                className="flex items-center gap-2 bg-blue-500/20 rounded-lg px-3 py-2 border border-blue-500/30"
-              >
-                <Sword className="w-5 h-5 text-blue-400" />
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium text-blue-200">
                     Damage
                   </span>
-                  <span className="text-xs text-blue-400">+2</span>
+                  <span className="text-xs text-red-400">
+                    +5 (New Total: {playerStats.damage})
+                  </span>
                 </div>
               </motion.div>
 

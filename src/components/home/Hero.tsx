@@ -89,22 +89,11 @@ export function Hero() {
               className="flex flex-col sm:flex-row items-center justify-center gap-6"
             >
               <motion.a
-                href="/editor"
+                href="/play/village-scene"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="group px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium 
                          hover:from-blue-600 hover:to-blue-700 transition-all flex items-center gap-2 shadow-lg shadow-blue-500/25"
-              >
-                Create your game
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </motion.a>
-
-              <motion.a
-                href="/game"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="group px-8 py-4 rounded-2xl bg-white/10 backdrop-blur-sm text-white font-medium 
-                         hover:bg-white/20 transition-all flex items-center gap-2 border border-white/10"
               >
                 <Play className="w-5 h-5" />
                 Play Demo
