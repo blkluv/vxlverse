@@ -1,4 +1,12 @@
-import { Gamepad2, LogOut, User, Settings, Heart, Plus, ChevronDown } from "lucide-react";
+import {
+  Gamepad2,
+  LogOut,
+  User,
+  Settings,
+  Heart,
+  Plus,
+  ChevronDown,
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { pb } from "../../lib/pocketbase";
 import { useAuthStore } from "../../stores/authStore";
@@ -26,7 +34,6 @@ export function Header() {
   const dropdownItems = [
     { icon: User, label: "Profile", path: "/profile" },
     { icon: Heart, label: "Favorites", path: "/favorites" },
-    { icon: Plus, label: "Create Game", path: "/editor" },
     { icon: Settings, label: "Settings", path: "/settings" },
   ];
 
@@ -95,9 +102,11 @@ export function Header() {
                       {user.email || "No email"}
                     </div>
                   </div>
-                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
-                    showDropdown ? "rotate-180" : ""
-                  }`} />
+                  <ChevronDown
+                    className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
+                      showDropdown ? "rotate-180" : ""
+                    }`}
+                  />
                 </motion.button>
 
                 {/* Dropdown Menu */}

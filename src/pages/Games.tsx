@@ -1,46 +1,45 @@
 import { useState, useMemo } from "react";
-import { GameCard } from "../components/game/GameCard";
+import { CreateGameModal } from "../components/game/CreateGameModal";
+import { Plus, Search, Filter } from "lucide-react";
 import { useAuthStore } from "../stores/authStore";
-import { Header } from "../components/layout/Header";
-import { Plus, Filter } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useGames } from "../hooks/useGames";
 import { GameFilters } from "../components/game/GameFilters";
+import { Button } from "../components/UI/Button";
+import { GameCard } from "../components/game/GameCard";
+import { Header } from "../components/layout/Header";
 
 export function Games() {
-  const [activeTab, setActiveTab] = useState<'all' | 'my'>('all');
-  const [showFilters, setShowFilters] = useState(false);
+  const [activeTab, setActiveTab] = useState<"all" | "my">("all");
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
   const { user } = useAuthStore();
   const { games, isLoading, mutate } = useGames();
 
   const filteredGames = useMemo(() => {
-    let filtered = games;
+    if (!games) return [];
+    let filtered = [...games];
 
-    // Filter by search
     if (search) {
       const searchLower = search.toLowerCase();
       filtered = filtered.filter(
-        game =>
+        (game) =>
           game.title.toLowerCase().includes(searchLower) ||
           game.description.toLowerCase().includes(searchLower)
       );
     }
 
-    // Filter by tags
     if (selectedTags.length > 0) {
-      filtered = filtered.filter(game => 
-        game.tags?.some(tag => selectedTags.includes(tag))
-      );
+      filtered = filtered.filter((game) => {
+        const gameTags = game.tags || [];
+        return selectedTags.every((tag) => gameTags.includes(tag));
+      });
     }
 
-    // Filter by ownership
-    if (activeTab === 'my') {
-      filtered = filtered.filter(game => game.creator === user?.id);
-    } else {
-      filtered = filtered.filter(game => game.creator !== user?.id);
+    if (activeTab === "my" && user) {
+      filtered = filtered.filter((game) => game.creator === user.id);
     }
 
     return filtered;
@@ -48,15 +47,8 @@ export function Games() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-900">
-        <Header />
-        <div className="container mx-auto px-4 py-8 pt-24">
-          <div className="animate-pulse space-y-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-48 bg-gray-800 rounded-lg" />
-            ))}
-          </div>
-        </div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -64,105 +56,122 @@ export function Games() {
   return (
     <div className="min-h-screen bg-gray-900">
       <Header />
-      <div className="container mx-auto px-4 py-8 pt-24">
+
+      <div className="flex-1 container mx-auto  px-4 sm:px-6 lg:px-8 pt-20 pb-8">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Games Gallery</h1>
-            <p className="text-gray-400">Discover and play amazing VXL games</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                showFilters
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700'
-              }`}
-            >
-              <Filter className="w-5 h-5" />
-              Filters
-            </button>
-            {user && (
-              <Link
-                to="/editor"
-                className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+        <div className="flex flex-col gap-6 mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">
+                Games
+              </h1>
+              <p className="text-gray-400 mt-1">
+                Discover and play amazing VXL games
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                icon={Filter}
+                onClick={() => setIsFiltersOpen(!isFiltersOpen)}
               >
-                <Plus className="w-5 h-5" />
-                Create Game
-              </Link>
-            )}
+                Filters
+              </Button>
+              {user && (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  icon={Plus}
+                  onClick={() => setIsCreateModalOpen(true)}
+                >
+                  Create
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {/* Search and Tabs */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search games..."
+                className="w-full h-10 pl-10 pr-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-gray-500 
+                         focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all"
+              />
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500"
+                strokeWidth={1.5}
+              />
+            </div>
+            <div className="flex gap-2 self-end">
+              <Button
+                size="sm"
+                variant={activeTab === "all" ? "primary" : "outline"}
+                onClick={() => setActiveTab("all")}
+              >
+                All Games
+              </Button>
+              {user && (
+                <Button
+                  size="sm"
+                  variant={activeTab === "my" ? "primary" : "outline"}
+                  onClick={() => setActiveTab("my")}
+                >
+                  My Games
+                </Button>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Filters */}
-        {showFilters && (
-          <div className="mb-8 p-4 bg-gray-800/50 rounded-xl border border-gray-700/50">
+        {isFiltersOpen && (
+          <div className="mb-6 p-4 bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm">
             <GameFilters
-              onSearchChange={setSearch}
-              onTagsChange={setSelectedTags}
               selectedTags={selectedTags}
+              onTagsChange={setSelectedTags}
             />
           </div>
         )}
 
-        {/* Tabs */}
-        <div className="flex gap-4 mb-8 bg-gray-800/50 p-1 rounded-lg w-fit">
-          <button
-            onClick={() => setActiveTab('all')}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              activeTab === 'all'
-                ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
-                : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-            }`}
-          >
-            All Games
-          </button>
-          {user && (
-            <button
-              onClick={() => setActiveTab('my')}
-              className={`px-4 py-2 rounded-lg transition-all ${
-                activeTab === 'my'
-                  ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-              }`}
-            >
-              My Games
-            </button>
-          )}
-        </div>
-
         {/* Games Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredGames.map((game, index) => (
-            <GameCard
-              key={game.id}
-              game={game}
-              index={index}
-              onDelete={mutate}
-            />
+          {filteredGames.map((game) => (
+            <GameCard key={game.id} game={game} />
           ))}
-          {filteredGames.length === 0 && (
-            <div className="col-span-full flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-gray-700 rounded-xl">
-              <div className="text-gray-400 text-center">
-                <p className="mb-2">
-                  {activeTab === 'my'
-                    ? "You haven't created any games yet."
-                    : "No games found matching your filters."}
-                </p>
-                {activeTab === 'my' && (
-                  <Link
-                    to="/editor"
-                    className="text-blue-400 hover:text-blue-300 transition-colors"
-                  >
-                    Create your first game →
-                  </Link>
-                )}
-              </div>
-            </div>
-          )}
         </div>
+
+        {/* Empty State */}
+        {filteredGames.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <p className="text-gray-400 mb-4">No games found</p>
+            {user && (
+              <Button
+                variant="primary"
+                size="sm"
+                icon={Plus}
+                onClick={() => setIsCreateModalOpen(true)}
+              >
+                Create your first game
+              </Button>
+            )}
+          </div>
+        )}
       </div>
+
+      {/* Create Game Modal */}
+      <CreateGameModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={() => {
+          setIsCreateModalOpen(false);
+          mutate();
+        }}
+      />
     </div>
   );
 }
