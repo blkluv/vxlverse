@@ -1,8 +1,17 @@
 import PocketBase from "pocketbase";
 
-export const pb = new PocketBase("https://api.findasb.com");
+// Initialize PocketBase
+export const pb = new PocketBase("https://api.vxlverse.com");
 
-// Enable Google auth
-pb.authStore.onChange(() => {
-  console.log("authStore changed", pb.authStore.model);
+// Export types for better TypeScript support
+export type AuthModel = {
+  id: string;
+  email: string;
+  name?: string;
+  avatar?: string;
+};
+
+// Enable Google auth with type-safe onChange handler
+pb.authStore.onChange((token, model) => {
+  console.log("authStore changed", { token, model });
 });

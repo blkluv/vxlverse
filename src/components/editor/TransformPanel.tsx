@@ -1,6 +1,13 @@
-import { useState } from 'react';
-import { Move, RotateCcw, Maximize, RefreshCw, ChevronDown, ChevronRight } from 'lucide-react';
-import * as THREE from 'three';
+import { useState } from "react";
+import {
+  Move,
+  RotateCcw,
+  Maximize,
+  RefreshCw,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react";
+import * as THREE from "three";
 
 interface TransformPanelProps {
   object: {
@@ -12,10 +19,12 @@ interface TransformPanelProps {
 }
 
 export function TransformPanel({ object, onChange }: TransformPanelProps) {
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['position']));
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(
+    new Set(["position"])
+  );
 
   const toggleSection = (section: string) => {
-    setExpandedSections(prev => {
+    setExpandedSections((prev) => {
       const next = new Set(prev);
       if (next.has(section)) {
         next.delete(section);
@@ -30,7 +39,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
     return Number(value.toFixed(2));
   };
 
-  const handlePositionChange = (axis: 'x' | 'y' | 'z', value: string) => {
+  const handlePositionChange = (axis: "x" | "y" | "z", value: string) => {
     const numValue = parseFloat(value);
     if (isNaN(numValue)) return;
 
@@ -39,7 +48,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
     onChange({ position: newPosition });
   };
 
-  const handleRotationChange = (axis: 'x' | 'y' | 'z', value: string) => {
+  const handleRotationChange = (axis: "x" | "y" | "z", value: string) => {
     const numValue = (parseFloat(value) * Math.PI) / 180;
     if (isNaN(numValue)) return;
 
@@ -48,7 +57,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
     onChange({ rotation: newRotation });
   };
 
-  const handleScaleChange = (axis: 'x' | 'y' | 'z', value: string) => {
+  const handleScaleChange = (axis: "x" | "y" | "z", value: string) => {
     const numValue = parseFloat(value);
     if (isNaN(numValue)) return;
 
@@ -57,15 +66,15 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
     onChange({ scale: newScale });
   };
 
-  const resetTransforms = (type: 'position' | 'rotation' | 'scale') => {
+  const resetTransforms = (type: "position" | "rotation" | "scale") => {
     switch (type) {
-      case 'position':
+      case "position":
         onChange({ position: new THREE.Vector3(0, 0, 0) });
         break;
-      case 'rotation':
+      case "rotation":
         onChange({ rotation: new THREE.Euler(0, 0, 0) });
         break;
-      case 'scale':
+      case "scale":
         onChange({ scale: new THREE.Vector3(1, 1, 1) });
         break;
     }
@@ -76,7 +85,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
       {/* Position Section */}
       <div className="bg-slate-800/50 rounded-lg border border-slate-700/50 overflow-hidden">
         <button
-          onClick={() => toggleSection('position')}
+          onClick={() => toggleSection("position")}
           className="w-full p-2 flex items-center justify-between hover:bg-slate-700/30 transition-colors"
         >
           <div className="flex items-center gap-2">
@@ -85,17 +94,17 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
             </div>
             <span className="text-sm font-medium text-cyan-100">Position</span>
           </div>
-          {expandedSections.has('position') ? (
+          {expandedSections.has("position") ? (
             <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
           ) : (
             <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
           )}
         </button>
 
-        {expandedSections.has('position') && (
+        {expandedSections.has("position") && (
           <div className="p-2 border-t border-slate-700/50">
             <div className="grid grid-cols-3 gap-2">
-              {['x', 'y', 'z'].map((axis) => (
+              {["x", "y", "z"].map((axis) => (
                 <div key={`pos-${axis}`} className="relative group">
                   <div className="absolute inset-0 bg-cyan-500/5 rounded-md -m-0.5 group-hover:bg-cyan-500/10 transition-colors" />
                   <div className="relative">
@@ -104,8 +113,15 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
                     </label>
                     <input
                       type="number"
-                      value={formatValue(object.position[axis as 'x' | 'y' | 'z'])}
-                      onChange={(e) => handlePositionChange(axis as 'x' | 'y' | 'z', e.target.value)}
+                      value={formatValue(
+                        object.position[axis as "x" | "y" | "z"]
+                      )}
+                      onChange={(e) =>
+                        handlePositionChange(
+                          axis as "x" | "y" | "z",
+                          e.target.value
+                        )
+                      }
                       className="w-full px-1.5 py-1 text-xs bg-slate-800/50 border border-slate-600/50 rounded-md 
                                focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 text-right
                                transition-all"
@@ -116,7 +132,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
               ))}
             </div>
             <button
-              onClick={() => resetTransforms('position')}
+              onClick={() => resetTransforms("position")}
               className="w-full mt-2 p-1 flex items-center justify-center gap-1.5 text-[10px] text-cyan-300 hover:bg-cyan-500/10 rounded-md transition-colors"
             >
               <RefreshCw className="w-3 h-3" />
@@ -129,7 +145,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
       {/* Rotation Section */}
       <div className="bg-slate-800/50 rounded-lg border border-slate-700/50 overflow-hidden">
         <button
-          onClick={() => toggleSection('rotation')}
+          onClick={() => toggleSection("rotation")}
           className="w-full p-2 flex items-center justify-between hover:bg-slate-700/30 transition-colors"
         >
           <div className="flex items-center gap-2">
@@ -138,17 +154,17 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
             </div>
             <span className="text-sm font-medium text-blue-100">Rotation</span>
           </div>
-          {expandedSections.has('rotation') ? (
+          {expandedSections.has("rotation") ? (
             <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
           ) : (
             <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
           )}
         </button>
 
-        {expandedSections.has('rotation') && (
+        {expandedSections.has("rotation") && (
           <div className="p-2 border-t border-slate-700/50">
             <div className="grid grid-cols-3 gap-2">
-              {['x', 'y', 'z'].map((axis) => (
+              {["x", "y", "z"].map((axis) => (
                 <div key={`rot-${axis}`} className="relative group">
                   <div className="absolute inset-0 bg-blue-500/5 rounded-md -m-0.5 group-hover:bg-blue-500/10 transition-colors" />
                   <div className="relative">
@@ -157,8 +173,16 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
                     </label>
                     <input
                       type="number"
-                      value={formatValue((object.rotation[axis as 'x' | 'y' | 'z'] * 180) / Math.PI)}
-                      onChange={(e) => handleRotationChange(axis as 'x' | 'y' | 'z', e.target.value)}
+                      value={formatValue(
+                        (object.rotation[axis as "x" | "y" | "z"] * 180) /
+                          Math.PI
+                      )}
+                      onChange={(e) =>
+                        handleRotationChange(
+                          axis as "x" | "y" | "z",
+                          e.target.value
+                        )
+                      }
                       className="w-full px-1.5 py-1 text-xs bg-slate-800/50 border border-slate-600/50 rounded-md 
                                focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 text-right
                                transition-all"
@@ -169,7 +193,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
               ))}
             </div>
             <button
-              onClick={() => resetTransforms('rotation')}
+              onClick={() => resetTransforms("rotation")}
               className="w-full mt-2 p-1 flex items-center justify-center gap-1.5 text-[10px] text-blue-300 hover:bg-blue-500/10 rounded-md transition-colors"
             >
               <RefreshCw className="w-3 h-3" />
@@ -182,7 +206,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
       {/* Scale Section */}
       <div className="bg-slate-800/50 rounded-lg border border-slate-700/50 overflow-hidden">
         <button
-          onClick={() => toggleSection('scale')}
+          onClick={() => toggleSection("scale")}
           className="w-full p-2 flex items-center justify-between hover:bg-slate-700/30 transition-colors"
         >
           <div className="flex items-center gap-2">
@@ -191,17 +215,17 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
             </div>
             <span className="text-sm font-medium text-purple-100">Scale</span>
           </div>
-          {expandedSections.has('scale') ? (
+          {expandedSections.has("scale") ? (
             <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
           ) : (
             <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
           )}
         </button>
 
-        {expandedSections.has('scale') && (
+        {expandedSections.has("scale") && (
           <div className="p-2 border-t border-slate-700/50">
-            <div className="grid grid-cols-3 gap-2">
-              {['x', 'y', 'z'].map((axis) => (
+            <div className="grid grid-cols-1 gap-2">
+              {["x"].map((axis) => (
                 <div key={`scale-${axis}`} className="relative group">
                   <div className="absolute inset-0 bg-purple-500/5 rounded-md -m-0.5 group-hover:bg-purple-500/10 transition-colors" />
                   <div className="relative">
@@ -210,8 +234,17 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
                     </label>
                     <input
                       type="number"
-                      value={formatValue(object.scale[axis as 'x' | 'y' | 'z'])}
-                      onChange={(e) => handleScaleChange(axis as 'x' | 'y' | 'z', e.target.value)}
+                      value={formatValue(object.scale[axis as "x" | "y" | "z"])}
+                      onChange={(e) => {
+                        {
+                          ["x", "y", "z"].forEach((axis) =>
+                            handleScaleChange(
+                              axis as "x" | "y" | "z",
+                              e.target.value
+                            )
+                          );
+                        }
+                      }}
                       className="w-full px-1.5 py-1 text-xs bg-slate-800/50 border border-slate-600/50 rounded-md 
                                focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 text-right
                                transition-all"
@@ -223,7 +256,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
               ))}
             </div>
             <button
-              onClick={() => resetTransforms('scale')}
+              onClick={() => resetTransforms("scale")}
               className="w-full mt-2 p-1 flex items-center justify-center gap-1.5 text-[10px] text-purple-300 hover:bg-purple-500/10 rounded-md transition-colors"
             >
               <RefreshCw className="w-3 h-3" />

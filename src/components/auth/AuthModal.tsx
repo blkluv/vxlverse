@@ -1,33 +1,32 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, LogIn, UserPlus, Github } from "lucide-react";
+import { motion } from "framer-motion";
+import { X } from "lucide-react";
 import { pb } from "../../lib/pocketbase";
 import { Portal } from "../Portal";
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  mode?: "signin" | "register";
 }
 
-export function AuthModal({
-  isOpen,
-  onClose,
-  mode: initialMode = "signin",
-}: AuthModalProps) {
-  const [mode, setMode] = useState(initialMode);
+export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [error, setError] = useState<string | null>(null);
 
   const handleGoogleLogin = async () => {
     try {
-      const authData = await pb
-        .collection("users")
-        .authWithOAuth2({ provider: "google" });
-      console.log("Google auth success:", authData);
-      onClose();
-    } catch (err) {
-      setError("Failed to sign in with Google");
+      const authData = await pb.collection("users").authWithOAuth2({
+        provider: "google",
+      });
+
+      if (authData) {
+        console.log("Successfully authenticated with Google");
+        onClose();
+      }
+    } catch (err: any) {
       console.error("Google auth error:", err);
+      setError(
+        err.message || "Failed to sign in with Google. Please try again."
+      );
     }
   };
 
@@ -58,67 +57,33 @@ export function AuthModal({
           </button>
 
           {/* Header */}
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold mb-2">
-              {mode === "signin" ? "Welcome Back!" : "Create Account"}
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold mb-3 text-white">
+              Welcome Back!
             </h2>
             <p className="text-gray-400">
-              {mode === "signin"
-                ? "Sign in to access your games and creations"
-                : "Join our community of game creators"}
+              Sign in to continue your creative journey
             </p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+            <div className="mb-6 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
               {error}
             </div>
           )}
 
-          {/* OAuth Buttons */}
-          <div className="space-y-3 mb-6">
-            <button
-              onClick={handleGoogleLogin}
-              className="w-full px-4 py-3 rounded-lg bg-white text-gray-900 font-medium hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
-            >
-              <img
-                src="https://www.google.com/favicon.ico"
-                className="w-5 h-5"
-                alt="Google"
-              />
-              Continue with Google
-            </button>
-            <button className="w-full px-4 py-3 rounded-lg bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors flex items-center justify-center gap-2">
-              <Github className="w-5 h-5" />
-              Continue with GitHub
-            </button>
-          </div>
-
-          {/* Divider */}
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-800"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-gray-900 text-gray-400">or</span>
-            </div>
-          </div>
-
-          {/* Switch Mode */}
-          <div className="text-center text-sm">
-            <span className="text-gray-400">
-              {mode === "signin"
-                ? "Don't have an account? "
-                : "Already have an account? "}
-            </span>
-            <button
-              onClick={() => setMode(mode === "signin" ? "register" : "signin")}
-              className="text-blue-400 hover:text-blue-300"
-            >
-              {mode === "signin" ? "Sign up" : "Sign in"}
-            </button>
-          </div>
+          <button
+            onClick={handleGoogleLogin}
+            className="w-full bg-white hover:bg-gray-100 text-gray-900 font-medium py-3.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-3 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+          >
+            <img
+              src="https://www.google.com/favicon.ico"
+              className="w-6 h-6"
+              alt="Google"
+            />
+            Continue with Google
+          </button>
         </motion.div>
       </motion.div>
     </Portal>

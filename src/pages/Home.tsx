@@ -1,27 +1,31 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Gamepad2, LogOut } from "lucide-react";
-import { AuthModal } from "../components/auth/AuthModal";
 import { CreateGameModal } from "../components/game/CreateGameModal";
 import { useAuthStore } from "../stores/authStore";
 import { Hero } from "../components/home/Hero";
 import { FeaturedGames } from "../components/home/FeaturedGames";
 import { PopularTags } from "../components/home/PopularTags";
+import { GoogleSignIn } from "../components/auth/GoogleSignIn";
+import { pb } from "../lib/pocketbase";
 
 export function Home() {
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [authMode, setAuthMode] = useState<"signin" | "register">("signin");
+  const isAuthenticated = pb.authStore.isValid;
 
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const { user, logout } = useAuthStore();
 
   const handleCreateGame = () => {
     if (!isAuthenticated) {
-      setAuthMode("signin");
-      setShowAuthModal(true);
+      return;
     } else {
       setShowCreateModal(true);
     }
+  };
+
+  const handleLogout = () => {
+    pb.authStore.clear();
+    logout();
   };
 
   return (
@@ -65,37 +69,14 @@ export function Home() {
                     animate={{ opacity: 1 }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={logout}
+                    onClick={handleLogout}
                     className="p-2 text-gray-400 hover:text-white transition-colors"
                   >
                     <LogOut className="w-5 h-5" />
                   </motion.button>
                 </>
               ) : (
-                <>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                      setAuthMode("signin");
-                      setShowAuthModal(true);
-                    }}
-                    className="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 transition-colors"
-                  >
-                    Sign In
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                      setAuthMode("register");
-                      setShowAuthModal(true);
-                    }}
-                    className="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 transition-colors"
-                  >
-                    Register
-                  </motion.button>
-                </>
+                <GoogleSignIn />
               )}
             </div>
           </div>
@@ -110,11 +91,6 @@ export function Home() {
       </main>
 
       {/* Modals */}
-      <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        mode={authMode}
-      />
       <CreateGameModal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}

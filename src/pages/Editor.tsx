@@ -3,12 +3,27 @@ import { Scene } from "../components/Scene";
 import { ScenePanel } from "../components/editor/ScenePanel";
 import { PropertiesPanel } from "../components/editor/PropertiesPanel";
 import { Loader, OrbitControls } from "@react-three/drei";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useEditorStore } from "../stores/editorStore";
 import * as THREE from "three";
+import { AIGenerationInput } from "../components/editor/AIGenerationInput";
 
 export function Editor() {
   const { scenes, addScene } = useEditorStore();
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleGenerate = async (prompt: string) => {
+    setIsGenerating(true);
+    try {
+      // Here you would integrate with your AI generation service
+      console.log("Generating from prompt:", prompt);
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate API call
+    } catch (error) {
+      console.error("Generation failed:", error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   useEffect(() => {
     if (scenes.length === 0) {
@@ -36,7 +51,12 @@ export function Editor() {
           <OrbitControls makeDefault />
         </Canvas>
         <Loader />
+
         <PropertiesPanel />
+        <AIGenerationInput
+          onGenerate={handleGenerate}
+          isGenerating={isGenerating}
+        />
       </div>
     </div>
   );
