@@ -1,13 +1,44 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Gamepad2, LogOut } from "lucide-react";
 import { CreateGameModal } from "../components/game/CreateGameModal";
 import { useAuthStore } from "../stores/authStore";
 import { Hero } from "../components/home/Hero";
-import { FeaturedGames } from "../components/home/FeaturedGames";
 import { PopularTags } from "../components/home/PopularTags";
-import { GoogleSignIn } from "../components/auth/GoogleSignIn";
 import { pb } from "../lib/pocketbase";
+import { Header } from "../components/layout/Header";
+import { GameCard } from "../components/game/GameCard";
+
+const FEATURED_GAMES = [
+  {
+    id: "1",
+    title: "Dragon's Quest",
+    description: "Embark on an epic journey through mystical lands",
+    thumbnail: "https://images.unsplash.com/photo-1642479755125-d073df16ce7e",
+    creator: "system",
+    rating: 4.8,
+    players: 12500,
+    lastUpdated: "2 days ago",
+  },
+  {
+    id: "2",
+    title: "Space Odyssey",
+    description: "Explore the vast universe in this sci-fi adventure",
+    thumbnail: "https://images.unsplash.com/photo-1614728263952-84ea256f9679",
+    creator: "system",
+    rating: 4.6,
+    players: 8300,
+    lastUpdated: "5 days ago",
+  },
+  {
+    id: "3",
+    title: "Medieval Legends",
+    description: "Build your kingdom and conquer new territories",
+    thumbnail: "https://images.unsplash.com/photo-1615672968435-75de2c710c1b",
+    creator: "system",
+    rating: 4.9,
+    players: 15200,
+    lastUpdated: "1 day ago",
+  },
+];
 
 export function Home() {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -30,63 +61,31 @@ export function Home() {
 
   return (
     <div className="min-h-screen bg-gray-900">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-gray-800/50 backdrop-blur-md bg-gray-900/50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-2xl font-bold">
-              <Gamepad2 className="w-8 h-8 text-blue-500" />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
-                VXLverse
-              </span>
-            </div>
-
-            <div className="flex items-center gap-4">
-              {isAuthenticated ? (
-                <>
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="flex items-center gap-3 px-4 py-2 bg-gray-800/50 rounded-xl border border-gray-700/50"
-                  >
-                    <img
-                      src={
-                        user.avatar ||
-                        "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
-                      }
-                      alt="Avatar"
-                      className="w-8 h-8 rounded-lg"
-                    />
-                    <div>
-                      <div className="text-sm font-medium">
-                        {user.name || user.email}
-                      </div>
-                      <div className="text-xs text-gray-400">Game Creator</div>
-                    </div>
-                  </motion.div>
-                  <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleLogout}
-                    className="p-2 text-gray-400 hover:text-white transition-colors"
-                  >
-                    <LogOut className="w-5 h-5" />
-                  </motion.button>
-                </>
-              ) : (
-                <GoogleSignIn />
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header
+        isAuthenticated={isAuthenticated}
+        user={user}
+        handleCreateGame={handleCreateGame}
+        handleLogout={handleLogout}
+      />
 
       {/* Main Content */}
       <main>
         <Hero />
-        <FeaturedGames />
+
+        {/* Featured Games */}
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-white mb-8">
+              Featured Games
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {FEATURED_GAMES.map((game, index) => (
+                <GameCard key={game.id} game={game} index={index} />
+              ))}
+            </div>
+          </div>
+        </section>
+
         <PopularTags />
       </main>
 

@@ -2,7 +2,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Editor } from "./pages/Editor";
 import { Game } from "./pages/Game";
 import { Home } from "./pages/Home";
-import { Browse } from "./pages/Browse";
+import { Games } from "./pages/Games";
+import { Profile } from "./pages/Profile";
+import { Favorites } from "./pages/Favorites";
+import { Settings } from "./pages/Settings";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 
 export default function App() {
@@ -10,6 +13,8 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/games" element={<Games />} />
+        <Route path="/play/:id" element={<Game />} />
         <Route
           path="/editor"
           element={
@@ -18,8 +23,38 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/browse" element={<Browse />} />
-        <Route path="/game" element={<Game />} />
+        <Route
+          path="/edit/:id"
+          element={
+            <ProtectedRoute>
+              <Editor />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/favorites"
+          element={
+            <ProtectedRoute>
+              <Favorites />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

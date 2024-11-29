@@ -21,6 +21,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.1",
+    "swr": "^2.2.5",
     "three": "^0.159.0",
     "zustand": "^4.5.1"
   },
