@@ -21,30 +21,30 @@ export function LevelUpModal({}) {
   }, []);
   return (
     <Portal>
-      <div className="fixed  flex justify-center inset-0 pointer-events-none">
+      <div className="fixed flex justify-center inset-0 pointer-events-none px-4">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ type: "spring", duration: 0.6 }}
-          className="fixed top-4 bg-black/95 backdrop-blur-md rounded-2xl border border-yellow-500/20 p-4 shadow-xl pointer-events-auto"
+          className="fixed top-4 w-full max-w-lg bg-black/95 backdrop-blur-md rounded-2xl border border-yellow-500/20 p-3 md:p-4 shadow-xl pointer-events-auto"
         >
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
             <div className="flex items-center gap-3">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", duration: 0.6, delay: 0.2 }}
-                className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500 to-yellow-700 flex items-center justify-center"
+                className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-yellow-500 to-yellow-700 flex items-center justify-center"
               >
-                <Trophy className="w-6 h-6 text-white" />
+                <Trophy className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </motion.div>
               <div>
                 <motion.h2
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.3 }}
-                  className="text-lg font-bold text-yellow-300"
+                  className="text-base md:text-lg font-bold text-yellow-300"
                 >
                   Level Up!
                 </motion.h2>
@@ -52,26 +52,27 @@ export function LevelUpModal({}) {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.4 }}
-                  className="text-sm text-yellow-500/70"
+                  className="text-xs md:text-sm text-yellow-500/70"
                 >
                   You've reached level {newLevel}
                 </motion.div>
               </div>
             </div>
 
-            <div className="h-12 w-px bg-gray-800" />
+            <div className="hidden md:block h-12 w-px bg-gray-800" />
+            <div className="md:hidden h-px w-full bg-gray-800" />
 
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
               {/* Level Increase */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.5 }}
-                className="flex items-center gap-2 bg-yellow-500/20 rounded-lg px-3 py-2 border border-yellow-500/30"
+                className="flex items-center gap-2 bg-yellow-500/20 rounded-lg px-3 py-2 border border-yellow-500/30 w-full md:w-auto"
               >
-                <Star className="w-5 h-5 text-yellow-400" />
+                <Star className="w-4 h-4 md:w-5 md:h-5 text-yellow-400" />
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium text-yellow-200">
+                  <span className="text-xs md:text-sm font-medium text-yellow-200">
                     Level
                   </span>
                   <span className="text-xs text-yellow-400">
@@ -86,11 +87,11 @@ export function LevelUpModal({}) {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.6 }}
-                className="flex items-center gap-2 bg-red-500/20 rounded-lg px-3 py-2 border border-red-500/30"
+                className="flex items-center gap-2 bg-red-500/20 rounded-lg px-3 py-2 border border-red-500/30 w-full md:w-auto"
               >
-                <Sword className="w-5 h-5 text-red-400" />
+                <Sword className="w-4 h-4 md:w-5 md:h-5 text-red-400" />
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium text-red-200">
+                  <span className="text-xs md:text-sm font-medium text-red-200">
                     Damage
                   </span>
                   <span className="text-xs text-red-400">
@@ -99,19 +100,21 @@ export function LevelUpModal({}) {
                 </div>
               </motion.div>
 
-              {/* Defense Increase */}
+              {/* Health Increase */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.8 }}
-                className="flex items-center gap-2 bg-emerald-500/20 rounded-lg px-3 py-2 border border-emerald-500/30"
+                transition={{ duration: 0.4, delay: 0.7 }}
+                className="flex items-center gap-2 bg-green-500/20 rounded-lg px-3 py-2 border border-green-500/30 w-full md:w-auto"
               >
-                <Shield className="w-5 h-5 text-emerald-400" />
+                <Heart className="w-4 h-4 md:w-5 md:h-5 text-green-400" />
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium text-emerald-200">
-                    Defense
+                  <span className="text-xs md:text-sm font-medium text-green-200">
+                    Health
                   </span>
-                  <span className="text-xs text-emerald-400">+1</span>
+                  <span className="text-xs text-green-400">
+                    +{healthIncrease} (New Total: {playerStats.health})
+                  </span>
                 </div>
               </motion.div>
             </div>
