@@ -1,6 +1,6 @@
-import { forwardRef } from 'react';
-import { Model3D } from '../types';
-import { motion } from 'framer-motion';
+import { forwardRef } from "react";
+import { Model3D } from "../types";
+import { motion } from "framer-motion";
 
 interface ModelCardProps {
   model: Model3D;
@@ -19,10 +19,10 @@ export const ModelCard = forwardRef<HTMLButtonElement, ModelCardProps>(
         exit={{ opacity: 0, y: -20 }}
         whileHover={{ scale: 1.02 }}
         onClick={() => onSelect(model)}
-        className={`w-full p-4 rounded-lg transition-all ${
+        className={`w-full p-4  transition-all ${
           isSelected
-            ? 'bg-blue-500 ring-2 ring-blue-400'
-            : 'bg-gray-800 hover:bg-gray-700'
+            ? "bg-blue-500 ring-2 ring-blue-400"
+            : "bg-gray-800 hover:bg-gray-700"
         }`}
       >
         <div className="flex items-center gap-4">
@@ -30,7 +30,7 @@ export const ModelCard = forwardRef<HTMLButtonElement, ModelCardProps>(
             <img
               src={model.thumbnail}
               alt={model.name}
-              className="w-full h-full object-cover rounded-lg"
+              className="w-full h-full object-cover "
               loading="lazy"
             />
           </div>
@@ -39,10 +39,10 @@ export const ModelCard = forwardRef<HTMLButtonElement, ModelCardProps>(
             <p className="text-sm text-gray-400 truncate">{model.creator}</p>
             <div className="mt-1 h-16 overflow-y-auto custom-scrollbar">
               <div className="flex flex-wrap gap-1">
-                {model.tags.split(',').map((tag, index) => (
+                {model.tags.split(",").map((tag, index) => (
                   <span
                     key={`${model.id}-${tag.trim()}-${index}`}
-                    className="inline-block px-2 py-0.5 text-xs rounded-full bg-gray-700 text-gray-300 whitespace-nowrap"
+                    className="inline-block px-2 py-0.5 text-xs  bg-gray-700 text-gray-300 whitespace-nowrap"
                   >
                     {tag.trim()}
                   </span>
@@ -56,4 +56,4 @@ export const ModelCard = forwardRef<HTMLButtonElement, ModelCardProps>(
   }
 );
 
-ModelCard.displayName = 'ModelCard';
+ModelCard.displayName = "ModelCard";

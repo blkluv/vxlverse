@@ -57,14 +57,14 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
       transition={{ duration: 0.4, delay: index * 0.1 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="group relative h-[20rem] rounded-xl overflow-hidden backdrop-blur-sm bg-gradient-to-br from-gray-800/30 via-gray-900/30 to-black/30 border border-gray-700/30 hover:border-blue-500/50 shadow-xl hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 flex flex-col"
+      className="group relative h-[20rem]  overflow-hidden backdrop-blur-sm bg-gradient-to-br from-gray-800/30 via-gray-900/30 to-black/30 border border-gray-700/30 hover:border-blue-500/50 shadow-xl hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 flex flex-col"
     >
       {/* Thumbnail with glass effect */}
       <div className="relative h-48 overflow-hidden">
         <motion.img
           src={
             game.thumbnail
-              ? pb.files.getUrl(game, game.thumbnail, { thumb: "300x300" })
+              ? pb.files.getURL(game, game.thumbnail, { thumb: "300x300" })
               : DEFAULT_THUMBNAIL
           }
           alt={game.title}
@@ -85,7 +85,7 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
             <motion.div
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="bg-blue-500 p-3 rounded-full shadow-lg shadow-blue-500/25 backdrop-blur-sm"
+              className="bg-blue-500 p-3  shadow-lg shadow-blue-500/25 backdrop-blur-sm"
             >
               <PlayCircle className="w-6 h-6 text-white" />
             </motion.div>
@@ -97,7 +97,7 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
           onClick={() => setIsLiked(!isLiked)}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="absolute top-2 right-2 p-1.5 rounded-full backdrop-blur-sm bg-white/10 border border-white/20 shadow-xl"
+          className="absolute top-2 right-2 p-1.5  backdrop-blur-sm bg-white/10 border border-white/20 shadow-xl"
         >
           <Heart
             className={`w-3.5 h-3.5 transition-colors ${
@@ -126,13 +126,13 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
             <div className="flex gap-1 flex-shrink-0">
               <Link
                 to={`/editor/${game.id}`}
-                className="p-1 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg backdrop-blur-sm transition-all duration-300"
+                className="p-1 text-gray-400 hover:text-white hover:bg-white/10  backdrop-blur-sm transition-all duration-300"
               >
                 <Edit3 className="w-3 h-3" />
               </Link>
               <button
                 onClick={handleDelete}
-                className="p-1 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg backdrop-blur-sm transition-all duration-300"
+                className="p-1 text-gray-400 hover:text-red-400 hover:bg-red-500/10  backdrop-blur-sm transition-all duration-300"
               >
                 <Trash2 className="w-3 h-3" />
               </button>
@@ -151,7 +151,7 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
             {game.tags.map((tag) => (
               <span
                 key={tag}
-                className="px-1.5 py-0.5 text-[10px] font-medium text-blue-300 bg-blue-500/10 rounded-full border border-blue-500/20 backdrop-blur-sm whitespace-nowrap"
+                className="px-1.5 py-0.5 text-[10px] font-medium text-blue-300 bg-blue-500/10  border border-blue-500/20 backdrop-blur-sm whitespace-nowrap"
               >
                 {tag}
               </span>
@@ -162,7 +162,7 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
         {/* Stats with glass effect */}
         <div className="relative flex items-center gap-3 text-[10px] mt-auto">
           <div className="flex items-center gap-1">
-            <div className="p-1 rounded-lg bg-yellow-500/10 backdrop-blur-sm">
+            <div className="p-1  bg-yellow-500/10 backdrop-blur-sm">
               <Star className="w-3 h-3 text-yellow-500" />
             </div>
             <span className="text-yellow-500 font-medium">
@@ -170,7 +170,7 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
             </span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="p-1 rounded-lg bg-blue-500/10 backdrop-blur-sm">
+            <div className="p-1  bg-blue-500/10 backdrop-blur-sm">
               <Users className="w-3 h-3 text-blue-400" />
             </div>
             <span className="text-blue-400 font-medium">
@@ -178,7 +178,7 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
             </span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="p-1 rounded-lg bg-purple-500/10 backdrop-blur-sm">
+            <div className="p-1  bg-purple-500/10 backdrop-blur-sm">
               <Clock className="w-3 h-3 text-purple-400" />
             </div>
             <span className="text-purple-400 font-medium">

@@ -12,6 +12,7 @@ import {
   Calendar,
   FileCode,
   ChevronRight,
+  Brush,
 } from "lucide-react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stage } from "@react-three/drei";
@@ -29,7 +30,8 @@ export function ModelSelector() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedModel, setSelectedModel] = useState<Model3D | null>(null);
 
-  const { currentSceneId, setShowModelSelector } = useEditorStore();
+  const { currentSceneId, setShowModelSelector, setBrushTemplate } =
+    useEditorStore();
 
   useEffect(() => {
     fetch(MODEL_API)
@@ -74,6 +76,22 @@ export function ModelSelector() {
     setShowModelSelector(false);
   };
 
+  const handleUseAsBrush = () => {
+    if (!selectedModel) return;
+
+    const brushObject = {
+      id: new THREE.Object3D().uuid,
+      name: selectedModel.name,
+      modelUrl: selectedModel.glb,
+      position: new THREE.Vector3(0, 0, 0),
+      rotation: new THREE.Euler(0, 0, 0),
+      scale: new THREE.Vector3(1, 1, 1),
+    };
+
+    setBrushTemplate(brushObject);
+    setShowModelSelector(false);
+  };
+
   return (
     <Portal>
       <motion.div
@@ -87,7 +105,7 @@ export function ModelSelector() {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-slate-900 rounded-2xl w-[85vw] h-[85vh] flex overflow-hidden border border-slate-800/50 shadow-2xl"
+          className="bg-slate-900  w-[85vw] h-[85vh] flex overflow-hidden border border-slate-800/50 shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Left Panel */}
@@ -96,7 +114,7 @@ export function ModelSelector() {
             <div className="p-6 border-b border-slate-800/50">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-blue-500/10">
+                  <div className="p-2  bg-blue-500/10">
                     <Package className="w-5 h-5 text-blue-400" />
                   </div>
                   <div>
@@ -110,7 +128,7 @@ export function ModelSelector() {
                 </div>
                 <button
                   onClick={() => setShowModelSelector(false)}
-                  className="p-2 hover:bg-slate-800/50 rounded-lg transition-colors"
+                  className="p-2 hover:bg-slate-800/50  transition-colors"
                 >
                   <X className="w-5 h-5 text-slate-400" />
                 </button>
@@ -123,7 +141,7 @@ export function ModelSelector() {
                   placeholder="Search models..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-800/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 border border-slate-700/50"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-800/50  text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 border border-slate-700/50"
                 />
               </div>
 
@@ -132,7 +150,7 @@ export function ModelSelector() {
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all flex-shrink-0 ${
+                    className={`px-3 py-1.5  text-sm font-medium transition-all flex-shrink-0 ${
                       selectedCategory === category
                         ? "bg-blue-500/20 text-blue-300 ring-1 ring-blue-500/30"
                         : "bg-slate-800/50 text-slate-300 hover:bg-slate-800"
@@ -149,7 +167,7 @@ export function ModelSelector() {
               <div className="p-4 space-y-3">
                 {loading ? (
                   <div className="text-center py-12">
-                    <div className="animate-spin w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-4" />
+                    <div className="animate-spin w-8 h-8 border-2 border-blue-500 border-t-transparent  mx-auto mb-4" />
                     <p className="text-slate-400">Loading models...</p>
                   </div>
                 ) : filteredModels.length === 0 ? (
@@ -163,14 +181,14 @@ export function ModelSelector() {
                       key={model.id}
                       layout
                       onClick={() => setSelectedModel(model)}
-                      className={`w-full p-4 rounded-xl transition-all ${
+                      className={`w-full p-4  transition-all ${
                         selectedModel?.id === model.id
                           ? "bg-blue-500/20 ring-1 ring-blue-500/30"
                           : "bg-slate-800/50 hover:bg-slate-800/80"
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-20 h-20 rounded-lg overflow-hidden bg-slate-800 flex-shrink-0">
+                        <div className="w-20 h-20  overflow-hidden bg-slate-800 flex-shrink-0">
                           <img
                             src={model.thumbnail}
                             alt={model.name}
@@ -190,7 +208,7 @@ export function ModelSelector() {
                             {model.tags.split(",").map((tag, index) => (
                               <span
                                 key={index}
-                                className="px-2 py-0.5 text-xs bg-slate-700/50 text-slate-300 rounded-full whitespace-nowrap flex-shrink-0"
+                                className="px-2 py-0.5 text-xs bg-slate-700/50 text-slate-300  whitespace-nowrap flex-shrink-0"
                               >
                                 {tag.trim()}
                               </span>
@@ -256,13 +274,26 @@ export function ModelSelector() {
                       </div>
                     </div>
 
-                    <button
-                      onClick={handleAddToScene}
-                      className="w-full px-4 py-3 bg-blue-500 hover:bg-blue-600 rounded-xl flex items-center justify-center gap-2 text-sm font-medium transition-colors"
-                    >
-                      <Plus className="w-5 h-5" />
-                      Add to Scene
-                    </button>
+                    {/* Preview Actions */}
+                    <div className="mt-6 flex flex-col gap-3">
+                      <button
+                        onClick={handleAddToScene}
+                        disabled={!selectedModel}
+                        className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white  transition-all duration-300 disabled:opacity-50 disabled:hover:from-blue-500 disabled:hover:to-violet-500"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Add to Scene
+                      </button>
+
+                      <button
+                        onClick={handleUseAsBrush}
+                        disabled={!selectedModel}
+                        className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-br from-slate-800 to-slate-700 hover:from-slate-700 hover:to-slate-600 text-white  transition-all duration-300 disabled:opacity-50 border border-slate-700/50"
+                      >
+                        <Brush className="w-4 h-4" />
+                        Use as Brush
+                      </button>
+                    </div>
                   </div>
                 </div>
               </>

@@ -61,7 +61,6 @@ export function Settings() {
 
   const handleSettingChange = (id: string, value: boolean | string) => {
     // TODO: Implement settings update
-    console.log("Setting changed:", { id, value });
   };
 
   return (

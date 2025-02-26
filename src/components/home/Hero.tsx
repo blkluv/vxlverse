@@ -19,7 +19,7 @@ export function Hero() {
             y: [0, -50, 0],
           }}
           transition={{ duration: 10, repeat: Infinity }}
-          className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/30 rounded-full blur-3xl"
+          className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/30  blur-3xl"
         />
         <motion.div
           animate={{
@@ -29,7 +29,7 @@ export function Hero() {
             y: [0, 50, 0],
           }}
           transition={{ duration: 8, repeat: Infinity }}
-          className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/30 rounded-full blur-3xl"
+          className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/30  blur-3xl"
         />
       </div>
 
@@ -48,7 +48,7 @@ export function Hero() {
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                 className="relative"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-xl opacity-50" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500  blur-xl opacity-50" />
                 <Gamepad2 className="w-16 h-16 text-white relative" />
               </motion.div>
               <motion.div
@@ -92,7 +92,7 @@ export function Hero() {
                 href="/play/village-scene"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="group px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium 
+                className="group px-8 py-4  bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium 
                          hover:from-blue-600 hover:to-blue-700 transition-all flex items-center gap-2 shadow-lg shadow-blue-500/25"
               >
                 <Play className="w-5 h-5" />

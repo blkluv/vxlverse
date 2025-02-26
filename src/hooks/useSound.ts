@@ -58,7 +58,26 @@ const SOUNDS = {
   notAllowed:{
     src: "/mp3/wrong-47985.mp3",
     volume: 0.6,
-
+  },
+  dialogueStart: {
+    src: "/mp3/typing.mp3",
+    volume: 0.4,
+  },
+  dialogueChoice: {
+    src: "/mp3/beepd-86247.mp3",
+    volume: 0.4,
+  },
+  dialogueEnd: {
+    src: "/mp3/select.mp3",
+    volume: 0.5,
+  },
+  error: {
+    src: "/mp3/wrong-47985.mp3",
+    volume: 0.5,
+  },
+  itemGet: {
+    src: "/mp3/collect-5930.mp3",
+    volume: 0.6,
   }
 };
 
@@ -68,6 +87,9 @@ export function useSound() {
   const soundsRef = useRef<Record<SoundType, Howl>>(
     {} as Record<SoundType, Howl>
   );
+  
+  // Cache for custom sound URLs
+  const customSoundsCache = useRef<Record<string, Howl>>({});
 
   useEffect(() => {
     // Initialize sounds
@@ -83,21 +105,59 @@ export function useSound() {
 
     // Cleanup
     return () => {
+      // Unload predefined sounds
       Object.values(soundsRef.current).forEach((sound) => sound.unload());
+      
+      // Unload custom sounds
+      Object.values(customSoundsCache.current).forEach((sound) => sound.unload());
     };
   }, []);
 
-  const playSound = useCallback((type: SoundType) => {
-    const sound = soundsRef.current[type];
-    if (sound) {
-      sound.play();
+  const playSound = useCallback((soundInput: SoundType | string) => {
+    // Check if it's a predefined sound type
+    if (typeof soundInput === 'string' && soundInput in SOUNDS) {
+      const sound = soundsRef.current[soundInput as SoundType];
+      if (sound) {
+        sound.play();
+      }
+    } 
+    // Handle custom sound URL
+    else if (typeof soundInput === 'string' && soundInput.startsWith('http')) {
+      // Check if we already have this sound cached
+      if (customSoundsCache.current[soundInput]) {
+        customSoundsCache.current[soundInput].play();
+      } else {
+        // Create and cache a new Howl instance for this URL
+        try {
+          const newSound = new Howl({
+            src: [soundInput],
+            volume: 0.5,
+            html5: true, // This helps with streaming audio from external URLs
+          });
+          
+          // Cache the sound
+          customSoundsCache.current[soundInput] = newSound;
+          
+          // Play it
+          newSound.play();
+        } catch (error) {
+          console.error("Error playing custom sound:", error);
+        }
+      }
     }
   }, []);
 
-  const stopSound = useCallback((type: SoundType) => {
-    const sound = soundsRef.current[type];
-    if (sound) {
-      sound.stop();
+  const stopSound = useCallback((soundInput: SoundType | string) => {
+    // Check if it's a predefined sound type
+    if (typeof soundInput === 'string' && soundInput in SOUNDS) {
+      const sound = soundsRef.current[soundInput as SoundType];
+      if (sound) {
+        sound.stop();
+      }
+    } 
+    // Handle custom sound URL
+    else if (typeof soundInput === 'string' && customSoundsCache.current[soundInput]) {
+      customSoundsCache.current[soundInput].stop();
     }
   }, []);
 

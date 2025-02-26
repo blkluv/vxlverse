@@ -66,7 +66,7 @@ export function Browse() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search games..."
-              className="w-full pl-12 pr-4 py-3 bg-gray-800 rounded-xl border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-12 pr-4 py-3 bg-gray-800  border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -79,7 +79,7 @@ export function Browse() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all \${
+                className={`px-4 py-2  text-sm font-medium transition-all \${
                   selectedCategory === category
                     ? "bg-blue-500 text-white"
                     : "bg-gray-800 text-gray-300 hover:bg-gray-700"
@@ -95,7 +95,7 @@ export function Browse() {
             <select
               value={selectedSort}
               onChange={(e) => setSelectedSort(e.target.value)}
-              className="px-4 py-2 bg-gray-800 rounded-xl border border-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 bg-gray-800  border border-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {FILTERS.sortBy.map((option) => (
                 <option key={option} value={option}>
@@ -107,7 +107,7 @@ export function Browse() {
             <select
               value={selectedTime}
               onChange={(e) => setSelectedTime(e.target.value)}
-              className="px-4 py-2 bg-gray-800 rounded-xl border border-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 bg-gray-800  border border-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {FILTERS.timeRange.map((option) => (
                 <option key={option} value={option}>
@@ -126,7 +126,7 @@ export function Browse() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700/50 hover:border-blue-500/50 transition-colors"
+              className="group relative bg-gray-800  overflow-hidden border border-gray-700/50 hover:border-blue-500/50 transition-colors"
             >
               {/* Game Image */}
               <div className="aspect-video relative overflow-hidden">
@@ -138,11 +138,11 @@ export function Browse() {
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-60" />
 
                 {/* Creator Info */}
-                <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
+                <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/50 backdrop-blur-sm  px-3 py-1">
                   <img
                     src={`https://api.dicebear.com/7.x/avataaars/svg?seed=\${game.creator}`}
                     alt={game.creator}
-                    className="w-6 h-6 rounded-full"
+                    className="w-6 h-6 "
                   />
                   <span className="text-sm text-white">{game.creator}</span>
                 </div>
@@ -162,7 +162,7 @@ export function Browse() {
                   {game.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1 bg-gray-700/50 rounded-full text-sm text-gray-300 flex items-center gap-1"
+                      className="px-3 py-1 bg-gray-700/50  text-sm text-gray-300 flex items-center gap-1"
                     >
                       <TagIcon className="w-3 h-3" />
                       {tag}
@@ -188,7 +188,7 @@ export function Browse() {
 
                 {/* Play Button Overlay */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button className="px-6 py-3 bg-blue-500 text-white rounded-full font-medium transform -translate-y-4 group-hover:translate-y-0 transition-all flex items-center gap-2">
+                  <button className="px-6 py-3 bg-blue-500 text-white  font-medium transform -translate-y-4 group-hover:translate-y-0 transition-all flex items-center gap-2">
                     Play Now
                     <ArrowUpRight className="w-4 h-4" />
                   </button>

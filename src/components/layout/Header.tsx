@@ -60,7 +60,7 @@ export function Header() {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                className={`px-4 py-2  transition-all duration-300 ${
                   location.pathname === item.path
                     ? "bg-blue-500/20 text-blue-400 shadow-lg shadow-blue-500/20"
                     : "text-gray-400 hover:text-white hover:bg-gray-800"
@@ -77,7 +77,7 @@ export function Header() {
               <div className="relative">
                 <motion.button
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className={`flex items-center gap-3 px-4 py-2 rounded-xl transition-all duration-300 ${
+                  className={`flex items-center gap-3 px-4 py-2  transition-all duration-300 ${
                     showDropdown
                       ? "bg-blue-500/20 shadow-lg shadow-blue-500/20"
                       : "bg-gray-800/50 hover:bg-gray-800"
@@ -87,10 +87,10 @@ export function Header() {
                     <img
                       src={user.avatar}
                       alt={user.name}
-                      className="w-8 h-8 rounded-lg border-2 border-blue-500/20"
+                      className="w-8 h-8  border-2 border-blue-500/20"
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-500 flex items-center justify-center text-sm font-medium border-2 border-blue-500/20">
+                    <div className="w-8 h-8  bg-blue-500/20 text-blue-500 flex items-center justify-center text-sm font-medium border-2 border-blue-500/20">
                       {user.name?.charAt(0) || "U"}
                     </div>
                   )}
@@ -117,7 +117,7 @@ export function Header() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute right-0 mt-2 w-64 p-2 rounded-xl bg-gray-800/90 backdrop-blur-xl border border-gray-700/50 shadow-xl"
+                      className="absolute right-0 mt-2 w-64 p-2  bg-gray-800/90 backdrop-blur-xl border border-gray-700/50 shadow-xl"
                     >
                       <div className="space-y-1">
                         {dropdownItems.map((item) => (
@@ -125,7 +125,7 @@ export function Header() {
                             key={item.path}
                             to={item.path}
                             onClick={() => setShowDropdown(false)}
-                            className="flex items-center gap-3 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-lg transition-colors duration-200"
+                            className="flex items-center gap-3 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700/50  transition-colors duration-200"
                           >
                             <item.icon className="w-4 h-4" />
                             <span className="text-sm">{item.label}</span>
@@ -134,7 +134,7 @@ export function Header() {
                         <hr className="border-gray-700/50 my-2" />
                         <button
                           onClick={handleLogout}
-                          className="w-full flex items-center gap-3 px-3 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors duration-200"
+                          className="w-full flex items-center gap-3 px-3 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10  transition-colors duration-200"
                         >
                           <LogOut className="w-4 h-4" />
                           <span className="text-sm">Sign Out</span>

@@ -1,6 +1,6 @@
-import { Model3D } from '../types';
-import { motion } from 'framer-motion';
-import { Calendar, User, Tag, FileKey, Info } from 'lucide-react';
+import { Model3D } from "../types";
+import { motion } from "framer-motion";
+import { Calendar, User, Tag, FileKey, Info } from "lucide-react";
 
 interface ModelDetailsProps {
   model: Model3D;
@@ -12,7 +12,7 @@ export function ModelDetails({ model }: ModelDetailsProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="mt-8 bg-gray-800 rounded-lg p-6 shadow-lg"
+      className="mt-8 bg-gray-800  p-6 shadow-lg"
     >
       <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
         <Info className="w-5 h-5 text-blue-400" />
@@ -46,11 +46,8 @@ export function ModelDetails({ model }: ModelDetailsProps) {
             <h3>Tags</h3>
           </div>
           <div className="flex flex-wrap gap-2">
-            {model.tags.split(',').map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-1 bg-gray-700 rounded-full text-sm"
-              >
+            {model.tags.split(",").map((tag) => (
+              <span key={tag} className="px-2 py-1 bg-gray-700  text-sm">
                 {tag.trim()}
               </span>
             ))}

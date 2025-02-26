@@ -36,7 +36,7 @@ export function PopularTags() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ scale: 1.05 }}
-              className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-purple-700/10 border border-purple-500/20
+              className="p-4  bg-gradient-to-br from-purple-500/10 to-purple-700/10 border border-purple-500/20
                        hover:from-purple-500/20 hover:to-purple-700/20 hover:border-purple-500/30 transition-all group"
             >
               <div className="text-lg font-medium text-purple-300 group-hover:text-purple-200">

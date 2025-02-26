@@ -27,7 +27,7 @@ export function LevelUpModal({}) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ type: "spring", duration: 0.6 }}
-          className="fixed top-4 w-full max-w-lg bg-black/95 backdrop-blur-md rounded-2xl border border-yellow-500/20 p-3 md:p-4 shadow-xl pointer-events-auto"
+          className="fixed top-4 w-full max-w-lg bg-black/95 backdrop-blur-md  border border-yellow-500/20 p-3 md:p-4 shadow-xl pointer-events-auto"
         >
           <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
             <div className="flex items-center gap-3">
@@ -35,7 +35,7 @@ export function LevelUpModal({}) {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", duration: 0.6, delay: 0.2 }}
-                className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-yellow-500 to-yellow-700 flex items-center justify-center"
+                className="w-10 h-10 md:w-12 md:h-12  bg-gradient-to-br from-yellow-500 to-yellow-700 flex items-center justify-center"
               >
                 <Trophy className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </motion.div>
@@ -68,7 +68,7 @@ export function LevelUpModal({}) {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.5 }}
-                className="flex items-center gap-2 bg-yellow-500/20 rounded-lg px-3 py-2 border border-yellow-500/30 w-full md:w-auto"
+                className="flex items-center gap-2 bg-yellow-500/20  px-3 py-2 border border-yellow-500/30 w-full md:w-auto"
               >
                 <Star className="w-4 h-4 md:w-5 md:h-5 text-yellow-400" />
                 <div className="flex flex-col">
@@ -87,7 +87,7 @@ export function LevelUpModal({}) {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.6 }}
-                className="flex items-center gap-2 bg-red-500/20 rounded-lg px-3 py-2 border border-red-500/30 w-full md:w-auto"
+                className="flex items-center gap-2 bg-red-500/20  px-3 py-2 border border-red-500/30 w-full md:w-auto"
               >
                 <Sword className="w-4 h-4 md:w-5 md:h-5 text-red-400" />
                 <div className="flex flex-col">
@@ -105,7 +105,7 @@ export function LevelUpModal({}) {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.7 }}
-                className="flex items-center gap-2 bg-green-500/20 rounded-lg px-3 py-2 border border-green-500/30 w-full md:w-auto"
+                className="flex items-center gap-2 bg-green-500/20  px-3 py-2 border border-green-500/30 w-full md:w-auto"
               >
                 <Heart className="w-4 h-4 md:w-5 md:h-5 text-green-400" />
                 <div className="flex flex-col">

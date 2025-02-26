@@ -7,6 +7,7 @@ import { GameFilters } from "../components/game/GameFilters";
 import { Button } from "../components/UI/Button";
 import { GameCard } from "../components/game/GameCard";
 import { Header } from "../components/layout/Header";
+import { Input } from "../components/UI/input";
 
 export function Games() {
   const [activeTab, setActiveTab] = useState<"all" | "my">("all");
@@ -48,7 +49,7 @@ export function Games() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent  animate-spin" />
       </div>
     );
   }
@@ -94,12 +95,12 @@ export function Games() {
           {/* Search and Tabs */}
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
-              <input
+              <Input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search games..."
-                className="w-full h-10 pl-10 pr-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-gray-500 
+                className="w-full h-10 pl-10 pr-4 bg-white/5 border border-white/10  text-white placeholder:text-gray-500 
                          focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all"
               />
               <Search
@@ -130,7 +131,7 @@ export function Games() {
 
         {/* Filters */}
         {isFiltersOpen && (
-          <div className="mb-6 p-4 bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm">
+          <div className="mb-6 p-4 bg-white/5 border border-white/10  backdrop-blur-sm">
             <GameFilters
               selectedTags={selectedTags}
               onTagsChange={setSelectedTags}

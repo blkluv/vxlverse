@@ -93,6 +93,10 @@ export function Home() {
       <CreateGameModal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
+        onSuccess={() => {
+          // Refresh or update the game list if needed
+          window.location.reload(); // Simple reload to show the new game
+        }}
       />
     </div>
   );

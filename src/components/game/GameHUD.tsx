@@ -66,10 +66,10 @@ export function GameHUD() {
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-black/80 backdrop-blur-sm rounded-lg p-2 md:p-3 border border-yellow-500/20"
+          className="bg-black/80 backdrop-blur-sm  p-2 md:p-3 border border-yellow-500/20"
         >
           <div className="flex items-center gap-2 md:gap-3">
-            <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-gradient-to-br text-[10px] md:text-xs from-yellow-400 to-yellow-600 flex items-center justify-center font-bold">
+            <div className="w-6 h-6 md:w-8 md:h-8  bg-gradient-to-br text-[10px] md:text-xs from-yellow-400 to-yellow-600 flex items-center justify-center font-bold">
               {level}
             </div>
             <div className="flex-1">
@@ -78,7 +78,7 @@ export function GameHUD() {
                   {xp}/{xpNeeded} XP
                 </span>
               </div>
-              <div className="h-1.5 md:h-2 bg-black/50 rounded-full overflow-hidden">
+              <div className="h-1.5 md:h-2 bg-black/50  overflow-hidden">
                 <motion.div
                   className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500"
                   style={{ width: `${xpProgress}%` }}
@@ -96,7 +96,7 @@ export function GameHUD() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-black/80 backdrop-blur-sm rounded-lg p-2 md:p-3 border border-green-500/20"
+          className="bg-black/80 backdrop-blur-sm  p-2 md:p-3 border border-green-500/20"
         >
           <div className="flex items-center gap-2 md:gap-3">
             <div className="text-xl md:text-2xl">🔋</div>
@@ -104,7 +104,7 @@ export function GameHUD() {
               <div className="text-[10px] md:text-xs text-green-400 font-medium mb-1">
                 Energy {energy}/{100}
               </div>
-              <div className="h-1.5 md:h-2 bg-black/50 rounded-full overflow-hidden">
+              <div className="h-1.5 md:h-2 bg-black/50  overflow-hidden">
                 <motion.div
                   className="h-full bg-gradient-to-r from-green-500 to-green-600"
                   style={{ width: `${(energy / 100) * 100}%` }}
@@ -125,11 +125,13 @@ export function GameHUD() {
           animate={{ opacity: 1, x: 0 }}
           className="flex gap-1.5 md:gap-2 flex-col md:flex-row"
         >
-          <div className="bg-black/80 backdrop-blur-sm rounded-lg p-2 md:p-3 border border-yellow-500/20 flex items-center gap-1.5 md:gap-2">
+          <div className="bg-black/80 backdrop-blur-sm  p-2 md:p-3 border border-yellow-500/20 flex items-center gap-1.5 md:gap-2">
             <span className="text-lg md:text-xl">💰</span>
-            <span className="text-yellow-100 font-medium text-sm md:text-base">{money}</span>
+            <span className="text-yellow-100 font-medium text-sm md:text-base">
+              {money}
+            </span>
           </div>
-          <div className="bg-black/80 backdrop-blur-sm rounded-lg p-2 md:p-3 border border-blue-500/20 flex items-center gap-1.5 md:gap-2">
+          <div className="bg-black/80 backdrop-blur-sm  p-2 md:p-3 border border-blue-500/20 flex items-center gap-1.5 md:gap-2">
             <span className="text-lg md:text-xl">🕐</span>
             <div className="text-xs md:text-sm">
               <span className="text-blue-100">Day {day}</span>
@@ -139,7 +141,9 @@ export function GameHUD() {
                 {String(minutes).padStart(2, "0")}
               </span>
               <span className="hidden md:inline text-gray-500 mx-2">•</span>
-              <span className="hidden md:inline text-blue-300 capitalize">{timeOfDay}</span>
+              <span className="hidden md:inline text-blue-300 capitalize">
+                {timeOfDay}
+              </span>
             </div>
           </div>
         </motion.div>
@@ -155,16 +159,16 @@ export function GameHUD() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleInventoryClick}
-            className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center shadow-lg relative group"
+            className="w-10 h-10 md:w-14 md:h-14  bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center shadow-lg relative group"
           >
             <span className="text-xl md:text-2xl">🎒</span>
             {inventory.length > 0 && (
-              <div className="absolute -top-1 -right-1 w-5 h-5 md:w-6 md:h-6 rounded-full bg-red-500 flex items-center justify-center text-[10px] md:text-xs font-bold text-white border-2 border-gray-900">
+              <div className="absolute -top-1 -right-1 w-5 h-5 md:w-6 md:h-6  bg-red-500 flex items-center justify-center text-[10px] md:text-xs font-bold text-white border-2 border-gray-900">
                 {inventory.length}
               </div>
             )}
             <div className="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-              <div className="bg-black/90 text-white text-xs md:text-sm px-2 md:px-3 py-1 md:py-1.5 rounded-lg whitespace-nowrap">
+              <div className="bg-black/90 text-white text-xs md:text-sm px-2 md:px-3 py-1 md:py-1.5  whitespace-nowrap">
                 Inventory (I)
               </div>
             </div>
@@ -178,16 +182,16 @@ export function GameHUD() {
             whileTap={{ scale: 0.95 }}
             transition={{ delay: 0.1 }}
             onClick={handleQuestLogClick}
-            className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-lg relative group"
+            className="w-10 h-10 md:w-14 md:h-14  bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-lg relative group"
           >
             <span className="text-xl md:text-2xl">📜</span>
             {questLog.active.length > 0 && (
-              <div className="absolute -top-1 -right-1 w-5 h-5 md:w-6 md:h-6 rounded-full bg-red-500 flex items-center justify-center text-[10px] md:text-xs font-bold text-white border-2 border-gray-900">
+              <div className="absolute -top-1 -right-1 w-5 h-5 md:w-6 md:h-6  bg-red-500 flex items-center justify-center text-[10px] md:text-xs font-bold text-white border-2 border-gray-900">
                 {questLog.active.length}
               </div>
             )}
             <div className="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-              <div className="bg-black/90 text-white text-xs md:text-sm px-2 md:px-3 py-1 md:py-1.5 rounded-lg whitespace-nowrap">
+              <div className="bg-black/90 text-white text-xs md:text-sm px-2 md:px-3 py-1 md:py-1.5  whitespace-nowrap">
                 Quest Log (L)
               </div>
             </div>
@@ -200,11 +204,11 @@ export function GameHUD() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleMapClick}
-            className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-lg relative group"
+            className="w-10 h-10 md:w-14 md:h-14  bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-lg relative group"
           >
             <span className="text-xl md:text-2xl">🗺️</span>
             <div className="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-              <div className="bg-black/90 text-white text-xs md:text-sm px-2 md:px-3 py-1 md:py-1.5 rounded-lg whitespace-nowrap">
+              <div className="bg-black/90 text-white text-xs md:text-sm px-2 md:px-3 py-1 md:py-1.5  whitespace-nowrap">
                 World Map (M)
               </div>
             </div>

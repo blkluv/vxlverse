@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { GAME_ITEMS } from "../../types";
 import { Portal } from "../Portal";
 import { useSound } from "../../hooks/useSound";
+import { Input } from "../UI/input";
 
 const CATEGORIES = [
   { id: "all", label: "All Items", emoji: "📦" },
@@ -53,7 +54,7 @@ export function Inventory() {
     // Show sale notification
     const notification = document.createElement("div");
     notification.className =
-      "fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 animate-slide-up";
+      "fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2  flex items-center gap-2 animate-slide-up";
     notification.innerHTML = `
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -107,7 +108,7 @@ export function Inventory() {
           initial={{ scale: 0.95 }}
           animate={{ scale: 1 }}
           exit={{ scale: 0.95 }}
-          className="bg-gray-900/95 rounded-xl w-full md:w-[900px] h-[90vh] md:h-[600px] shadow-xl border border-gray-800/50 flex flex-col md:flex-row overflow-hidden"
+          className="bg-gray-900/95  w-full md:w-[900px] h-[90vh] md:h-[600px] shadow-xl border border-gray-800/50 flex flex-col md:flex-row overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Left Sidebar - Categories (Hidden on mobile, shown as top bar) */}
@@ -128,7 +129,7 @@ export function Inventory() {
                       playSound("select");
                       setSelectedCategory(category.id);
                     }}
-                    className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-center transition-all ${
+                    className={`flex-shrink-0 px-3 py-1.5  text-center transition-all ${
                       selectedCategory === category.id
                         ? "bg-blue-500/20 text-blue-100"
                         : "bg-gray-800/50 text-gray-300"
@@ -136,9 +137,11 @@ export function Inventory() {
                   >
                     <div className="flex items-center gap-1.5">
                       <span className="text-lg">{category.emoji}</span>
-                      <span className="text-xs whitespace-nowrap">{category.label}</span>
+                      <span className="text-xs whitespace-nowrap">
+                        {category.label}
+                      </span>
                       <span
-                        className={`text-xs px-1.5 py-0.5 rounded-full ${
+                        className={`text-xs px-1.5 py-0.5  ${
                           selectedCategory === category.id
                             ? "bg-blue-500/30 text-blue-200"
                             : "bg-gray-800 text-gray-400"
@@ -165,7 +168,8 @@ export function Inventory() {
                     category.id === "all"
                       ? inventory.length
                       : inventory.filter(
-                          (item) => getItemDetails(item.id)?.type === category.id
+                          (item) =>
+                            getItemDetails(item.id)?.type === category.id
                         ).length;
 
                   return (
@@ -175,7 +179,7 @@ export function Inventory() {
                         playSound("select");
                         setSelectedCategory(category.id);
                       }}
-                      className={`w-full px-3 py-2 rounded-lg text-left transition-all flex items-center justify-between group ${
+                      className={`w-full px-3 py-2  text-left transition-all flex items-center justify-between group ${
                         selectedCategory === category.id
                           ? "bg-blue-500/20 text-blue-100"
                           : "hover:bg-gray-800/50 text-gray-300"
@@ -186,7 +190,7 @@ export function Inventory() {
                         <span className="text-sm">{category.label}</span>
                       </div>
                       <span
-                        className={`text-xs px-1.5 py-0.5 rounded-full ${
+                        className={`text-xs px-1.5 py-0.5  ${
                           selectedCategory === category.id
                             ? "bg-blue-500/30 text-blue-200"
                             : "bg-gray-800 text-gray-400"
@@ -208,7 +212,9 @@ export function Inventory() {
               <div className="flex items-center gap-2 md:gap-3">
                 <div className="text-xl md:text-2xl">🎒</div>
                 <div>
-                  <h2 className="text-base md:text-lg font-bold text-white">Inventory</h2>
+                  <h2 className="text-base md:text-lg font-bold text-white">
+                    Inventory
+                  </h2>
                   <div className="text-xs md:text-sm text-gray-400">
                     {inventory.length} items
                   </div>
@@ -216,7 +222,7 @@ export function Inventory() {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 md:p-2 hover:bg-gray-800 rounded-lg transition-colors"
+                className="p-1.5 md:p-2 hover:bg-gray-800  transition-colors"
               >
                 <X className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
               </button>
@@ -226,12 +232,12 @@ export function Inventory() {
             <div className="p-3 md:p-4 border-b border-gray-800/50 bg-gray-900/30">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
+                <Input
                   type="text"
                   placeholder="Search items..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 md:py-2.5 bg-gray-800/50 rounded-lg text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                  className="w-full pl-9 pr-4 py-2 md:py-2.5 bg-gray-800/50  text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
             </div>
@@ -246,7 +252,9 @@ export function Inventory() {
               ) : (
                 <div
                   className={`grid ${
-                    selectedItemDetails ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
+                    selectedItemDetails
+                      ? "grid-cols-1"
+                      : "grid-cols-1 md:grid-cols-2"
                   } gap-2 md:gap-3`}
                 >
                   {filteredItems.map((item) => {
@@ -267,14 +275,16 @@ export function Inventory() {
                           scale: isSold ? 0.95 : 1,
                           opacity: isSold ? 0.5 : 1,
                         }}
-                        className={`p-3 md:p-4 rounded-lg border transition-all ${
+                        className={`p-3 md:p-4  border transition-all ${
                           selectedItem === item.id
                             ? "bg-blue-500/20 border-blue-500/50 ring-1 ring-blue-500/50"
                             : "bg-gray-800/50 border-gray-700/50 hover:bg-gray-800"
                         }`}
                       >
                         <div className="flex items-center gap-3 md:gap-4">
-                          <div className="text-2xl md:text-3xl">{details.emoji}</div>
+                          <div className="text-2xl md:text-3xl">
+                            {details.emoji}
+                          </div>
                           <div className="flex-1 min-w-0">
                             <div className="text-sm font-medium text-gray-100 truncate">
                               {details.name}
@@ -291,7 +301,7 @@ export function Inventory() {
                             <motion.div
                               initial={{ scale: 0 }}
                               animate={{ scale: 1 }}
-                              className="bg-green-500 rounded-full p-1"
+                              className="bg-green-500  p-1"
                             >
                               <Check className="w-3 h-3 md:w-4 md:h-4 text-white" />
                             </motion.div>
@@ -309,18 +319,18 @@ export function Inventory() {
           <AnimatePresence mode="wait">
             {selectedItemDetails && (
               <motion.div
-                initial={{ 
-                  width: 0, 
+                initial={{
+                  width: 0,
                   opacity: 0,
                   height: "100%",
                 }}
-                animate={{ 
-                  width: window.innerWidth < 768 ? "100%" : 350, 
+                animate={{
+                  width: window.innerWidth < 768 ? "100%" : 350,
                   opacity: 1,
                   height: "100%",
                 }}
-                exit={{ 
-                  width: 0, 
+                exit={{
+                  width: 0,
                   opacity: 0,
                   height: "100%",
                 }}
@@ -332,7 +342,7 @@ export function Inventory() {
                 <div className="p-4 md:p-6">
                   <div className="flex items-center justify-between mb-4 md:mb-6">
                     <div className="flex items-center gap-2 md:gap-3">
-                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+                      <div className="w-10 h-10 md:w-12 md:h-12  bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
                         <Info className="w-5 h-5 md:w-6 md:h-6 text-white" />
                       </div>
                       <div>
@@ -349,7 +359,7 @@ export function Inventory() {
                         playSound("select");
                         setSelectedItem(null);
                       }}
-                      className="p-1.5 md:p-2 hover:bg-gray-800/50 rounded-lg transition-colors"
+                      className="p-1.5 md:p-2 hover:bg-gray-800/50  transition-colors"
                     >
                       <X className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
                     </button>
@@ -407,7 +417,7 @@ export function Inventory() {
                     <div className="flex flex-col gap-2">
                       <button
                         onClick={() => handleSellItem(selectedItemDetails.id)}
-                        className="w-full px-4 py-2.5 rounded-lg bg-gradient-to-br from-yellow-500 to-yellow-700 text-white font-medium text-sm hover:from-yellow-600 hover:to-yellow-800 transition-all flex items-center justify-center gap-2"
+                        className="w-full px-4 py-2.5  bg-gradient-to-br from-yellow-500 to-yellow-700 text-white font-medium text-sm hover:from-yellow-600 hover:to-yellow-800 transition-all flex items-center justify-center gap-2"
                       >
                         <DollarSign className="w-4 h-4" />
                         Sell Item

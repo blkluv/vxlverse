@@ -18,14 +18,14 @@ export function EnemyStats({ enemy }: EnemyStatsProps) {
       <div className="pointer-events-none select-none">
         {/* Name and Level */}
         <div className="text-center mb-1">
-          <div className="text-white text-sm font-bold bg-black/80 backdrop-blur-sm px-2 py-0.5 rounded-lg">
+          <div className="text-white text-sm font-bold bg-black/80 backdrop-blur-sm px-2 py-0.5 ">
             {enemy.name}
           </div>
         </div>
 
         {/* Health Bar */}
-        <div className="w-24 bg-black/80 backdrop-blur-sm rounded-lg p-1">
-          <div className="h-1.5 bg-gray-700 rounded-full overflow-hidden">
+        <div className="w-24 bg-black/80 backdrop-blur-sm  p-1">
+          <div className="h-1.5 bg-gray-700  overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-red-500 to-red-600"
               style={{ width: `${healthPercentage}%` }}
@@ -38,7 +38,7 @@ export function EnemyStats({ enemy }: EnemyStatsProps) {
 
         {/* XP Indicator */}
         <div className="text-center mt-1">
-          <div className="text-yellow-400 text-xs bg-black/80 backdrop-blur-sm px-2 py-0.5 rounded-lg">
+          <div className="text-yellow-400 text-xs bg-black/80 backdrop-blur-sm px-2 py-0.5 ">
             +{enemy.xp} XP
           </div>
         </div>

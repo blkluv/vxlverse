@@ -43,7 +43,7 @@ export function FeaturedGames() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="group relative overflow-hidden rounded-2xl bg-gradient-to-b from-gray-800/80 to-gray-900/80 border border-gray-700/50"
+              className="group relative overflow-hidden  bg-gradient-to-b from-gray-800/80 to-gray-900/80 border border-gray-700/50"
             >
               <div className="aspect-[16/9] overflow-hidden">
                 <img

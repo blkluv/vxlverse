@@ -1,4 +1,5 @@
 import { items } from "./stores/items";
+import * as THREE from "three";
 
 export interface Item {
   id: string;
@@ -46,7 +47,8 @@ export const ENEMY_TYPES = {
     attackRange: 2,
     attackSpeed: 1.5,
     moveSpeed: 2,
-    model: "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_elPqhAENKG.glb",
+    model:
+      "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_elPqhAENKG.glb",
     scale: 1,
     loot: items.map((item) => ({
       itemId: item.id,
@@ -63,7 +65,8 @@ export const ENEMY_TYPES = {
     attackRange: 8,
     attackSpeed: 1,
     moveSpeed: 1.5,
-    model: "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_dnm6fkRN7J.glb",
+    model:
+      "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_dnm6fkRN7J.glb",
     scale: 1,
     loot: items.map((item) => ({
       itemId: item.id,
@@ -80,7 +83,8 @@ export const ENEMY_TYPES = {
     attackRange: 5,
     attackSpeed: 0.8,
     moveSpeed: 3,
-    model: "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_p49uuKHYJc.glb",
+    model:
+      "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_p49uuKHYJc.glb",
     scale: 2,
     loot: items.map((item) => ({
       itemId: item.id,
@@ -97,7 +101,8 @@ export const ENEMY_TYPES = {
     attackRange: 3,
     attackSpeed: 1.2,
     moveSpeed: 2.5,
-    model: "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_DQ3wuTlaxb.glb",
+    model:
+      "https://raw.githubusercontent.com/mpoapostolis/3d-assets/refs/heads/master/storage/scene_DQ3wuTlaxb.glb",
     scale: 1.5,
     loot: items.map((item) => ({
       itemId: item.id,
@@ -118,6 +123,9 @@ export interface Model3D {
   glb: string;
   attribution: string;
   created: string;
+  animated: boolean;
+  attribution_url: string;
+  attribution_owner: string;
 }
 
 export interface Dialogue {
@@ -162,12 +170,16 @@ export interface Quest {
   id: string;
   title: string;
   description: string;
+  backstory: string;
   dialogues: Dialogue[];
   requirements: {
     level: number;
     energy: number;
     money: number;
-    timeOfDay: ("morning" | "noon" | "evening" | "night")[];
+    time?: {
+      start?: string;
+      end?: string;
+    };
     items: { id: string; amount: number }[];
   };
   rewards: {
@@ -186,11 +198,27 @@ export interface Quest {
     };
     actions: QuestAction[];
   };
+  tracking?: {
+    type:
+      | "manual"
+      | "item_collection"
+      | "location"
+      | "npc_talk"
+      | "enemy_defeat";
+    quantity?: number;
+    targetId?: string;
+    targetName?: string;
+  };
+  status?: "active" | "completed" | "failed";
+  completionText?: string;
   completed: boolean;
 }
 
 export interface Scene {
   id: string;
+  showGrid: boolean;
+  gridSize?: number;
+  snapPrecision?: number;
   name: string;
   objects: GameObject[];
   environment?: string;
@@ -201,19 +229,43 @@ export interface Scene {
     near: number;
     far: number;
   };
+  clouds?: {
+    enabled: boolean;
+    speed: number;
+    opacity: number;
+    count: number;
+  };
+  stars?: {
+    enabled: boolean;
+    count: number;
+    depth: number;
+    fade: boolean;
+  };
   music?: {
     url: string;
     volume: number;
     loop: boolean;
   };
+  description?: string;
 }
 
 export interface GameObject {
   id: string;
   name: string;
   modelUrl: string;
+  requiredLvl?: number;
+  requiredItems?: Item[];
+
   position: THREE.Vector3;
   rotation: THREE.Euler;
   scale: THREE.Vector3;
   quests?: Quest[];
+  activeAnimation?: string;
+  isAnimationPlaying?: boolean;
+  animations?: {
+    idle?: string;
+    click?: string;
+    hit?: string;
+  };
+  interactionSound?: string;
 }

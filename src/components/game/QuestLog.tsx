@@ -40,21 +40,23 @@ export function QuestLog() {
           initial={{ scale: 0.95 }}
           animate={{ scale: 1 }}
           exit={{ scale: 0.95 }}
-          className="bg-gray-900/95 rounded-xl w-full md:w-[900px] h-[85vh] md:h-[600px] shadow-xl border border-amber-500/20 flex flex-col overflow-hidden"
+          className="bg-gray-900/95  w-full md:w-[900px] h-[85vh] md:h-[600px] shadow-xl border border-amber-500/20 flex flex-col overflow-hidden"
         >
           {/* Header */}
           <div className="p-4 md:p-6 border-b border-gray-800/50 flex items-center justify-between">
             <div className="flex items-center gap-2 md:gap-4">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center">
+              <div className="w-10 h-10 md:w-12 md:h-12  bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center">
                 <Book className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-lg md:text-xl font-bold text-white">Quest Log</h2>
+                <h2 className="text-lg md:text-xl font-bold text-white">
+                  Quest Log
+                </h2>
                 <div className="flex items-center gap-2 md:gap-3 mt-1">
-                  <span className="text-xs md:text-sm px-1.5 md:px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/20">
+                  <span className="text-xs md:text-sm px-1.5 md:px-2 py-0.5  bg-amber-500/20 text-amber-300 border border-amber-500/20">
                     {questLog.active.length} Active
                   </span>
-                  <span className="text-xs md:text-sm px-1.5 md:px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/20">
+                  <span className="text-xs md:text-sm px-1.5 md:px-2 py-0.5  bg-emerald-500/20 text-emerald-300 border border-emerald-500/20">
                     {questLog.completed.length} Completed
                   </span>
                 </div>
@@ -62,7 +64,7 @@ export function QuestLog() {
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1.5 md:p-2 hover:bg-gray-800 rounded-lg transition-colors"
+              className="p-1.5 md:p-2 hover:bg-gray-800  transition-colors"
             >
               <X className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
             </button>
@@ -88,7 +90,7 @@ export function QuestLog() {
                         setIsOpen(false);
                       }}
                       className="w-full p-3 md:p-4 bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-800 hover:to-gray-900
-                               rounded-xl border border-amber-500/20 hover:border-amber-500/40 transition-all text-left"
+                                border border-amber-500/20 hover:border-amber-500/40 transition-all text-left"
                     >
                       <div className="flex items-center justify-between mb-2 md:mb-3">
                         <h4 className="font-medium text-amber-300 text-sm md:text-base">
@@ -111,7 +113,7 @@ export function QuestLog() {
                           return (
                             <div
                               key={itemId}
-                              className="flex items-center gap-1 px-1.5 md:px-2 py-0.5 rounded-full bg-gray-800 text-gray-300 text-xs md:text-sm"
+                              className="flex items-center gap-1 px-1.5 md:px-2 py-0.5  bg-gray-800 text-gray-300 text-xs md:text-sm"
                             >
                               <Package className="w-3 h-3 md:w-3.5 md:h-3.5" />
                               {item.name}
@@ -119,7 +121,7 @@ export function QuestLog() {
                           );
                         })}
                         {quest.rewards.money && (
-                          <div className="flex items-center gap-1 px-1.5 md:px-2 py-0.5 rounded-full bg-gray-800 text-gray-300 text-xs md:text-sm">
+                          <div className="flex items-center gap-1 px-1.5 md:px-2 py-0.5  bg-gray-800 text-gray-300 text-xs md:text-sm">
                             <Coins className="w-3 h-3 md:w-3.5 md:h-3.5" />
                             {quest.rewards.money} coins
                           </div>
@@ -141,7 +143,7 @@ export function QuestLog() {
                     <div
                       key={quest.id}
                       className="w-full p-3 md:p-4 bg-gradient-to-br from-gray-800/20 to-gray-900/20
-                               rounded-xl border border-emerald-500/20"
+                                border border-emerald-500/20"
                     >
                       <div className="flex items-center justify-between mb-2 md:mb-3">
                         <h4 className="font-medium text-emerald-300 text-sm md:text-base">

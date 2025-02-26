@@ -17,6 +17,11 @@ body {
   min-height: 100vh;
 }
 
+.no-scrollbar {
+  scrollbar-width: none;
+  scrollbar-color: transparent;
+}
+
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgba(59, 130, 246, 0.5) transparent;

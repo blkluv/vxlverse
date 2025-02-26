@@ -32,10 +32,10 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
             className="w-full max-w-2xl mx-4 max-h-[90vh] relative"
           >
             {/* Glass background with gradient borders */}
-            <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br p-[1px] from-white/20 via-white/0 to-white/20">
+            <div className="relative  overflow-hidden bg-gradient-to-br p-[1px] from-white/20 via-white/0 to-white/20">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-violet-500/10 to-purple-500/10 animate-gradient" />
-              
-              <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900/95 via-gray-900/98 to-gray-800/95 backdrop-blur-xl">
+
+              <div className="relative  overflow-hidden bg-gradient-to-br from-gray-900/95 via-gray-900/98 to-gray-800/95 backdrop-blur-xl">
                 {/* Header - Fixed */}
                 <div className="p-6 pb-0 bg-gradient-to-r from-gray-900/95 via-gray-900/90 to-gray-900/95">
                   <div className="flex items-center justify-between">
@@ -51,7 +51,7 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
                     </motion.div>
                     <button
                       onClick={onClose}
-                      className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-black/20"
+                      className="p-2 text-gray-400 hover:text-white hover:bg-white/5  transition-all duration-200 hover:shadow-lg hover:shadow-black/20"
                     >
                       <X className="w-5 h-5" />
                     </button>
@@ -61,9 +61,7 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
                 {/* Content - Scrollable */}
                 <div className="overflow-y-auto max-h-[calc(90vh-8rem)] scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent">
                   <div className="p-6 relative">
-                    <div className="relative z-10">
-                      {children}
-                    </div>
+                    <div className="relative z-10">{children}</div>
                   </div>
                 </div>
               </div>

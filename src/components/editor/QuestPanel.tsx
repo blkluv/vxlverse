@@ -1,698 +1,519 @@
-import { useState } from "react";
-import { Quest, GAME_ITEMS } from "../../types";
+import { useState, useCallback } from "react";
+import { motion } from "framer-motion";
 import {
-  MessageCircle,
-  ChevronDown,
-  ChevronRight,
-  Plus,
+  Scroll,
+  Edit3,
   Trash2,
-  Clock,
-  MessageSquare,
-  Gift,
-  ArrowRight,
-  Sun,
-  Moon,
-  Sunset,
-  Sunrise,
-  Coins,
-  Heart,
-  Trophy,
-  Sword,
-  Package,
+  X,
+  BookOpen,
+  Plus,
+  Type,
+  AlignLeft,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ItemSelector } from "./ItemSelector";
-import { DialogueEditor } from "./DialogueEditor";
+import { Quest, GAME_ITEMS } from "../../types";
+import { RequirementsPanel } from "./properties/requirments";
+import { Textarea } from "../UI/textarea";
+import { Input } from "../UI/input";
 
 interface QuestPanelProps {
   object: {
     quests?: Quest[];
   };
-  onChange: (updates: Partial<typeof object>) => void;
+  onChange: (updates: Partial<{ quests?: Quest[] }>) => void;
 }
 
-const TIME_OF_DAY_CONFIG = [
-  { id: "morning", icon: Sunrise, label: "Morning", color: "amber" },
-  { id: "noon", icon: Sun, label: "Noon", color: "yellow" },
-  { id: "evening", icon: Sunset, label: "Evening", color: "orange" },
-  { id: "night", icon: Moon, label: "Night", color: "blue" },
-] as const;
+interface QuestItem {
+  id: string;
+  name: string;
+  amount: number;
+  quantity?: number;
+}
+
+type QuestTab = "story" | "requirements" | "rewards";
 
 export function QuestPanel({ object, onChange }: QuestPanelProps) {
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(
-    new Set()
-  );
   const [editingQuest, setEditingQuest] = useState<Quest | null>(null);
+  const [activeTab, setActiveTab] = useState<QuestTab>("story");
   const [showItemSelector, setShowItemSelector] = useState<{
     type: "requirement" | "reward";
     questId: string;
   } | null>(null);
 
-  const toggleSection = (section: string) => {
-    setExpandedSections((prev) => {
-      const next = new Set(prev);
-      if (next.has(section)) {
-        next.delete(section);
-      } else {
-        next.add(section);
-      }
-      return next;
-    });
-  };
-
-  const addNewQuest = () => {
+  // Create a new quest with default values
+  const addNewQuest = useCallback(() => {
     const newQuest: Quest = {
       id: `quest-${Date.now()}`,
       title: "New Quest",
-      description: "Quest description",
-      dialogues: [
-        {
-          id: 0,
-          speaker: "NPC",
-          text: "Hello adventurer!",
-          choices: [
-            {
-              text: "Continue",
-              nextDialogue: 1,
-            },
-          ],
-        },
-      ],
+      description: "Quest description goes here...",
+      status: "active",
       requirements: {
         level: 1,
-        energy: 10,
+        energy: 0,
         money: 0,
-        timeOfDay: ["morning", "noon"],
+        time: { start: "", end: "" },
         items: [],
       },
       rewards: {
         xp: 100,
+        energy: 0,
         money: 50,
-        energy: 20,
         items: [],
       },
-      completion: {
-        conditions: {
-          items: [],
-          location: undefined,
-          npcTalk: [],
-          objectInteract: [],
-          enemyDefeat: [],
-        },
-        actions: [
-          {
-            type: "complete",
-            params: { message: "Quest completed!" },
-          },
-        ],
-      },
+      completion: { actions: [] },
+      completionText: "Congratulations on completing this quest!",
+      tracking: { type: "manual", quantity: 1 },
+      objectives: [],
+      dialogues: [],
+      backstory: "",
       completed: false,
     };
 
-    onChange({
-      quests: [...(object.quests || []), newQuest],
-    });
+    onChange({ quests: [...(object.quests || []), newQuest] });
     setEditingQuest(newQuest);
-  };
+    setActiveTab("story");
+  }, [object.quests, onChange]);
 
-  const removeQuest = (questId: string) => {
-    onChange({
-      quests: object.quests?.filter((q) => q.id !== questId) || [],
-    });
-    if (editingQuest?.id === questId) {
-      setEditingQuest(null);
-    }
-  };
-
-  const updateQuest = (questId: string, updates: Partial<Quest>) => {
-    onChange({
-      quests: object.quests?.map((q) =>
-        q.id === questId ? { ...q, ...updates } : q
-      ),
-    });
-  };
-
-  const handleItemSelect = (item: (typeof GAME_ITEMS)[0]) => {
-    if (!showItemSelector) return;
-
-    const { type, questId } = showItemSelector;
-    const quest = object.quests?.find((q) => q.id === questId);
-    if (!quest) return;
-
-    if (type === "requirement") {
-      const items = [...(quest.requirements.items || [])];
-      items.push({ id: item.id, amount: 1 });
-      updateQuest(questId, {
-        requirements: {
-          ...quest.requirements,
-          items,
-        },
+  // Remove quest
+  const removeQuest = useCallback(
+    (questId: string) => {
+      onChange({
+        quests: object.quests?.filter((q) => q.id !== questId) || [],
       });
-    } else {
-      const items = [...(quest.rewards.items || [])];
-      items.push({ id: item.id, amount: 1 });
-      updateQuest(questId, {
-        rewards: {
-          ...quest.rewards,
-          items,
-        },
+      if (editingQuest?.id === questId) setEditingQuest(null);
+    },
+    [editingQuest?.id, object.quests, onChange]
+  );
+
+  // Update quest
+  const updateQuest = useCallback(
+    (questId: string, updates: Partial<Quest>) => {
+      onChange({
+        quests:
+          object.quests?.map((q) =>
+            q.id === questId ? { ...q, ...updates } : q
+          ) || [],
       });
-    }
+      if (editingQuest?.id === questId) {
+        setEditingQuest((prev) => (prev ? { ...prev, ...updates } : null));
+      }
+    },
+    [editingQuest?.id, object.quests, onChange]
+  );
 
-    setShowItemSelector(null);
+  // Handle item selection (for requirements or rewards)
+  const handleItemSelect = useCallback(
+    (item: (typeof GAME_ITEMS)[0]) => {
+      if (!showItemSelector || !item) return;
+
+      const { type, questId } = showItemSelector;
+      const quest = object.quests?.find((q) => q.id === questId);
+      if (!quest) return;
+
+      const listKey = type === "requirement" ? "requirements" : "rewards";
+      const currentItems = quest[listKey].items || [];
+      const existingItem = currentItems.find(
+        (i: QuestItem) => i.id === item.id
+      );
+
+      const newItems = existingItem
+        ? currentItems.map((i: QuestItem) =>
+            i.id === item.id ? { ...i, amount: (i.amount || 1) + 1 } : i
+          )
+        : [...currentItems, { id: item.id, amount: 1, name: item.name }];
+
+      updateQuest(questId, {
+        [listKey]: { ...quest[listKey], items: newItems },
+      } as Partial<Quest>);
+      setShowItemSelector(null);
+    },
+    [object.quests, showItemSelector, updateQuest]
+  );
+
+  // Toggle quest editor view
+  const toggleQuestEditor = useCallback((quest: Quest) => {
+    setEditingQuest((prev) => (prev?.id === quest.id ? null : quest));
+    setActiveTab("story");
+  }, []);
+
+  // Sub-component: SectionHeader
+  const SectionHeader = ({
+    icon,
+    title,
+  }: {
+    icon: React.ReactNode;
+    title: string;
+  }) => (
+    <div className="flex items-center gap-2 mb-2">
+      <div className="w-5 h-5 flex items-center justify-center  bg-gradient-to-br from-blue-500/30 to-indigo-500/20 border border-blue-500/40 shadow-sm">
+        <div className="text-blue-300">{icon}</div>
+      </div>
+      <span className="text-xs font-semibold text-slate-100 tracking-wide">
+        {title}
+      </span>
+    </div>
+  );
+
+  // Sub-component: TabButton
+  const TabButton = ({
+    icon,
+    label,
+    isActive,
+    onClick,
+  }: {
+    icon: React.ReactNode;
+    label: string;
+    isActive: boolean;
+    onClick: () => void;
+  }) => (
+    <button
+      onClick={onClick}
+      className={`px-3 py-1.5 text-xs font-medium transition-all duration-200 relative ${
+        isActive
+          ? "text-blue-50 bg-gradient-to-r from-blue-600/20 to-blue-500/10 shadow-sm"
+          : "text-slate-400 hover:text-slate-200 hover:bg-slate-700/40"
+      }`}
+    >
+      <div className="flex items-center gap-1.5">
+        <div
+          className={`transition-colors duration-200 ${
+            isActive ? "text-blue-300" : ""
+          }`}
+        >
+          {icon}
+        </div>
+        {label}
+      </div>
+      {isActive && (
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-indigo-400 -t-full" />
+      )}
+    </button>
+  );
+
+  // Sub-component: ItemCard
+  const ItemCard = ({
+    item,
+    onIncrement,
+    onRemove,
+  }: {
+    item: QuestItem;
+    onIncrement: () => void;
+    onRemove: () => void;
+  }) => {
+    const gameItem = GAME_ITEMS.find((gi) => gi.id === item.id);
+    if (!gameItem) return null;
+    return (
+      <div className="flex items-center justify-between p-2 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-800/90 border border-slate-700/70  shadow-md hover:shadow-lg hover:border-slate-600/80 hover:from-slate-800/95 hover:to-slate-800/95 transition-all duration-200">
+        <div className="flex items-center gap-2.5">
+          <div className="text-xl flex items-center justify-center w-9 h-9 bg-gradient-to-br from-slate-700/60 to-slate-800/60  border border-slate-600/40 shadow-inner">
+            {gameItem.emoji}
+          </div>
+          <div className="min-w-0">
+            <div className="text-xs font-medium text-slate-100 truncate group-hover:text-white">
+              {gameItem.name}
+            </div>
+            <div className="text-xs text-slate-400 flex items-center gap-1.5">
+              <span className="flex items-center">
+                <span className="text-amber-400 mr-0.5">×</span>
+                <span>{item.amount || item.quantity || 1}</span>
+              </span>
+              <span className="text-slate-500 text-[10px] px-1.5 py-0.5 -full bg-slate-800/80 border border-slate-700/50">
+                {gameItem.type}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onIncrement();
+            }}
+            className="p-1.5 text-slate-400 hover:text-blue-300 hover:bg-blue-500/10 transition-all "
+            title="Increase quantity"
+            aria-label="Increase quantity"
+          >
+            <Plus className="w-3 h-3" />
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemove();
+            }}
+            className="p-1.5 text-slate-400 hover:bg-red-500/20 hover:text-red-300 transition-all "
+            title="Remove item"
+            aria-label="Remove item"
+          >
+            <Trash2 className="w-3 h-3" />
+          </button>
+        </div>
+      </div>
+    );
   };
 
-  const getItemDetails = (itemId: string) => {
-    return GAME_ITEMS.find((item) => item.id === itemId);
-  };
+  // Render list of items (used for both requirements and rewards)
+  const renderItemsList = useCallback(
+    (items: QuestItem[] = []) => {
+      if (!items.length)
+        return (
+          <div className="text-xs text-slate-400 italic">No items added</div>
+        );
+      return (
+        <div className="space-y-1.5 mt-1.5 max-h-40 overflow-y-auto custom-scrollbar">
+          {items.map((item) => (
+            <ItemCard
+              key={item.id}
+              item={item}
+              onIncrement={() => {
+                const quest = object.quests?.find(
+                  (q) => q.id === editingQuest?.id
+                );
+                if (!quest) return;
+                if (activeTab === "requirements") {
+                  const updatedItems = quest.requirements.items?.map((i) =>
+                    i.id === item.id ? { ...i, amount: (i.amount || 1) + 1 } : i
+                  );
+                  updateQuest(quest.id, {
+                    requirements: {
+                      ...quest.requirements,
+                      items: updatedItems,
+                    },
+                  });
+                } else if (activeTab === "rewards") {
+                  const updatedItems = quest.rewards.items?.map((i) =>
+                    i.id === item.id ? { ...i, amount: (i.amount || 1) + 1 } : i
+                  );
+                  updateQuest(quest.id, {
+                    rewards: { ...quest.rewards, items: updatedItems },
+                  });
+                }
+              }}
+              onRemove={() => {
+                const quest = object.quests?.find(
+                  (q) => q.id === editingQuest?.id
+                );
+                if (!quest) return;
+                if (activeTab === "requirements") {
+                  const updatedItems =
+                    quest.requirements.items?.filter((i) => i.id !== item.id) ||
+                    [];
+                  updateQuest(quest.id, {
+                    requirements: {
+                      ...quest.requirements,
+                      items: updatedItems,
+                    },
+                  });
+                } else if (activeTab === "rewards") {
+                  const updatedItems =
+                    quest.rewards.items?.filter((i) => i.id !== item.id) || [];
+                  updateQuest(quest.id, {
+                    rewards: { ...quest.rewards, items: updatedItems },
+                  });
+                }
+              }}
+            />
+          ))}
+        </div>
+      );
+    },
+    [activeTab, editingQuest?.id, object.quests, updateQuest]
+  );
 
   return (
-    <div className="space-y-4">
-      <button
-        onClick={() => toggleSection("quests")}
-        className="w-full flex items-center justify-between p-3 bg-slate-800/50 rounded-xl border border-slate-700/50"
-      >
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-indigo-500/10">
-            <MessageCircle className="w-4 h-4 text-indigo-400" />
-          </div>
-          <span className="font-medium text-slate-100">Quests & Dialogues</span>
-        </div>
-        {expandedSections.has("quests") ? (
-          <ChevronDown className="w-4 h-4 text-slate-400" />
-        ) : (
-          <ChevronRight className="w-4 h-4 text-slate-400" />
-        )}
-      </button>
-
-      {expandedSections.has("quests") && (
-        <div className="space-y-4">
-          {/* Quest List */}
-          <div className="space-y-2">
-            {(object.quests || []).map((quest) => (
-              <motion.div
-                key={quest.id}
-                layout
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`rounded-lg border transition-all overflow-hidden ${
-                  editingQuest?.id === quest.id
-                    ? "bg-slate-800/50 border-indigo-500/30"
-                    : "bg-slate-800/30 border-slate-700/30"
-                }`}
-              >
-                {/* Quest Header */}
-                <div
-                  className="p-3 cursor-pointer hover:bg-slate-700/30 transition-colors"
-                  onClick={() =>
-                    setEditingQuest(
-                      editingQuest?.id === quest.id ? null : quest
-                    )
+    <div className="space-y-2">
+      {/* Quest List */}
+      <>
+        <motion.div
+          className="space-y-2 overflow-hidden custom-scrollbar"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        >
+          {object.quests?.map((quest) => (
+            <motion.div
+              key={quest.id}
+              className={`mb-1 border  overflow-hidden shadow-md transition-all duration-200 ${
+                editingQuest?.id === quest.id
+                  ? "bg-gradient-to-br from-slate-800/95 via-slate-850/95 to-slate-900/98 border-blue-500/30 shadow-lg ring-1 ring-blue-500/10"
+                  : "bg-gradient-to-r from-slate-800/70 to-slate-800/80 hover:from-slate-800/80 hover:to-slate-800/90 border-slate-700/50 hover:border-slate-600/70"
+              }`}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div
+                className="p-2.5 flex items-center justify-between cursor-pointer"
+                onClick={() => toggleQuestEditor(quest)}
+                role="button"
+                tabIndex={0}
+                aria-expanded={editingQuest?.id === quest.id}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    toggleQuestEditor(quest);
+                    e.preventDefault();
                   }
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <MessageSquare className="w-4 h-4 text-indigo-400" />
-                      <input
-                        type="text"
-                        value={quest.title}
-                        onChange={(e) =>
-                          updateQuest(quest.id, { title: e.target.value })
-                        }
-                        onClick={(e) => e.stopPropagation()}
-                        className="bg-transparent text-sm font-medium text-slate-100 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 rounded px-1"
-                      />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          removeQuest(quest.id);
-                        }}
-                        className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                      {editingQuest?.id === quest.id ? (
-                        <ChevronDown className="w-4 h-4 text-slate-400" />
-                      ) : (
-                        <ChevronRight className="w-4 h-4 text-slate-400" />
-                      )}
-                    </div>
+                }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div
+                    className={`p-1.5  flex items-center justify-center ${
+                      editingQuest?.id === quest.id
+                        ? "bg-gradient-to-br from-blue-500/30 to-indigo-500/20 text-blue-300 shadow-sm"
+                        : "bg-slate-700/80 text-slate-300"
+                    }`}
+                  >
+                    <Scroll className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <h3
+                      className={`text-sm font-medium ${
+                        editingQuest?.id === quest.id
+                          ? "text-blue-50"
+                          : "text-slate-100"
+                      }`}
+                    >
+                      {quest.title || "Untitled Quest"}
+                    </h3>
+                    {quest.status && (
+                      <div className="text-[11px] flex items-center gap-1.5 mt-0.5">
+                        <span
+                          className={`inline-block w-2 h-2 -full ${
+                            quest.status === "active"
+                              ? "bg-green-400 shadow-sm shadow-green-400/30"
+                              : quest.status === "completed"
+                              ? "bg-blue-400 shadow-sm shadow-blue-400/30"
+                              : "bg-amber-400 shadow-sm shadow-amber-400/30"
+                          }`}
+                        />
+                        <span className="text-slate-400 capitalize">
+                          {quest.status}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleQuestEditor(quest);
+                    }}
+                    className={`p-1.5  transition-all duration-200 ${
+                      editingQuest?.id === quest.id
+                        ? "text-blue-300 hover:bg-blue-500/20 hover:text-blue-200"
+                        : "text-slate-400 hover:bg-slate-700/80 hover:text-slate-200"
+                    }`}
+                    title={editingQuest?.id === quest.id ? "Close" : "Edit"}
+                    aria-label={
+                      editingQuest?.id === quest.id
+                        ? "Close quest editor"
+                        : "Edit quest"
+                    }
+                  >
+                    {editingQuest?.id === quest.id ? (
+                      <X className="w-3.5 h-3.5" />
+                    ) : (
+                      <Edit3 className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeQuest(quest.id);
+                    }}
+                    className="p-1.5  text-slate-400 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200"
+                    title="Delete quest"
+                    aria-label="Delete quest"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
 
-                {/* Quest Details */}
-                <AnimatePresence>
-                  {editingQuest?.id === quest.id && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="border-t border-slate-700/50"
-                    >
-                      <div className="p-4 space-y-6">
-                        {/* Description */}
-                        <div className="space-y-2">
-                          <label className="text-xs font-medium text-slate-400">
+              {/* Quest Details */}
+              <>
+                {editingQuest?.id === quest.id && (
+                  <div>
+                    {/* Tab Content */}
+                    <div className="p-3 bg-gradient-to-b from-slate-900/90 to-slate-900/95 backdrop-blur-sm">
+                      <div className="space-y-3">
+                        <div>
+                          <label
+                            htmlFor="quest-title"
+                            className="block text-xs font-medium text-slate-300 mb-1 flex items-center gap-1.5"
+                          >
+                            <Type className="w-3 h-3 text-cyan-400" /> Title
+                          </label>
+                          <Input
+                            id="quest-title"
+                            type="text"
+                            value={quest.title}
+                            onChange={(e) =>
+                              updateQuest(quest.id, { title: e.target.value })
+                            }
+                            className="w-full px-3 py-1.5 bg-slate-800/30 border border-slate-700/80  text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/40 transition-colors"
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="quest-description"
+                            className="block text-xs font-medium text-slate-300 mb-1 flex items-center gap-1.5"
+                          >
+                            <AlignLeft className="w-3 h-3 text-teal-400" />{" "}
                             Description
                           </label>
-                          <textarea
+                          <Textarea
+                            id="quest-description"
                             value={quest.description}
                             onChange={(e) =>
                               updateQuest(quest.id, {
                                 description: e.target.value,
                               })
                             }
-                            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-600/50 rounded-lg text-sm resize-none focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
+                            className="w-full px-3 py-1.5 bg-slate-800/90 border border-slate-700/80  text-xs text-slate-100 resize-none focus:outline-none focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/40 transition-colors"
+                            rows={2}
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="quest-backstory"
+                            className=" text-xs font-medium text-slate-300 mb-1 flex items-center gap-1.5"
+                          >
+                            <BookOpen className="w-3 h-3 text-purple-400" />{" "}
+                            Backstory
+                          </label>
+                          <Textarea
+                            id="quest-backstory"
+                            value={quest.backstory}
+                            onChange={(e) =>
+                              updateQuest(quest.id, {
+                                backstory: e.target.value,
+                              })
+                            }
+                            className="w-full px-3 py-1.5 bg-slate-800/90 border border-slate-700/80  text-xs text-slate-100 resize-none focus:outline-none focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/40 transition-colors"
                             rows={3}
                           />
                         </div>
-
-                        {/* Dialogues */}
-                        <div className="space-y-2">
-                          <h3 className="text-sm font-medium text-slate-200 flex items-center gap-2">
-                            <MessageSquare className="w-4 h-4 text-indigo-400" />
-                            Dialogues
-                          </h3>
-                          <DialogueEditor
-                            quest={quest}
-                            onChange={(updates) =>
-                              updateQuest(quest.id, updates)
-                            }
-                          />
-                        </div>
-
-                        {/* Requirements Section */}
-                        <div className="space-y-4">
-                          <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-slate-400" />
-                            <h3 className="text-sm font-medium text-slate-200">
-                              Requirements
-                            </h3>
-                          </div>
-
-                          {/* Level & Stats Requirements */}
-                          <div className="grid grid-cols-3 gap-3">
-                            <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700/30">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Trophy className="w-4 h-4 text-yellow-400" />
-                                <label className="text-xs text-slate-300">
-                                  Level
-                                </label>
-                              </div>
-                              <input
-                                type="number"
-                                min="1"
-                                value={quest.requirements.level || 1}
-                                onChange={(e) =>
-                                  updateQuest(quest.id, {
-                                    requirements: {
-                                      ...quest.requirements,
-                                      level: parseInt(e.target.value) || 1,
-                                    },
-                                  })
-                                }
-                                className="w-full px-2 py-1 bg-slate-900/50 border border-slate-600/50 rounded text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/30"
-                              />
-                            </div>
-
-                            <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700/30">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Heart className="w-4 h-4 text-red-400" />
-                                <label className="text-xs text-slate-300">
-                                  Energy
-                                </label>
-                              </div>
-                              <input
-                                type="number"
-                                min="0"
-                                value={quest.requirements.energy || 0}
-                                onChange={(e) =>
-                                  updateQuest(quest.id, {
-                                    requirements: {
-                                      ...quest.requirements,
-                                      energy: parseInt(e.target.value) || 0,
-                                    },
-                                  })
-                                }
-                                className="w-full px-2 py-1 bg-slate-900/50 border border-slate-600/50 rounded text-sm focus:outline-none focus:ring-1 focus:ring-red-500/30"
-                              />
-                            </div>
-
-                            <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700/30">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Coins className="w-4 h-4 text-amber-400" />
-                                <label className="text-xs text-slate-300">
-                                  Money
-                                </label>
-                              </div>
-                              <input
-                                type="number"
-                                min="0"
-                                value={quest.requirements.money || 0}
-                                onChange={(e) =>
-                                  updateQuest(quest.id, {
-                                    requirements: {
-                                      ...quest.requirements,
-                                      money: parseInt(e.target.value) || 0,
-                                    },
-                                  })
-                                }
-                                className="w-full px-2 py-1 bg-slate-900/50 border border-slate-600/50 rounded text-sm focus:outline-none focus:ring-1 focus:ring-amber-500/30"
-                              />
-                            </div>
-                          </div>
-
-                          {/* Time of Day Requirements */}
-                          <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700/30">
-                            <label className="text-xs text-slate-300 mb-3 block">
-                              Available Times
-                            </label>
-                            <div className="grid grid-cols-2 gap-2">
-                              {TIME_OF_DAY_CONFIG.map(
-                                ({ id, icon: Icon, label }) => {
-                                  const isSelected =
-                                    quest.requirements.timeOfDay?.includes(
-                                      id as any
-                                    );
-                                  return (
-                                    <button
-                                      key={id}
-                                      onClick={() => {
-                                        const times = new Set(
-                                          quest.requirements.timeOfDay || []
-                                        );
-                                        if (isSelected) {
-                                          times.delete(id as any);
-                                        } else {
-                                          times.add(id as any);
-                                        }
-                                        updateQuest(quest.id, {
-                                          requirements: {
-                                            ...quest.requirements,
-                                            timeOfDay: Array.from(times),
-                                          },
-                                        });
-                                      }}
-                                      className={`flex items-center gap-2 p-3 rounded-lg border transition-all ${
-                                        isSelected
-                                          ? "bg-indigo-500/10 border-indigo-500/30 text-indigo-100"
-                                          : "bg-slate-900/30 border-slate-700/30 text-slate-400 hover:bg-slate-900/50"
-                                      }`}
-                                    >
-                                      <Icon
-                                        className={`w-4 h-4 ${
-                                          isSelected ? "text-indigo-400" : ""
-                                        }`}
-                                      />
-                                      <span className="text-xs font-medium">
-                                        {label}
-                                      </span>
-                                    </button>
-                                  );
-                                }
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Required Items */}
-                          <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700/30">
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="flex items-center gap-2">
-                                <Package className="w-4 h-4 text-slate-400" />
-                                <label className="text-xs text-slate-300">
-                                  Required Items
-                                </label>
-                              </div>
-                              <button
-                                onClick={() =>
-                                  setShowItemSelector({
-                                    type: "requirement",
-                                    questId: quest.id,
-                                  })
-                                }
-                                className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
-                              >
-                                <Plus className="w-3.5 h-3.5" />
-                                Add Item
-                              </button>
-                            </div>
-                            <div className="grid grid-cols-2 gap-2">
-                              {(quest.requirements.items || []).map(
-                                (item, index) => {
-                                  const itemDetails = getItemDetails(item.id);
-                                  return (
-                                    <div
-                                      key={index}
-                                      className="flex items-center gap-2 p-2 bg-slate-900/30 rounded-lg border border-slate-700/30"
-                                    >
-                                      <div className="text-2xl">
-                                        {itemDetails?.emoji}
-                                      </div>
-                                      <div className="flex-1 min-w-0">
-                                        <div className="text-xs font-medium text-slate-200 truncate">
-                                          {itemDetails?.name || item.id}
-                                        </div>
-                                        <input
-                                          type="number"
-                                          min="1"
-                                          value={item.amount}
-                                          onChange={(e) => {
-                                            const items = [
-                                              ...(quest.requirements.items ||
-                                                []),
-                                            ];
-                                            items[index] = {
-                                              ...item,
-                                              amount:
-                                                parseInt(e.target.value) || 1,
-                                            };
-                                            updateQuest(quest.id, {
-                                              requirements: {
-                                                ...quest.requirements,
-                                                items,
-                                              },
-                                            });
-                                          }}
-                                          className="w-16 px-1 py-0.5 bg-slate-800/50 border border-slate-600/50 rounded text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
-                                        />
-                                      </div>
-                                      <button
-                                        onClick={() => {
-                                          const items = [
-                                            ...(quest.requirements.items || []),
-                                          ];
-                                          items.splice(index, 1);
-                                          updateQuest(quest.id, {
-                                            requirements: {
-                                              ...quest.requirements,
-                                              items,
-                                            },
-                                          });
-                                        }}
-                                        className="p-1 text-slate-400 hover:text-red-400 rounded"
-                                      >
-                                        <Trash2 className="w-3.5 h-3.5" />
-                                      </button>
-                                    </div>
-                                  );
-                                }
-                              )}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Rewards Section */}
-                        <div className="space-y-4">
-                          <div className="flex items-center gap-2">
-                            <Gift className="w-4 h-4 text-slate-400" />
-                            <h3 className="text-sm font-medium text-slate-200">
-                              Rewards
-                            </h3>
-                          </div>
-
-                          <div className="grid grid-cols-3 gap-3">
-                            <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700/30">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Trophy className="w-4 h-4 text-yellow-400" />
-                                <label className="text-xs text-slate-300">
-                                  XP
-                                </label>
-                              </div>
-                              <input
-                                type="number"
-                                min="0"
-                                value={quest.rewards.xp || 0}
-                                onChange={(e) =>
-                                  updateQuest(quest.id, {
-                                    rewards: {
-                                      ...quest.rewards,
-                                      xp: parseInt(e.target.value) || 0,
-                                    },
-                                  })
-                                }
-                                className="w-full px-2 py-1 bg-slate-900/50 border border-slate-600/50 rounded text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/30"
-                              />
-                            </div>
-
-                            <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700/30">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Coins className="w-4 h-4 text-amber-400" />
-                                <label className="text-xs text-slate-300">
-                                  Money
-                                </label>
-                              </div>
-                              <input
-                                type="number"
-                                min="0"
-                                value={quest.rewards.money || 0}
-                                onChange={(e) =>
-                                  updateQuest(quest.id, {
-                                    rewards: {
-                                      ...quest.rewards,
-                                      money: parseInt(e.target.value) || 0,
-                                    },
-                                  })
-                                }
-                                className="w-full px-2 py-1 bg-slate-900/50 border border-slate-600/50 rounded text-sm focus:outline-none focus:ring-1 focus:ring-amber-500/30"
-                              />
-                            </div>
-
-                            <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700/30">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Heart className="w-4 h-4 text-red-400" />
-                                <label className="text-xs text-slate-300">
-                                  Energy
-                                </label>
-                              </div>
-                              <input
-                                type="number"
-                                min="0"
-                                value={quest.rewards.energy || 0}
-                                onChange={(e) =>
-                                  updateQuest(quest.id, {
-                                    rewards: {
-                                      ...quest.rewards,
-                                      energy: parseInt(e.target.value) || 0,
-                                    },
-                                  })
-                                }
-                                className="w-full px-2 py-1 bg-slate-900/50 border border-slate-600/50 rounded text-sm focus:outline-none focus:ring-1 focus:ring-red-500/30"
-                              />
-                            </div>
-                          </div>
-
-                          {/* Reward Items */}
-                          <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700/30">
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="flex items-center gap-2">
-                                <Package className="w-4 h-4 text-slate-400" />
-                                <label className="text-xs text-slate-300">
-                                  Reward Items
-                                </label>
-                              </div>
-                              <button
-                                onClick={() =>
-                                  setShowItemSelector({
-                                    type: "reward",
-                                    questId: quest.id,
-                                  })
-                                }
-                                className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
-                              >
-                                <Plus className="w-3.5 h-3.5" />
-                                Add Item
-                              </button>
-                            </div>
-                            <div className="grid grid-cols-2 gap-2">
-                              {(quest.rewards.items || []).map(
-                                (item, index) => {
-                                  const itemDetails = getItemDetails(item.id);
-                                  return (
-                                    <div
-                                      key={index}
-                                      className="flex items-center gap-2 p-2 bg-slate-900/30 rounded-lg border border-slate-700/30"
-                                    >
-                                      <div className="text-2xl">
-                                        {itemDetails?.emoji}
-                                      </div>
-                                      <div className="flex-1 min-w-0">
-                                        <div className="text-xs font-medium text-slate-200 truncate">
-                                          {itemDetails?.name || item.id}
-                                        </div>
-                                        <input
-                                          type="number"
-                                          min="1"
-                                          value={item.amount}
-                                          onChange={(e) => {
-                                            const items = [
-                                              ...(quest.rewards.items || []),
-                                            ];
-                                            items[index] = {
-                                              ...item,
-                                              amount:
-                                                parseInt(e.target.value) || 1,
-                                            };
-                                            updateQuest(quest.id, {
-                                              rewards: {
-                                                ...quest.rewards,
-                                                items,
-                                              },
-                                            });
-                                          }}
-                                          className="w-16 px-1 py-0.5 bg-slate-800/50 border border-slate-600/50 rounded text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
-                                        />
-                                      </div>
-                                      <button
-                                        onClick={() => {
-                                          const items = [
-                                            ...(quest.rewards.items || []),
-                                          ];
-                                          items.splice(index, 1);
-                                          updateQuest(quest.id, {
-                                            rewards: {
-                                              ...quest.rewards,
-                                              items,
-                                            },
-                                          });
-                                        }}
-                                        className="p-1 text-slate-400 hover:text-red-400 rounded"
-                                      >
-                                        <Trash2 className="w-3.5 h-3.5" />
-                                      </button>
-                                    </div>
-                                  );
-                                }
-                              )}
-                            </div>
-                          </div>
-                        </div>
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            ))}
-          </div>
 
+                      <div className="space-y-3">
+                        <RequirementsPanel />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            </motion.div>
+          ))}
           <button
             onClick={addNewQuest}
-            className="w-full p-2 flex items-center justify-center gap-2 text-sm text-indigo-400 hover:text-indigo-300 bg-indigo-500/10 hover:bg-indigo-500/20 rounded-lg transition-colors"
+            className="w-full p-2.5 flex items-center justify-center gap-2 text-xs font-medium text-slate-100 bg-gradient-to-r from-blue-500/15 to-blue-500/10 hover:from-blue-500/20 hover:to-blue-500/15 border border-blue-500/30 hover:border-blue-500/40  transition-all duration-200 shadow-sm"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 text-blue-400" />
             Add New Quest
           </button>
-        </div>
-      )}
-
-      {/* Item Selector Modal */}
-      {showItemSelector && (
-        <ItemSelector
-          onSelect={handleItemSelect}
-          onClose={() => setShowItemSelector(null)}
-        />
-      )}
+        </motion.div>
+      </>
     </div>
   );
 }

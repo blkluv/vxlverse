@@ -222,15 +222,15 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
 
       {!isDying && isNearby && (
         <Html position={[0, 3, 0]} center>
-          <div className="bg-black/80 px-3  w-32 py-1.5 rounded-lg">
+          <div className="bg-black/80 px-3  w-32 py-1.5 ">
             <div className=" items-center gap-1 mb-1">
-              <span className="text-yellow-400 block w-fit text-[10px] font-bold px-1.5 py-0.5 rounded bg-yellow-400/10 border border-yellow-400/20">
+              <span className="text-yellow-400 block w-fit text-[10px] font-bold px-1.5 py-0.5  bg-yellow-400/10 border border-yellow-400/20">
                 Lv.{enemy.level}
               </span>
               <span className="text-white/90 text-xs">{enemy.name}</span>
             </div>
 
-            <div className="relative w-full h-1.5 bg-gray-800/80 rounded-full overflow-hidden">
+            <div className="relative w-full h-1.5 bg-gray-800/80  overflow-hidden">
               <div
                 className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-500 transition-all duration-200"
                 style={{

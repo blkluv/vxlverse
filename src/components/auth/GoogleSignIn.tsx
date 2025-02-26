@@ -5,20 +5,18 @@ import { useAuthStore } from "../../stores/authStore";
 export function GoogleSignIn() {
   const [loading, setLoading] = useState(false);
   const { setUser } = useAuthStore();
-  
+
   const handleGoogleLogin = async () => {
     setLoading(true);
     try {
       const providers = await pb.collection("users").listAuthMethods({
         provider: "google",
       });
-      console.log("Providers:", providers);
       const authData = await pb.collection("users").authWithOAuth2({
         provider: "google",
       });
 
       if (authData) {
-        console.log("Successfully authenticated with Google", authData);
         setUser(authData.record);
       }
     } catch (err: any) {
@@ -32,7 +30,7 @@ export function GoogleSignIn() {
     <button
       onClick={handleGoogleLogin}
       disabled={loading}
-      className="flex items-center justify-center gap-2 w-60 ml-auto px-4 py-2 text-white bg-grandient-to-r from-blue-500 to-indigo-500 rounded  disabled:opacity-50"
+      className="flex items-center justify-center gap-2 w-60 ml-auto px-4 py-2 text-white bg-grandient-to-r from-blue-500 to-indigo-500   disabled:opacity-50"
     >
       {loading ? (
         "Signing in..."

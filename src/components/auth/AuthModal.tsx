@@ -19,7 +19,6 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       });
 
       if (authData) {
-        console.log("Successfully authenticated with Google");
         onClose();
       }
     } catch (err: any) {
@@ -46,7 +45,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-gray-900 rounded-xl w-full max-w-md p-6 relative border border-gray-800"
+          className="bg-gray-900  w-full max-w-md p-6 relative border border-gray-800"
         >
           {/* Close Button */}
           <button
@@ -68,14 +67,14 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
           {/* Error Message */}
           {error && (
-            <div className="mb-6 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+            <div className="mb-6 p-3 bg-red-500/10 border border-red-500/20  text-red-400 text-sm">
               {error}
             </div>
           )}
 
           <button
             onClick={handleGoogleLogin}
-            className="w-full bg-white hover:bg-gray-100 text-gray-900 font-medium py-3.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-3 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            className="w-full bg-white hover:bg-gray-100 text-gray-900 font-medium py-3.5 px-4  transition-colors flex items-center justify-center gap-3 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
           >
             <img
               src="https://www.google.com/favicon.ico"

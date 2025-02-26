@@ -12,6 +12,4 @@ export type AuthModel = {
 };
 
 // Enable Google auth with type-safe onChange handler
-pb.authStore.onChange((token, model) => {
-  console.log("authStore changed", { token, model });
-});
+pb.authStore.onChange((token, model) => {});

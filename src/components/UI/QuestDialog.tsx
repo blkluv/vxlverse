@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useGameStore } from '../../stores/gameStore';
-import { Quest } from '../../stores/gameStore';
-import { MessageSquare, XCircle } from 'lucide-react';
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useGameStore } from "../../stores/gameStore";
+import { Quest } from "../../stores/gameStore";
+import { MessageSquare, XCircle } from "lucide-react";
 
 interface QuestDialogProps {
   quest: Quest;
@@ -25,10 +25,13 @@ export function QuestDialog({ quest, onClose }: QuestDialogProps) {
     onClose();
   };
 
-  const canComplete = 
-    (!quest.requirements.level || playerStats.level >= quest.requirements.level) &&
-    (!quest.requirements.energy || playerStats.energy >= quest.requirements.energy) &&
-    (!quest.requirements.money || playerStats.money >= quest.requirements.money);
+  const canComplete =
+    (!quest.requirements.level ||
+      playerStats.level >= quest.requirements.level) &&
+    (!quest.requirements.energy ||
+      playerStats.energy >= quest.requirements.energy) &&
+    (!quest.requirements.money ||
+      playerStats.money >= quest.requirements.money);
 
   return (
     <motion.div
@@ -37,7 +40,7 @@ export function QuestDialog({ quest, onClose }: QuestDialogProps) {
       exit={{ opacity: 0, scale: 0.9 }}
       className="fixed inset-0 flex items-center justify-center p-4 bg-black/50"
     >
-      <div className="bg-gray-800 rounded-xl max-w-2xl w-full p-6 relative">
+      <div className="bg-gray-800  max-w-2xl w-full p-6 relative">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -50,7 +53,7 @@ export function QuestDialog({ quest, onClose }: QuestDialogProps) {
           <p className="text-gray-400">{quest.description}</p>
         </div>
 
-        <div className="bg-gray-700 rounded-lg p-4 mb-6">
+        <div className="bg-gray-700  p-4 mb-6">
           <div className="flex items-start gap-4">
             <MessageSquare className="w-6 h-6 text-blue-400 mt-1" />
             <div>
@@ -76,7 +79,7 @@ export function QuestDialog({ quest, onClose }: QuestDialogProps) {
                       choice.action();
                     }
                   }}
-                  className="w-full text-left px-4 py-2 rounded bg-gray-600 hover:bg-gray-500 transition-colors"
+                  className="w-full text-left px-4 py-2  bg-gray-600 hover:bg-gray-500 transition-colors"
                 >
                   {choice.text}
                 </button>
@@ -123,10 +126,10 @@ export function QuestDialog({ quest, onClose }: QuestDialogProps) {
           <button
             onClick={handleComplete}
             disabled={!canComplete}
-            className={`px-4 py-2 rounded-lg ${
+            className={`px-4 py-2  ${
               canComplete
-                ? 'bg-blue-500 hover:bg-blue-600'
-                : 'bg-gray-600 cursor-not-allowed'
+                ? "bg-blue-500 hover:bg-blue-600"
+                : "bg-gray-600 cursor-not-allowed"
             }`}
           >
             Complete Quest

@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Environment, Sky } from "@react-three/drei";
 import { Physics, RigidBody } from "@react-three/rapier";
-import { GameObject } from "../GameObject";
+import { GameObject } from "../GameObjectWrapper";
 import { Scene as SceneType } from "../../types";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
@@ -114,9 +114,8 @@ function Floor() {
   );
 }
 
-export function Scene({ sceneData, isPreview }: SceneProps) {
+export function GameScene({ sceneData, isPreview }: SceneProps) {
   const { scene } = useThree();
-  const setMoveToPoint = useGame((state) => state.setMoveToPoint);
 
   const { playSound } = useSound();
 
@@ -147,7 +146,7 @@ export function Scene({ sceneData, isPreview }: SceneProps) {
       <ambientLight intensity={sceneData.ambientLight || 0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
 
-      <Physics debug>
+      <Physics>
         {/* Ground */}
         <Floor />
 

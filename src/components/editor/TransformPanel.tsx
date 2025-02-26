@@ -6,6 +6,8 @@ import {
   RefreshCw,
   ChevronDown,
   ChevronRight,
+  Lock,
+  Unlock,
 } from "lucide-react";
 import * as THREE from "three";
 
@@ -22,6 +24,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(["position"])
   );
+  const [lockScale, setLockScale] = useState<boolean>(true);
 
   const toggleSection = (section: string) => {
     setExpandedSections((prev) => {
@@ -62,7 +65,24 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
     if (isNaN(numValue)) return;
 
     const newScale = object.scale.clone();
-    newScale[axis] = Math.max(0.01, numValue);
+
+    if (lockScale) {
+      // If scale is locked, update all axes with the same value
+      newScale.set(
+        Math.max(0.01, numValue),
+        Math.max(0.01, numValue),
+        Math.max(0.01, numValue)
+      );
+    } else {
+      // Otherwise just update the specified axis
+      newScale[axis] = Math.max(0.01, numValue);
+    }
+
+    onChange({ scale: newScale });
+  };
+
+  const applyPresetScale = (scaleValue: number) => {
+    const newScale = new THREE.Vector3(scaleValue, scaleValue, scaleValue);
     onChange({ scale: newScale });
   };
 
@@ -83,13 +103,13 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
   return (
     <div className="space-y-2">
       {/* Position Section */}
-      <div className="bg-slate-800/50 rounded-lg border border-slate-700/50 overflow-hidden">
+      <div className="bg-slate-800/50  border border-slate-700/50 overflow-hidden">
         <button
           onClick={() => toggleSection("position")}
           className="w-full p-2 flex items-center justify-between hover:bg-slate-700/30 transition-colors"
         >
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-md bg-cyan-500/10">
+            <div className="p-1.5  bg-cyan-500/10">
               <Move className="w-3.5 h-3.5 text-cyan-400" />
             </div>
             <span className="text-sm font-medium text-cyan-100">Position</span>
@@ -106,7 +126,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
             <div className="grid grid-cols-3 gap-2">
               {["x", "y", "z"].map((axis) => (
                 <div key={`pos-${axis}`} className="relative group">
-                  <div className="absolute inset-0 bg-cyan-500/5 rounded-md -m-0.5 group-hover:bg-cyan-500/10 transition-colors" />
+                  <div className="absolute inset-0 bg-cyan-500/5  -m-0.5 group-hover:bg-cyan-500/10 transition-colors" />
                   <div className="relative">
                     <label className="text-[10px] font-medium text-cyan-300/70 uppercase tracking-wider block mb-1 ml-0.5">
                       {axis}
@@ -122,7 +142,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
                           e.target.value
                         )
                       }
-                      className="w-full px-1.5 py-1 text-xs bg-slate-800/50 border border-slate-600/50 rounded-md 
+                      className="w-full px-1.5 py-1 text-xs bg-slate-800/50 border border-slate-600/50  
                                focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 text-right
                                transition-all"
                       step={0.1}
@@ -133,7 +153,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
             </div>
             <button
               onClick={() => resetTransforms("position")}
-              className="w-full mt-2 p-1 flex items-center justify-center gap-1.5 text-[10px] text-cyan-300 hover:bg-cyan-500/10 rounded-md transition-colors"
+              className="w-full mt-2 p-1 flex items-center justify-center gap-1.5 text-[10px] text-cyan-300 hover:bg-cyan-500/10  transition-colors"
             >
               <RefreshCw className="w-3 h-3" />
               Reset
@@ -143,13 +163,13 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
       </div>
 
       {/* Rotation Section */}
-      <div className="bg-slate-800/50 rounded-lg border border-slate-700/50 overflow-hidden">
+      <div className="bg-slate-800/50  border border-slate-700/50 overflow-hidden">
         <button
           onClick={() => toggleSection("rotation")}
           className="w-full p-2 flex items-center justify-between hover:bg-slate-700/30 transition-colors"
         >
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-md bg-blue-500/10">
+            <div className="p-1.5  bg-blue-500/10">
               <RotateCcw className="w-3.5 h-3.5 text-blue-400" />
             </div>
             <span className="text-sm font-medium text-blue-100">Rotation</span>
@@ -166,7 +186,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
             <div className="grid grid-cols-3 gap-2">
               {["x", "y", "z"].map((axis) => (
                 <div key={`rot-${axis}`} className="relative group">
-                  <div className="absolute inset-0 bg-blue-500/5 rounded-md -m-0.5 group-hover:bg-blue-500/10 transition-colors" />
+                  <div className="absolute inset-0 bg-blue-500/5  -m-0.5 group-hover:bg-blue-500/10 transition-colors" />
                   <div className="relative">
                     <label className="text-[10px] font-medium text-blue-300/70 uppercase tracking-wider block mb-1 ml-0.5">
                       {axis}
@@ -183,7 +203,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
                           e.target.value
                         )
                       }
-                      className="w-full px-1.5 py-1 text-xs bg-slate-800/50 border border-slate-600/50 rounded-md 
+                      className="w-full px-1.5 py-1 text-xs bg-slate-800/50 border border-slate-600/50  
                                focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 text-right
                                transition-all"
                       step={1}
@@ -194,7 +214,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
             </div>
             <button
               onClick={() => resetTransforms("rotation")}
-              className="w-full mt-2 p-1 flex items-center justify-center gap-1.5 text-[10px] text-blue-300 hover:bg-blue-500/10 rounded-md transition-colors"
+              className="w-full mt-2 p-1 flex items-center justify-center gap-1.5 text-[10px] text-blue-300 hover:bg-blue-500/10  transition-colors"
             >
               <RefreshCw className="w-3 h-3" />
               Reset
@@ -204,13 +224,13 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
       </div>
 
       {/* Scale Section */}
-      <div className="bg-slate-800/50 rounded-lg border border-slate-700/50 overflow-hidden">
+      <div className="bg-slate-800/50  border border-slate-700/50 overflow-hidden">
         <button
           onClick={() => toggleSection("scale")}
           className="w-full p-2 flex items-center justify-between hover:bg-slate-700/30 transition-colors"
         >
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-md bg-purple-500/10">
+            <div className="p-1.5  bg-purple-500/10">
               <Maximize className="w-3.5 h-3.5 text-purple-400" />
             </div>
             <span className="text-sm font-medium text-purple-100">Scale</span>
@@ -224,10 +244,36 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
 
         {expandedSections.has("scale") && (
           <div className="p-2 border-t border-slate-700/50">
-            <div className="grid grid-cols-1 gap-2">
-              {["x"].map((axis) => (
+            {/* Lock/Unlock Toggle */}
+            <div className="mb-2 flex justify-end">
+              <button
+                onClick={() => setLockScale(!lockScale)}
+                className="flex items-center gap-1 text-xs text-purple-300 hover:text-purple-200 transition-colors"
+                title={
+                  lockScale
+                    ? "Unlock axes (scale independently)"
+                    : "Lock axes (uniform scaling)"
+                }
+              >
+                {lockScale ? (
+                  <>
+                    <Lock className="w-3 h-3" />
+                    <span>Locked</span>
+                  </>
+                ) : (
+                  <>
+                    <Unlock className="w-3 h-3" />
+                    <span>Unlocked</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Scale Inputs */}
+            <div className="grid grid-cols-3 gap-2">
+              {["x", "y", "z"].map((axis) => (
                 <div key={`scale-${axis}`} className="relative group">
-                  <div className="absolute inset-0 bg-purple-500/5 rounded-md -m-0.5 group-hover:bg-purple-500/10 transition-colors" />
+                  <div className="absolute inset-0 bg-purple-500/5  -m-0.5 group-hover:bg-purple-500/10 transition-colors" />
                   <div className="relative">
                     <label className="text-[10px] font-medium text-purple-300/70 uppercase tracking-wider block mb-1 ml-0.5">
                       {axis}
@@ -235,29 +281,62 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
                     <input
                       type="number"
                       value={formatValue(object.scale[axis as "x" | "y" | "z"])}
-                      onChange={(e) => {
-                        {
-                          ["x", "y", "z"].forEach((axis) =>
-                            handleScaleChange(
-                              axis as "x" | "y" | "z",
-                              e.target.value
-                            )
-                          );
-                        }
-                      }}
-                      className="w-full px-1.5 py-1 text-xs bg-slate-800/50 border border-slate-600/50 rounded-md 
+                      onChange={(e) =>
+                        handleScaleChange(
+                          axis as "x" | "y" | "z",
+                          e.target.value
+                        )
+                      }
+                      className="w-full px-1.5 py-1 text-xs bg-slate-800/50 border border-slate-600/50  
                                focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 text-right
                                transition-all"
                       step={0.1}
                       min={0.01}
+                      disabled={lockScale && axis !== "x"}
                     />
                   </div>
                 </div>
               ))}
             </div>
+
+            {/* Slider for uniform scaling */}
+            <div className="mt-3 px-1">
+              <input
+                type="range"
+                min="0.1"
+                max="5"
+                step="0.1"
+                value={object.scale.x}
+                onChange={(e) => handleScaleChange("x", e.target.value)}
+                className="w-full h-1.5 bg-purple-500/20  appearance-none cursor-pointer"
+              />
+            </div>
+
+            {/* Preset Scale Buttons */}
+            <div className="grid grid-cols-3 gap-2 mt-3">
+              <button
+                onClick={() => applyPresetScale(0.5)}
+                className="p-1 text-[10px] text-purple-300 bg-purple-500/10 hover:bg-purple-500/20  transition-colors"
+              >
+                0.5×
+              </button>
+              <button
+                onClick={() => applyPresetScale(1)}
+                className="p-1 text-[10px] text-purple-300 bg-purple-500/10 hover:bg-purple-500/20  transition-colors"
+              >
+                1×
+              </button>
+              <button
+                onClick={() => applyPresetScale(2)}
+                className="p-1 text-[10px] text-purple-300 bg-purple-500/10 hover:bg-purple-500/20  transition-colors"
+              >
+                2×
+              </button>
+            </div>
+
             <button
               onClick={() => resetTransforms("scale")}
-              className="w-full mt-2 p-1 flex items-center justify-center gap-1.5 text-[10px] text-purple-300 hover:bg-purple-500/10 rounded-md transition-colors"
+              className="w-full mt-2 p-1 flex items-center justify-center gap-1.5 text-[10px] text-purple-300 hover:bg-purple-500/10  transition-colors"
             >
               <RefreshCw className="w-3 h-3" />
               Reset

@@ -21,7 +21,7 @@ export function Favorites() {
             <motion.div
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="p-2 rounded-xl bg-red-500/20 text-red-400"
+              className="p-2  bg-red-500/20 text-red-400"
             >
               <Heart className="w-6 h-6" />
             </motion.div>
@@ -47,9 +47,9 @@ export function Favorites() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-gray-700 rounded-xl"
+            className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-gray-700 "
           >
-            <div className="p-4 rounded-full bg-red-500/20 text-red-400 mb-4">
+            <div className="p-4  bg-red-500/20 text-red-400 mb-4">
               <Heart className="w-8 h-8" />
             </div>
             <div className="text-gray-400 text-center">

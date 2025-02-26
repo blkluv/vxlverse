@@ -7,10 +7,12 @@ import { Profile } from "./pages/Profile";
 import { Favorites } from "./pages/Favorites";
 import { Settings } from "./pages/Settings";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import { ToastContainer } from "./components/UI/Toast";
 
 export default function App() {
   return (
     <Router>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/games" element={<Games />} />

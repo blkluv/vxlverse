@@ -5,7 +5,7 @@ import { QuestLog } from "../components/game/QuestLog";
 import { Inventory } from "../components/game/Inventory";
 import { DialogueModal } from "../components/game/DialogueModal";
 import { Canvas } from "@react-three/fiber";
-import { Scene } from "../components/game/Scene";
+import { SceneWrapper } from "../components/SceneWrapper";
 import { OrbitControls, Sky } from "@react-three/drei";
 import { Suspense, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,6 +13,7 @@ import { useEnemyStore } from "../stores/enemyStore";
 import { EnemyRewardModal } from "../components/game/EnemyReward";
 import { LevelUpModal } from "../components/game/LevelUpModal";
 import { useParams } from "react-router-dom";
+import { GameScene } from "../components/game/Scene";
 
 export function Game() {
   const { id } = useParams();
@@ -73,7 +74,7 @@ export function Game() {
           {/* 3D Scene */}
           <Canvas shadows camera={{ position: [0, 5, 10], fov: 50 }}>
             <Suspense fallback={null}>
-              <Scene sceneData={currentScene} />
+              <GameScene sceneData={currentScene} />
               <Sky sunPosition={getSunPosition()} />
             </Suspense>
           </Canvas>
@@ -88,7 +89,7 @@ export function Game() {
                 transition={{ duration: 0.3 }}
                 className="absolute top-20 left-1/2 -translate-x-1/2 pointer-events-none"
               >
-                <div className="bg-black/80 backdrop-blur-sm px-6 py-2 rounded-full">
+                <div className="bg-black/80 backdrop-blur-sm px-6 py-2 ">
                   <h2 className="text-xl font-bold text-white">
                     {currentScene?.name}
                   </h2>
