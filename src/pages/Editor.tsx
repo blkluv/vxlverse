@@ -351,7 +351,7 @@ export function _Editor() {
             <div className="flex h-full items-center">
               {/* Transform Tools Group */}
               <div className="flex h-full border-r border-slate-700/20">
-                <Tooltip position="bottom" content="Move Tool (W)">
+                <Tooltip position="top" content="Move Tool (W)">
                   <button
                     disabled={!selectedObjectId}
                     onClick={() => {
@@ -368,7 +368,7 @@ export function _Editor() {
                     <Move className="w-4 h-4" />
                   </button>
                 </Tooltip>
-                <Tooltip position="bottom" content="Rotate Tool (E)">
+                <Tooltip position="top" content="Rotate Tool (E)">
                   <button
                     disabled={!selectedObjectId}
                     onClick={() => {
@@ -385,7 +385,7 @@ export function _Editor() {
                     <RotateCcw className="w-4 h-4" />
                   </button>
                 </Tooltip>
-                <Tooltip position="bottom" content="Scale Tool (R)">
+                <Tooltip position="top" content="Scale Tool (R)">
                   <button
                     disabled={!selectedObjectId}
                     onClick={() => {
@@ -406,10 +406,7 @@ export function _Editor() {
 
               {/* Object Manipulation Group */}
               <div className="flex h-full border-r border-slate-700/20">
-                <Tooltip
-                  position="bottom"
-                  content="Duplicate Object (Meta + D)"
-                >
+                <Tooltip position="top" content="Duplicate Object (Meta + D)">
                   <button
                     disabled={!selectedObjectId}
                     onClick={() => {
@@ -422,7 +419,7 @@ export function _Editor() {
                     <Copy className="w-4 h-4" />
                   </button>
                 </Tooltip>
-                <Tooltip position="bottom" content="Brush Tool (B)">
+                <Tooltip position="top" content="Brush Tool (B)">
                   <button
                     disabled={!selectedObjectId}
                     onClick={handleBrushToggle}
@@ -435,7 +432,7 @@ export function _Editor() {
                     <Brush className="w-4 h-4" />
                   </button>
                 </Tooltip>
-                <Tooltip position="bottom" content="Delete Object (Delete)">
+                <Tooltip position="top" content="Delete Object (Delete)">
                   <button
                     disabled={!selectedObjectId}
                     onClick={() => {
@@ -448,7 +445,7 @@ export function _Editor() {
                     <Trash className="w-4 h-4" />
                   </button>
                 </Tooltip>
-                <Tooltip position="bottom" content="Close (Esc)">
+                <Tooltip position="top" content="Close (Esc)">
                   <button
                     disabled={!selectedObjectId}
                     onClick={() => {
@@ -463,7 +460,7 @@ export function _Editor() {
 
               {/* Grid and View Group */}
               <div className="flex h-full border-r border-slate-700/20">
-                <Tooltip position="bottom" content="Toggle Grid Snap (S)">
+                <Tooltip position="top" content="Toggle Grid Snap (S)">
                   <button
                     className={`w-10 h-full flex items-center justify-center transition-all duration-200 ${
                       gridSnap
@@ -475,7 +472,7 @@ export function _Editor() {
                     <Magnet className="w-4 h-4" />
                   </button>
                 </Tooltip>
-                <Tooltip position="bottom" content="Toggle Grid (G)">
+                <Tooltip position="top" content="Toggle Grid (G)">
                   <button
                     onClick={toggleGrid}
                     className={`w-10 h-full flex items-center justify-center transition-all duration-200 ${
@@ -487,7 +484,7 @@ export function _Editor() {
                     <Grid3X3 className="w-4 h-4" />
                   </button>
                 </Tooltip>
-                <Tooltip position="bottom" content="Focus on Object (F)">
+                <Tooltip position="top" content="Focus on Object (F)">
                   <button
                     disabled={!selectedObjectId}
                     onClick={() => {
@@ -505,7 +502,7 @@ export function _Editor() {
 
               {/* Utility Group */}
               <div className="flex h-full border-r border-slate-700/20">
-                <Tooltip position="bottom" content="Metrics">
+                <Tooltip position="top" content="Metrics">
                   <button
                     onClick={() => setShowMetrics(!showMetrics)}
                     className={`w-10 h-full flex items-center justify-center transition-all duration-200 ${
@@ -517,12 +514,12 @@ export function _Editor() {
                     <Gauge className="w-4 h-4" />
                   </button>
                 </Tooltip>
-                <Tooltip position="bottom" content="Undo (Ctrl+Z)">
+                <Tooltip position="top" content="Undo (Ctrl+Z)">
                   <button className="w-10 h-full flex items-center justify-center transition-all duration-200 text-slate-400 hover:bg-slate-700/40 hover:text-white">
                     <Undo className="w-4 h-4" />
                   </button>
                 </Tooltip>
-                <Tooltip position="bottom" content="Redo (Ctrl+Y)">
+                <Tooltip position="top" content="Redo (Ctrl+Y)">
                   <button className="w-10 h-full flex items-center justify-center transition-all duration-200 text-slate-400 hover:bg-slate-700/40 hover:text-white">
                     <Redo className="w-4 h-4" />
                   </button>
@@ -532,7 +529,7 @@ export function _Editor() {
               {/* View Mode Group */}
               <div className="flex h-full">
                 <Tooltip
-                  position="bottom"
+                  position="top"
                   content={
                     isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"
                   }
@@ -552,7 +549,7 @@ export function _Editor() {
                     )}
                   </button>
                 </Tooltip>
-                <Tooltip position="left" content="Preview Mode (P)">
+                <Tooltip position="top" content="Preview Mode (P)">
                   <button
                     onClick={togglePreviewMode}
                     className={`w-10 h-full flex items-center justify-center transition-all duration-200 ${

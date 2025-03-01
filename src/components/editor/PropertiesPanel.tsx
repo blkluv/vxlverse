@@ -96,7 +96,7 @@ export function PropertiesPanel() {
       {/* Panel Content */}
       <div className="flex-1 overflow-auto ">
         <>
-          <motion.div className="max-h-[90vh] no-scrollbar overflow-y-auto">
+          <motion.div className="h-screen pb-20 no-scrollbar overflow-y-auto">
             <div className="p-2 space-y-2">
               {activeTab === "properties" && (
                 <>

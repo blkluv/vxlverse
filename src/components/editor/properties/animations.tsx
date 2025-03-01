@@ -287,7 +287,7 @@ export function AnimationsPanel() {
                         </span>
                       </div>
                     ) : modelAnimations.length > 0 ? (
-                      <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800/30">
+                      <div className="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar pr-1 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800/30">
                         {modelAnimations.map((anim) => {
                           const isCurrentStateAnimation =
                             getCurrentStateAnimation(selectedState) === anim;
