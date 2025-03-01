@@ -1,7 +1,7 @@
-import { Model3D } from '../types';
-import { ModelCard } from './ModelCard';
-import { AnimatePresence, motion } from 'framer-motion';
-import { LoadingSpinner } from './LoadingSpinner';
+import { Model3D } from "../types";
+import { ModelCard } from "./ModelCard";
+import { AnimatePresence, motion } from "framer-motion";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 interface ModelListProps {
   models: Model3D[];
@@ -10,7 +10,12 @@ interface ModelListProps {
   loading: boolean;
 }
 
-export function ModelList({ models, selectedModel, onSelectModel, loading }: ModelListProps) {
+export function ModelList({
+  models,
+  selectedModel,
+  onSelectModel,
+  loading,
+}: ModelListProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-40">
@@ -33,16 +38,14 @@ export function ModelList({ models, selectedModel, onSelectModel, loading }: Mod
 
   return (
     <div className="space-y-3 max-h-[calc(100vh-16rem)] overflow-y-auto pr-2 custom-scrollbar">
-      <AnimatePresence mode="popLayout">
-        {models.map((model) => (
-          <ModelCard
-            key={model.id}
-            model={model}
-            isSelected={selectedModel?.id === model.id}
-            onSelect={onSelectModel}
-          />
-        ))}
-      </AnimatePresence>
+      {models.map((model) => (
+        <ModelCard
+          key={model.id}
+          model={model}
+          isSelected={selectedModel?.id === model.id}
+          onSelect={onSelectModel}
+        />
+      ))}
     </div>
   );
 }

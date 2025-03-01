@@ -64,19 +64,17 @@ export function RequirementsPanel() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {activeSection === id && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="overflow-hidden border-t border-slate-700/40 bg-slate-900/30 backdrop-blur-sm"
-          >
-            <div className="p-3">{children}</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {activeSection === id && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
+          className="overflow-hidden border-t border-slate-700/40 bg-slate-900/30 backdrop-blur-sm"
+        >
+          <div className="p-3">{children}</div>
+        </motion.div>
+      )}
     </div>
   );
   // Get state from the store
@@ -164,196 +162,189 @@ export function RequirementsPanel() {
         )}
       </div>
 
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden"
-          >
-            <div className="p-3 pt-2 border-t border-slate-700/30 space-y-3">
-              {/* Required Items Section */}
-              <RequirementSection
-                id="items"
-                title="Required Items"
-                icon={<Package className="w-3.5 h-3.5 text-amber-400" />}
-                iconColor="bg-amber-500/20 border border-amber-500/30"
-                action={
-                  <Button
-                    variant="secondary"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowItemSelector(true);
-                    }}
-                    className="text-[10px] h-6 px-2 text-amber-400 hover:text-amber-300 bg-slate-800/60 border border-amber-500/30"
+      {expanded && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="overflow-hidden"
+        >
+          <div className="p-3 pt-2 border-t border-slate-700/30 space-y-3">
+            {/* Required Items Section */}
+            <RequirementSection
+              id="items"
+              title="Required Items"
+              icon={<Package className="w-3.5 h-3.5 text-amber-400" />}
+              iconColor="bg-amber-500/20 border border-amber-500/30"
+              action={
+                <Button
+                  variant="secondary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowItemSelector(true);
+                  }}
+                  className="text-[10px] h-6 px-2 text-amber-400 hover:text-amber-300 bg-slate-800/60 border border-amber-500/30"
+                >
+                  <PlusCircle className="w-3 h-3 mr-1" />
+                  Add
+                </Button>
+              }
+            >
+              {/* List of required items */}
+              <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-1">
+                {selectedObject.requiredItems?.length ? (
+                  selectedObject.requiredItems.map((item) => (
+                    <ItemCard
+                      key={item.id}
+                      item={item}
+                      onRemove={() => {
+                        updateObject(currentScene.id, selectedObject.id, {
+                          requiredItems: selectedObject.requiredItems?.filter(
+                            (i) => i.id !== item.id
+                          ),
+                        });
+                        toast.success(
+                          `Removed ${item.name || "item"} requirement`
+                        );
+                      }}
+                    />
+                  ))
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex flex-col items-center justify-center py-4 px-3 bg-slate-800/40 border border-slate-700/30 "
                   >
-                    <PlusCircle className="w-3 h-3 mr-1" />
-                    Add
-                  </Button>
-                }
-              >
-                {/* List of required items */}
-                <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-1">
-                  <AnimatePresence>
-                    {selectedObject.requiredItems?.length ? (
-                      selectedObject.requiredItems.map((item) => (
-                        <ItemCard
-                          key={item.id}
-                          item={item}
-                          onRemove={() => {
-                            updateObject(currentScene.id, selectedObject.id, {
-                              requiredItems:
-                                selectedObject.requiredItems?.filter(
-                                  (i) => i.id !== item.id
-                                ),
-                            });
-                            toast.success(
-                              `Removed ${item.name || "item"} requirement`
-                            );
-                          }}
-                        />
-                      ))
-                    ) : (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="flex flex-col items-center justify-center py-4 px-3 bg-slate-800/40 border border-slate-700/30 "
-                      >
-                        <AlertCircle className="w-5 h-5 text-slate-500 mb-2" />
-                        <div className="text-xs text-slate-400 text-center">
-                          No required items. Add items that the player needs to
-                          interact with this object.
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </RequirementSection>
+                    <AlertCircle className="w-5 h-5 text-slate-500 mb-2" />
+                    <div className="text-xs text-slate-400 text-center">
+                      No required items. Add items that the player needs to
+                      interact with this object.
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+            </RequirementSection>
 
-              {/* Level Requirement */}
-              <RequirementSection
-                id="level"
-                title="Level Requirement"
-                icon={<Trophy className="w-3.5 h-3.5 text-blue-400" />}
-                iconColor="bg-blue-500/20 border border-blue-500/30"
-              >
-                <div className="bg-slate-800/50 border border-slate-700/50 p-3 ">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs text-blue-300 flex items-center">
-                      <CheckCircle className="w-3.5 h-3.5 mr-1.5 text-blue-400" />
-                      Minimum Level:
-                      <span className="font-bold ml-1 text-white">
-                        {selectedObject.requiredLvl || 0}
-                      </span>
+            {/* Level Requirement */}
+            <RequirementSection
+              id="level"
+              title="Level Requirement"
+              icon={<Trophy className="w-3.5 h-3.5 text-blue-400" />}
+              iconColor="bg-blue-500/20 border border-blue-500/30"
+            >
+              <div className="bg-slate-800/50 border border-slate-700/50 p-3 ">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs text-blue-300 flex items-center">
+                    <CheckCircle className="w-3.5 h-3.5 mr-1.5 text-blue-400" />
+                    Minimum Level:
+                    <span className="font-bold ml-1 text-white">
+                      {selectedObject.requiredLvl || 0}
                     </span>
-                    <div className="flex items-center bg-slate-900/60 border border-slate-700/80 p-0.5 ">
-                      <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                          if (
-                            currentSceneId &&
-                            (selectedObject.requiredLvl || 0) > 0
-                          ) {
-                            updateObject(currentSceneId, selectedObject.id, {
-                              requiredLvl:
-                                (selectedObject.requiredLvl || 0) - 1,
-                            });
-                          }
-                        }}
-                        className={`w-6 h-6 flex items-center justify-center -sm ${
+                  </span>
+                  <div className="flex items-center bg-slate-900/60 border border-slate-700/80 p-0.5 ">
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        if (
+                          currentSceneId &&
                           (selectedObject.requiredLvl || 0) > 0
-                            ? "bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-300"
-                            : "bg-slate-800/50 text-slate-500 cursor-not-allowed"
-                        } transition-colors duration-150`}
-                        title="Decrease level"
-                        disabled={(selectedObject.requiredLvl || 0) <= 0}
-                      >
-                        <span className="text-xs">-</span>
-                      </motion.button>
-                      <div className="px-2 min-w-[30px] text-center">
-                        <span className="text-xs text-blue-300 font-medium">
-                          {selectedObject.requiredLvl || 0}
-                        </span>
-                      </div>
-                      <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                          if (
-                            currentSceneId &&
-                            (selectedObject.requiredLvl || 0) < 50
-                          ) {
-                            updateObject(currentSceneId, selectedObject.id, {
-                              requiredLvl:
-                                (selectedObject.requiredLvl || 0) + 1,
-                            });
-                          }
-                        }}
-                        className={`w-6 h-6 flex items-center justify-center -sm ${
-                          (selectedObject.requiredLvl || 0) < 50
-                            ? "bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-300"
-                            : "bg-slate-800/50 text-slate-500 cursor-not-allowed"
-                        } transition-colors duration-150`}
-                        title="Increase level"
-                        disabled={(selectedObject.requiredLvl || 0) >= 50}
-                      >
-                        <span className="text-xs">+</span>
-                      </motion.button>
-                    </div>
-                  </div>
-
-                  <div className="relative mb-2">
-                    <div className="h-2 w-full bg-slate-700/70 -full overflow-hidden">
-                      <motion.div
-                        initial={false}
-                        animate={{
-                          width: `${Math.min(
-                            100,
-                            ((selectedObject.requiredLvl || 0) / 50) * 100
-                          )}%`,
-                        }}
-                        transition={{
-                          duration: 0.3,
-                          ease: "easeOut",
-                        }}
-                        className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 -full"
-                      ></motion.div>
-                    </div>
-                    <Slider
-                      value={[selectedObject.requiredLvl || 0]}
-                      min={0}
-                      max={50}
-                      step={1}
-                      onValueChange={(values) => {
-                        if (currentSceneId) {
+                        ) {
                           updateObject(currentSceneId, selectedObject.id, {
-                            requiredLvl: values[0],
+                            requiredLvl: (selectedObject.requiredLvl || 0) - 1,
                           });
                         }
                       }}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div className="flex justify-between text-[9px] text-slate-500">
-                    <span>0</span>
-                    <span>25</span>
-                    <span>50</span>
-                  </div>
-
-                  <div className="mt-3 flex items-start text-[10px] text-slate-400 bg-slate-900/40 p-2  border border-slate-700/40">
-                    <Info className="w-3.5 h-3.5 text-blue-400 mr-1.5 mt-0.5 flex-shrink-0" />
-                    <span>
-                      Players below this level will not be able to interact with
-                      this object. Set to 0 to allow all players to interact.
-                    </span>
+                      className={`w-6 h-6 flex items-center justify-center -sm ${
+                        (selectedObject.requiredLvl || 0) > 0
+                          ? "bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-300"
+                          : "bg-slate-800/50 text-slate-500 cursor-not-allowed"
+                      } transition-colors duration-150`}
+                      title="Decrease level"
+                      disabled={(selectedObject.requiredLvl || 0) <= 0}
+                    >
+                      <span className="text-xs">-</span>
+                    </motion.button>
+                    <div className="px-2 min-w-[30px] text-center">
+                      <span className="text-xs text-blue-300 font-medium">
+                        {selectedObject.requiredLvl || 0}
+                      </span>
+                    </div>
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        if (
+                          currentSceneId &&
+                          (selectedObject.requiredLvl || 0) < 50
+                        ) {
+                          updateObject(currentSceneId, selectedObject.id, {
+                            requiredLvl: (selectedObject.requiredLvl || 0) + 1,
+                          });
+                        }
+                      }}
+                      className={`w-6 h-6 flex items-center justify-center -sm ${
+                        (selectedObject.requiredLvl || 0) < 50
+                          ? "bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-300"
+                          : "bg-slate-800/50 text-slate-500 cursor-not-allowed"
+                      } transition-colors duration-150`}
+                      title="Increase level"
+                      disabled={(selectedObject.requiredLvl || 0) >= 50}
+                    >
+                      <span className="text-xs">+</span>
+                    </motion.button>
                   </div>
                 </div>
-              </RequirementSection>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+                <div className="relative mb-2">
+                  <div className="h-2 w-full bg-slate-700/70 -full overflow-hidden">
+                    <motion.div
+                      initial={false}
+                      animate={{
+                        width: `${Math.min(
+                          100,
+                          ((selectedObject.requiredLvl || 0) / 50) * 100
+                        )}%`,
+                      }}
+                      transition={{
+                        duration: 0.3,
+                        ease: "easeOut",
+                      }}
+                      className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 -full"
+                    ></motion.div>
+                  </div>
+                  <Slider
+                    value={[selectedObject.requiredLvl || 0]}
+                    min={0}
+                    max={50}
+                    step={1}
+                    onValueChange={(values) => {
+                      if (currentSceneId) {
+                        updateObject(currentSceneId, selectedObject.id, {
+                          requiredLvl: values[0],
+                        });
+                      }
+                    }}
+                    className="mt-1"
+                  />
+                </div>
+                <div className="flex justify-between text-[9px] text-slate-500">
+                  <span>0</span>
+                  <span>25</span>
+                  <span>50</span>
+                </div>
+
+                <div className="mt-3 flex items-start text-[10px] text-slate-400 bg-slate-900/40 p-2  border border-slate-700/40">
+                  <Info className="w-3.5 h-3.5 text-blue-400 mr-1.5 mt-0.5 flex-shrink-0" />
+                  <span>
+                    Players below this level will not be able to interact with
+                    this object. Set to 0 to allow all players to interact.
+                  </span>
+                </div>
+              </div>
+            </RequirementSection>
+          </div>
+        </motion.div>
+      )}
 
       {/* Item selector modal with improved styling */}
       {showItemSelector && (

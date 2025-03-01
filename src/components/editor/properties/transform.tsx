@@ -161,115 +161,113 @@ export function TransformPanel() {
         )}
       </div>
 
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden"
-          >
-            <div className="p-3 pt-2 border-t border-slate-700/30">
-              {/* Position */}
-              <TransformSection
-                title="Position"
-                onReset={() => {
-                  if (currentScene.id) {
-                    updateObject(currentScene.id, selectedObject.id, {
-                      position: { x: 0, y: 0, z: 0 },
-                    });
-                  }
-                }}
-              >
-                <TransformInput
-                  axis="x"
-                  value={selectedObject.position?.x || 0}
-                  onChange={(value) => handlePositionChange("x", value)}
-                  color="red"
-                />
-                <TransformInput
-                  axis="y"
-                  value={selectedObject.position?.y || 0}
-                  onChange={(value) => handlePositionChange("y", value)}
-                  color="green"
-                />
-                <TransformInput
-                  axis="z"
-                  value={selectedObject.position?.z || 0}
-                  onChange={(value) => handlePositionChange("z", value)}
-                  color="blue"
-                />
-              </TransformSection>
+      {expanded && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="overflow-hidden"
+        >
+          <div className="p-3 pt-2 border-t border-slate-700/30">
+            {/* Position */}
+            <TransformSection
+              title="Position"
+              onReset={() => {
+                if (currentScene.id) {
+                  updateObject(currentScene.id, selectedObject.id, {
+                    position: { x: 0, y: 0, z: 0 },
+                  });
+                }
+              }}
+            >
+              <TransformInput
+                axis="x"
+                value={selectedObject.position?.x || 0}
+                onChange={(value) => handlePositionChange("x", value)}
+                color="red"
+              />
+              <TransformInput
+                axis="y"
+                value={selectedObject.position?.y || 0}
+                onChange={(value) => handlePositionChange("y", value)}
+                color="green"
+              />
+              <TransformInput
+                axis="z"
+                value={selectedObject.position?.z || 0}
+                onChange={(value) => handlePositionChange("z", value)}
+                color="blue"
+              />
+            </TransformSection>
 
-              {/* Rotation */}
-              <TransformSection
-                title="Rotation"
-                onReset={() => {
-                  if (currentScene.id) {
-                    updateObject(currentScene.id, selectedObject.id, {
-                      rotation: { x: 0, y: 0, z: 0 },
-                    });
-                  }
-                }}
-              >
-                <TransformInput
-                  axis="x"
-                  value={selectedObject.rotation?.x || 0}
-                  onChange={(value) => handleRotationChange("x", value)}
-                  color="red"
-                />
-                <TransformInput
-                  axis="y"
-                  value={selectedObject.rotation?.y || 0}
-                  onChange={(value) => handleRotationChange("y", value)}
-                  color="green"
-                />
-                <TransformInput
-                  axis="z"
-                  value={selectedObject.rotation?.z || 0}
-                  onChange={(value) => handleRotationChange("z", value)}
-                  color="blue"
-                />
-              </TransformSection>
+            {/* Rotation */}
+            <TransformSection
+              title="Rotation"
+              onReset={() => {
+                if (currentScene.id) {
+                  updateObject(currentScene.id, selectedObject.id, {
+                    rotation: { x: 0, y: 0, z: 0 },
+                  });
+                }
+              }}
+            >
+              <TransformInput
+                axis="x"
+                value={selectedObject.rotation?.x || 0}
+                onChange={(value) => handleRotationChange("x", value)}
+                color="red"
+              />
+              <TransformInput
+                axis="y"
+                value={selectedObject.rotation?.y || 0}
+                onChange={(value) => handleRotationChange("y", value)}
+                color="green"
+              />
+              <TransformInput
+                axis="z"
+                value={selectedObject.rotation?.z || 0}
+                onChange={(value) => handleRotationChange("z", value)}
+                color="blue"
+              />
+            </TransformSection>
 
-              {/* Scale */}
-              <TransformSection
-                title="Scale"
-                onReset={() => {
-                  if (currentScene.id) {
-                    updateObject(currentScene.id, selectedObject.id, {
-                      scale: { x: 1, y: 1, z: 1 },
-                    });
-                  }
-                }}
-              >
-                <TransformInput
-                  axis="x"
-                  value={selectedObject.scale?.x || 1}
-                  onChange={(value) => handleScaleChange("x", value)}
-                  color="red"
-                  step={0.1}
-                />
-                <TransformInput
-                  axis="y"
-                  value={selectedObject.scale?.y || 1}
-                  onChange={(value) => handleScaleChange("y", value)}
-                  color="green"
-                  step={0.1}
-                />
-                <TransformInput
-                  axis="z"
-                  value={selectedObject.scale?.z || 1}
-                  onChange={(value) => handleScaleChange("z", value)}
-                  color="blue"
-                  step={0.1}
-                />
-              </TransformSection>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            {/* Scale */}
+            <TransformSection
+              title="Scale"
+              onReset={() => {
+                if (currentScene.id) {
+                  updateObject(currentScene.id, selectedObject.id, {
+                    scale: { x: 1, y: 1, z: 1 },
+                  });
+                }
+              }}
+            >
+              <TransformInput
+                axis="x"
+                value={selectedObject.scale?.x || 1}
+                onChange={(value) => handleScaleChange("x", value)}
+                color="red"
+                step={0.1}
+              />
+              <TransformInput
+                axis="y"
+                value={selectedObject.scale?.y || 1}
+                onChange={(value) => handleScaleChange("y", value)}
+                color="green"
+                step={0.1}
+              />
+              <TransformInput
+                axis="z"
+                value={selectedObject.scale?.z || 1}
+                onChange={(value) => handleScaleChange("z", value)}
+                color="blue"
+                step={0.1}
+              />
+            </TransformSection>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }

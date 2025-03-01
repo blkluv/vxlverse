@@ -62,43 +62,41 @@ export function Game() {
 
   return (
     <div className="w-full h-screen relative select-none">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentSceneId}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className="w-full h-full"
-        >
-          {/* 3D Scene */}
-          <Canvas shadows camera={{ position: [0, 5, 10], fov: 50 }}>
-            <Suspense fallback={null}>
-              <GameScene sceneData={currentScene} />
-              <Sky sunPosition={getSunPosition()} />
-            </Suspense>
-          </Canvas>
+      <motion.div
+        key={currentSceneId}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full h-full"
+      >
+        {/* 3D Scene */}
+        <Canvas shadows camera={{ position: [0, 5, 10], fov: 50 }}>
+          <Suspense fallback={null}>
+            <GameScene sceneData={currentScene} />
+            <Sky sunPosition={getSunPosition()} />
+          </Suspense>
+        </Canvas>
 
-          {/* Scene Name Indicator */}
-          <AnimatePresence>
-            {showSceneName && (
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="absolute top-20 left-1/2 -translate-x-1/2 pointer-events-none"
-              >
-                <div className="bg-black/80 backdrop-blur-sm px-6 py-2 ">
-                  <h2 className="text-xl font-bold text-white">
-                    {currentScene?.name}
-                  </h2>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </AnimatePresence>
+        {/* Scene Name Indicator */}
+        <AnimatePresence>
+          {showSceneName && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="absolute top-20 left-1/2 -translate-x-1/2 pointer-events-none"
+            >
+              <div className="bg-black/80 backdrop-blur-sm px-6 py-2 ">
+                <h2 className="text-xl font-bold text-white">
+                  {currentScene?.name}
+                </h2>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
 
       {/* Game UI */}
       <GameHUD />

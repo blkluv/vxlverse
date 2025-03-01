@@ -316,118 +316,116 @@ export function Inventory() {
           </div>
 
           {/* Right Sidebar - Item Details (Full screen on mobile) */}
-          <AnimatePresence mode="wait">
-            {selectedItemDetails && (
-              <motion.div
-                initial={{
-                  width: 0,
-                  opacity: 0,
-                  height: "100%",
-                }}
-                animate={{
-                  width: window.innerWidth < 768 ? "100%" : 350,
-                  opacity: 1,
-                  height: "100%",
-                }}
-                exit={{
-                  width: 0,
-                  opacity: 0,
-                  height: "100%",
-                }}
-                className="absolute md:relative right-0 top-0 md:w-[350px] h-full bg-gray-900/95 md:bg-gray-900/50 border-l border-gray-800/50 overflow-hidden"
-                style={{
-                  zIndex: window.innerWidth < 768 ? 50 : 1,
-                }}
-              >
-                <div className="p-4 md:p-6">
-                  <div className="flex items-center justify-between mb-4 md:mb-6">
-                    <div className="flex items-center gap-2 md:gap-3">
-                      <div className="w-10 h-10 md:w-12 md:h-12  bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
-                        <Info className="w-5 h-5 md:w-6 md:h-6 text-white" />
-                      </div>
-                      <div>
-                        <h2 className="text-lg md:text-xl font-bold text-white">
-                          Details
-                        </h2>
-                        <div className="text-xs md:text-sm text-blue-400">
-                          Item Information
-                        </div>
+          {selectedItemDetails && (
+            <motion.div
+              initial={{
+                width: 0,
+                opacity: 0,
+                height: "100%",
+              }}
+              animate={{
+                width: window.innerWidth < 768 ? "100%" : 350,
+                opacity: 1,
+                height: "100%",
+              }}
+              exit={{
+                width: 0,
+                opacity: 0,
+                height: "100%",
+              }}
+              className="absolute md:relative right-0 top-0 md:w-[350px] h-full bg-gray-900/95 md:bg-gray-900/50 border-l border-gray-800/50 overflow-hidden"
+              style={{
+                zIndex: window.innerWidth < 768 ? 50 : 1,
+              }}
+            >
+              <div className="p-4 md:p-6">
+                <div className="flex items-center justify-between mb-4 md:mb-6">
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className="w-10 h-10 md:w-12 md:h-12  bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+                      <Info className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg md:text-xl font-bold text-white">
+                        Details
+                      </h2>
+                      <div className="text-xs md:text-sm text-blue-400">
+                        Item Information
                       </div>
                     </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      playSound("select");
+                      setSelectedItem(null);
+                    }}
+                    className="p-1.5 md:p-2 hover:bg-gray-800/50  transition-colors"
+                  >
+                    <X className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
+                  </button>
+                </div>
+
+                <div className="space-y-6">
+                  {/* Item Preview */}
+                  <div className="flex items-center gap-4">
+                    <div className="text-4xl md:text-5xl">
+                      {selectedItemDetails.emoji}
+                    </div>
+                    <div>
+                      <h3 className="text-lg md:text-xl font-bold text-white">
+                        {selectedItemDetails.name}
+                      </h3>
+                      <div className="text-xs md:text-sm text-gray-400">
+                        {selectedItemDetails.type.charAt(0).toUpperCase() +
+                          selectedItemDetails.type.slice(1)}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <div>
+                    <h4 className="text-xs md:text-sm font-medium text-gray-400 uppercase tracking-wider mb-2">
+                      Description
+                    </h4>
+                    <p className="text-sm md:text-base text-gray-300">
+                      {selectedItemDetails.description}
+                    </p>
+                  </div>
+
+                  {/* Stats */}
+                  <div>
+                    <h4 className="text-xs md:text-sm font-medium text-gray-400 uppercase tracking-wider mb-2">
+                      Stats
+                    </h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-400">Value</span>
+                        <span className="text-yellow-400">
+                          {selectedItemDetails.value} coins
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-400">Sell Price</span>
+                        <span className="text-yellow-400">
+                          {Math.floor(selectedItemDetails.value * 0.7)} coins
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex flex-col gap-2">
                     <button
-                      onClick={() => {
-                        playSound("select");
-                        setSelectedItem(null);
-                      }}
-                      className="p-1.5 md:p-2 hover:bg-gray-800/50  transition-colors"
+                      onClick={() => handleSellItem(selectedItemDetails.id)}
+                      className="w-full px-4 py-2.5  bg-gradient-to-br from-yellow-500 to-yellow-700 text-white font-medium text-sm hover:from-yellow-600 hover:to-yellow-800 transition-all flex items-center justify-center gap-2"
                     >
-                      <X className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
+                      <DollarSign className="w-4 h-4" />
+                      Sell Item
                     </button>
                   </div>
-
-                  <div className="space-y-6">
-                    {/* Item Preview */}
-                    <div className="flex items-center gap-4">
-                      <div className="text-4xl md:text-5xl">
-                        {selectedItemDetails.emoji}
-                      </div>
-                      <div>
-                        <h3 className="text-lg md:text-xl font-bold text-white">
-                          {selectedItemDetails.name}
-                        </h3>
-                        <div className="text-xs md:text-sm text-gray-400">
-                          {selectedItemDetails.type.charAt(0).toUpperCase() +
-                            selectedItemDetails.type.slice(1)}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    <div>
-                      <h4 className="text-xs md:text-sm font-medium text-gray-400 uppercase tracking-wider mb-2">
-                        Description
-                      </h4>
-                      <p className="text-sm md:text-base text-gray-300">
-                        {selectedItemDetails.description}
-                      </p>
-                    </div>
-
-                    {/* Stats */}
-                    <div>
-                      <h4 className="text-xs md:text-sm font-medium text-gray-400 uppercase tracking-wider mb-2">
-                        Stats
-                      </h4>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-400">Value</span>
-                          <span className="text-yellow-400">
-                            {selectedItemDetails.value} coins
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-400">Sell Price</span>
-                          <span className="text-yellow-400">
-                            {Math.floor(selectedItemDetails.value * 0.7)} coins
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex flex-col gap-2">
-                      <button
-                        onClick={() => handleSellItem(selectedItemDetails.id)}
-                        className="w-full px-4 py-2.5  bg-gradient-to-br from-yellow-500 to-yellow-700 text-white font-medium text-sm hover:from-yellow-600 hover:to-yellow-800 transition-all flex items-center justify-center gap-2"
-                      >
-                        <DollarSign className="w-4 h-4" />
-                        Sell Item
-                      </button>
-                    </div>
-                  </div>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
         </motion.div>
       </motion.div>
     </Portal>

@@ -203,255 +203,251 @@ export function AnimationsPanel() {
         )}
       </div>
 
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="border-t border-slate-700/30"
-          >
-            {selectedObject?.modelUrl ? (
-              <div className="p-3 space-y-4">
-                {/* Animation States Tabs */}
-                <div className="flex space-x-1 bg-slate-800/40 p-1 ">
-                  {ANIMATION_STATES.map((state) => (
-                    <motion.button
-                      key={state.id}
-                      onClick={() => setSelectedState(state.id)}
-                      className={`flex-1 flex items-center justify-center text-[10px] py-1.5 px-2  transition-all duration-200 relative ${
-                        selectedState === state.id
-                          ? `${state.color} border`
-                          : "text-slate-400 hover:bg-slate-700/40"
-                      }`}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onMouseEnter={() => setShowTooltip(state.id)}
-                      onMouseLeave={() => setShowTooltip(null)}
-                    >
-                      {state.icon}
-                      <span className="ml-1.5">{state.label}</span>
+      {expanded && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.2 }}
+          className="border-t border-slate-700/30"
+        >
+          {selectedObject?.modelUrl ? (
+            <div className="p-3 space-y-4">
+              {/* Animation States Tabs */}
+              <div className="flex space-x-1 bg-slate-800/40 p-1 ">
+                {ANIMATION_STATES.map((state) => (
+                  <motion.button
+                    key={state.id}
+                    onClick={() => setSelectedState(state.id)}
+                    className={`flex-1 flex items-center justify-center text-[10px] py-1.5 px-2  transition-all duration-200 relative ${
+                      selectedState === state.id
+                        ? `${state.color} border`
+                        : "text-slate-400 hover:bg-slate-700/40"
+                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onMouseEnter={() => setShowTooltip(state.id)}
+                    onMouseLeave={() => setShowTooltip(null)}
+                  >
+                    {state.icon}
+                    <span className="ml-1.5">{state.label}</span>
 
-                      {/* Tooltip */}
-                      <AnimatePresence>
-                        {showTooltip === state.id && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 5 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 5 }}
-                            className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 w-36 p-1.5 bg-slate-900 border border-slate-700  shadow-lg z-10 text-[9px] text-slate-300"
-                          >
-                            {state.description}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.button>
-                  ))}
-                </div>
-
-                {/* Current State Info */}
-                {selectedState && (
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <span
-                          className={`text-[11px] font-medium ${
-                            getStateConfig(selectedState).color.split(" ")[2]
-                          }`}
-                        >
-                          {getStateConfig(selectedState).label} Animation
-                        </span>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        onClick={handleRefreshAnimations}
-                        disabled={isLoadingAnimations}
-                        className="text-[10px] h-5 px-1.5 text-purple-400 hover:text-purple-300"
+                    {/* Tooltip */}
+                    {showTooltip === state.id && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 5 }}
+                        className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 w-36 p-1.5 bg-slate-900 border border-slate-700  shadow-lg z-10 text-[9px] text-slate-300"
                       >
-                        {isLoadingAnimations ? (
-                          <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                        ) : (
-                          <RefreshCw className="w-3 h-3 mr-1" />
-                        )}
-                        Refresh
-                      </Button>
-                    </div>
-
-                    {/* Animation Selection */}
-                    {isLoadingAnimations ? (
-                      <div className="flex items-center justify-center py-4 bg-slate-800/40  border border-slate-700/30">
-                        <Loader2 className="w-5 h-5 text-purple-400 animate-spin mr-2" />
-                        <span className="text-[11px] text-slate-300">
-                          Loading animations...
-                        </span>
-                      </div>
-                    ) : modelAnimations.length > 0 ? (
-                      <div className="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar pr-1 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800/30">
-                        {modelAnimations.map((anim) => {
-                          const isCurrentStateAnimation =
-                            getCurrentStateAnimation(selectedState) === anim;
-                          const stateConfig = getStateConfig(selectedState);
-
-                          return (
-                            <motion.div
-                              key={anim}
-                              initial={{ opacity: 0, y: -5 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.2 }}
-                              className={`flex items-center justify-between p-2  ${
-                                isCurrentStateAnimation
-                                  ? `${stateConfig.color
-                                      .split(" ")
-                                      .slice(0, 2)
-                                      .join(" ")} border`
-                                  : "bg-slate-800/40 border border-slate-700/30 hover:bg-slate-800/60"
-                              }`}
-                            >
-                              <div className="flex-1 truncate">
-                                <span
-                                  className={`text-[11px] font-medium ${
-                                    isCurrentStateAnimation
-                                      ? stateConfig.color.split(" ")[2]
-                                      : "text-slate-300"
-                                  }`}
-                                >
-                                  {anim}
-                                </span>
-                              </div>
-                              <div className="flex space-x-1.5">
-                                <motion.button
-                                  whileHover={{ scale: 1.1 }}
-                                  whileTap={{ scale: 0.95 }}
-                                  onClick={() => toggleAnimationPreview(anim)}
-                                  className="h-6 w-6 flex items-center justify-center bg-slate-900/60 hover:bg-slate-900/80  text-purple-400 hover:text-purple-300 transition-colors"
-                                  title="Preview Animation"
-                                >
-                                  <Play className="w-3 h-3" />
-                                </motion.button>
-                                <motion.button
-                                  whileHover={{ scale: 1.1 }}
-                                  whileTap={{ scale: 0.95 }}
-                                  onClick={() =>
-                                    handleAnimationSelect(anim, selectedState)
-                                  }
-                                  className={`h-6 w-6 flex items-center justify-center  transition-colors ${
-                                    isCurrentStateAnimation
-                                      ? `${stateConfig.color
-                                          .split(" ")[2]
-                                          .replace("text-", "bg-")
-                                          .replace("400", "600")} text-white`
-                                      : `bg-slate-900/60 hover:bg-slate-900/80 ${
-                                          stateConfig.color.split(" ")[2]
-                                        } hover:text-white`
-                                  }`}
-                                  title={`Set as ${
-                                    getStateConfig(selectedState).label
-                                  } Animation`}
-                                >
-                                  {isCurrentStateAnimation ? (
-                                    <Check className="w-3 h-3" />
-                                  ) : (
-                                    <Plus className="w-3 h-3" />
-                                  )}
-                                </motion.button>
-                              </div>
-                            </motion.div>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <div className="text-[11px] text-slate-400 text-center py-4 px-3 bg-slate-800/40  border border-slate-700/30 flex items-center justify-center">
-                        <Info className="w-4 h-4 mr-2 text-slate-500" />
-                        No animations found in this model. Try a different model
-                        with animations.
-                      </div>
+                        {state.description}
+                      </motion.div>
                     )}
-                  </div>
-                )}
+                  </motion.button>
+                ))}
+              </div>
 
-                {/* Animation States Summary */}
-                <div className="pt-2 border-t border-slate-700/20">
-                  <div className="text-[10px] font-medium text-slate-400 mb-2">
-                    Animation States
+              {/* Current State Info */}
+              {selectedState && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <span
+                        className={`text-[11px] font-medium ${
+                          getStateConfig(selectedState).color.split(" ")[2]
+                        }`}
+                      >
+                        {getStateConfig(selectedState).label} Animation
+                      </span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      onClick={handleRefreshAnimations}
+                      disabled={isLoadingAnimations}
+                      className="text-[10px] h-5 px-1.5 text-purple-400 hover:text-purple-300"
+                    >
+                      {isLoadingAnimations ? (
+                        <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                      ) : (
+                        <RefreshCw className="w-3 h-3 mr-1" />
+                      )}
+                      Refresh
+                    </Button>
                   </div>
-                  <div className="space-y-2">
-                    {ANIMATION_STATES.map((state) => {
-                      const currentAnim = getCurrentStateAnimation(state.id);
-                      return (
-                        <div
-                          key={state.id}
-                          className={`flex items-center justify-between p-1.5  ${
-                            currentAnim
-                              ? `${state.color
-                                  .split(" ")
-                                  .slice(0, 2)
-                                  .join(" ")} border`
-                              : "bg-slate-800/40 border border-slate-700/30"
-                          }`}
-                        >
-                          <div className="flex items-center">
-                            <div
-                              className={`w-5 h-5  flex items-center justify-center ${
-                                state.color.split(" ")[0]
-                              } mr-2`}
-                            >
-                              {state.icon}
-                            </div>
-                            <div>
-                              <div
-                                className={`text-[10px] font-medium ${
-                                  state.color.split(" ")[2]
-                                }`}
-                              >
-                                {state.label}
-                              </div>
-                              {currentAnim ? (
-                                <div className="text-[9px] text-slate-400 truncate max-w-[120px]">
-                                  {currentAnim}
-                                </div>
-                              ) : (
-                                <div className="text-[9px] text-slate-500">
-                                  Not set
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => setSelectedState(state.id)}
-                            className={`text-[9px] px-2 py-0.5  ${
-                              currentAnim
-                                ? `${state.color
-                                    .split(" ")[2]
-                                    .replace("text-", "bg-")
-                                    .replace("400", "600")} text-white`
-                                : "bg-slate-700/50 text-slate-300"
+
+                  {/* Animation Selection */}
+                  {isLoadingAnimations ? (
+                    <div className="flex items-center justify-center py-4 bg-slate-800/40  border border-slate-700/30">
+                      <Loader2 className="w-5 h-5 text-purple-400 animate-spin mr-2" />
+                      <span className="text-[11px] text-slate-300">
+                        Loading animations...
+                      </span>
+                    </div>
+                  ) : modelAnimations.length > 0 ? (
+                    <div className="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar pr-1 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800/30">
+                      {modelAnimations.map((anim) => {
+                        const isCurrentStateAnimation =
+                          getCurrentStateAnimation(selectedState) === anim;
+                        const stateConfig = getStateConfig(selectedState);
+
+                        return (
+                          <motion.div
+                            key={anim}
+                            initial={{ opacity: 0, y: -5 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className={`flex items-center justify-between p-2  ${
+                              isCurrentStateAnimation
+                                ? `${stateConfig.color
+                                    .split(" ")
+                                    .slice(0, 2)
+                                    .join(" ")} border`
+                                : "bg-slate-800/40 border border-slate-700/30 hover:bg-slate-800/60"
                             }`}
                           >
-                            {currentAnim ? "Change" : "Set"}
-                          </motion.button>
+                            <div className="flex-1 truncate">
+                              <span
+                                className={`text-[11px] font-medium ${
+                                  isCurrentStateAnimation
+                                    ? stateConfig.color.split(" ")[2]
+                                    : "text-slate-300"
+                                }`}
+                              >
+                                {anim}
+                              </span>
+                            </div>
+                            <div className="flex space-x-1.5">
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => toggleAnimationPreview(anim)}
+                                className="h-6 w-6 flex items-center justify-center bg-slate-900/60 hover:bg-slate-900/80  text-purple-400 hover:text-purple-300 transition-colors"
+                                title="Preview Animation"
+                              >
+                                <Play className="w-3 h-3" />
+                              </motion.button>
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() =>
+                                  handleAnimationSelect(anim, selectedState)
+                                }
+                                className={`h-6 w-6 flex items-center justify-center  transition-colors ${
+                                  isCurrentStateAnimation
+                                    ? `${stateConfig.color
+                                        .split(" ")[2]
+                                        .replace("text-", "bg-")
+                                        .replace("400", "600")} text-white`
+                                    : `bg-slate-900/60 hover:bg-slate-900/80 ${
+                                        stateConfig.color.split(" ")[2]
+                                      } hover:text-white`
+                                }`}
+                                title={`Set as ${
+                                  getStateConfig(selectedState).label
+                                } Animation`}
+                              >
+                                {isCurrentStateAnimation ? (
+                                  <Check className="w-3 h-3" />
+                                ) : (
+                                  <Plus className="w-3 h-3" />
+                                )}
+                              </motion.button>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-[11px] text-slate-400 text-center py-4 px-3 bg-slate-800/40  border border-slate-700/30 flex items-center justify-center">
+                      <Info className="w-4 h-4 mr-2 text-slate-500" />
+                      No animations found in this model. Try a different model
+                      with animations.
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Animation States Summary */}
+              <div className="pt-2 border-t border-slate-700/20">
+                <div className="text-[10px] font-medium text-slate-400 mb-2">
+                  Animation States
+                </div>
+                <div className="space-y-2">
+                  {ANIMATION_STATES.map((state) => {
+                    const currentAnim = getCurrentStateAnimation(state.id);
+                    return (
+                      <div
+                        key={state.id}
+                        className={`flex items-center justify-between p-1.5  ${
+                          currentAnim
+                            ? `${state.color
+                                .split(" ")
+                                .slice(0, 2)
+                                .join(" ")} border`
+                            : "bg-slate-800/40 border border-slate-700/30"
+                        }`}
+                      >
+                        <div className="flex items-center">
+                          <div
+                            className={`w-5 h-5  flex items-center justify-center ${
+                              state.color.split(" ")[0]
+                            } mr-2`}
+                          >
+                            {state.icon}
+                          </div>
+                          <div>
+                            <div
+                              className={`text-[10px] font-medium ${
+                                state.color.split(" ")[2]
+                              }`}
+                            >
+                              {state.label}
+                            </div>
+                            {currentAnim ? (
+                              <div className="text-[9px] text-slate-400 truncate max-w-[120px]">
+                                {currentAnim}
+                              </div>
+                            ) : (
+                              <div className="text-[9px] text-slate-500">
+                                Not set
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      );
-                    })}
-                  </div>
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => setSelectedState(state.id)}
+                          className={`text-[9px] px-2 py-0.5  ${
+                            currentAnim
+                              ? `${state.color
+                                  .split(" ")[2]
+                                  .replace("text-", "bg-")
+                                  .replace("400", "600")} text-white`
+                              : "bg-slate-700/50 text-slate-300"
+                          }`}
+                        >
+                          {currentAnim ? "Change" : "Set"}
+                        </motion.button>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
-            ) : (
-              <div className="flex items-center justify-center flex-col p-6 text-center">
-                <div className="w-10 h-10 -full bg-slate-800/60 flex items-center justify-center mb-2">
-                  <Play className="w-5 h-5 text-slate-500" />
-                </div>
-                <div className="text-[11px] text-slate-400 max-w-[200px]">
-                  Select a 3D model object with animations to configure
-                  animation states.
-                </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center flex-col p-6 text-center">
+              <div className="w-10 h-10 -full bg-slate-800/60 flex items-center justify-center mb-2">
+                <Play className="w-5 h-5 text-slate-500" />
               </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <div className="text-[11px] text-slate-400 max-w-[200px]">
+                Select a 3D model object with animations to configure animation
+                states.
+              </div>
+            </div>
+          )}
+        </motion.div>
+      )}
     </div>
   );
 }

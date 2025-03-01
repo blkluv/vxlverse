@@ -110,39 +110,37 @@ export function Header() {
                 </motion.button>
 
                 {/* Dropdown Menu */}
-                <AnimatePresence>
-                  {showDropdown && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute right-0 mt-2 w-64 p-2  bg-gray-800/90 backdrop-blur-xl border border-gray-700/50 shadow-xl"
-                    >
-                      <div className="space-y-1">
-                        {dropdownItems.map((item) => (
-                          <Link
-                            key={item.path}
-                            to={item.path}
-                            onClick={() => setShowDropdown(false)}
-                            className="flex items-center gap-3 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700/50  transition-colors duration-200"
-                          >
-                            <item.icon className="w-4 h-4" />
-                            <span className="text-sm">{item.label}</span>
-                          </Link>
-                        ))}
-                        <hr className="border-gray-700/50 my-2" />
-                        <button
-                          onClick={handleLogout}
-                          className="w-full flex items-center gap-3 px-3 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10  transition-colors duration-200"
+                {showDropdown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 mt-2 w-64 p-2  bg-gray-800/90 backdrop-blur-xl border border-gray-700/50 shadow-xl"
+                  >
+                    <div className="space-y-1">
+                      {dropdownItems.map((item) => (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          onClick={() => setShowDropdown(false)}
+                          className="flex items-center gap-3 px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700/50  transition-colors duration-200"
                         >
-                          <LogOut className="w-4 h-4" />
-                          <span className="text-sm">Sign Out</span>
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                          <item.icon className="w-4 h-4" />
+                          <span className="text-sm">{item.label}</span>
+                        </Link>
+                      ))}
+                      <hr className="border-gray-700/50 my-2" />
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-3 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10  transition-colors duration-200"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span className="text-sm">Sign Out</span>
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
               </div>
             ) : (
               <GoogleSignIn />

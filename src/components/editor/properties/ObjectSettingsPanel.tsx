@@ -69,33 +69,31 @@ export function ObjectSettingsPanel() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden"
-          >
-            <div className="p-3 pt-2 border-t border-slate-700/30">
-              <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center  bg-gradient-to-br from-green-500/20 to-teal-500/20 border border-green-500/30">
-                  <Edit3 className="w-4 h-4 text-green-400" />
-                </div>
-                <div className="flex-grow bg-slate-900/60  border border-slate-700/50 px-2 py-1 focus-within:border-green-500/50 focus-within:ring-1 focus-within:ring-green-500/30">
-                  <Input
-                    value={selectedObject.name || ""}
-                    onChange={handleNameChange}
-                    className="w-full text-xs bg-transparent border-0 outline-none text-slate-200 placeholder-slate-500"
-                    placeholder="Enter object name"
-                  />
-                </div>
+      {expanded && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="overflow-hidden"
+        >
+          <div className="p-3 pt-2 border-t border-slate-700/30">
+            <div className="flex items-center space-x-2">
+              <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center  bg-gradient-to-br from-green-500/20 to-teal-500/20 border border-green-500/30">
+                <Edit3 className="w-4 h-4 text-green-400" />
+              </div>
+              <div className="flex-grow bg-slate-900/60  border border-slate-700/50 px-2 py-1 focus-within:border-green-500/50 focus-within:ring-1 focus-within:ring-green-500/30">
+                <Input
+                  value={selectedObject.name || ""}
+                  onChange={handleNameChange}
+                  className="w-full text-xs bg-transparent border-0 outline-none text-slate-200 placeholder-slate-500"
+                  placeholder="Enter object name"
+                />
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }

@@ -92,7 +92,7 @@ export function ItemSelector({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-slate-900/95 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-slate-900/95 backdrop-blur-sm z-50 flex items-center justify-center"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -102,23 +102,23 @@ export function ItemSelector({
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="w-full max-w-2xl bg-gradient-to-b from-slate-800 to-slate-900  shadow-2xl border border-slate-700/50 overflow-hidden"
+        className="w-full h-full bg-gradient-to-b from-slate-800 to-slate-900 shadow-2xl border border-slate-700/50 overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-4 border-b border-slate-700 bg-slate-800/50">
+        <div className="p-4 border-b border-slate-700 bg-slate-800/50 flex-shrink-0">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-medium text-slate-100 flex items-center">
               <span className="mr-2">{title}</span>
               {maxSelections < Infinity && (
-                <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 -full">
+                <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">
                   Max: {maxSelections}
                 </span>
               )}
             </h3>
             <button
               onClick={onClose}
-              className="text-slate-400 hover:text-slate-300 transition-colors p-1 hover:bg-slate-700/50 -full"
+              className="text-slate-400 hover:text-slate-300 transition-colors p-1 hover:bg-slate-700/50 rounded-full"
             >
               <X className="w-5 h-5" />
             </button>
@@ -148,7 +148,7 @@ export function ItemSelector({
                   <button
                     key={type}
                     onClick={() => setSelectedType(type as any)}
-                    className={`px-2.5 py-1  text-xs font-medium capitalize transition-all ${
+                    className={`px-2.5 py-1 rounded-sm text-xs font-medium capitalize transition-all ${
                       selectedType === type
                         ? "bg-blue-500/20 text-blue-300 ring-1 ring-blue-500/30"
                         : "bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-slate-200"
@@ -160,7 +160,7 @@ export function ItemSelector({
               {types.length > 4 && (
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className="px-2 py-1  text-xs font-medium bg-slate-700/30 text-slate-400 hover:bg-slate-700/50 hover:text-slate-300 transition-all flex items-center"
+                  className="px-2 py-1 rounded-sm text-xs font-medium bg-slate-700/30 text-slate-400 hover:bg-slate-700/50 hover:text-slate-300 transition-all flex items-center"
                 >
                   {showFilters ? "Less" : "More"}
                   <ChevronDown
@@ -175,7 +175,7 @@ export function ItemSelector({
             <div className="ml-2">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className={`p-1.5  text-xs font-medium transition-all flex items-center ${
+                className={`p-1.5 rounded-sm text-xs font-medium transition-all flex items-center ${
                   showFilters
                     ? "bg-blue-500/20 text-blue-300"
                     : "bg-slate-700/50 text-slate-400 hover:bg-slate-700"
@@ -188,54 +188,52 @@ export function ItemSelector({
           </div>
 
           {/* Advanced Filters */}
-          <AnimatePresence>
-            {showFilters && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="overflow-hidden"
-              >
-                <div className="mt-3 p-2 bg-slate-800/50  border border-slate-700/50">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-400">Sort by:</span>
-                    <div className="flex gap-1.5">
-                      {(["name", "value", "type"] as const).map((option) => (
-                        <button
-                          key={option}
-                          onClick={() => {
-                            if (sortBy === option) {
-                              setSortOrder((prev) =>
-                                prev === "asc" ? "desc" : "asc"
-                              );
-                            } else {
-                              setSortBy(option);
-                              setSortOrder("asc");
-                            }
-                          }}
-                          className={`px-2 py-0.5  text-[10px] capitalize flex items-center ${
-                            sortBy === option
-                              ? "bg-blue-500/20 text-blue-300"
-                              : "bg-slate-700/30 text-slate-400 hover:bg-slate-700/50"
-                          }`}
-                        >
-                          {option}
-                          {sortBy === option && (
-                            <ChevronDown
-                              className={`w-3 h-3 ml-1 transition-transform ${
-                                sortOrder === "desc" ? "rotate-180" : ""
-                              }`}
-                            />
-                          )}
-                        </button>
-                      ))}
-                    </div>
+          {showFilters && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden"
+            >
+              <div className="mt-3 p-2 bg-slate-800/50  border border-slate-700/50">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400">Sort by:</span>
+                  <div className="flex gap-1.5">
+                    {(["name", "value", "type"] as const).map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => {
+                          if (sortBy === option) {
+                            setSortOrder((prev) =>
+                              prev === "asc" ? "desc" : "asc"
+                            );
+                          } else {
+                            setSortBy(option);
+                            setSortOrder("asc");
+                          }
+                        }}
+                        className={`px-2 py-0.5 rounded-sm text-[10px] capitalize flex items-center ${
+                          sortBy === option
+                            ? "bg-blue-500/20 text-blue-300"
+                            : "bg-slate-700/30 text-slate-400 hover:bg-slate-700/50"
+                        }`}
+                      >
+                        {option}
+                        {sortBy === option && (
+                          <ChevronDown
+                            className={`w-3 h-3 ml-1 transition-transform ${
+                              sortOrder === "desc" ? "rotate-180" : ""
+                            }`}
+                          />
+                        )}
+                      </button>
+                    ))}
                   </div>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
 
           {/* Selected Items Preview */}
           {selectedItems.length > 0 && (
@@ -243,7 +241,7 @@ export function ItemSelector({
               {selectedItems.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-blue-500/10 text-blue-300 text-xs px-2 py-0.5 -full flex items-center"
+                  className="bg-blue-500/10 text-blue-300 text-xs px-2 py-0.5 rounded-full flex items-center"
                 >
                   <span className="mr-1">{item.emoji}</span>
                   <span className="truncate max-w-[100px]">{item.name}</span>
@@ -260,7 +258,7 @@ export function ItemSelector({
         </div>
 
         {/* Items Grid */}
-        <div className="p-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+        <div className="p-4 overflow-y-auto flex-grow custom-scrollbar">
           {filteredItems.length === 0 ? (
             <div className="text-center py-8 text-slate-400">
               <p>No items found matching your search</p>
@@ -275,7 +273,7 @@ export function ItemSelector({
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
               {filteredItems.map((item) => {
                 const isSelected = isItemSelected(item.id);
                 const isDisabled =
@@ -287,7 +285,7 @@ export function ItemSelector({
                     onClick={() => !isDisabled && toggleItemSelection(item)}
                     whileHover={{ scale: isDisabled ? 1 : 1.02 }}
                     whileTap={{ scale: isDisabled ? 1 : 0.98 }}
-                    className={`flex items-center gap-3 p-3  transition-all relative overflow-hidden ${
+                    className={`flex items-center gap-3 p-3 transition-all relative overflow-hidden h-full ${
                       isSelected
                         ? "bg-blue-500/20 border border-blue-500/30"
                         : isDisabled
@@ -300,7 +298,9 @@ export function ItemSelector({
                         <Check className="w-3 h-3 text-white" />
                       </div>
                     )}
-                    <span className="text-2xl">{item.emoji}</span>
+                    <div className="text-3xl flex items-center justify-center w-12 h-12 bg-gradient-to-br from-slate-700/60 to-slate-800/60 border border-slate-600/40 shadow-inner">
+                      {item.emoji}
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-medium text-slate-200 truncate">
                         {item.name}
@@ -309,7 +309,7 @@ export function ItemSelector({
                         <span className="text-xs text-slate-400">
                           {item.value} coins
                         </span>
-                        <span className="text-[10px] bg-slate-800/70 px-1.5 py-0.5 -full text-slate-400 capitalize">
+                        <span className="text-[10px] bg-slate-800/70 px-1.5 py-0.5 rounded-sm text-slate-400 capitalize">
                           {item.type}
                         </span>
                       </div>
@@ -322,7 +322,7 @@ export function ItemSelector({
         </div>
 
         {/* Footer with Action Buttons */}
-        <div className="p-3 border-t border-slate-700 bg-slate-800/50 flex justify-between items-center">
+        <div className="p-3 border-t border-slate-700 bg-slate-800/50 flex justify-between items-center flex-shrink-0">
           <div className="text-xs text-slate-400">
             {selectedItems.length > 0 ? (
               <span>

@@ -260,7 +260,7 @@ export function EditorGameObject({
         position={position}
         rotation={rotation}
         scale={scale}
-        onPointerDown={(e) => {
+        onDoubleClick={(e) => {
           if (!brushActive) e.stopPropagation();
           document.body.style.cursor = "pointer";
           if (onClick && !brushActive) onClick(e);

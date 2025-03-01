@@ -193,76 +193,72 @@ export function DialogueModal({ quest, dialogueId }: DialogueModalProps) {
             currentDialogue.choices &&
             currentDialogue.choices.length > 0 && (
               <div className="border-t border-blue-500/30 p-3">
-                <AnimatePresence>
-                  {currentDialogue.choices.map((choice, index) => {
-                    // Check if the choice has requirements that aren't met
-                    let isDisabled = false;
-                    let requirementText = "";
+                {currentDialogue.choices.map((choice, index) => {
+                  // Check if the choice has requirements that aren't met
+                  let isDisabled = false;
+                  let requirementText = "";
 
-                    if (choice.requirements) {
-                      if (
-                        choice.requirements.level &&
-                        playerStats.level < choice.requirements.level
-                      ) {
-                        isDisabled = true;
-                        requirementText = `Requires Level ${choice.requirements.level}`;
-                      } else if (
-                        choice.requirements.energy &&
-                        playerStats.energy < choice.requirements.energy
-                      ) {
-                        isDisabled = true;
-                        requirementText = `Requires ${choice.requirements.energy} Energy`;
-                      } else if (
-                        choice.requirements.money &&
-                        playerStats.money < choice.requirements.money
-                      ) {
-                        isDisabled = true;
-                        requirementText = `Requires ${choice.requirements.money} Gold`;
-                      } else if (
-                        choice.requirements.items &&
-                        choice.requirements.items.length > 0
-                      ) {
-                        const missingItems = choice.requirements.items.filter(
-                          (item) => !hasItem(item.id, item.amount)
-                        );
+                  if (choice.requirements) {
+                    if (
+                      choice.requirements.level &&
+                      playerStats.level < choice.requirements.level
+                    ) {
+                      isDisabled = true;
+                      requirementText = `Requires Level ${choice.requirements.level}`;
+                    } else if (
+                      choice.requirements.energy &&
+                      playerStats.energy < choice.requirements.energy
+                    ) {
+                      isDisabled = true;
+                      requirementText = `Requires ${choice.requirements.energy} Energy`;
+                    } else if (
+                      choice.requirements.money &&
+                      playerStats.money < choice.requirements.money
+                    ) {
+                      isDisabled = true;
+                      requirementText = `Requires ${choice.requirements.money} Gold`;
+                    } else if (
+                      choice.requirements.items &&
+                      choice.requirements.items.length > 0
+                    ) {
+                      const missingItems = choice.requirements.items.filter(
+                        (item) => !hasItem(item.id, item.amount)
+                      );
 
-                        if (missingItems.length > 0) {
-                          isDisabled = true;
-                          requirementText = `Missing required items`;
-                        }
+                      if (missingItems.length > 0) {
+                        isDisabled = true;
+                        requirementText = `Missing required items`;
                       }
                     }
+                  }
 
-                    return (
-                      <motion.button
-                        key={index}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
-                        className={`flex items-center w-full text-left p-2 mb-1  hover:bg-blue-900/40 transition-colors ${
-                          isDisabled
-                            ? "opacity-50 cursor-not-allowed"
-                            : "cursor-pointer"
-                        }`}
-                        onClick={() =>
-                          !isDisabled && handleChoiceSelect(choice)
-                        }
-                        disabled={isDisabled}
-                      >
-                        <ChevronRight className="w-4 h-4 text-blue-400 mr-2 flex-shrink-0" />
-                        <div className="flex-1">
-                          <span className="text-white">{choice.text}</span>
-                          {isDisabled && requirementText && (
-                            <span className="block text-xs text-red-400 mt-1">
-                              {requirementText}
-                            </span>
-                          )}
-                        </div>
-                      </motion.button>
-                    );
-                  })}
-                </AnimatePresence>
+                  return (
+                    <motion.button
+                      key={index}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      className={`flex items-center w-full text-left p-2 mb-1  hover:bg-blue-900/40 transition-colors ${
+                        isDisabled
+                          ? "opacity-50 cursor-not-allowed"
+                          : "cursor-pointer"
+                      }`}
+                      onClick={() => !isDisabled && handleChoiceSelect(choice)}
+                      disabled={isDisabled}
+                    >
+                      <ChevronRight className="w-4 h-4 text-blue-400 mr-2 flex-shrink-0" />
+                      <div className="flex-1">
+                        <span className="text-white">{choice.text}</span>
+                        {isDisabled && requirementText && (
+                          <span className="block text-xs text-red-400 mt-1">
+                            {requirementText}
+                          </span>
+                        )}
+                      </div>
+                    </motion.button>
+                  );
+                })}
               </div>
             )}
 

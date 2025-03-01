@@ -261,22 +261,20 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
         </Html>
       )}
 
-      <AnimatePresence>
-        {damageNumbers.map((damage) => (
-          <Html
-            key={damage.id}
-            position={[damage.position.x, damage.position.y, damage.position.z]}
-            center
+      {damageNumbers.map((damage) => (
+        <Html
+          key={damage.id}
+          position={[damage.position.x, damage.position.y, damage.position.z]}
+          center
+        >
+          <div
+            className="damage-text text-2xl font-bold"
+            style={{ whiteSpace: "nowrap" }}
           >
-            <div
-              className="damage-text text-2xl font-bold"
-              style={{ whiteSpace: "nowrap" }}
-            >
-              -{damage.value}
-            </div>
-          </Html>
-        ))}
-      </AnimatePresence>
+            -{damage.value}
+          </div>
+        </Html>
+      ))}
     </group>
   );
 }
