@@ -59,7 +59,7 @@ export function GridSnappingPanel() {
       </div>
 
       {expanded && (
-        <motion.div
+        <div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
@@ -162,7 +162,7 @@ export function GridSnappingPanel() {
             Grid snapping helps align objects to the grid for precise
             positioning.
           </div>
-        </motion.div>
+        </div>
       )}
     </div>
   );

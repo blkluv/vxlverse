@@ -88,7 +88,7 @@ export function ItemSelector({
   }, [selectedType]);
 
   return (
-    <motion.div
+    <div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -97,7 +97,7 @@ export function ItemSelector({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <motion.div
+      <div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
@@ -111,14 +111,14 @@ export function ItemSelector({
             <h3 className="text-lg font-medium text-slate-100 flex items-center">
               <span className="mr-2">{title}</span>
               {maxSelections < Infinity && (
-                <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">
+                <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 ">
                   Max: {maxSelections}
                 </span>
               )}
             </h3>
             <button
               onClick={onClose}
-              className="text-slate-400 hover:text-slate-300 transition-colors p-1 hover:bg-slate-700/50 rounded-full"
+              className="text-slate-400 hover:text-slate-300 transition-colors p-1 hover:bg-slate-700/50 "
             >
               <X className="w-5 h-5" />
             </button>
@@ -148,7 +148,7 @@ export function ItemSelector({
                   <button
                     key={type}
                     onClick={() => setSelectedType(type as any)}
-                    className={`px-2.5 py-1 rounded-sm text-xs font-medium capitalize transition-all ${
+                    className={`px-2.5 py-1  text-xs font-medium capitalize transition-all ${
                       selectedType === type
                         ? "bg-blue-500/20 text-blue-300 ring-1 ring-blue-500/30"
                         : "bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-slate-200"
@@ -160,7 +160,7 @@ export function ItemSelector({
               {types.length > 4 && (
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className="px-2 py-1 rounded-sm text-xs font-medium bg-slate-700/30 text-slate-400 hover:bg-slate-700/50 hover:text-slate-300 transition-all flex items-center"
+                  className="px-2 py-1  text-xs font-medium bg-slate-700/30 text-slate-400 hover:bg-slate-700/50 hover:text-slate-300 transition-all flex items-center"
                 >
                   {showFilters ? "Less" : "More"}
                   <ChevronDown
@@ -175,7 +175,7 @@ export function ItemSelector({
             <div className="ml-2">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className={`p-1.5 rounded-sm text-xs font-medium transition-all flex items-center ${
+                className={`p-1.5  text-xs font-medium transition-all flex items-center ${
                   showFilters
                     ? "bg-blue-500/20 text-blue-300"
                     : "bg-slate-700/50 text-slate-400 hover:bg-slate-700"
@@ -189,7 +189,7 @@ export function ItemSelector({
 
           {/* Advanced Filters */}
           {showFilters && (
-            <motion.div
+            <div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
@@ -213,7 +213,7 @@ export function ItemSelector({
                             setSortOrder("asc");
                           }
                         }}
-                        className={`px-2 py-0.5 rounded-sm text-[10px] capitalize flex items-center ${
+                        className={`px-2 py-0.5  text-[10px] capitalize flex items-center ${
                           sortBy === option
                             ? "bg-blue-500/20 text-blue-300"
                             : "bg-slate-700/30 text-slate-400 hover:bg-slate-700/50"
@@ -232,7 +232,7 @@ export function ItemSelector({
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Selected Items Preview */}
@@ -241,7 +241,7 @@ export function ItemSelector({
               {selectedItems.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-blue-500/10 text-blue-300 text-xs px-2 py-0.5 rounded-full flex items-center"
+                  className="bg-blue-500/10 text-blue-300 text-xs px-2 py-0.5  flex items-center"
                 >
                   <span className="mr-1">{item.emoji}</span>
                   <span className="truncate max-w-[100px]">{item.name}</span>
@@ -280,11 +280,9 @@ export function ItemSelector({
                   !isSelected && selectedItems.length >= maxSelections;
 
                 return (
-                  <motion.button
+                  <button
                     key={item.id}
                     onClick={() => !isDisabled && toggleItemSelection(item)}
-                    whileHover={{ scale: isDisabled ? 1 : 1.02 }}
-                    whileTap={{ scale: isDisabled ? 1 : 0.98 }}
                     className={`flex items-center gap-3 p-3 transition-all relative overflow-hidden h-full ${
                       isSelected
                         ? "bg-blue-500/20 border border-blue-500/30"
@@ -309,12 +307,12 @@ export function ItemSelector({
                         <span className="text-xs text-slate-400">
                           {item.value} coins
                         </span>
-                        <span className="text-[10px] bg-slate-800/70 px-1.5 py-0.5 rounded-sm text-slate-400 capitalize">
+                        <span className="text-[10px] bg-slate-800/70 px-1.5 py-0.5  text-slate-400 capitalize">
                           {item.type}
                         </span>
                       </div>
                     </div>
-                  </motion.button>
+                  </button>
                 );
               })}
             </div>
@@ -356,7 +354,7 @@ export function ItemSelector({
             </button>
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

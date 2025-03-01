@@ -17,7 +17,7 @@ interface ItemCardProps {
 export function ItemCard({ item, onIncrement, onRemove }: ItemCardProps) {
   const gameItem = GAME_ITEMS.find((gi) => gi.id === item.id);
   if (!gameItem) return null;
-  
+
   return (
     <div className="flex items-center justify-between p-2 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-800/90 border border-slate-700/70 shadow-md hover:shadow-lg hover:border-slate-600/80 hover:from-slate-800/95 hover:to-slate-800/95 transition-all duration-200">
       <div className="flex items-center gap-2.5">
@@ -45,7 +45,7 @@ export function ItemCard({ item, onIncrement, onRemove }: ItemCardProps) {
             e.stopPropagation();
             onIncrement();
           }}
-          className="p-1.5 text-slate-400 hover:text-blue-300 hover:bg-blue-500/10 transition-all rounded-sm"
+          className="p-1.5 text-slate-400 hover:text-blue-300 hover:bg-blue-500/10 transition-all "
           title="Increase quantity"
           aria-label="Increase quantity"
         >
@@ -56,7 +56,7 @@ export function ItemCard({ item, onIncrement, onRemove }: ItemCardProps) {
             e.stopPropagation();
             onRemove();
           }}
-          className="p-1.5 text-slate-400 hover:bg-red-500/20 hover:text-red-300 transition-all rounded-sm"
+          className="p-1.5 text-slate-400 hover:bg-red-500/20 hover:text-red-300 transition-all "
           title="Remove item"
           aria-label="Remove item"
         >

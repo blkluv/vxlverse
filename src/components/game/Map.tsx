@@ -29,13 +29,13 @@ export function Map({ onClose }: MapProps) {
 
   return (
     <Portal>
-      <motion.div
+      <div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-2 md:p-8"
       >
-        <motion.div
+        <div
           initial={{ scale: 0.95 }}
           animate={{ scale: 1 }}
           exit={{ scale: 0.95 }}
@@ -63,10 +63,8 @@ export function Map({ onClose }: MapProps) {
           <div className="p-3 md:p-6 overflow-y-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
               {scenes.map((scene) => (
-                <motion.button
+                <button
                   key={scene.id}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                   onClick={() => handleTeleport(scene.id)}
                   className={`group relative h-[200px] md:h-[300px]  border transition-all ${
                     currentSceneId === scene.id
@@ -116,12 +114,12 @@ export function Map({ onClose }: MapProps) {
                         : "border-transparent group-hover:border-white/20"
                     }`}
                   />
-                </motion.button>
+                </button>
               ))}
             </div>
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </Portal>
   );
 }

@@ -62,7 +62,7 @@ export function Game() {
 
   return (
     <div className="w-full h-screen relative select-none">
-      <motion.div
+      <div
         key={currentSceneId}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -81,7 +81,7 @@ export function Game() {
         {/* Scene Name Indicator */}
         <AnimatePresence>
           {showSceneName && (
-            <motion.div
+            <div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -93,10 +93,10 @@ export function Game() {
                   {currentScene?.name}
                 </h2>
               </div>
-            </motion.div>
+            </div>
           )}
         </AnimatePresence>
-      </motion.div>
+      </div>
 
       {/* Game UI */}
       <GameHUD />

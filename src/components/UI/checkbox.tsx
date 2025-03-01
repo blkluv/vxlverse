@@ -2,7 +2,8 @@ import React, { forwardRef, useId } from "react";
 import { cn } from "../../lib/utils";
 import { Check } from "lucide-react";
 
-export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface CheckboxProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   description?: string;
   error?: string;
@@ -10,18 +11,23 @@ export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElemen
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-  ({
-    className = "",
-    label,
-    description,
-    error,
-    id,
-    containerClassName,
-    ...props
-  }, ref) => {
+  (
+    {
+      className = "",
+      label,
+      description,
+      error,
+      id,
+      containerClassName,
+      ...props
+    },
+    ref
+  ) => {
     const generatedId = useId();
     const checkboxId = id || `checkbox-${generatedId}`;
-    const descriptionId = description ? `description-${generatedId}` : undefined;
+    const descriptionId = description
+      ? `description-${generatedId}`
+      : undefined;
 
     return (
       <div className={cn("flex items-start", containerClassName)}>
@@ -33,10 +39,11 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
               aria-describedby={descriptionId}
               aria-invalid={!!error}
               className={cn(
-                "h-4 w-4 rounded border-slate-700/80 bg-slate-800/80 text-blue-500",
+                "h-4 w-4  border-slate-700/80 bg-slate-800/80 text-blue-500",
                 "focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/40",
                 "transition-colors",
-                error && "border-red-500 focus:ring-red-500 focus:border-red-500",
+                error &&
+                  "border-red-500 focus:ring-red-500 focus:border-red-500",
                 "appearance-none",
                 className
               )}
@@ -63,10 +70,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           )}
 
           {description && (
-            <p
-              id={descriptionId}
-              className="text-[0.8rem] text-slate-400"
-            >
+            <p id={descriptionId} className="text-[0.8rem] text-slate-400">
               {description}
             </p>
           )}

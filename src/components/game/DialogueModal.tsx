@@ -160,7 +160,7 @@ export function DialogueModal({ quest, dialogueId }: DialogueModalProps) {
   return (
     <Portal>
       <div className="fixed inset-0 flex items-end justify-center pointer-events-none z-10 px-4 pb-4 md:pb-8">
-        <motion.div
+        <div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
@@ -233,7 +233,7 @@ export function DialogueModal({ quest, dialogueId }: DialogueModalProps) {
                   }
 
                   return (
-                    <motion.button
+                    <button
                       key={index}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -256,7 +256,7 @@ export function DialogueModal({ quest, dialogueId }: DialogueModalProps) {
                           </span>
                         )}
                       </div>
-                    </motion.button>
+                    </button>
                   );
                 })}
               </div>
@@ -267,7 +267,7 @@ export function DialogueModal({ quest, dialogueId }: DialogueModalProps) {
             (!currentDialogue.choices ||
               currentDialogue.choices.length === 0) && (
               <div className="border-t border-blue-500/30 p-3">
-                <motion.button
+                <button
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
@@ -275,10 +275,10 @@ export function DialogueModal({ quest, dialogueId }: DialogueModalProps) {
                   onClick={handleClose}
                 >
                   <span className="text-white">Continue</span>
-                </motion.button>
+                </button>
               </div>
             )}
-        </motion.div>
+        </div>
       </div>
     </Portal>
   );

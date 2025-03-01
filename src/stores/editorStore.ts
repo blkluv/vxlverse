@@ -50,6 +50,7 @@ interface EditorState {
   gridSize: number;
   snapPrecision: number;
   isTransforming: boolean;
+  focusOnObject: boolean;
 
   addScene: (scene: Scene) => void;
   removeScene: (id: string) => void;
@@ -83,6 +84,7 @@ interface EditorState {
   setSnapPrecision: (precision: number) => void;
   createNewScene: (name: string) => void;
   setIsTransforming: (isTransforming: boolean) => void;
+  setFocusOnObject: (focus: boolean) => void;
 }
 
 export const useEditorStore = create<EditorState>()(
@@ -101,6 +103,7 @@ export const useEditorStore = create<EditorState>()(
       gridSize: 1,
       snapPrecision: 0.1,
       isTransforming: false,
+      focusOnObject: false,
 
       addScene: (scene) => {
         set((state) => {
@@ -304,6 +307,7 @@ export const useEditorStore = create<EditorState>()(
         toast.success(`Scene created: ${name}`);
       },
       setIsTransforming: (isTransforming) => set({ isTransforming }),
+      setFocusOnObject: (focus) => set({ focusOnObject: focus }),
     }),
     {
       name: "editor-storage",

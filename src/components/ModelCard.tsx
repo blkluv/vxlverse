@@ -11,13 +11,8 @@ interface ModelCardProps {
 export const ModelCard = forwardRef<HTMLButtonElement, ModelCardProps>(
   ({ model, isSelected, onSelect }, ref) => {
     return (
-      <motion.button
+      <button
         ref={ref}
-        layout
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        whileHover={{ scale: 1.02 }}
         onClick={() => onSelect(model)}
         className={`w-full p-4  transition-all ${
           isSelected
@@ -51,7 +46,7 @@ export const ModelCard = forwardRef<HTMLButtonElement, ModelCardProps>(
             </div>
           </div>
         </div>
-      </motion.button>
+      </button>
     );
   }
 );

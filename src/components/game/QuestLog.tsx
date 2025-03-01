@@ -30,13 +30,13 @@ export function QuestLog() {
 
   return (
     <Portal>
-      <motion.div
+      <div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-2 md:p-8"
       >
-        <motion.div
+        <div
           initial={{ scale: 0.95 }}
           animate={{ scale: 1 }}
           exit={{ scale: 0.95 }}
@@ -81,7 +81,7 @@ export function QuestLog() {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                   {questLog.active.map((quest) => (
-                    <motion.button
+                    <button
                       key={quest.id}
                       layoutId={quest.id}
                       onClick={() => {
@@ -127,7 +127,7 @@ export function QuestLog() {
                           </div>
                         )}
                       </div>
-                    </motion.button>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -160,8 +160,8 @@ export function QuestLog() {
               </div>
             </div>
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </Portal>
   );
 }

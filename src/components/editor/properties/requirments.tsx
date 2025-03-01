@@ -65,15 +65,9 @@ export function RequirementsPanel() {
       </div>
 
       {activeSection === id && (
-        <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: "auto", opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.2, ease: "easeInOut" }}
-          className="overflow-hidden border-t border-slate-700/40 bg-slate-900/30 backdrop-blur-sm"
-        >
+        <div className="overflow-hidden border-t border-slate-700/40 bg-slate-900/30 backdrop-blur-sm">
           <div className="p-3">{children}</div>
-        </motion.div>
+        </div>
       )}
     </div>
   );
@@ -111,13 +105,7 @@ export function RequirementsPanel() {
     if (!gameItem) return null;
 
     return (
-      <motion.div
-        initial={{ opacity: 0, y: -5 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 5 }}
-        transition={{ duration: 0.2 }}
-        className="flex items-center justify-between p-2.5 bg-gradient-to-r from-slate-800/90 to-slate-800/60 border border-slate-700/50  hover:border-amber-500/30 transition-colors shadow-sm"
-      >
+      <div className="flex items-center justify-between p-2.5 bg-gradient-to-r from-slate-800/90 to-slate-800/60 border border-slate-700/50  hover:border-amber-500/30 transition-colors shadow-sm">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 flex items-center justify-center text-xl bg-slate-900/50  border border-slate-700/50">
             {gameItem?.emoji || "🔍"}
@@ -132,16 +120,14 @@ export function RequirementsPanel() {
           </div>
         </div>
 
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
+        <button
           onClick={onRemove}
           className="h-7 w-7 flex items-center justify-center text-red-400 hover:text-red-300 bg-slate-900/60 hover:bg-red-900/20  border border-slate-700/50 hover:border-red-700/30 transition-all"
           aria-label="Remove item"
         >
           <Trash2 className="w-3.5 h-3.5" />
-        </motion.button>
-      </motion.div>
+        </button>
+      </div>
     );
   };
 
@@ -163,13 +149,7 @@ export function RequirementsPanel() {
       </div>
 
       {expanded && (
-        <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: "auto", opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="overflow-hidden"
-        >
+        <div className="overflow-hidden">
           <div className="p-3 pt-2 border-t border-slate-700/30 space-y-3">
             {/* Required Items Section */}
             <RequirementSection
@@ -211,17 +191,13 @@ export function RequirementsPanel() {
                     />
                   ))
                 ) : (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="flex flex-col items-center justify-center py-4 px-3 bg-slate-800/40 border border-slate-700/30 "
-                  >
+                  <div className="flex flex-col items-center justify-center py-4 px-3 bg-slate-800/40 border border-slate-700/30 ">
                     <AlertCircle className="w-5 h-5 text-slate-500 mb-2" />
                     <div className="text-xs text-slate-400 text-center">
                       No required items. Add items that the player needs to
                       interact with this object.
                     </div>
-                  </motion.div>
+                  </div>
                 )}
               </div>
             </RequirementSection>
@@ -243,8 +219,7 @@ export function RequirementsPanel() {
                     </span>
                   </span>
                   <div className="flex items-center bg-slate-900/60 border border-slate-700/80 p-0.5 ">
-                    <motion.button
-                      whileTap={{ scale: 0.95 }}
+                    <button
                       onClick={() => {
                         if (
                           currentSceneId &&
@@ -264,14 +239,13 @@ export function RequirementsPanel() {
                       disabled={(selectedObject.requiredLvl || 0) <= 0}
                     >
                       <span className="text-xs">-</span>
-                    </motion.button>
+                    </button>
                     <div className="px-2 min-w-[30px] text-center">
                       <span className="text-xs text-blue-300 font-medium">
                         {selectedObject.requiredLvl || 0}
                       </span>
                     </div>
-                    <motion.button
-                      whileTap={{ scale: 0.95 }}
+                    <button
                       onClick={() => {
                         if (
                           currentSceneId &&
@@ -291,26 +265,13 @@ export function RequirementsPanel() {
                       disabled={(selectedObject.requiredLvl || 0) >= 50}
                     >
                       <span className="text-xs">+</span>
-                    </motion.button>
+                    </button>
                   </div>
                 </div>
 
                 <div className="relative mb-2">
                   <div className="h-2 w-full bg-slate-700/70 -full overflow-hidden">
-                    <motion.div
-                      initial={false}
-                      animate={{
-                        width: `${Math.min(
-                          100,
-                          ((selectedObject.requiredLvl || 0) / 50) * 100
-                        )}%`,
-                      }}
-                      transition={{
-                        duration: 0.3,
-                        ease: "easeOut",
-                      }}
-                      className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 -full"
-                    ></motion.div>
+                    <div className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 -full"></div>
                   </div>
                   <Slider
                     value={[selectedObject.requiredLvl || 0]}
@@ -343,19 +304,13 @@ export function RequirementsPanel() {
               </div>
             </RequirementSection>
           </div>
-        </motion.div>
+        </div>
       )}
 
       {/* Item selector modal with improved styling */}
       {showItemSelector && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="p-4 max-h-[70vh] w-[90vw] max-w-[500px] overflow-y-auto bg-slate-900/95 border border-slate-700/50  shadow-xl"
-          >
+          <div className="p-4 max-h-[70vh] w-[90vw] max-w-[500px] overflow-y-auto bg-slate-900/95 border border-slate-700/50  shadow-xl">
             <div className="flex justify-between items-center mb-3">
               <h3 className="text-sm font-medium text-slate-200 flex items-center">
                 <Package className="w-4 h-4 text-amber-400 mr-1.5" />
@@ -380,7 +335,7 @@ export function RequirementsPanel() {
                 toast.success(`Updated required items`);
               }}
             />
-          </motion.div>
+          </div>
         </div>
       )}
     </div>

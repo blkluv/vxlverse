@@ -88,7 +88,7 @@ export function Switch({
   };
 
   const renderSwitch = () => (
-    <motion.button
+    <button
       type="button"
       role="switch"
       aria-checked={checked}
@@ -105,20 +105,13 @@ export function Switch({
       } ${
         disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
       } ${className}`}
-      whileTap={disabled ? {} : { scale: 0.95 }}
     >
-      <motion.span
+      <span
         className={`${selectedSize.dot} -full shadow-md ${
           checked ? `${selectedColor.dot} ${selectedColor.shadow}` : "bg-white"
         }`}
-        initial={false}
-        animate={{
-          x: checked ? "100%" : "0%",
-          translateX: checked ? "-100%" : "0%",
-        }}
-        transition={{ type: "spring", stiffness: 500, damping: 30 }}
       />
-    </motion.button>
+    </button>
   );
 
   // If no label, just return the switch

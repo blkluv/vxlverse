@@ -48,7 +48,7 @@ export function HowItWorks() {
       </div>
 
       <div className="container mx-auto px-4 relative">
-        <motion.div
+        <div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -66,7 +66,7 @@ export function HowItWorks() {
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
             From concept to playable game in four simple steps
           </p>
-        </motion.div>
+        </div>
 
         <div className="relative">
           {/* Connection line */}
@@ -75,7 +75,7 @@ export function HowItWorks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {STEPS.map((step, index) => (
               <div key={step.title} className="relative">
-                <motion.div
+                <div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -84,7 +84,7 @@ export function HowItWorks() {
                 >
                   <div className="flex items-center gap-4 mb-4">
                     <div
-                      className={`relative z-10 flex items-center justify-center w-12 h-12 rounded-full bg-${step.color}-500/20 border border-${step.color}-500/30`}
+                      className={`relative z-10 flex items-center justify-center w-12 h-12  bg-${step.color}-500/20 border border-${step.color}-500/30`}
                     >
                       <step.icon className={`w-5 h-5 text-${step.color}-400`} />
                     </div>
@@ -99,37 +99,29 @@ export function HowItWorks() {
                   {/* Arrow for all but last item */}
                   {index < STEPS.length - 1 && (
                     <div className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10">
-                      <motion.div
+                      <div
                         animate={{ x: [0, 5, 0] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
                       >
                         <ArrowRight className="w-6 h-6 text-blue-400" />
-                      </motion.div>
+                      </div>
                     </div>
                   )}
-                </motion.div>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="mt-16 text-center"
-        >
-          <motion.a
+        <div className="mt-16 text-center">
+          <a
             href="/editor"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
             className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-medium hover:from-purple-600 hover:to-blue-600 transition-all shadow-lg shadow-purple-500/25"
           >
             Start Creating Now
             <ArrowRight className="w-5 h-5" />
-          </motion.a>
-        </motion.div>
+          </a>
+        </div>
       </div>
     </section>
   );

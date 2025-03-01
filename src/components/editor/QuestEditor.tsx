@@ -52,7 +52,7 @@ export function QuestEditor() {
   return (
     <div className="space-y-2">
       {currentScene.quests.map((quest) => (
-        <motion.div
+        <div
           key={quest.id}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -81,7 +81,7 @@ export function QuestEditor() {
               Rewards: {quest.rewards.xp} XP, {quest.rewards.money} coins
             </div>
           </div>
-        </motion.div>
+        </div>
       ))}
       <button
         onClick={handleAddQuest}

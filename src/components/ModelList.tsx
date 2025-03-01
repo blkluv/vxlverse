@@ -26,13 +26,13 @@ export function ModelList({
 
   if (models.length === 0) {
     return (
-      <motion.div
+      <div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="text-center py-8 text-gray-400"
       >
         No models found matching your criteria
-      </motion.div>
+      </div>
     );
   }
 

@@ -36,7 +36,7 @@ export function Profile() {
           <div className="relative p-8  border border-gray-700/50">
             <div className="flex flex-col md:flex-row items-center gap-8">
               {/* Avatar */}
-              <motion.div whileHover={{ scale: 1.05 }} className="relative">
+              <div className="relative">
                 {user?.avatar ? (
                   <img
                     src={user.avatar}
@@ -49,7 +49,7 @@ export function Profile() {
                   </div>
                 )}
                 <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500  shadow-lg shadow-green-500/30" />
-              </motion.div>
+              </div>
 
               {/* User Info */}
               <div className="flex-1 text-center md:text-left">
@@ -78,9 +78,8 @@ export function Profile() {
               {/* Stats */}
               <div className="grid grid-cols-3 gap-4">
                 {stats.map((stat) => (
-                  <motion.div
+                  <div
                     key={stat.label}
-                    whileHover={{ scale: 1.05 }}
                     className="flex flex-col items-center p-4  bg-gray-800/50 backdrop-blur-sm border border-gray-700/50"
                   >
                     <stat.icon className="w-6 h-6 text-blue-400 mb-2" />
@@ -88,7 +87,7 @@ export function Profile() {
                       {stat.value}
                     </div>
                     <div className="text-sm text-gray-400">{stat.label}</div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -108,13 +107,9 @@ export function Profile() {
             <div className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-gray-700 ">
               <div className="text-gray-400 text-center">
                 <p className="mb-2">You haven't created any games yet.</p>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="text-blue-400 hover:text-blue-300 transition-colors"
-                >
+                <button className="text-blue-400 hover:text-blue-300 transition-colors">
                   Create your first game →
-                </motion.button>
+                </button>
               </div>
             </div>
           )}

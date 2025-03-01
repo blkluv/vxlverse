@@ -51,7 +51,7 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
   };
 
   return (
-    <motion.div
+    <div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -61,42 +61,29 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
     >
       {/* Thumbnail with glass effect */}
       <div className="relative h-48 overflow-hidden">
-        <motion.img
+        <img
           src={
             game.thumbnail
               ? pb.files.getURL(game, game.thumbnail, { thumb: "300x300" })
               : DEFAULT_THUMBNAIL
           }
           alt={game.title}
-          animate={{ scale: isHovered ? 1.1 : 1 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
 
         {/* Play button overlay */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: isHovered ? 1 : 0, scale: isHovered ? 1 : 0.5 }}
-          transition={{ duration: 0.3 }}
-          className="absolute inset-0 flex items-center justify-center"
-        >
+        <div className="absolute inset-0 flex items-center justify-center">
           <Link to={`/play/${game.id}`}>
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="bg-blue-500 p-3  shadow-lg shadow-blue-500/25 backdrop-blur-sm"
-            >
+            <div className="bg-blue-500 p-3  shadow-lg shadow-blue-500/25 backdrop-blur-sm">
               <PlayCircle className="w-6 h-6 text-white" />
-            </motion.div>
+            </div>
           </Link>
-        </motion.div>
+        </div>
 
         {/* Like button */}
-        <motion.button
+        <button
           onClick={() => setIsLiked(!isLiked)}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
           className="absolute top-2 right-2 p-1.5  backdrop-blur-sm bg-white/10 border border-white/20 shadow-xl"
         >
           <Heart
@@ -104,7 +91,7 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
               isLiked ? "text-red-500 fill-red-500" : "text-white"
             }`}
           />
-        </motion.button>
+        </button>
       </div>
 
       {/* Content with glass effect */}
@@ -115,13 +102,13 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
 
         {/* Title and Actions */}
         <div className="relative flex items-start justify-between gap-2 mb-2">
-          <motion.h3
+          <h3
             animate={{ color: isHovered ? "#60A5FA" : "#FFFFFF" }}
             transition={{ duration: 0.3 }}
             className="text-base font-bold truncate"
           >
             {game.title}
-          </motion.h3>
+          </h3>
           {isOwner && (
             <div className="flex gap-1 flex-shrink-0">
               <Link
@@ -189,6 +176,6 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

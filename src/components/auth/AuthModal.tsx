@@ -33,14 +33,14 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   return (
     <Portal>
-      <motion.div
+      <div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50"
         onClick={onClose}
       >
-        <motion.div
+        <div
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
@@ -83,8 +83,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             />
             Continue with Google
           </button>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </Portal>
   );
 }

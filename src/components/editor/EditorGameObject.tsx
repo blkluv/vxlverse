@@ -6,6 +6,7 @@ import {
   Helper,
   Box,
   useHelper,
+  Gltf,
 } from "@react-three/drei";
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
@@ -47,6 +48,7 @@ interface EditorGameObjectProps {
   rotation: THREE.Euler;
   scale: THREE.Vector3;
   isSelected: boolean;
+  type?: "prop" | "npc" | "enemy" | "item" | "portal" | "trigger";
   thumbnail?: string;
   onClick?: (e: THREE.Event) => void;
   transformMode?: "translate" | "rotate" | "scale";
@@ -101,8 +103,11 @@ export function EditorGameObject({
     (obj) => obj.id === selectedObjectId
   );
 
-  // Setup animations.
-  const { actions, mixer } = useAnimations(animations, scene);
+  // Setup animations only if they exist
+  const { actions, mixer } = useAnimations(
+    animations.length > 0 ? animations : [],
+    scene
+  );
 
   // Update the object's transform when props change.
   useEffect(() => {
@@ -115,6 +120,7 @@ export function EditorGameObject({
 
   // Handle playing and stopping animations based on selection.
   useEffect(() => {
+    // Skip animation handling if there are no animations
     if (!actions || !mixer || Object.keys(actions).length === 0) return;
 
     if (isSelected && selectedObject?.activeAnimation) {
@@ -151,13 +157,14 @@ export function EditorGameObject({
 
     // Make sure the animation mixer updates
     return () => {
-      mixer.update(0);
+      if (mixer) mixer.update(0);
     };
   }, [actions, mixer, isSelected, selectedObject?.activeAnimation]);
 
   // Update the animation mixer on each frame
   useEffect(() => {
-    if (!mixer) return;
+    // Skip if there's no mixer or no animations
+    if (!mixer || !animations || animations.length === 0) return;
 
     // Create animation loop
     const animationLoop = (delta: number) => {
@@ -172,7 +179,7 @@ export function EditorGameObject({
     // return () => {
     //   unsubscribe();
     // };
-  }, [mixer]);
+  }, [mixer, animations]);
 
   /**
    * Handle click events.

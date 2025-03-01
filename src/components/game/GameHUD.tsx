@@ -63,7 +63,7 @@ export function GameHUD() {
       {/* Top Left - Level & Health */}
       <div className="fixed top-2 left-2 md:top-4 md:left-4 space-y-1.5 md:space-y-2">
         {/* Level */}
-        <motion.div
+        <div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="bg-black/80 backdrop-blur-sm  p-2 md:p-3 border border-yellow-500/20"
@@ -79,7 +79,7 @@ export function GameHUD() {
                 </span>
               </div>
               <div className="h-1.5 md:h-2 bg-black/50  overflow-hidden">
-                <motion.div
+                <div
                   className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500"
                   style={{ width: `${xpProgress}%` }}
                   initial={{ width: 0 }}
@@ -89,10 +89,10 @@ export function GameHUD() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Energy */}
-        <motion.div
+        <div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
@@ -105,7 +105,7 @@ export function GameHUD() {
                 Energy {energy}/{100}
               </div>
               <div className="h-1.5 md:h-2 bg-black/50  overflow-hidden">
-                <motion.div
+                <div
                   className="h-full bg-gradient-to-r from-green-500 to-green-600"
                   style={{ width: `${(energy / 100) * 100}%` }}
                   initial={{ width: 0 }}
@@ -115,12 +115,12 @@ export function GameHUD() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Top Right - Money & Time */}
       <div className="fixed top-2 right-2 md:top-4 md:right-4">
-        <motion.div
+        <div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           className="flex gap-1.5 md:gap-2 flex-col md:flex-row"
@@ -146,18 +146,14 @@ export function GameHUD() {
               </span>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Bottom Right - Quick Actions */}
       <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6">
         <div className="flex items-center gap-2 md:gap-4">
           {/* Inventory */}
-          <motion.button
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <button
             onClick={handleInventoryClick}
             className="w-10 h-10 md:w-14 md:h-14  bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center shadow-lg relative group"
           >
@@ -172,15 +168,10 @@ export function GameHUD() {
                 Inventory (I)
               </div>
             </div>
-          </motion.button>
+          </button>
 
           {/* Quest Log */}
-          <motion.button
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ delay: 0.1 }}
+          <button
             onClick={handleQuestLogClick}
             className="w-10 h-10 md:w-14 md:h-14  bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-lg relative group"
           >
@@ -195,14 +186,10 @@ export function GameHUD() {
                 Quest Log (L)
               </div>
             </div>
-          </motion.button>
+          </button>
 
           {/* Map */}
-          <motion.button
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <button
             onClick={handleMapClick}
             className="w-10 h-10 md:w-14 md:h-14  bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-lg relative group"
           >
@@ -212,7 +199,7 @@ export function GameHUD() {
                 World Map (M)
               </div>
             </div>
-          </motion.button>
+          </button>
         </div>
       </div>
 

@@ -18,13 +18,9 @@ export function Favorites() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="p-2  bg-red-500/20 text-red-400"
-            >
+            <div className="p-2  bg-red-500/20 text-red-400">
               <Heart className="w-6 h-6" />
-            </motion.div>
+            </div>
             <h1 className="text-3xl font-bold text-white">Favorite Games</h1>
           </div>
           <p className="text-gray-400">Games you've marked as favorites</p>
@@ -32,37 +28,23 @@ export function Favorites() {
 
         {/* Games Grid */}
         {favoriteGames.length > 0 ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {favoriteGames.map((game, index) => (
               <GameCard key={game.id} game={game} index={index} />
             ))}
-          </motion.div>
+          </div>
         ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-gray-700 "
-          >
+          <div className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-gray-700 ">
             <div className="p-4  bg-red-500/20 text-red-400 mb-4">
               <Heart className="w-8 h-8" />
             </div>
             <div className="text-gray-400 text-center">
               <p className="mb-2">You haven't favorited any games yet.</p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="text-blue-400 hover:text-blue-300 transition-colors"
-              >
+              <button className="text-blue-400 hover:text-blue-300 transition-colors">
                 Browse games →
-              </motion.button>
+              </button>
             </div>
-          </motion.div>
+          </div>
         )}
       </div>
     </div>

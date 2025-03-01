@@ -122,7 +122,7 @@ export function QuestRequirements({
             </label>
             <button
               onClick={onAddItem}
-              className="text-[10px] px-2 py-1 flex items-center gap-1 text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 transition-all rounded-sm"
+              className="text-[10px] px-2 py-1 flex items-center gap-1 text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 transition-all "
             >
               <Plus className="w-3 h-3" /> Add Item
             </button>
@@ -139,7 +139,7 @@ export function QuestRequirements({
                 />
               ))
             ) : (
-              <div className="text-xs text-slate-400 italic p-2 bg-slate-800/30 border border-slate-700/50 rounded-sm">
+              <div className="text-xs text-slate-400 italic p-2 bg-slate-800/30 border border-slate-700/50 ">
                 No items required
               </div>
             )}

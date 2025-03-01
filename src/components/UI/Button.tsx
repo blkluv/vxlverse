@@ -72,16 +72,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     return (
-      <motion.button
+      <button
         onClick={props.onClick}
         type={props.type}
         ref={ref}
-        whileTap={{ scale: 0.97 }}
         className={buttonStyles}
         disabled={isLoading || props.disabled}
       >
         {content}
-      </motion.button>
+      </button>
     );
   }
 );

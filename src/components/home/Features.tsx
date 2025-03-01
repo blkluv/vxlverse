@@ -74,13 +74,13 @@ export function Features() {
     <section className="py-24 bg-gradient-to-b from-gray-900 to-gray-950 relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-64 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-64 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 -left-64 w-96 h-96 bg-blue-500/10  blur-3xl" />
+        <div className="absolute bottom-1/4 -right-64 w-96 h-96 bg-purple-500/10  blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(ellipse_at_center,rgba(30,64,175,0.05),transparent_50%)]" />
       </div>
 
       <div className="container mx-auto px-4 relative">
-        <motion.div
+        <div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -98,11 +98,11 @@ export function Features() {
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
             Everything you need to create amazing 3D games without writing code
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {FEATURES.map((feature, index) => (
-            <motion.div
+            <div
               key={feature.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -121,7 +121,7 @@ export function Features() {
               <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
                 {feature.description}
               </p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

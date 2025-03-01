@@ -29,13 +29,9 @@ export function PopularTags() {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {TAGS.map((tag, index) => (
-            <motion.button
+            <button
               key={tag.name}
               onClick={() => handleTagClick(tag.name)}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.05 }}
               className="p-4  bg-gradient-to-br from-purple-500/10 to-purple-700/10 border border-purple-500/20
                        hover:from-purple-500/20 hover:to-purple-700/20 hover:border-purple-500/30 transition-all group"
             >
@@ -45,7 +41,7 @@ export function PopularTags() {
               <div className="text-sm text-purple-400/60">
                 {tag.count.toLocaleString()} games
               </div>
-            </motion.button>
+            </button>
           ))}
         </div>
       </div>

@@ -33,10 +33,8 @@ export function Filters({
 
       <div className="flex flex-wrap gap-2">
         {categories.map((category) => (
-          <motion.button
+          <button
             key={category}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
             onClick={() => onCategoryChange(category)}
             className={`px-3 py-1.5  text-sm transition-colors ${
               selectedCategory === category
@@ -45,7 +43,7 @@ export function Filters({
             }`}
           >
             {category}
-          </motion.button>
+          </button>
         ))}
       </div>
     </div>

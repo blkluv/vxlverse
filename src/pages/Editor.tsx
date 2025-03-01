@@ -87,8 +87,9 @@ export function _Editor() {
   >("translate");
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [focusOnObject, setFocusOnObject] = useState(false);
   const orbitControlsRef = useRef();
+  const focusOnObject = useEditorStore((state) => state.focusOnObject);
+  const setFocusOnObject = useEditorStore((state) => state.setFocusOnObject);
 
   // Create a default scene if none exists
   useEffect(() => {
@@ -573,7 +574,7 @@ export function _Editor() {
               camera={{ position: [5, 5, 5], fov: 50 }}
               className="w-full relative h-full"
             >
-              {showMetrics && <Perf className="absolute w-80 bottom right-0" />}
+              {showMetrics && <Perf className="absolute w-80 top-8 left-0" />}
               <EditorScene
                 showGrid={showGrid}
                 gridSnap={gridSnap}

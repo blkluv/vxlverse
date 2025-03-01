@@ -20,7 +20,7 @@ export function GridSettingsPanel({
   onUpdateScene,
 }: GridSettingsPanelProps) {
   return (
-    <motion.div
+    <div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}
@@ -136,6 +136,6 @@ export function GridSettingsPanel({
           </p>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

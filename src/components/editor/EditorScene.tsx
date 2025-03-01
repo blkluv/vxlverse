@@ -238,6 +238,7 @@ export function EditorScene({
             position={object.position}
             rotation={object.rotation}
             scale={object.scale}
+            type={object.type}
             isSelected={object.id === selectedObjectId}
             transformMode={transformMode}
             onClick={() => handleObjectClick(object.id)}

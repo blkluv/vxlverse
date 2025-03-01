@@ -80,8 +80,6 @@ export function QuestPanel({ object, onChange }: QuestPanelProps) {
     [editingQuest?.id, object.quests, onChange]
   );
 
-
-
   // Toggle quest editor view
   const toggleQuestEditor = useCallback((quest: Quest) => {
     setEditingQuest((prev) => (prev?.id === quest.id ? null : quest));
@@ -91,12 +89,7 @@ export function QuestPanel({ object, onChange }: QuestPanelProps) {
   return (
     <div className="space-y-2">
       {/* Quest List */}
-      <motion.div
-        className="space-y-2 overflow-hidden custom-scrollbar"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.2 }}
-      >
+      <div className="space-y-2 overflow-hidden custom-scrollbar">
         {object.quests?.map((quest) => (
           <QuestItem
             key={quest.id}
@@ -110,7 +103,7 @@ export function QuestPanel({ object, onChange }: QuestPanelProps) {
             )}
           </QuestItem>
         ))}
-        
+
         <button
           onClick={addNewQuest}
           className="w-full p-2.5 flex items-center justify-center gap-2 text-xs font-medium text-slate-100 bg-gradient-to-r from-blue-500/15 to-blue-500/10 hover:from-blue-500/20 hover:to-blue-500/15 border border-blue-500/30 hover:border-blue-500/40 transition-all duration-200 shadow-sm"
@@ -118,7 +111,7 @@ export function QuestPanel({ object, onChange }: QuestPanelProps) {
           <Plus className="w-4 h-4 text-blue-400" />
           Add New Quest
         </button>
-      </motion.div>
+      </div>
     </div>
   );
 }

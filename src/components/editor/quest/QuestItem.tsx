@@ -10,15 +10,15 @@ interface QuestItemProps {
   children?: React.ReactNode;
 }
 
-export function QuestItem({ 
-  quest, 
-  isEditing, 
-  onToggleEdit, 
-  onRemove, 
-  children 
+export function QuestItem({
+  quest,
+  isEditing,
+  onToggleEdit,
+  onRemove,
+  children,
 }: QuestItemProps) {
   return (
-    <motion.div
+    <div
       key={quest.id}
       className={`mb-1 border overflow-hidden shadow-md transition-all duration-200 ${
         isEditing
@@ -64,7 +64,7 @@ export function QuestItem({
             {quest.status && (
               <div className="text-[11px] flex items-center gap-1.5 mt-0.5">
                 <span
-                  className={`inline-block w-2 h-2 rounded-full ${
+                  className={`inline-block w-2 h-2  ${
                     quest.status === "active"
                       ? "bg-green-400 shadow-sm shadow-green-400/30"
                       : quest.status === "completed"
@@ -121,6 +121,6 @@ export function QuestItem({
           </div>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }

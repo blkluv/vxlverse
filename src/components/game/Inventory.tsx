@@ -97,14 +97,14 @@ export function Inventory() {
 
   return (
     <Portal>
-      <motion.div
+      <div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-2 md:p-8"
         onClick={() => setIsOpen(false)}
       >
-        <motion.div
+        <div
           initial={{ scale: 0.95 }}
           animate={{ scale: 1 }}
           exit={{ scale: 0.95 }}
@@ -264,7 +264,7 @@ export function Inventory() {
                     const isSold = recentlySold.includes(item.id);
 
                     return (
-                      <motion.button
+                      <button
                         key={item.id}
                         layoutId={item.id}
                         onClick={() => {
@@ -298,16 +298,16 @@ export function Inventory() {
                             </div>
                           </div>
                           {isSold && (
-                            <motion.div
+                            <div
                               initial={{ scale: 0 }}
                               animate={{ scale: 1 }}
                               className="bg-green-500  p-1"
                             >
                               <Check className="w-3 h-3 md:w-4 md:h-4 text-white" />
-                            </motion.div>
+                            </div>
                           )}
                         </div>
-                      </motion.button>
+                      </button>
                     );
                   })}
                 </div>
@@ -317,7 +317,7 @@ export function Inventory() {
 
           {/* Right Sidebar - Item Details (Full screen on mobile) */}
           {selectedItemDetails && (
-            <motion.div
+            <div
               initial={{
                 width: 0,
                 opacity: 0,
@@ -424,10 +424,10 @@ export function Inventory() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </Portal>
   );
 }

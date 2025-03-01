@@ -83,7 +83,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   const selectedSize = sizeVariants[size];
 
   const renderToggle = () => (
-    <motion.button
+    <button
       onClick={disabled ? undefined : onToggle}
       aria-pressed={isOn}
       disabled={disabled}
@@ -94,20 +94,13 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
           ? `${selectedColor.bg} ${selectedColor.border} border`
           : "bg-slate-700/80 border border-slate-600/50"
       } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
-      whileTap={disabled ? {} : { scale: 0.95 }}
     >
-      <motion.div
+      <div
         className={`${selectedSize.dot} -full shadow-md ${
           isOn ? `${selectedColor.dot} ${selectedColor.shadow}` : "bg-white"
         }`}
-        initial={false}
-        animate={{
-          x: isOn ? "100%" : "0%",
-          translateX: isOn ? "-100%" : "0%",
-        }}
-        transition={{ type: "spring", stiffness: 500, damping: 30 }}
       />
-    </motion.button>
+    </button>
   );
 
   // If no label, just return the toggle

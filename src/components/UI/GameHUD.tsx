@@ -15,7 +15,7 @@ export function GameHUD() {
   const cappedEnergy = Math.min(100, energy);
 
   return (
-    <motion.div
+    <div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       className="fixed top-0 left-0 right-0 p-4 pointer-events-none z-50"
@@ -75,6 +75,6 @@ export function GameHUD() {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

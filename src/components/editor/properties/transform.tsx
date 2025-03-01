@@ -95,15 +95,21 @@ export function TransformPanel() {
             {axis.toUpperCase()}
           </span>
         </div>
-        <div
-          className={`flex-grow bg-slate-900/80  border border-slate-700/50 ${colors.focusBorder} focus-within:ring-1 ${colors.focusRing} transition-all duration-150`}
-        >
+        <div className="flex-grow relative">
           <Input
             type="number"
             value={value}
             onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
             step={step}
-            className={`w-full h-5 px-2  text-[11px] bg-transparent border-0 outline-none ${colors.text} placeholder-slate-500`}
+            className={`w-full h-7 px-2 text-[11px] bg-slate-900/80 border border-slate-700/50 ${
+              colors.text
+            } placeholder-slate-500 focus:outline-none focus:ring-1 ${colors.focusRing.replace(
+              "focus-within:",
+              "focus:"
+            )} focus:border-none ${colors.focusBorder.replace(
+              "focus-within:",
+              "focus:"
+            )}`}
             onKeyDown={(e) => e.stopPropagation()}
             onKeyUp={(e) => e.stopPropagation()}
             onKeyPress={(e) => e.stopPropagation()}
@@ -162,13 +168,7 @@ export function TransformPanel() {
       </div>
 
       {expanded && (
-        <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: "auto", opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="overflow-hidden"
-        >
+        <div className="overflow-hidden">
           <div className="p-3 pt-2 border-t border-slate-700/30">
             {/* Position */}
             <TransformSection
@@ -266,7 +266,7 @@ export function TransformPanel() {
               />
             </TransformSection>
           </div>
-        </motion.div>
+        </div>
       )}
     </div>
   );

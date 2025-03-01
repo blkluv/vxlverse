@@ -43,12 +43,9 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo with animation */}
           <Link to="/" className="flex items-center gap-2">
-            <motion.div
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.5 }}
-            >
+            <div transition={{ duration: 0.5 }}>
               <Gamepad2 className="w-8 h-8 text-blue-500" />
-            </motion.div>
+            </div>
             <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
               VXLverse
             </span>
@@ -75,7 +72,7 @@ export function Header() {
           <div className="flex items-center gap-4">
             {isAuthenticated && user ? (
               <div className="relative">
-                <motion.button
+                <button
                   onClick={() => setShowDropdown(!showDropdown)}
                   className={`flex items-center gap-3 px-4 py-2  transition-all duration-300 ${
                     showDropdown
@@ -107,11 +104,11 @@ export function Header() {
                       showDropdown ? "rotate-180" : ""
                     }`}
                   />
-                </motion.button>
+                </button>
 
                 {/* Dropdown Menu */}
                 {showDropdown && (
-                  <motion.div
+                  <div
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -139,7 +136,7 @@ export function Header() {
                         <span className="text-sm">Sign Out</span>
                       </button>
                     </div>
-                  </motion.div>
+                  </div>
                 )}
               </div>
             ) : (

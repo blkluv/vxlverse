@@ -96,7 +96,7 @@ export function PropertiesPanel() {
       {/* Panel Content */}
       <div className="flex-1 overflow-auto ">
         <>
-          <motion.div className="h-screen pb-20 no-scrollbar overflow-y-auto">
+          <div className="h-screen pb-20 no-scrollbar overflow-y-auto">
             <div className="p-2 space-y-2">
               {activeTab === "properties" && (
                 <>
@@ -109,8 +109,8 @@ export function PropertiesPanel() {
                     </>
                   ) : (
                     <div className="flex flex-col items-center justify-center h-[70vh] p-6 text-center">
-                      <div className="bg-slate-800/40 border border-slate-700/30 rounded-lg p-8 shadow-lg max-w-xs">
-                        <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 p-4 rounded-full mb-4 mx-auto w-16 h-16 flex items-center justify-center border border-blue-500/20">
+                      <div className="bg-slate-800/40 border border-slate-700/30  p-8 shadow-lg max-w-xs">
+                        <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 p-4  mb-4 mx-auto w-16 h-16 flex items-center justify-center border border-blue-500/20">
                           <Box className="w-8 h-8 text-blue-400/80" />
                         </div>
                         <h3 className="text-blue-300 font-medium mb-2">
@@ -120,7 +120,7 @@ export function PropertiesPanel() {
                           Select an object in the scene to view and edit its
                           properties.
                         </p>
-                        <div className="text-xs text-slate-500 bg-slate-800/60 p-2 rounded border border-slate-700/40">
+                        <div className="text-xs text-slate-500 bg-slate-800/60 p-2  border border-slate-700/40">
                           Tip: Use the toolbar to add new objects to your scene
                         </div>
                       </div>
@@ -147,8 +147,8 @@ export function PropertiesPanel() {
                     />
                   ) : (
                     <div className="flex flex-col items-center justify-center h-[70vh] p-6 text-center">
-                      <div className="bg-slate-800/40 border border-slate-700/30 rounded-lg p-8 shadow-lg max-w-xs">
-                        <div className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 p-4 rounded-full mb-4 mx-auto w-16 h-16 flex items-center justify-center border border-indigo-500/20">
+                      <div className="bg-slate-800/40 border border-slate-700/30  p-8 shadow-lg max-w-xs">
+                        <div className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 p-4  mb-4 mx-auto w-16 h-16 flex items-center justify-center border border-indigo-500/20">
                           <FileCode className="w-8 h-8 text-indigo-400/80" />
                         </div>
                         <h3 className="text-indigo-300 font-medium mb-2">
@@ -158,7 +158,7 @@ export function PropertiesPanel() {
                           Select an object in the scene to create and manage
                           quests.
                         </p>
-                        <div className="text-xs text-slate-500 bg-slate-800/60 p-2 rounded border border-slate-700/40">
+                        <div className="text-xs text-slate-500 bg-slate-800/60 p-2  border border-slate-700/40">
                           Tip: Quests allow players to interact with objects and
                           complete tasks
                         </div>
@@ -186,7 +186,7 @@ export function PropertiesPanel() {
                 />
               )}
             </div>
-          </motion.div>
+          </div>
         </>
       </div>
     </div>

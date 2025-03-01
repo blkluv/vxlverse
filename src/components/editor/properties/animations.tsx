@@ -5,7 +5,6 @@ import {
   Maximize,
   Loader2,
   RefreshCw,
-  Pause,
   Check,
   MousePointer,
   HandMetal,
@@ -13,7 +12,6 @@ import {
   Info,
   Plus,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../../UI/Button";
 import { useGLTF } from "@react-three/drei";
 import toast from "react-hot-toast";
@@ -204,19 +202,13 @@ export function AnimationsPanel() {
       </div>
 
       {expanded && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.2 }}
-          className="border-t border-slate-700/30"
-        >
+        <div className="border-t border-slate-700/30">
           {selectedObject?.modelUrl ? (
             <div className="p-3 space-y-4">
               {/* Animation States Tabs */}
               <div className="flex space-x-1 bg-slate-800/40 p-1 ">
                 {ANIMATION_STATES.map((state) => (
-                  <motion.button
+                  <button
                     key={state.id}
                     onClick={() => setSelectedState(state.id)}
                     className={`flex-1 flex items-center justify-center text-[10px] py-1.5 px-2  transition-all duration-200 relative ${
@@ -224,8 +216,6 @@ export function AnimationsPanel() {
                         ? `${state.color} border`
                         : "text-slate-400 hover:bg-slate-700/40"
                     }`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
                     onMouseEnter={() => setShowTooltip(state.id)}
                     onMouseLeave={() => setShowTooltip(null)}
                   >
@@ -234,16 +224,11 @@ export function AnimationsPanel() {
 
                     {/* Tooltip */}
                     {showTooltip === state.id && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 5 }}
-                        className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 w-36 p-1.5 bg-slate-900 border border-slate-700  shadow-lg z-10 text-[9px] text-slate-300"
-                      >
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 w-36 p-1.5 bg-slate-900 border border-slate-700  shadow-lg z-10 text-[9px] text-slate-300">
                         {state.description}
-                      </motion.div>
+                      </div>
                     )}
-                  </motion.button>
+                  </button>
                 ))}
               </div>
 
@@ -291,11 +276,8 @@ export function AnimationsPanel() {
                         const stateConfig = getStateConfig(selectedState);
 
                         return (
-                          <motion.div
+                          <div
                             key={anim}
-                            initial={{ opacity: 0, y: -5 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.2 }}
                             className={`flex items-center justify-between p-2  ${
                               isCurrentStateAnimation
                                 ? `${stateConfig.color
@@ -317,18 +299,14 @@ export function AnimationsPanel() {
                               </span>
                             </div>
                             <div className="flex space-x-1.5">
-                              <motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
+                              <button
                                 onClick={() => toggleAnimationPreview(anim)}
                                 className="h-6 w-6 flex items-center justify-center bg-slate-900/60 hover:bg-slate-900/80  text-purple-400 hover:text-purple-300 transition-colors"
                                 title="Preview Animation"
                               >
                                 <Play className="w-3 h-3" />
-                              </motion.button>
-                              <motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
+                              </button>
+                              <button
                                 onClick={() =>
                                   handleAnimationSelect(anim, selectedState)
                                 }
@@ -351,9 +329,9 @@ export function AnimationsPanel() {
                                 ) : (
                                   <Plus className="w-3 h-3" />
                                 )}
-                              </motion.button>
+                              </button>
                             </div>
-                          </motion.div>
+                          </div>
                         );
                       })}
                     </div>
@@ -414,9 +392,7 @@ export function AnimationsPanel() {
                             )}
                           </div>
                         </div>
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
+                        <button
                           onClick={() => setSelectedState(state.id)}
                           className={`text-[9px] px-2 py-0.5  ${
                             currentAnim
@@ -428,7 +404,7 @@ export function AnimationsPanel() {
                           }`}
                         >
                           {currentAnim ? "Change" : "Set"}
-                        </motion.button>
+                        </button>
                       </div>
                     );
                   })}
@@ -446,7 +422,7 @@ export function AnimationsPanel() {
               </div>
             </div>
           )}
-        </motion.div>
+        </div>
       )}
     </div>
   );

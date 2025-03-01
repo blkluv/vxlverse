@@ -83,7 +83,7 @@ const ToastItem = ({
   };
 
   return (
-    <motion.div
+    <div
       initial={{ opacity: 0, y: -20, scale: 0.8 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
@@ -102,7 +102,7 @@ const ToastItem = ({
         className="absolute bottom-0 left-0 h-1 bg-white/30 "
         style={{ width: `${progress}%` }}
       />
-    </motion.div>
+    </div>
   );
 };
 

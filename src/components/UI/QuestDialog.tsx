@@ -34,7 +34,7 @@ export function QuestDialog({ quest, onClose }: QuestDialogProps) {
       playerStats.money >= quest.requirements.money);
 
   return (
-    <motion.div
+    <div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
@@ -136,6 +136,6 @@ export function QuestDialog({ quest, onClose }: QuestDialogProps) {
           </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

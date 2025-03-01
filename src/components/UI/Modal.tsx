@@ -14,7 +14,7 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
     isOpen && (
       <div className="fixed inset-0 flex items-center justify-center z-50">
         {/* Backdrop with blur */}
-        <motion.div
+        <div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -23,7 +23,7 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
         />
 
         {/* Modal Container with max height and scrolling */}
-        <motion.div
+        <div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -38,7 +38,7 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
               {/* Header - Fixed */}
               <div className="p-6 pb-0 bg-gradient-to-r from-gray-900/95 via-gray-900/90 to-gray-900/95">
                 <div className="flex items-center justify-between">
-                  <motion.div
+                  <div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     className="flex flex-col gap-1"
@@ -47,7 +47,7 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
                       {title}
                     </h2>
                     <div className="h-px w-full bg-gradient-to-r from-blue-500/50 via-violet-500/50 to-purple-500/50" />
-                  </motion.div>
+                  </div>
                   <button
                     onClick={onClose}
                     className="p-2 text-gray-400 hover:text-white hover:bg-white/5  transition-all duration-200 hover:shadow-lg hover:shadow-black/20"
@@ -65,7 +65,7 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     )
   );

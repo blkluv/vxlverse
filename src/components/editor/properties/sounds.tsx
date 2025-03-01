@@ -127,7 +127,7 @@ export function SoundPanel() {
       </div>
 
       {expanded && (
-        <motion.div
+        <div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
@@ -198,7 +198,7 @@ export function SoundPanel() {
           <div className="text-[9px] text-slate-400 italic">
             This sound will play when the player interacts with this object.
           </div>
-        </motion.div>
+        </div>
       )}
     </div>
   );

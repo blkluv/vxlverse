@@ -8,12 +8,7 @@ interface ModelDetailsProps {
 
 export function ModelDetails({ model }: ModelDetailsProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
-      className="mt-8 bg-gray-800  p-6 shadow-lg"
-    >
+    <div className="mt-8 bg-gray-800  p-6 shadow-lg">
       <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
         <Info className="w-5 h-5 text-blue-400" />
         Model Details
@@ -61,6 +56,6 @@ export function ModelDetails({ model }: ModelDetailsProps) {
           <p className="text-sm">{model.attribution}</p>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

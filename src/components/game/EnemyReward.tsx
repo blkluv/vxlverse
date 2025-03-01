@@ -24,7 +24,7 @@ export function EnemyRewardModal({ rewards, onClose }: EnemyRewardModalProps) {
   return (
     <Portal>
       <div className="fixed flex justify-center h-fit inset-0 pointer-events-none px-4">
-        <motion.div
+        <div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
@@ -33,31 +33,31 @@ export function EnemyRewardModal({ rewards, onClose }: EnemyRewardModalProps) {
         >
           <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
             <div className="flex items-center gap-3">
-              <motion.div
+              <div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", duration: 0.6, delay: 0.2 }}
                 className="w-10 h-10 md:w-12 md:h-12  bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center"
               >
                 <Trophy className="w-5 h-5 md:w-6 md:h-6 text-white" />
-              </motion.div>
+              </div>
               <div>
-                <motion.h2
+                <h2
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.3 }}
                   className="text-base md:text-lg font-bold text-amber-300"
                 >
                   Enemy Defeated!
-                </motion.h2>
-                <motion.div
+                </h2>
+                <div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.4 }}
                   className="text-xs md:text-sm text-amber-500/70"
                 >
                   Rewards Collected
-                </motion.div>
+                </div>
               </div>
             </div>
 
@@ -66,7 +66,7 @@ export function EnemyRewardModal({ rewards, onClose }: EnemyRewardModalProps) {
 
             <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
               {/* XP Reward */}
-              <motion.div
+              <div
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.5 }}
@@ -81,10 +81,10 @@ export function EnemyRewardModal({ rewards, onClose }: EnemyRewardModalProps) {
                     +{rewards.xp} XP
                   </span>
                 </div>
-              </motion.div>
+              </div>
 
               {/* Item Reward */}
-              <motion.div
+              <div
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.6 }}
@@ -99,10 +99,10 @@ export function EnemyRewardModal({ rewards, onClose }: EnemyRewardModalProps) {
                     ×{rewards.amount}
                   </span>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </Portal>
   );
