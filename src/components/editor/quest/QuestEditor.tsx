@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Quest, Item } from "../../../types";
+import { Quest, Item, GAME_ITEMS } from "../../../types";
 import { ItemSelector } from "../../editor/ItemSelector";
 import { QuestStory } from "./QuestStory";
 import { QuestRequirements } from "./QuestRequirements";
@@ -18,41 +18,68 @@ export function QuestEditor({ quest, updateQuest }: QuestEditorProps) {
 
   const handleAddItem = (items: Item[]) => {
     if (items.length === 0) return;
-    const item = items[0]; // We only use the first item since we're adding one at a time
 
+    // Add all selected items
     if (showItemSelector.type === "requirement") {
       const currentItems = quest.requirements.items || [];
-      const existingItem = currentItems.find((i) => i.id === item.id);
 
-      const newItems = existingItem
-        ? currentItems.map((i) =>
-            i.id === item.id ? { ...i, amount: (i.amount || 1) + 1 } : i
-          )
-        : [...currentItems, { id: item.id, amount: 1, name: item.name }];
+      // Create a new array with all existing items that don't conflict with new selections
+      const nonConflictingItems = currentItems.filter(
+        (existingItem) =>
+          !items.some((newItem) => newItem.id === existingItem.id)
+      );
 
+      // Add all newly selected items
+      const newItems = [
+        ...nonConflictingItems,
+        ...items.map((item) => ({
+          ...item,
+          // Preserve any additional properties needed
+        })),
+      ];
+
+      // Update quest with new items
       updateQuest(quest.id, {
         requirements: {
           ...quest.requirements,
           items: newItems,
         },
       });
+
+      // Show a toast or feedback that items were added
+      console.log(`Added ${items.length} items to requirements`);
     } else {
       const currentItems = quest.rewards.items || [];
-      const existingItem = currentItems.find((i) => i.id === item.id);
 
-      const newItems = existingItem
-        ? currentItems.map((i) =>
-            i.id === item.id ? { ...i, amount: (i.amount || 1) + 1 } : i
-          )
-        : [...currentItems, { id: item.id, amount: 1, name: item.name }];
+      // Create a new array with all existing items that don't conflict with new selections
+      const nonConflictingItems = currentItems.filter(
+        (existingItem) =>
+          !items.some((newItem) => newItem.id === existingItem.id)
+      );
 
+      // Add all newly selected items
+      const newItems = [
+        ...nonConflictingItems,
+        ...items.map((item) => ({
+          ...item,
+          // Preserve any additional properties needed
+        })),
+      ];
+
+      // Update quest with new items
       updateQuest(quest.id, {
         rewards: {
           ...quest.rewards,
           items: newItems,
         },
       });
+
+      // Show a toast or feedback that items were added
+      console.log(`Added ${items.length} items to rewards`);
     }
+
+    // Close the item selector after adding items
+    setShowItemSelector({ ...showItemSelector, open: false });
   };
 
   const handleRemoveItem = (itemId: string, type: "requirement" | "reward") => {
@@ -77,33 +104,6 @@ export function QuestEditor({ quest, updateQuest }: QuestEditorProps) {
     }
   };
 
-  const handleIncrementItem = (
-    itemId: string,
-    type: "requirement" | "reward"
-  ) => {
-    if (type === "requirement") {
-      const updatedItems = quest.requirements.items?.map((i) =>
-        i.id === itemId ? { ...i, amount: (i.amount || 1) + 1 } : i
-      );
-      updateQuest(quest.id, {
-        requirements: {
-          ...quest.requirements,
-          items: updatedItems,
-        },
-      });
-    } else {
-      const updatedItems = quest.rewards.items?.map((i) =>
-        i.id === itemId ? { ...i, amount: (i.amount || 1) + 1 } : i
-      );
-      updateQuest(quest.id, {
-        rewards: {
-          ...quest.rewards,
-          items: updatedItems,
-        },
-      });
-    }
-  };
-
   return (
     <>
       <div className="space-y-4">
@@ -117,9 +117,6 @@ export function QuestEditor({ quest, updateQuest }: QuestEditorProps) {
           onAddItem={() =>
             setShowItemSelector({ type: "requirement", open: true })
           }
-          onIncrementItem={(itemId) =>
-            handleIncrementItem(itemId, "requirement")
-          }
           onRemoveItem={(itemId) => handleRemoveItem(itemId, "requirement")}
         />
 
@@ -128,24 +125,28 @@ export function QuestEditor({ quest, updateQuest }: QuestEditorProps) {
           quest={quest}
           updateQuest={updateQuest}
           onAddItem={() => setShowItemSelector({ type: "reward", open: true })}
-          onIncrementItem={(itemId) => handleIncrementItem(itemId, "reward")}
           onRemoveItem={(itemId) => handleRemoveItem(itemId, "reward")}
         />
-
-        {/* Item Selector Modal */}
-        {showItemSelector.open && (
-          <ItemSelector
-            onSelect={handleAddItem}
-            onClose={() =>
-              setShowItemSelector({ ...showItemSelector, open: false })
-            }
-            maxSelections={1}
-            title={`Select ${
-              showItemSelector.type === "requirement" ? "Required" : "Reward"
-            } Item to Add`}
-          />
-        )}
       </div>
+
+      {/* Item Selector Modal */}
+      {showItemSelector.open && (
+        <ItemSelector
+          onSelect={handleAddItem}
+          initialSelectedItems={
+            showItemSelector.type === "requirement"
+              ? quest.requirements.items || []
+              : quest.rewards.items || []
+          }
+          onClose={() =>
+            setShowItemSelector({ ...showItemSelector, open: false })
+          }
+          title={`Select ${
+            showItemSelector.type === "requirement" ? "Required" : "Reward"
+          } Items`}
+          maxSelections={10}
+        />
+      )}
     </>
   );
 }

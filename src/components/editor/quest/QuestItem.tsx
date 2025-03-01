@@ -25,10 +25,6 @@ export function QuestItem({
           ? "bg-gradient-to-br from-slate-800/95 via-slate-850/95 to-slate-900/98 border-blue-500/30 shadow-lg ring-1 ring-blue-500/10"
           : "bg-gradient-to-r from-slate-800/70 to-slate-800/80 hover:from-slate-800/80 hover:to-slate-800/90 border-slate-700/50 hover:border-slate-600/70"
       }`}
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, height: 0 }}
-      transition={{ duration: 0.2 }}
     >
       <div
         className="p-2.5 flex items-center justify-between cursor-pointer"

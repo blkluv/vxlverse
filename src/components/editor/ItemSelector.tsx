@@ -2,6 +2,7 @@ import { GAME_ITEMS, Item } from "../../types";
 import { Check, ChevronDown, Filter, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { createPortal } from "react-dom";
 
 interface ItemSelectorProps {
   onSelect: (items: Item[]) => void;
@@ -87,22 +88,15 @@ export function ItemSelector({
     setSearch("");
   }, [selectedType]);
 
-  return (
+  return createPortal(
     <div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-slate-900/95 backdrop-blur-sm z-50 flex items-center justify-center"
+      className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-hidden"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="w-full h-full bg-gradient-to-b from-slate-800 to-slate-900 shadow-2xl border border-slate-700/50 overflow-hidden flex flex-col"
+        className="w-full max-w-4xl max-h-[90vh] bg-gradient-to-b from-slate-800 to-slate-900 shadow-2xl border border-slate-700/50 overflow-hidden flex flex-col rounded-md"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -132,7 +126,8 @@ export function ItemSelector({
               placeholder="Search items..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 bg-slate-700/50  text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all border border-slate-600/50 text-slate-200"
+              className="w-full pl-9 pr-4 py-2.5 bg-slate-700/50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all border border-slate-600/50 text-slate-200 rounded-sm"
+              autoFocus
             />
           </div>
 
@@ -144,11 +139,11 @@ export function ItemSelector({
                   0,
                   showFilters ? types.length : Math.min(4, types.length)
                 )
-                .map((type) => (
+                .map((type, index) => (
                   <button
                     key={type}
                     onClick={() => setSelectedType(type as any)}
-                    className={`px-2.5 py-1  text-xs font-medium capitalize transition-all ${
+                    className={`px-2.5 py-1 text-xs font-medium capitalize rounded-sm ${
                       selectedType === type
                         ? "bg-blue-500/20 text-blue-300 ring-1 ring-blue-500/30"
                         : "bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-slate-200"
@@ -160,14 +155,12 @@ export function ItemSelector({
               {types.length > 4 && (
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className="px-2 py-1  text-xs font-medium bg-slate-700/30 text-slate-400 hover:bg-slate-700/50 hover:text-slate-300 transition-all flex items-center"
+                  className="px-2 py-1 text-xs font-medium bg-slate-700/30 text-slate-400 hover:bg-slate-700/50 hover:text-slate-300 rounded-sm flex items-center"
                 >
                   {showFilters ? "Less" : "More"}
-                  <ChevronDown
-                    className={`w-3 h-3 ml-1 transition-transform ${
-                      showFilters ? "rotate-180" : ""
-                    }`}
-                  />
+                  <div>
+                    <ChevronDown className="w-3 h-3 ml-1" />
+                  </div>
                 </button>
               )}
             </div>
@@ -175,7 +168,7 @@ export function ItemSelector({
             <div className="ml-2">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className={`p-1.5  text-xs font-medium transition-all flex items-center ${
+                className={`p-1.5 text-xs font-medium rounded-sm flex items-center ${
                   showFilters
                     ? "bg-blue-500/20 text-blue-300"
                     : "bg-slate-700/50 text-slate-400 hover:bg-slate-700"
@@ -188,73 +181,48 @@ export function ItemSelector({
           </div>
 
           {/* Advanced Filters */}
-          {showFilters && (
-            <div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="overflow-hidden"
-            >
-              <div className="mt-3 p-2 bg-slate-800/50  border border-slate-700/50">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">Sort by:</span>
-                  <div className="flex gap-1.5">
-                    {(["name", "value", "type"] as const).map((option) => (
-                      <button
-                        key={option}
-                        onClick={() => {
-                          if (sortBy === option) {
-                            setSortOrder((prev) =>
-                              prev === "asc" ? "desc" : "asc"
-                            );
-                          } else {
-                            setSortBy(option);
-                            setSortOrder("asc");
-                          }
-                        }}
-                        className={`px-2 py-0.5  text-[10px] capitalize flex items-center ${
-                          sortBy === option
-                            ? "bg-blue-500/20 text-blue-300"
-                            : "bg-slate-700/30 text-slate-400 hover:bg-slate-700/50"
-                        }`}
-                      >
-                        {option}
-                        {sortBy === option && (
-                          <ChevronDown
-                            className={`w-3 h-3 ml-1 transition-transform ${
-                              sortOrder === "desc" ? "rotate-180" : ""
-                            }`}
-                          />
-                        )}
-                      </button>
-                    ))}
+          <AnimatePresence>
+            {showFilters && (
+              <div className="overflow-hidden">
+                <div className="mt-3 p-2 bg-slate-800/50  border border-slate-700/50">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-slate-400">Sort by:</span>
+                    <div className="flex gap-1.5">
+                      {(["name", "value", "type"] as const).map((option) => (
+                        <button
+                          key={option}
+                          onClick={() => {
+                            if (sortBy === option) {
+                              setSortOrder((prev) =>
+                                prev === "asc" ? "desc" : "asc"
+                              );
+                            } else {
+                              setSortBy(option);
+                              setSortOrder("asc");
+                            }
+                          }}
+                          className={`px-2 py-0.5  text-[10px] capitalize flex items-center ${
+                            sortBy === option
+                              ? "bg-blue-500/20 text-blue-300"
+                              : "bg-slate-700/30 text-slate-400 hover:bg-slate-700/50"
+                          }`}
+                        >
+                          {option}
+                          {sortBy === option && (
+                            <ChevronDown
+                              className={`w-3 h-3 ml-1 transition-transform ${
+                                sortOrder === "desc" ? "rotate-180" : ""
+                              }`}
+                            />
+                          )}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-
-          {/* Selected Items Preview */}
-          {selectedItems.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-1.5 p-2 bg-slate-800/30  border border-slate-700/30">
-              {selectedItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-blue-500/10 text-blue-300 text-xs px-2 py-0.5  flex items-center"
-                >
-                  <span className="mr-1">{item.emoji}</span>
-                  <span className="truncate max-w-[100px]">{item.name}</span>
-                  <button
-                    onClick={() => toggleItemSelection(item)}
-                    className="ml-1 text-blue-400 hover:text-blue-300"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Items Grid */}
@@ -273,7 +241,7 @@ export function ItemSelector({
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {filteredItems.map((item) => {
                 const isSelected = isItemSelected(item.id);
                 const isDisabled =
@@ -283,19 +251,21 @@ export function ItemSelector({
                   <button
                     key={item.id}
                     onClick={() => !isDisabled && toggleItemSelection(item)}
-                    className={`flex items-center gap-3 p-3 transition-all relative overflow-hidden h-full ${
+                    className={`flex items-center gap-3 p-3 relative overflow-hidden h-full ${
                       isSelected
                         ? "bg-blue-500/20 border border-blue-500/30"
                         : isDisabled
                         ? "bg-slate-700/20 border border-slate-700/30 opacity-50 cursor-not-allowed"
                         : "bg-slate-700/30 border border-slate-700/50 hover:bg-slate-700/50 hover:border-slate-600"
-                    } text-left`}
+                    } text-left rounded-sm`}
                   >
-                    {isSelected && (
-                      <div className="absolute top-0 right-0 bg-blue-500 p-1 -bl-md">
-                        <Check className="w-3 h-3 text-white" />
-                      </div>
-                    )}
+                    <AnimatePresence>
+                      {isSelected && (
+                        <div className="absolute top-0 right-0 bg-blue-500 p-1 rounded-bl-md">
+                          <Check className="w-3 h-3 text-white" />
+                        </div>
+                      )}
+                    </AnimatePresence>
                     <div className="text-3xl flex items-center justify-center w-12 h-12 bg-gradient-to-br from-slate-700/60 to-slate-800/60 border border-slate-600/40 shadow-inner">
                       {item.emoji}
                     </div>
@@ -307,7 +277,7 @@ export function ItemSelector({
                         <span className="text-xs text-slate-400">
                           {item.value} coins
                         </span>
-                        <span className="text-[10px] bg-slate-800/70 px-1.5 py-0.5  text-slate-400 capitalize">
+                        <span className="text-[10px] bg-slate-800/70 px-1.5 py-0.5 rounded-sm text-slate-400 capitalize">
                           {item.type}
                         </span>
                       </div>
@@ -323,7 +293,7 @@ export function ItemSelector({
         <div className="p-3 border-t border-slate-700 bg-slate-800/50 flex justify-between items-center flex-shrink-0">
           <div className="text-xs text-slate-400">
             {selectedItems.length > 0 ? (
-              <span>
+              <span key={selectedItems.length}>
                 Selected:{" "}
                 <span className="text-blue-300 font-medium">
                   {selectedItems.length}
@@ -337,24 +307,27 @@ export function ItemSelector({
           <div className="flex gap-2">
             <button
               onClick={onClose}
-              className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm  transition-colors"
+              className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm transition-colors rounded-sm"
             >
               Cancel
             </button>
             <button
               onClick={handleConfirm}
               disabled={selectedItems.length === 0}
-              className={`px-3 py-1.5 text-sm  transition-colors ${
+              className={`px-3 py-1.5 text-sm transition-colors rounded-sm ${
                 selectedItems.length > 0
                   ? "bg-blue-500 hover:bg-blue-600 text-white"
                   : "bg-blue-500/30 text-blue-300/50 cursor-not-allowed"
               }`}
             >
-              Confirm ({selectedItems.length})
+              <span key={selectedItems.length}>
+                Confirm ({selectedItems.length})
+              </span>
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    window.document.body
   );
 }

@@ -8,7 +8,6 @@ interface QuestRewardsProps {
   quest: Quest;
   updateQuest: (questId: string, updates: Partial<Quest>) => void;
   onAddItem: () => void;
-  onIncrementItem: (itemId: string) => void;
   onRemoveItem: (itemId: string) => void;
 }
 
@@ -16,7 +15,6 @@ export function QuestRewards({
   quest,
   updateQuest,
   onAddItem,
-  onIncrementItem,
   onRemoveItem,
 }: QuestRewardsProps) {
   return (
@@ -117,29 +115,39 @@ export function QuestRewards({
         {/* Reward Items */}
         <div className="col-span-3 mt-2">
           <div className="flex items-center justify-between mb-2">
-            <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
-              <Package className="w-3 h-3 text-emerald-400" /> Reward Items
-            </label>
+            <div>
+              <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
+                <Package className="w-3 h-3 text-emerald-400" /> Reward Items
+              </label>
+              {quest.rewards.items?.length > 0 && (
+                <span className="text-[10px] text-slate-400 ml-5">
+                  {quest.rewards.items.length} item{quest.rewards.items.length !== 1 ? 's' : ''}
+                </span>
+              )}
+            </div>
             <button
               onClick={onAddItem}
-              className="text-[10px] px-2 py-1 flex items-center gap-1 text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 transition-all "
+              className="text-[10px] px-2 py-1 flex items-center gap-1 text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 transition-all rounded-sm"
             >
-              <Plus className="w-3 h-3" /> Add Item
+              <Plus className="w-3 h-3" /> Add Item{quest.rewards.items?.length > 0 ? 's' : ''}
             </button>
           </div>
 
-          <div className="space-y-1.5 max-h-40 overflow-y-auto custom-scrollbar pr-1">
+          <div className="space-y-1.5 max-h-[300px] overflow-y-auto custom-scrollbar pr-1">
             {quest.rewards.items?.length ? (
-              quest.rewards.items.map((item) => (
-                <ItemCard
-                  key={item.id}
-                  item={item}
-                  onIncrement={() => onIncrementItem(item.id)}
-                  onRemove={() => onRemoveItem(item.id)}
-                />
-              ))
+              <div className="grid grid-cols-1 gap-1.5">
+                <AnimatePresence>
+                  {quest.rewards.items.map((item) => (
+                    <ItemCard
+                      key={item.id}
+                      item={item}
+                      onRemove={() => onRemoveItem(item.id)}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
             ) : (
-              <div className="text-xs text-slate-400 italic p-2 bg-slate-800/30 border border-slate-700/50 ">
+              <div className="text-xs text-slate-400 italic p-2 bg-slate-800/30 border border-slate-700/50 rounded-sm">
                 No reward items
               </div>
             )}

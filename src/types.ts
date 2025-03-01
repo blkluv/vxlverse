@@ -180,13 +180,13 @@ export interface Quest {
       start?: string;
       end?: string;
     };
-    items: { id: string; amount: number }[];
+    items: Item[];
   };
   rewards: {
     xp: number;
     money: number;
     energy: number;
-    items: { id: string; amount: number }[];
+    items: Item[];
   };
   completion: {
     conditions: {
