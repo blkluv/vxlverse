@@ -1,16 +1,13 @@
-import { Suspense, useEffect, useRef, useState } from "react";
-import { Environment, Sky } from "@react-three/drei";
+import { Suspense, useEffect } from "react";
+import { Environment } from "@react-three/drei";
 import { Physics, RigidBody } from "@react-three/rapier";
-import { GameObject } from "../GameObject";
+import { GameObject } from "./GameObject";
 import { Scene as SceneType } from "../../types";
 import { useThree } from "@react-three/fiber";
-import * as THREE from "three";
 import { Player } from "./Player";
 import { useSound } from "../../hooks/useSound";
 import { useEnemyStore } from "../../stores/enemyStore";
 import { Enemy } from "./Enemy";
-import { EnemyRewardModal } from "./EnemyReward";
-import { useGame } from "ecctrl";
 
 interface SceneProps {
   sceneData?: SceneType;
@@ -18,98 +15,14 @@ interface SceneProps {
 }
 
 function Floor() {
-  const setMoveToPoint = useGame((state) => state.setMoveToPoint);
-  const [hoverPoint, setHoverPoint] = useState<THREE.Vector3 | null>(null);
-  const [targetPoint, setTargetPoint] = useState<THREE.Vector3 | null>(null);
-  const indicatorRef = useRef<THREE.Mesh>(null);
-  const targetRef = useRef<THREE.Mesh>(null);
-
-  // Animation for target point
-  useEffect(() => {
-    if (targetRef.current) {
-      const animate = () => {
-        if (targetRef.current) {
-          targetRef.current.rotation.z += 0.02;
-        }
-      };
-
-      const interval = setInterval(animate, 16);
-      return () => clearInterval(interval);
-    }
-  }, [targetPoint]);
-
   return (
     <group>
       <RigidBody type="fixed" colliders="trimesh">
-        <mesh
-          onClick={(e) => {
-            e.stopPropagation();
-            const point = e.point.clone().add(new THREE.Vector3(0, 0.01, 0));
-            setMoveToPoint(point);
-            setTargetPoint(point);
-          }}
-          onPointerMove={(e) => {
-            e.stopPropagation();
-            setHoverPoint(e.point.add(new THREE.Vector3(0, 0.01, 0)));
-          }}
-          onPointerLeave={() => setHoverPoint(null)}
-          rotation={[-Math.PI / 2, 0, 0]}
-          receiveShadow
-        >
+        <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
           <planeGeometry args={[100, 100]} />
           <meshStandardMaterial color="#1a1a1a" />
         </mesh>
       </RigidBody>
-
-      {/* Hover Point Indicator */}
-      {hoverPoint && (
-        <mesh
-          ref={indicatorRef}
-          position={hoverPoint}
-          rotation={[-Math.PI / 2, 0, 0]}
-        >
-          <ringGeometry args={[0.2, 0.3, 32]} />
-          <meshBasicMaterial color="#60a5fa" transparent opacity={0.5} />
-          <mesh position={[0, 0.01, 0]}>
-            <circleGeometry args={[0.1, 32]} />
-            <meshBasicMaterial color="#60a5fa" />
-          </mesh>
-        </mesh>
-      )}
-
-      {/* Target Point Indicator */}
-      {targetPoint && (
-        <group position={targetPoint}>
-          {/* Outer rotating ring */}
-          <mesh ref={targetRef} rotation={[-Math.PI / 2, 0, 0]}>
-            <ringGeometry args={[0.4, 0.5, 32]} />
-            <meshBasicMaterial color="#f43f5e" transparent opacity={0.8} />
-          </mesh>
-
-          {/* Inner static elements */}
-          <mesh rotation={[-Math.PI / 2, 0, 0]}>
-            <ringGeometry args={[0.2, 0.3, 32]} />
-            <meshBasicMaterial color="#f43f5e" transparent opacity={0.6} />
-            <mesh position={[0, 0.01, 0]}>
-              <circleGeometry args={[0.15, 32]} />
-              <meshBasicMaterial color="#f43f5e" />
-            </mesh>
-          </mesh>
-
-          {/* Pulsing effect */}
-          <mesh
-            rotation={[-Math.PI / 2, 0, 0]}
-            scale={[
-              1 + Math.sin(Date.now() * 0.005) * 0.2,
-              1 + Math.sin(Date.now() * 0.005) * 0.2,
-              1,
-            ]}
-          >
-            <ringGeometry args={[0.6, 0.7, 32]} />
-            <meshBasicMaterial color="#f43f5e" transparent opacity={0.3} />
-          </mesh>
-        </group>
-      )}
     </group>
   );
 }
@@ -120,7 +33,7 @@ export function GameScene({ sceneData, isPreview }: SceneProps) {
   const { playSound } = useSound();
 
   useEffect(() => {
-    playSound("background");
+    // playSound("background");
   }, [sceneData?.fog, scene]);
 
   if (!sceneData) return null;

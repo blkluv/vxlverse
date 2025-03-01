@@ -1,9 +1,18 @@
-import { useState } from "react";
-import { Settings, Minimize, Maximize, Edit3, Check, Tag } from "lucide-react";
+import { useState, useEffect } from "react";
+import {
+  Settings,
+  Minimize,
+  Maximize,
+  Edit3,
+  Check,
+  Tag,
+  MessageSquare,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEditorStore } from "../../../stores/editorStore";
 import { Input } from "../../UI/input";
 import { Select } from "../../UI/select";
+import { Textarea } from "../../UI";
 
 export function ObjectSettingsPanel() {
   const [expanded, setExpanded] = useState(true);
@@ -32,6 +41,17 @@ export function ObjectSettingsPanel() {
   const handleTypeChange = (value: string) => {
     if (currentSceneId && selectedObjectId) {
       updateObject(currentSceneId, selectedObjectId, { type: value });
+      showSaveAnimation();
+    }
+  };
+
+  const handleDescriptionChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    if (currentSceneId && selectedObjectId) {
+      updateObject(currentSceneId, selectedObjectId, {
+        description: e.target.value,
+      });
       showSaveAnimation();
     }
   };
@@ -75,15 +95,15 @@ export function ObjectSettingsPanel() {
       {expanded && (
         <div className="overflow-hidden">
           <div className="p-3 pt-2 border-t border-slate-700/30">
-            <div className="flex h-8 items-center space-x-2 mb-3">
-              <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center  bg-gradient-to-br from-green-500/20 to-teal-500/20 border border-green-500/30">
+            <div className="flex h-6 items-center space-x-2 mb-3">
+              <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center bg-gradient-to-br from-green-500/20 to-teal-500/20 border border-green-500/30">
                 <Edit3 className="w-4 h-4 text-green-400" />
               </div>
-              <div className="flex-grow h-8 bg-slate-900/60  border border-slate-700/50  focus-within:border-green-500/50 focus-within:ring-1 focus-within:ring-green-500/30">
+              <div className="flex-grow">
                 <Input
                   value={selectedObject.name || ""}
                   onChange={handleNameChange}
-                  className="w-full h-full text-xs bg-transparent border-0 outline-none text-slate-200 placeholder-slate-500"
+                  className="w-full h-6 px-2 text-xs bg-slate-900/60 border border-slate-700/50 focus:border-green-500/50 focus:ring-1 focus:ring-green-500/30 text-slate-200 placeholder-slate-500"
                   placeholder="Enter object name"
                 />
               </div>
@@ -93,11 +113,11 @@ export function ObjectSettingsPanel() {
               <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center  bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/30">
                 <Tag className="w-4 h-4 text-blue-400" />
               </div>
-              <div className="flex-grow">
+              <div className="flex-grow h-6">
                 <Select
                   value={selectedObject.type || "prop"}
                   onValueChange={handleTypeChange}
-                  className="w-full text-xs bg-slate-900/60 border border-slate-700/50 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/30"
+                  className="w-full py-0 px-2 text-xs bg-slate-900/60 border border-slate-700/50 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/30"
                 >
                   <option value="prop">Prop</option>
                   <option value="npc">NPC</option>
@@ -108,6 +128,28 @@ export function ObjectSettingsPanel() {
                 </Select>
               </div>
             </div>
+
+            {/* Character Description - only show for NPCs */}
+            {selectedObject.type === "npc" && (
+              <div className="mt-4">
+                <div className="flex items-start space-x-2 mb-2">
+                  <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
+                    <MessageSquare className="w-4 h-4 text-purple-400" />
+                  </div>
+                  <div className="flex-grow">
+                    <label className="block text-xs text-slate-300 mb-1">
+                      Character Description
+                    </label>
+                    <Textarea
+                      value={selectedObject.description || ""}
+                      onChange={handleDescriptionChange}
+                      className="w-full min-h-[120px] focus:outline-none p-2 text-xs bg-slate-900/60 border border-slate-700/50 focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/30 text-slate-200 placeholder-slate-500 resize-y"
+                      placeholder="Describe your character, for example, you are a friendly merchant known for your warm smile and eagerness to help travelers."
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -258,6 +258,7 @@ export interface GameObject {
   type?: "prop" | "npc" | "enemy" | "item" | "portal" | "trigger";
   requiredLvl?: number;
   requiredItems?: Item[];
+  description?: string;
 
   position: THREE.Vector3;
   rotation: THREE.Euler;

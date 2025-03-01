@@ -63,11 +63,7 @@ export function GameHUD() {
       {/* Top Left - Level & Health */}
       <div className="fixed top-2 left-2 md:top-4 md:left-4 space-y-1.5 md:space-y-2">
         {/* Level */}
-        <div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="bg-black/80 backdrop-blur-sm  p-2 md:p-3 border border-yellow-500/20"
-        >
+        <div className="bg-black/80 backdrop-blur-sm  p-2 md:p-3 border border-yellow-500/20">
           <div className="flex items-center gap-2 md:gap-3">
             <div className="w-6 h-6 md:w-8 md:h-8  bg-gradient-to-br text-[10px] md:text-xs from-yellow-400 to-yellow-600 flex items-center justify-center font-bold">
               {level}
@@ -82,9 +78,6 @@ export function GameHUD() {
                 <div
                   className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500"
                   style={{ width: `${xpProgress}%` }}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${xpProgress}%` }}
-                  transition={{ duration: 0.5 }}
                 />
               </div>
             </div>

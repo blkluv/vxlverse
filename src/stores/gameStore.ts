@@ -28,7 +28,7 @@ interface GameState {
   };
   currentSceneId: string;
   activeQuest: Quest | null;
-  activeDialogue: number | null;
+  activeNpc: string | null;
   dialogues: Dialogue[];
   inventory: { id: string; amount: number }[];
   questLog: {
@@ -51,10 +51,8 @@ interface GameState {
   updatePlayerStats: (updates: Partial<GameState["playerStats"]>) => void;
   advanceTime: (minutes: number) => void;
   setActiveQuest: (quest: Quest | null) => void;
-  setActiveDialogue: (dialogueId: string | null) => void;
+  setActiveNpc: (npcId: string | null) => void;
   addDialogue: (dialogue: Dialogue) => void;
-  removeDialogue: (dialogueId: number | string) => void;
-  startAIDialogue: (npcName: string, initialPrompt?: string) => Promise<void>;
   completeQuest: (questId: string) => void;
   failQuest: (questId: string) => void;
   addToInventory: (itemId: string, amount: number) => void;
@@ -94,7 +92,7 @@ export const useGameStore = create<GameState>()(
       },
       currentSceneId: DEFAULT_SCENE_ID,
       activeQuest: null,
-      activeDialogue: null,
+      activeNpc: null,
       dialogues: [],
       inventory: [],
       questLog: {
@@ -192,58 +190,12 @@ export const useGameStore = create<GameState>()(
           return { activeQuest: quest };
         }),
 
-      setActiveDialogue: (dialogueId) => set({ activeDialogue: dialogueId }),
+      setActiveNpc: (dialogueId) => set({ activeNpc: dialogueId }),
 
       addDialogue: (dialogue) =>
         set((state) => ({
           dialogues: [...state.dialogues, dialogue],
         })),
-
-      removeDialogue: (dialogueId) =>
-        set((state) => ({
-          dialogues: state.dialogues.filter((d) => d.id.toString() !== dialogueId.toString()),
-        })),
-        
-      startAIDialogue: async (npcName, initialPrompt = "Hello") => {
-        try {
-          // Dynamically import the AI service to avoid loading it unless needed
-          const { aiDialogueService } = await import("../services/AIDialogueService");
-          
-          // Check if initialPrompt is a greeting from the NPC or a player message
-          const isNPCGreeting = initialPrompt.length > 10 && !initialPrompt.includes("?");
-          
-          let dialogue;
-          
-          if (isNPCGreeting) {
-            // If it's an NPC greeting, create a dialogue directly with the provided text
-            dialogue = {
-              id: `ai-${Date.now()}`,
-              speaker: npcName,
-              text: initialPrompt,
-              choices: await aiDialogueService.generateChoices(
-                `${npcName}: ${initialPrompt}`,
-                3
-              )
-            };
-          } else {
-            // Otherwise, generate a response to the player's message
-            dialogue = await aiDialogueService.generateResponse(
-              initialPrompt,
-              npcName,
-              `You are speaking with the player for the first time.`
-            );
-          }
-          
-          // Add the dialogue to the store
-          set((state) => ({
-            dialogues: [...state.dialogues, dialogue],
-            activeDialogue: dialogue.id.toString()
-          }));
-          
-        } catch (error) {
-          console.error("Failed to start AI dialogue:", error);
-        }
-      },
 
       completeQuest: (questId) =>
         set((state) => {
@@ -326,7 +278,7 @@ export const useGameStore = create<GameState>()(
             playerStats: newStats,
             inventory: newInventory,
             activeQuest: null,
-            activeDialogue: null,
+            activeNpc: null,
             questLog: {
               ...state.questLog,
               active: state.questLog.active.filter((q) => q.id !== questId),
@@ -349,7 +301,7 @@ export const useGameStore = create<GameState>()(
             ],
           },
           activeQuest: null,
-          activeDialogue: null,
+          activeNpc: null,
         })),
 
       addToInventory: (itemId, amount) =>

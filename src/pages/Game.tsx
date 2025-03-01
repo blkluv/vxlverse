@@ -13,138 +13,43 @@ import { EnemyRewardModal } from "../components/game/EnemyReward";
 import { LevelUpModal } from "../components/game/LevelUpModal";
 import { useParams } from "react-router-dom";
 import { GameScene } from "../components/game/Scene";
+import { EcctrlJoystick } from "ecctrl";
+import { MeshBasicMaterial, SphereGeometry } from "three";
+import { Joystick } from "../components/game/Joystick";
 
 export function Game() {
   const { id } = useParams();
-  const setCurrentSceneId = useGameStore((state) => state.setCurrentSceneId);
-  const currentSceneId = useGameStore((state) => state.currentSceneId);
-  const scenes = useEditorStore((state) => state.scenes);
-  const currentScene = scenes.find((scene) => scene.id === currentSceneId);
-  const [showSceneName, setShowSceneName] = useState(false);
-  const activeQuest = useGameStore((state) => state.activeQuest);
-  const showLevelUp = useGameStore((state) => state.showLevelUp);
-  const activeDialogue = useGameStore((state) => state.activeDialogue);
-  const inventoryOpen = useGameStore((state) => state.inventoryOpen);
-  const questLogOpen = useGameStore((state) => state.questLogOpen);
-  const timeOfDay = useGameStore((state) => state.timeOfDay);
-  const rewards = useEnemyStore((state) => state.rewards);
-  const clearRewards = useEnemyStore((state) => state.clearRewards);
+  // Game state management
+  const gameState = useGameStore((state) => ({
+    currentSceneId: state.currentSceneId,
+    setCurrentSceneId: state.setCurrentSceneId,
+    showLevelUp: state.showLevelUp,
+    inventoryOpen: state.inventoryOpen,
+    questLogOpen: state.questLogOpen,
+    timeOfDay: state.timeOfDay,
+  }));
 
+  // Editor state for scene data
+  const scenes = useEditorStore((state) => state.scenes);
+  const currentScene =
+    scenes.find((scene) => scene.id === gameState.currentSceneId) ??
+    scenes?.at(0);
+
+  // Enemy rewards state
+  const { rewards, clearRewards } = useEnemyStore((state) => ({
+    rewards: state.rewards,
+    clearRewards: state.clearRewards,
+  }));
+
+  // Local UI state
+  const [showSceneName, setShowSceneName] = useState(false);
+
+  // Set the current scene ID when the route parameter changes
   useEffect(() => {
     if (id) {
-      setCurrentSceneId(id);
+      gameState.setCurrentSceneId(id);
     }
-  }, [id, setCurrentSceneId]);
-
-  // Test function to add a standalone dialogue
-  const addTestDialogue = useGameStore((state) => state.addDialogue);
-  const setActiveDialogueId = useGameStore((state) => state.setActiveDialogue);
-  const startAIDialogue = useGameStore((state) => state.startAIDialogue);
-
-  // Add test dialogue and NPCs when the game loads
-  useEffect(() => {
-    // Create a test dialogue
-    const testDialogue = {
-      id: 9999,
-      speaker: "Guide",
-      text: "Welcome to VXLverse! This is a standalone dialogue that doesn't require an active quest.",
-      choices: [
-        {
-          text: "Tell me more about this world",
-          nextDialogue: 10000,
-        },
-        {
-          text: "I'd like to talk to an NPC",
-          nextDialogue: 10001,
-        },
-        {
-          text: "I'm ready to explore",
-          nextDialogue: null,
-        },
-      ],
-    };
-
-    const followUpDialogue = {
-      id: 10000,
-      speaker: "Guide",
-      text: "VXLverse is a 3D world where you can complete quests, fight enemies, and explore different scenes. The world is yours to discover!",
-      choices: [
-        {
-          text: "Thanks for the information",
-          nextDialogue: null,
-        },
-      ],
-    };
-    
-    // NPC selection dialogue
-    const npcSelectionDialogue = {
-      id: 10001,
-      speaker: "Guide",
-      text: "There are several interesting characters you can speak with. Who would you like to meet?",
-      choices: [
-        {
-          text: "Elara, the Crystal Guardian Scholar",
-          nextDialogue: null,
-          action: {
-            type: "custom",
-            params: {
-              callback: () => {
-                startAIDialogue("Elara", "I am Elara, a scholar of the Crystal Guardians. I study the ancient texts that speak of the Crystal of Balance and its fragments. What knowledge do you seek, traveler?");
-              }
-            }
-          }
-        },
-        {
-          text: "Thorne, the Iron Crown Captain",
-          nextDialogue: null,
-          action: {
-            type: "custom",
-            params: {
-              callback: () => {
-                startAIDialogue("Captain Thorne", "*eyes you suspiciously* I am Captain Thorne of the Iron Crown. We maintain order in these chaotic times. State your business quickly, stranger.");
-              }
-            }
-          }
-        },
-        {
-          text: "Willow, the Whispering Circle Druid",
-          nextDialogue: null,
-          action: {
-            type: "custom",
-            params: {
-              callback: () => {
-                startAIDialogue("Willow", "*smiles gently* The forest welcomes you, traveler. I am Willow of the Whispering Circle. The ancient trees have whispered of your coming.");
-              }
-            }
-          }
-        },
-        {
-          text: "Old Grimble, the Village Merchant",
-          nextDialogue: null,
-          action: {
-            type: "custom",
-            params: {
-              callback: () => {
-                startAIDialogue("Old Grimble", "Ah, a new face! Welcome to my humble shop. Got all sorts of odds and ends for sale. What can Old Grimble get for ya today?");
-              }
-            }
-          }
-        },
-      ],
-    };
-
-    // Add dialogues to the game store
-    addTestDialogue(testDialogue);
-    addTestDialogue(followUpDialogue);
-    addTestDialogue(npcSelectionDialogue);
-
-    // Activate the dialogue after a short delay
-    const timer = setTimeout(() => {
-      setActiveDialogueId(9999);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [addTestDialogue, setActiveDialogueId, startAIDialogue]);
+  }, [id, gameState.setCurrentSceneId]);
 
   useEffect(() => {
     setShowSceneName(true);
@@ -152,10 +57,10 @@ export function Game() {
       setShowSceneName(false);
     }, 2000);
     return () => clearTimeout(timeout);
-  }, [currentSceneId]);
+  }, [gameState.currentSceneId]);
 
   const getSunPosition = () => {
-    switch (timeOfDay) {
+    switch (gameState.timeOfDay) {
       case "morning":
         return [-1, 0.5, 2];
       case "noon":
@@ -171,15 +76,10 @@ export function Game() {
 
   return (
     <div className="w-full h-screen relative select-none">
-      <div
-        key={currentSceneId}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full h-full"
-      >
+      <div key={gameState.currentSceneId} className="w-full h-full">
         {/* 3D Scene */}
+
+        <Joystick />
         <Canvas shadows camera={{ position: [0, 5, 10], fov: 50 }}>
           <Suspense fallback={null}>
             <GameScene sceneData={currentScene} />
@@ -205,15 +105,15 @@ export function Game() {
       <GameHUD />
 
       {/* Modals */}
-      {inventoryOpen && <Inventory />}
-      {questLogOpen && <QuestLog />}
+      {gameState.inventoryOpen && <Inventory />}
+      {gameState.questLogOpen && <QuestLog />}
       <DialogueModal />
       {/* Reward Modal */}
-      {rewards && !showLevelUp && (
+      {rewards && !gameState.showLevelUp && (
         <EnemyRewardModal rewards={rewards} onClose={clearRewards} />
       )}
 
-      {showLevelUp && <LevelUpModal />}
+      {gameState.showLevelUp && <LevelUpModal />}
     </div>
   );
 }

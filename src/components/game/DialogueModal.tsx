@@ -1,237 +1,369 @@
 import { Portal } from "../Portal";
 import { useGameStore } from "../../stores/gameStore";
 import { useSound } from "../../hooks/useSound";
-import { useEffect, useState, useCallback, useRef } from "react";
-import { Dialogue } from "../../types";
-import { MessageSquare, User, Loader2, X, Send } from "lucide-react";
+import { useEffect, useState, useRef, useCallback, memo } from "react";
 import { aiDialogueService } from "../../services/AIDialogueService";
+import { useEditorStore } from "../../stores/editorStore";
+import { MessageSquare, User, Loader2, X, Send, RefreshCw } from "lucide-react";
+import { Dialogue } from "../../types";
+import { Input } from "../UI";
+
+// Message component for better performance
+const MessageItem = memo(({ message }: { message: Dialogue }) => {
+  const isPlayer = message.speaker === "Player";
+
+  return (
+    <div className="mb-3 last:mb-0 animate-fadeIn">
+      <div className="flex items-center gap-2 mb-1">
+        <div
+          className={`w-7 h-7 rounded-full flex items-center justify-center ${
+            isPlayer ? "bg-emerald-600" : "bg-indigo-600"
+          }`}
+        >
+          {isPlayer ? (
+            <User className="w-3.5 h-3.5 text-white" />
+          ) : (
+            <MessageSquare className="w-3.5 h-3.5 text-white" />
+          )}
+        </div>
+        <h3
+          className={`text-base font-bold ${
+            isPlayer ? "text-emerald-300" : "text-indigo-300"
+          }`}
+        >
+          {message.speaker}
+        </h3>
+      </div>
+      <div className="text-white text-sm leading-relaxed pl-9 opacity-90">
+        {message.text}
+      </div>
+    </div>
+  );
+});
+
+MessageItem.displayName = "MessageItem";
 
 export function DialogueModal() {
   const { playSound } = useSound();
-  const activeDialogue = useGameStore((state) => state.activeDialogue);
-  const dialogues = useGameStore((state) => state.dialogues);
-  const setActiveDialogue = useGameStore((state) => state.setActiveDialogue);
+  const { activeNpc, setActiveNpc } = useGameStore((state) => ({
+    activeNpc: state.activeNpc,
+    setActiveNpc: state.setActiveNpc,
+  }));
+  const scenes = useEditorStore((state) => state.scenes);
 
-  const [typedText, setTypedText] = useState("");
-  const [isTyping, setIsTyping] = useState(true);
-  const [currentDialogue, setCurrentDialogue] = useState<Dialogue | null>(null);
-  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  // UI state
   const [userInput, setUserInput] = useState("");
-  const [showInputField, setShowInputField] = useState(false);
-  const [conversationHistory, setConversationHistory] = useState<Dialogue[]>(
-    []
-  );
-  const dialogueEndRef = useRef<HTMLDivElement>(null);
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  const [isModelLoading, setIsModelLoading] = useState(false);
+  const [npcName, setNpcName] = useState("");
+  const [messages, setMessages] = useState<Dialogue[]>([]);
+  const [inputFocused, setInputFocused] = useState(false);
+
+  // Refs
   const inputRef = useRef<HTMLInputElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  // Load the current dialogue from the store when activeDialogue changes
-  useEffect(() => {
-    if (!activeDialogue) return;
-    aiDialogueService.initialize();
+  // Initialize the dialogue when an NPC is selected
+  const init = useCallback(async () => {
+    setMessages([]);
+    setIsGeneratingAI(false);
+    setIsModelLoading(true);
+    if (!activeNpc) return;
 
-    const dialogue = dialogues.find((d) => d.id === activeDialogue);
-    if (dialogue) {
-      setCurrentDialogue(dialogue);
-      setTypedText("");
-      setIsTyping(true);
-      setConversationHistory([dialogue]);
-      setShowInputField(true); // Always show input field
-      playSound("dialogueStart");
+    try {
+      // Initialize the AI service
+      await aiDialogueService.initialize(npcName);
+    } catch (error) {
+      console.error("Failed to initialize AI service:", error);
+    } finally {
+      setIsModelLoading(false);
     }
-  }, [activeDialogue, dialogues, playSound]);
 
-  // Generate AI response based on user input
-  const generateAIAnswer = useCallback(
-    async (playerInput: string = "") => {
-      if (!currentDialogue) return;
+    // Find the scene containing the active NPC
+    const currentScene = scenes.find((scene) =>
+      scene.objects.some((obj) => obj.id === activeNpc)
+    );
+
+    if (currentScene) {
+      // Find the NPC object in the scene
+      const npcObject = currentScene.objects.find(
+        (obj) => obj.id === activeNpc
+      );
+
+      if (npcObject) {
+        // Set NPC name
+        setNpcName(npcObject.name || "NPC");
+
+        // Set the NPC description as context for the AI dialogue
+        if (npcObject.description) {
+          aiDialogueService.setContext(npcObject.description);
+        }
+
+        // Generate initial greeting
+        generateInitialGreeting(npcObject.name || "NPC");
+      }
+    }
+  }, [activeNpc, scenes]);
+
+  // Generate initial NPC greeting
+  const generateInitialGreeting = useCallback(
+    async (name: string) => {
+      if (!aiDialogueService.isReady()) {
+        // Wait for model to be ready
+        setIsModelLoading(true);
+        try {
+          await aiDialogueService.initialize(name);
+        } catch (error) {
+          console.error("Failed to initialize AI service:", error);
+        } finally {
+          setIsModelLoading(false);
+        }
+      }
+
       setIsGeneratingAI(true);
       try {
-        const aiDialogue = await aiDialogueService.generateResponse(
-          playerInput,
-          currentDialogue.speaker,
-          "" // No additional context
-        );
-
-        // Add the AI response to conversation history
-        setConversationHistory((prev) => [...prev, aiDialogue]);
-
-        // Update the current dialogue with the generated text
-        setCurrentDialogue(aiDialogue);
-
-        // Restart typing animation for the new text
-        setTypedText("");
-        setIsTyping(true);
-
-        // Show input field after AI responds
-        setShowInputField(true);
+        const greetingDialogue = await aiDialogueService.generateGreeting(name);
+        setMessages([greetingDialogue]);
+        playSound("dialogueStart");
       } catch (error) {
-        console.error("Error generating AI answer:", error);
+        console.error("Failed to generate greeting:", error);
+        // Fallback greeting
+        const fallbackMessage: Dialogue = {
+          id: Date.now(),
+          speaker: name,
+          text: `Greetings, traveler. How may I help you today?`,
+          choices: [],
+        };
+        setMessages([fallbackMessage]);
       } finally {
         setIsGeneratingAI(false);
       }
     },
-    [currentDialogue]
+    [playSound]
   );
 
-  // Initial AI response when dialogue starts
-  useEffect(() => {
-    if (
-      currentDialogue &&
-      currentDialogue.id.toString().startsWith("ai-") &&
-      !currentDialogue.text
-    ) {
-      generateAIAnswer();
-    }
-  }, [currentDialogue, generateAIAnswer]);
+  // Handle user message submission
+  const handleSendMessage = useCallback(async () => {
+    if (!userInput.trim() || isGeneratingAI || isModelLoading) return;
 
-  // Type out the dialogue text letter by letter
-  useEffect(() => {
-    if (!currentDialogue || !isTyping) return;
-
-    let index = 0;
-    const text = currentDialogue.text;
-    const typingInterval = setInterval(() => {
-      if (index < text.length) {
-        setTypedText((prev) => prev + text.charAt(index));
-        index++;
-      } else {
-        clearInterval(typingInterval);
-        setIsTyping(false);
-      }
-    }, 30);
-
-    return () => clearInterval(typingInterval);
-  }, [currentDialogue, isTyping]);
-
-  // Skip typing animation on text click
-  const handleTextClick = () => {
-    if (isTyping && currentDialogue) {
-      setTypedText(currentDialogue.text);
-      setIsTyping(false);
-    }
-  };
-
-  // Handle user input submission
-  const handleSubmitInput = async () => {
-    if (!userInput.trim() || isGeneratingAI || isTyping) return;
-
-    // Store user input before clearing it
-    const userMessage = userInput;
-
-    // Create a player dialogue
-    const playerDialogue: Dialogue = {
-      id: `player-${Date.now()}`,
+    // Create player message
+    const playerMessage: Dialogue = {
+      id: Date.now(),
       speaker: "Player",
-      text: userMessage,
+      text: userInput,
       choices: [],
     };
 
-    // Add player dialogue to conversation history
-    setConversationHistory((prev) => [...prev, playerDialogue]);
-
-    // Update current dialogue to show player's message
-    setCurrentDialogue(playerDialogue);
-    setTypedText("");
-    setIsTyping(true);
-
-    // Clear input field
+    // Add to messages
+    setMessages((prev) => [...prev, playerMessage]);
     setUserInput("");
 
-    // Wait for typing animation to complete
-    setTimeout(() => {
-      // Generate AI response
-      generateAIAnswer(userMessage);
-    }, userMessage.length * 30 + 500); // Wait for typing animation plus a small delay
-  };
+    // Generate AI response
+    setIsGeneratingAI(true);
+    try {
+      // Create conversation history for context
+      const conversationMessages: {
+        role: "system" | "user" | "assistant";
+        content: string;
+      }[] = [
+        {
+          role: "system",
+          content:
+            aiDialogueService.getContext() ||
+            `You are ${npcName}, an NPC in a fantasy game.`,
+        },
+      ];
 
-  // Close the dialogue modal
-  const handleClose = () => {
-    setActiveDialogue(null);
+      // Add previous messages to conversation history
+      messages.forEach((msg) => {
+        const role =
+          msg.speaker === "Player" ? ("user" as const) : ("assistant" as const);
+        conversationMessages.push({
+          role: role,
+          content: msg.text,
+        });
+      });
+
+      // Add current user message
+      conversationMessages.push({
+        role: "user",
+        content: userInput,
+      });
+
+      const response = await aiDialogueService.generateResponse(
+        conversationMessages
+      );
+
+      // The AIDialogueService now sets the speaker name correctly, but we'll ensure it matches
+      // our NPC name just in case
+      const responseWithCorrectSpeaker = {
+        ...response,
+        speaker: response.speaker || npcName,
+      };
+
+      setMessages((prev) => [...prev, responseWithCorrectSpeaker]);
+    } catch (error) {
+      console.error("Failed to generate response:", error);
+      // Fallback response
+      const fallbackResponse: Dialogue = {
+        id: Date.now(),
+        speaker: npcName,
+        text: "I'm not sure how to respond to that. Is there something else you'd like to discuss?",
+        choices: [],
+      };
+
+      setMessages((prev) => [...prev, fallbackResponse]);
+    } finally {
+      setIsGeneratingAI(false);
+    }
+  }, [userInput, isGeneratingAI, messages, npcName]);
+
+  // Handle closing the dialogue
+  const handleCloseDialogue = useCallback(() => {
+    setActiveNpc(null);
+    setMessages([]);
     setUserInput("");
-    setShowInputField(false);
-    setConversationHistory([]);
     playSound("dialogueEnd");
-  };
+  }, [playSound, setActiveNpc]);
 
-  // Focus input field when it appears
+  // Handle resetting the conversation
+  const handleResetConversation = useCallback(() => {
+    if (npcName) {
+      setMessages([]);
+      generateInitialGreeting(npcName);
+    }
+  }, [npcName, generateInitialGreeting]);
+
+  // Auto-scroll to bottom when messages change
   useEffect(() => {
-    if (showInputField && inputRef.current) {
+    if (messagesContainerRef.current && messages.length > 0) {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  // Focus input field when dialogue opens or after AI generation completes
+  useEffect(() => {
+    if (activeNpc && inputRef.current && !isGeneratingAI && !isModelLoading) {
       inputRef.current.focus();
     }
-  }, [showInputField]);
+  }, [activeNpc, isGeneratingAI, isModelLoading]);
 
-  // Scroll to bottom when conversation updates
   useEffect(() => {
-    dialogueEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [conversationHistory]);
+    if (activeNpc) {
+      init();
+    }
 
-  if (!activeDialogue || !currentDialogue) return null;
+    // Cleanup worker when component unmounts
+    return () => {
+      if (!activeNpc) {
+        aiDialogueService.terminate();
+      }
+    };
+  }, [activeNpc, init]);
+
+  // Don't render if no active NPC
+  if (!activeNpc) return null;
 
   return (
     <Portal>
       <div className="fixed inset-0 flex items-end justify-center pointer-events-none z-10 px-4 pb-4 md:pb-8">
-        <div className="w-full max-w-2xl bg-black/90 backdrop-blur-md border border-blue-500/30 rounded-t-md shadow-xl pointer-events-auto max-h-[80vh] flex flex-col">
-          {/* Conversation history */}
-          <div className="p-4 overflow-y-auto flex-grow">
-            {conversationHistory.map((dialogue, index) => (
-              <div key={`${dialogue.id}-${index}`} className="mb-4 last:mb-0">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                    {dialogue.speaker === "Player" ? (
-                      <User className="w-4 h-4 text-white" />
-                    ) : (
-                      <MessageSquare className="w-4 h-4 text-white" />
-                    )}
-                  </div>
-                  <h3 className="text-lg font-bold text-blue-300">
-                    {dialogue.speaker}
-                  </h3>
-                </div>
-                <div className="text-white text-base leading-relaxed pl-11">
-                  {dialogue.id === currentDialogue.id
-                    ? typedText
-                    : dialogue.text}
-                  {dialogue.id === currentDialogue.id && isTyping && (
-                    <span className="animate-pulse">|</span>
-                  )}
-                </div>
+        <div className="w-full max-w-2xl bg-gray-900/95 backdrop-blur-lg border border-indigo-500/30 rounded-t-lg shadow-2xl pointer-events-auto max-h-[80vh] flex flex-col transform transition-all duration-200 ease-in-out animate-fadeIn">
+          {/* Header with title and controls */}
+          <div className="flex justify-between items-center p-3 border-b border-indigo-500/20 bg-gradient-to-r from-indigo-900/50 to-purple-900/50 rounded-t-lg">
+            <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+              <div className="w-7 h-7 bg-indigo-600 rounded-full flex items-center justify-center shadow-md">
+                <MessageSquare className="w-3.5 h-3.5 text-white" />
               </div>
-            ))}
-            <div ref={dialogueEndRef} />
-          </div>
-
-          {/* AI generating indicator */}
-          {isGeneratingAI && (
-            <div className="border-t border-blue-500/30 p-3 flex justify-center items-center">
-              <Loader2 className="w-5 h-5 text-blue-400 animate-spin mr-2" />
-              <span className="text-blue-300">Generating response...</span>
-            </div>
-          )}
-
-          {/* User input field - Always visible */}
-          <div className="border-t border-blue-500/30 p-3">
-            <div className="flex items-center gap-2">
-              <input
-                ref={inputRef}
-                type="text"
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSubmitInput()}
-                placeholder="Type your response..."
-                className="flex-grow bg-blue-900/30 border border-blue-500/30 rounded px-3 py-2 text-white placeholder-blue-300/50 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                disabled={isGeneratingAI || isTyping}
-              />
+              <span className="text-indigo-100">{npcName}</span>
+            </h2>
+            <div className="flex gap-3">
               <button
-                onClick={handleSubmitInput}
-                disabled={isGeneratingAI || !userInput.trim() || isTyping}
-                className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-900/40 disabled:cursor-not-allowed p-2 rounded flex items-center justify-center transition-colors"
+                onClick={handleResetConversation}
+                className="text-indigo-300 hover:text-white transition-colors p-1.5 hover:bg-indigo-700/30 rounded-full"
+                title="Reset conversation"
+                disabled={isGeneratingAI || isModelLoading}
               >
-                <Send className="w-5 h-5 text-white" />
+                <RefreshCw
+                  size={16}
+                  className={isGeneratingAI ? "opacity-50" : ""}
+                />
+              </button>
+              <button
+                onClick={handleCloseDialogue}
+                className="text-indigo-300 hover:text-white transition-colors p-1.5 hover:bg-indigo-700/30 rounded-full"
+                title="Close dialogue"
+              >
+                <X size={18} />
               </button>
             </div>
           </div>
 
-          {/* Close dialogue button */}
+          {/* Message history */}
+          <div
+            ref={messagesContainerRef}
+            className="overflow-y-auto custom-scrollbar flex-grow p-3 space-y-3"
+            style={{
+              height: "40vh",
+              maxHeight: "400px",
+            }}
+          >
+            {messages.map((message) => (
+              <div key={message.id} className="animate-fadeIn">
+                <MessageItem message={message} />
+              </div>
+            ))}
+          </div>
+
+          {/* Loading indicators */}
+          {isModelLoading && (
+            <div className="border-t border-indigo-500/20 py-2 px-3 flex justify-center items-center bg-purple-900/30">
+              <Loader2 className="w-4 h-4 text-purple-400 animate-spin mr-2" />
+              <span className="text-purple-300 text-sm font-medium">
+                Loading AI model...
+              </span>
+            </div>
+          )}
+          {isGeneratingAI && !isModelLoading && (
+            <div className="border-t border-indigo-500/20 py-2 px-3 flex justify-center items-center bg-indigo-900/20">
+              <Loader2 className="w-4 h-4 text-indigo-400 animate-spin mr-2" />
+              <span className="text-indigo-300 text-sm font-medium">
+                Generating response...
+              </span>
+            </div>
+          )}
+
+          {/* User input field */}
+          <div
+            className={`border-t border-indigo-500/20 p-3 ${
+              inputFocused ? "bg-indigo-900/20" : "bg-gray-900/70"
+            } transition-colors duration-200`}
+          >
+            <div className="flex items-center gap-2">
+              <Input
+                ref={inputRef}
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                onKeyDown={(e) => {
+                  e.stopPropagation();
+                  e.key === "Enter" && handleSendMessage();
+                }}
+                onFocus={() => setInputFocused(true)}
+                onBlur={() => setInputFocused(false)}
+                placeholder="Type your message..."
+                className="flex-grow bg-gray-800/60 border border-indigo-500/30 rounded-md px-3 py-2 text-white text-sm placeholder-indigo-300/40 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                disabled={isGeneratingAI || isModelLoading}
+              />
+              <button
+                onClick={handleSendMessage}
+                disabled={isGeneratingAI || isModelLoading || !userInput.trim()}
+                className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-900/40 disabled:cursor-not-allowed p-2 rounded-md flex items-center justify-center transition-colors shadow-md"
+              >
+                <Send className="w-4 h-4 text-white" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </Portal>
