@@ -6,7 +6,7 @@ import {
   OrbitControls,
   useKeyboardControls,
 } from "@react-three/drei";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import { useEditorStore } from "../stores/editorStore";
 import { Perf } from "r3f-perf";
 import {
@@ -32,6 +32,8 @@ import {
 import { toast } from "../components/UI/Toast";
 import { EditorScene } from "../components/editor/EditorScene";
 import { Tooltip } from "../components/UI/Tooltip";
+import { Player } from "../components/game/Player";
+import { Hero } from "../components/game/Hero";
 
 // Updated keyboard mapping for tools
 const KEYBOARD_MAP = [
@@ -574,6 +576,7 @@ export function _Editor() {
               camera={{ position: [5, 5, 5], fov: 50 }}
               className="w-full relative h-full"
             >
+              <Hero />
               {showMetrics && <Perf className="absolute w-80 top-8 left-0" />}
               <EditorScene
                 showGrid={showGrid}

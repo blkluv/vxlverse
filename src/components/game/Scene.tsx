@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Environment, Sky } from "@react-three/drei";
 import { Physics, RigidBody } from "@react-three/rapier";
-import { GameObject } from "../GameObjectWrapper";
+import { GameObject } from "../GameObject";
 import { Scene as SceneType } from "../../types";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
@@ -147,7 +147,6 @@ export function GameScene({ sceneData, isPreview }: SceneProps) {
       <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
 
       <Physics>
-        {/* Ground */}
         <Floor />
 
         {!isPreview && <Player />}
@@ -160,13 +159,7 @@ export function GameScene({ sceneData, isPreview }: SceneProps) {
         {/* Scene Objects */}
         {sceneData.objects.map((object) => (
           <GameObject
-            key={object.id}
-            modelUrl={object.modelUrl}
-            position={object.position}
-            rotation={object.rotation}
-            scale={object.scale}
-            isSelected={false}
-            quests={object.quests}
+            {...object}
             thumbnail={object.modelUrl
               .replace("scene_", "thumbnail_")
               .replace(".glb", ".webp")}

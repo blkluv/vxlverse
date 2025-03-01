@@ -155,7 +155,8 @@ export interface QuestAction {
     | "give_item"
     | "remove_item"
     | "teleport"
-    | "spawn_npc";
+    | "spawn_npc"
+    | "custom";
   params: {
     itemId?: string;
     amount?: number;
@@ -163,6 +164,7 @@ export interface QuestAction {
     npcId?: string;
     message?: string;
     stageId?: number;
+    callback?: () => void;
   };
 }
 

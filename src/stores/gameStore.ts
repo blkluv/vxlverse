@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { persist } from "zustand/middleware";
-import { Quest } from "../types";
+import { Dialogue, Quest } from "../types";
 
 // Default scene ID
 const DEFAULT_SCENE_ID = "village-scene";
@@ -29,6 +29,7 @@ interface GameState {
   currentSceneId: string;
   activeQuest: Quest | null;
   activeDialogue: number | null;
+  dialogues: Dialogue[];
   inventory: { id: string; amount: number }[];
   questLog: {
     active: Quest[];
@@ -50,7 +51,10 @@ interface GameState {
   updatePlayerStats: (updates: Partial<GameState["playerStats"]>) => void;
   advanceTime: (minutes: number) => void;
   setActiveQuest: (quest: Quest | null) => void;
-  setActiveDialogue: (dialogueId: number | null) => void;
+  setActiveDialogue: (dialogueId: string | null) => void;
+  addDialogue: (dialogue: Dialogue) => void;
+  removeDialogue: (dialogueId: number | string) => void;
+  startAIDialogue: (npcName: string, initialPrompt?: string) => Promise<void>;
   completeQuest: (questId: string) => void;
   failQuest: (questId: string) => void;
   addToInventory: (itemId: string, amount: number) => void;
@@ -91,6 +95,7 @@ export const useGameStore = create<GameState>()(
       currentSceneId: DEFAULT_SCENE_ID,
       activeQuest: null,
       activeDialogue: null,
+      dialogues: [],
       inventory: [],
       questLog: {
         active: [],
@@ -116,17 +121,22 @@ export const useGameStore = create<GameState>()(
           // Update stats with validation
           if (updates.level !== undefined) newStats.level = updates.level;
           if (updates.xp !== undefined) newStats.xp = updates.xp;
-          if (updates.money !== undefined) newStats.money = Math.max(0, updates.money);
+          if (updates.money !== undefined)
+            newStats.money = Math.max(0, updates.money);
           if (updates.energy !== undefined) {
             const newEnergy = Number(updates.energy);
             if (!isNaN(newEnergy)) {
-              newStats.energy = Math.max(0, Math.min(newEnergy, newStats.maxEnergy));
+              newStats.energy = Math.max(
+                0,
+                Math.min(newEnergy, newStats.maxEnergy)
+              );
             }
           }
           if (updates.damage !== undefined) newStats.damage = updates.damage;
 
           // Calculate XP needed for next level
-          const xpForNextLevel = (level: number) => (level * 100) + (level * level * 25);
+          const xpForNextLevel = (level: number) =>
+            level * 100 + level * level * 25;
           newStats.xpNeeded = xpForNextLevel(newStats.level);
 
           // Level up logic
@@ -184,6 +194,57 @@ export const useGameStore = create<GameState>()(
 
       setActiveDialogue: (dialogueId) => set({ activeDialogue: dialogueId }),
 
+      addDialogue: (dialogue) =>
+        set((state) => ({
+          dialogues: [...state.dialogues, dialogue],
+        })),
+
+      removeDialogue: (dialogueId) =>
+        set((state) => ({
+          dialogues: state.dialogues.filter((d) => d.id.toString() !== dialogueId.toString()),
+        })),
+        
+      startAIDialogue: async (npcName, initialPrompt = "Hello") => {
+        try {
+          // Dynamically import the AI service to avoid loading it unless needed
+          const { aiDialogueService } = await import("../services/AIDialogueService");
+          
+          // Check if initialPrompt is a greeting from the NPC or a player message
+          const isNPCGreeting = initialPrompt.length > 10 && !initialPrompt.includes("?");
+          
+          let dialogue;
+          
+          if (isNPCGreeting) {
+            // If it's an NPC greeting, create a dialogue directly with the provided text
+            dialogue = {
+              id: `ai-${Date.now()}`,
+              speaker: npcName,
+              text: initialPrompt,
+              choices: await aiDialogueService.generateChoices(
+                `${npcName}: ${initialPrompt}`,
+                3
+              )
+            };
+          } else {
+            // Otherwise, generate a response to the player's message
+            dialogue = await aiDialogueService.generateResponse(
+              initialPrompt,
+              npcName,
+              `You are speaking with the player for the first time.`
+            );
+          }
+          
+          // Add the dialogue to the store
+          set((state) => ({
+            dialogues: [...state.dialogues, dialogue],
+            activeDialogue: dialogue.id.toString()
+          }));
+          
+        } catch (error) {
+          console.error("Failed to start AI dialogue:", error);
+        }
+      },
+
       completeQuest: (questId) =>
         set((state) => {
           const quest = state.questLog.active.find((q) => q.id === questId);
@@ -196,21 +257,36 @@ export const useGameStore = create<GameState>()(
           if (quest.rewards.xp) newStats.xp += quest.rewards.xp;
           if (quest.rewards.money) newStats.money += quest.rewards.money;
           if (quest.rewards.health !== undefined) {
-            newStats.health = Math.min(newStats.maxHealth, newStats.health + quest.rewards.health);
+            newStats.health = Math.min(
+              newStats.maxHealth,
+              newStats.health + quest.rewards.health
+            );
           }
           if (quest.rewards.energy !== undefined) {
-            newStats.energy = Math.min(newStats.maxEnergy, newStats.energy + quest.rewards.energy);
+            newStats.energy = Math.min(
+              newStats.maxEnergy,
+              newStats.energy + quest.rewards.energy
+            );
           }
 
           // Remove requirements
           if (quest.requirements?.health) {
-            newStats.health = Math.max(0, newStats.health - quest.requirements.health);
+            newStats.health = Math.max(
+              0,
+              newStats.health - quest.requirements.health
+            );
           }
           if (quest.requirements?.money) {
-            newStats.money = Math.max(0, newStats.money - quest.requirements.money);
+            newStats.money = Math.max(
+              0,
+              newStats.money - quest.requirements.money
+            );
           }
           if (quest.requirements?.energy) {
-            newStats.energy = Math.max(0, newStats.energy - quest.requirements.energy);
+            newStats.energy = Math.max(
+              0,
+              newStats.energy - quest.requirements.energy
+            );
           }
 
           // Add reward items
