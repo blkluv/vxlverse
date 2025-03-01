@@ -59,21 +59,21 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
     sm: {
       track: "w-8 h-4",
       dot: "w-3 h-3",
-      translate: "translate-x-4",
+      translateValue: 10,
       padding: "p-0.5",
       text: "text-xs",
     },
     md: {
       track: "w-10 h-6",
       dot: "w-4 h-4",
-      translate: "translate-x-4",
+      translateValue: 12,
       padding: "p-1",
       text: "text-sm",
     },
     lg: {
       track: "w-12 h-7",
       dot: "w-5 h-5",
-      translate: "translate-x-5",
+      translateValue: 14,
       padding: "p-1",
       text: "text-base",
     },
@@ -87,7 +87,9 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       onClick={disabled ? undefined : onToggle}
       aria-pressed={isOn}
       disabled={disabled}
-      className={`relative ${selectedSize.track} flex items-center -full ${
+      className={`relative ${
+        selectedSize.track
+      } flex items-center rounded-full ${
         selectedSize.padding
       } cursor-pointer transition-colors duration-300 ${
         isOn
@@ -95,8 +97,11 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
           : "bg-slate-700/80 border border-slate-600/50"
       } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
     >
-      <div
-        className={`${selectedSize.dot} -full shadow-md ${
+      <motion.div
+        initial={false}
+        animate={{ x: isOn ? selectedSize.translateValue : 0 }}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        className={`${selectedSize.dot} rounded-full shadow-md ${
           isOn ? `${selectedColor.dot} ${selectedColor.shadow}` : "bg-white"
         }`}
       />

@@ -16,10 +16,13 @@ import {
   Wind,
   Eye,
   Sparkles,
+  Grid,
+  Magnet,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "../UI/input";
 import { Textarea } from "../UI/textarea";
+import { ToggleSwitch } from "../UI/ToggleSwitch";
 
 const ENVIRONMENT_PRESETS = [
   "sunset",
@@ -43,6 +46,15 @@ const BACKGROUND_OPTIONS = [
 interface SceneSettingsPanelProps {
   scene: Scene;
   onChange: (updates: Partial<Scene>) => void;
+  // Grid and snapping props
+  showGrid?: boolean;
+  onToggleGrid?: () => void;
+  gridSnap?: boolean;
+  onToggleGridSnap?: () => void;
+  gridSize?: number;
+  onGridSizeChange?: (size: number) => void;
+  snapPrecision?: number;
+  onSnapPrecisionChange?: (precision: number) => void;
 }
 
 export function SceneSettingsPanel({
@@ -50,7 +62,7 @@ export function SceneSettingsPanel({
   onChange,
 }: SceneSettingsPanelProps) {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
-    new Set(["environment"])
+    new Set(["info", "environment"])
   );
 
   const toggleSection = (section: string) => {
@@ -68,10 +80,16 @@ export function SceneSettingsPanel({
   return (
     <div className="space-y-3 py-3 px-1">
       {/* Section Header Component */}
-      {["environment", "fog", "clouds", "stars", "audio", "info"].map(
+      {["info", "environment", "fog", "clouds", "stars", "audio"].map(
         (section) => {
           // Define section config
           const sectionConfig = {
+            info: {
+              title: "Scene Information",
+              icon: <Info className="w-4 h-4 text-purple-400" />,
+              color: "purple",
+            },
+
             environment: {
               title: "Environment",
               icon: <Sun className="w-4 h-4 text-amber-400" />,
@@ -97,15 +115,10 @@ export function SceneSettingsPanel({
               icon: <Music className="w-4 h-4 text-green-400" />,
               color: "green",
             },
-            info: {
-              title: "Scene Information",
-              icon: <Info className="w-4 h-4 text-purple-400" />,
-              color: "purple",
-            },
           };
 
           const { title, icon, color } =
-            sectionConfig[section as keyof typeof sectionConfig];
+            sectionConfig[section as keyof typeof sectionConfig] ?? {};
           const isExpanded = expandedSections.has(section);
 
           return (
@@ -134,14 +147,14 @@ export function SceneSettingsPanel({
 
               {/* Section Content */}
               {isExpanded && (
-                <div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden"
-                >
-                  <div className="p-4 space-y-4 border-t border-slate-700/20">
+                <div className="overflow-hidden">
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-4 space-y-4 border-t border-slate-700/20"
+                  >
                     {/* Environment Section */}
                     {section === "environment" && (
                       <>
@@ -248,6 +261,8 @@ export function SceneSettingsPanel({
                                   fog: {
                                     ...scene.fog,
                                     color: e.target.value,
+                                    near: scene.fog?.near || 1,
+                                    far: scene.fog?.far || 100,
                                   },
                                 })
                               }
@@ -261,6 +276,8 @@ export function SceneSettingsPanel({
                                   fog: {
                                     ...scene.fog,
                                     color: e.target.value,
+                                    near: scene.fog?.near || 1,
+                                    far: scene.fog?.far || 100,
                                   },
                                 })
                               }
@@ -288,6 +305,8 @@ export function SceneSettingsPanel({
                                   fog: {
                                     ...scene.fog,
                                     near: parseFloat(e.target.value),
+                                    color: scene.fog?.color || "#000000",
+                                    far: scene.fog?.far || 100,
                                   },
                                 })
                               }
@@ -313,6 +332,8 @@ export function SceneSettingsPanel({
                                   fog: {
                                     ...scene.fog,
                                     far: parseFloat(e.target.value),
+                                    color: scene.fog?.color || "#000000",
+                                    near: scene.fog?.near || 1,
                                   },
                                 })
                               }
@@ -326,7 +347,7 @@ export function SceneSettingsPanel({
                     {/* Clouds Section */}
                     {section === "clouds" && (
                       <>
-                        <div className="flex items-center justify-between bg-slate-800/50 p-3 ">
+                        <div className="flex items-center justify-between bg-slate-800/50 p-3 mb-3">
                           <div className="flex items-center gap-2">
                             <Eye className="w-3.5 h-3.5 text-blue-400" />
                             <label className="text-xs font-medium text-slate-300">
@@ -335,21 +356,19 @@ export function SceneSettingsPanel({
                           </div>
                           <ToggleSwitch
                             isOn={scene.clouds?.enabled ?? false}
-                            onToggle={() =>
-                              onChange({
-                                clouds: {
-                                  ...scene.clouds,
-                                  enabled: !(scene.clouds?.enabled ?? false),
-                                  speed: scene.clouds?.speed || 1,
-                                  opacity: scene.clouds?.opacity || 0.5,
-                                  count: scene.clouds?.count || 20,
-                                },
-                              })
-                            }
+                            onToggle={() => {
+                              const defaultClouds = {
+                                enabled: !(scene.clouds?.enabled ?? false),
+                                speed: scene.clouds?.speed || 1,
+                                opacity: scene.clouds?.opacity || 0.5,
+                                count: scene.clouds?.count || 20,
+                              };
+                              onChange({ clouds: defaultClouds });
+                            }}
                             color="blue"
                           />
                         </div>
-                        <div className="space-y-2">
+                        <div className="space-y-2 mb-3">
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-2">
                               <Wind className="w-3.5 h-3.5 text-blue-400" />
@@ -367,21 +386,19 @@ export function SceneSettingsPanel({
                             max="5"
                             step="0.1"
                             value={scene.clouds?.speed || 1}
-                            onChange={(e) =>
-                              onChange({
-                                clouds: {
-                                  ...scene.clouds,
-                                  speed: parseFloat(e.target.value),
-                                  enabled: scene.clouds?.enabled ?? false,
-                                  opacity: scene.clouds?.opacity || 0.5,
-                                  count: scene.clouds?.count || 20,
-                                },
-                              })
-                            }
+                            onChange={(e) => {
+                              const updatedClouds = {
+                                enabled: scene.clouds?.enabled ?? false,
+                                speed: parseFloat(e.target.value),
+                                opacity: scene.clouds?.opacity || 0.5,
+                                count: scene.clouds?.count || 20,
+                              };
+                              onChange({ clouds: updatedClouds });
+                            }}
                             className="w-full accent-blue-500"
                           />
                         </div>
-                        <div className="space-y-2">
+                        <div className="space-y-2 mb-3">
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-2">
                               <Layers className="w-3.5 h-3.5 text-blue-400" />
@@ -399,49 +416,15 @@ export function SceneSettingsPanel({
                             max="50"
                             step="1"
                             value={scene.clouds?.count || 20}
-                            onChange={(e) =>
-                              onChange({
-                                clouds: {
-                                  ...scene.clouds,
-                                  count: parseInt(e.target.value),
-                                  enabled: scene.clouds?.enabled ?? false,
-                                  speed: scene.clouds?.speed || 1,
-                                  opacity: scene.clouds?.opacity || 0.5,
-                                },
-                              })
-                            }
-                            className="w-full accent-blue-500"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex justify-between items-center">
-                            <div className="flex items-center gap-2">
-                              <Palette className="w-3.5 h-3.5 text-blue-400" />
-                              <label className="text-xs font-medium text-slate-300">
-                                Cloud Opacity
-                              </label>
-                            </div>
-                            <span className="text-xs font-medium bg-blue-500/20 text-blue-200 px-2 py-0.5 ">
-                              {scene.clouds?.opacity || 0.5}
-                            </span>
-                          </div>
-                          <Input
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.1"
-                            value={scene.clouds?.opacity || 0.5}
-                            onChange={(e) =>
-                              onChange({
-                                clouds: {
-                                  ...scene.clouds,
-                                  opacity: parseFloat(e.target.value),
-                                  enabled: scene.clouds?.enabled ?? false,
-                                  speed: scene.clouds?.speed || 1,
-                                  count: scene.clouds?.count || 20,
-                                },
-                              })
-                            }
+                            onChange={(e) => {
+                              const updatedClouds = {
+                                enabled: scene.clouds?.enabled ?? false,
+                                speed: scene.clouds?.speed || 1,
+                                opacity: scene.clouds?.opacity || 0.5,
+                                count: parseInt(e.target.value),
+                              };
+                              onChange({ clouds: updatedClouds });
+                            }}
                             className="w-full accent-blue-500"
                           />
                         </div>
@@ -451,7 +434,7 @@ export function SceneSettingsPanel({
                     {/* Stars Section */}
                     {section === "stars" && (
                       <>
-                        <div className="flex items-center justify-between bg-slate-800/50 p-3 ">
+                        <div className="flex items-center justify-between bg-slate-800/50 p-3 mb-3">
                           <div className="flex items-center gap-2">
                             <Eye className="w-3.5 h-3.5 text-purple-400" />
                             <label className="text-xs font-medium text-slate-300">
@@ -460,21 +443,19 @@ export function SceneSettingsPanel({
                           </div>
                           <ToggleSwitch
                             isOn={scene.stars?.enabled ?? false}
-                            onToggle={() =>
-                              onChange({
-                                stars: {
-                                  ...scene.stars,
-                                  enabled: !(scene.stars?.enabled ?? false),
-                                  count: scene.stars?.count || 5000,
-                                  depth: scene.stars?.depth || 50,
-                                  fade: scene.stars?.fade ?? true,
-                                },
-                              })
-                            }
+                            onToggle={() => {
+                              const defaultStars = {
+                                enabled: !(scene.stars?.enabled ?? false),
+                                count: scene.stars?.count || 5000,
+                                depth: scene.stars?.depth || 50,
+                                fade: scene.stars?.fade ?? true,
+                              };
+                              onChange({ stars: defaultStars });
+                            }}
                             color="purple"
                           />
                         </div>
-                        <div className="space-y-2">
+                        <div className="space-y-2 mb-3">
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-2">
                               <Sparkles className="w-3.5 h-3.5 text-purple-400" />
@@ -492,21 +473,19 @@ export function SceneSettingsPanel({
                             max="10000"
                             step="100"
                             value={scene.stars?.count || 5000}
-                            onChange={(e) =>
-                              onChange({
-                                stars: {
-                                  ...scene.stars,
-                                  count: parseInt(e.target.value),
-                                  enabled: scene.stars?.enabled ?? false,
-                                  depth: scene.stars?.depth || 50,
-                                  fade: scene.stars?.fade ?? true,
-                                },
-                              })
-                            }
+                            onChange={(e) => {
+                              const updatedStars = {
+                                enabled: scene.stars?.enabled ?? false,
+                                count: parseInt(e.target.value),
+                                depth: scene.stars?.depth || 50,
+                                fade: scene.stars?.fade ?? true,
+                              };
+                              onChange({ stars: updatedStars });
+                            }}
                             className="w-full accent-purple-500"
                           />
                         </div>
-                        <div className="space-y-2">
+                        <div className="space-y-2 mb-3">
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-2">
                               <Layers className="w-3.5 h-3.5 text-purple-400" />
@@ -524,21 +503,19 @@ export function SceneSettingsPanel({
                             max="100"
                             step="1"
                             value={scene.stars?.depth || 50}
-                            onChange={(e) =>
-                              onChange({
-                                stars: {
-                                  ...scene.stars,
-                                  depth: parseInt(e.target.value),
-                                  enabled: scene.stars?.enabled ?? false,
-                                  count: scene.stars?.count || 5000,
-                                  fade: scene.stars?.fade ?? true,
-                                },
-                              })
-                            }
+                            onChange={(e) => {
+                              const updatedStars = {
+                                enabled: scene.stars?.enabled ?? false,
+                                count: scene.stars?.count || 5000,
+                                depth: parseInt(e.target.value),
+                                fade: scene.stars?.fade ?? true,
+                              };
+                              onChange({ stars: updatedStars });
+                            }}
                             className="w-full accent-purple-500"
                           />
                         </div>
-                        <div className="flex items-center justify-between bg-slate-800/50 p-3 ">
+                        <div className="flex items-center justify-between bg-slate-800/50 p-3">
                           <div className="flex items-center gap-2">
                             <Palette className="w-3.5 h-3.5 text-purple-400" />
                             <label className="text-xs font-medium text-slate-300">
@@ -547,17 +524,15 @@ export function SceneSettingsPanel({
                           </div>
                           <ToggleSwitch
                             isOn={scene.stars?.fade ?? true}
-                            onToggle={() =>
-                              onChange({
-                                stars: {
-                                  ...scene.stars,
-                                  fade: !(scene.stars?.fade ?? true),
-                                  enabled: scene.stars?.enabled ?? false,
-                                  count: scene.stars?.count || 5000,
-                                  depth: scene.stars?.depth || 50,
-                                },
-                              })
-                            }
+                            onToggle={() => {
+                              const updatedStars = {
+                                enabled: scene.stars?.enabled ?? false,
+                                count: scene.stars?.count || 5000,
+                                depth: scene.stars?.depth || 50,
+                                fade: !(scene.stars?.fade ?? true),
+                              };
+                              onChange({ stars: updatedStars });
+                            }}
                             color="purple"
                           />
                         </div>
@@ -703,7 +678,7 @@ export function SceneSettingsPanel({
                         </div>
                       </>
                     )}
-                  </div>
+                  </motion.div>
                 </div>
               )}
             </div>
