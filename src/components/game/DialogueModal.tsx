@@ -13,29 +13,91 @@ const MessageItem = memo(({ message }: { message: Dialogue }) => {
   const isPlayer = message.speaker === "Player";
 
   return (
-    <div className="mb-3 last:mb-0 animate-fadeIn">
-      <div className="flex items-center gap-2 mb-1">
+    <div style={{ marginBottom: "16px" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          marginBottom: "6px",
+        }}
+      >
         <div
-          className={`w-7 h-7 rounded-full flex items-center justify-center ${
-            isPlayer ? "bg-emerald-600" : "bg-indigo-600"
-          }`}
+          style={{
+            width: "28px",
+            height: "28px",
+            backgroundColor: isPlayer ? "#047857" : "#92400e",
+            borderStyle: "solid",
+            borderWidth: "2px",
+            borderColor: isPlayer ? "#065f46" : "#78350f",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            imageRendering: "pixelated",
+            boxShadow: "2px 2px 0 rgba(0,0,0,0.3)",
+          }}
         >
           {isPlayer ? (
-            <User className="w-3.5 h-3.5 text-white" />
+            <User className="w-4 h-4 text-emerald-200" />
           ) : (
-            <MessageSquare className="w-3.5 h-3.5 text-white" />
+            <MessageSquare className="w-4 h-4 text-yellow-200" />
           )}
         </div>
         <h3
-          className={`text-base font-bold ${
-            isPlayer ? "text-emerald-300" : "text-indigo-300"
-          }`}
+          style={{
+            fontSize: "14px",
+            fontWeight: "bold",
+            color: isPlayer ? "#6ee7b7" : "#fef3c7",
+            fontFamily: "monospace",
+            textShadow: "1px 1px 0 #000",
+          }}
         >
           {message.speaker}
         </h3>
       </div>
-      <div className="text-white text-sm leading-relaxed pl-9 opacity-90">
-        {message.text}
+      <div
+        style={{
+          color: "#e5e7eb",
+          fontSize: "15px",
+          lineHeight: "1.5",
+          paddingLeft: "36px",
+          paddingRight: "8px",
+          fontFamily: "monospace",
+          backgroundColor: isPlayer
+            ? "rgba(4, 120, 87, 0.2)"
+            : "rgba(146, 64, 14, 0.2)",
+          borderLeft: isPlayer ? "3px solid #065f46" : "3px solid #78350f",
+          padding: "8px 12px 8px 36px",
+          borderRadius: "0 4px 4px 0",
+          boxShadow: "2px 2px 0 rgba(0,0,0,0.1)",
+          whiteSpace: "pre-line", // This preserves line breaks in the text
+
+          fontWeight: "bold",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          textShadow: "2px 2px 0 #000",
+          letterSpacing: "0.5px",
+        }}
+      >
+        {message.text.includes("*") ? (
+          <>
+            <span
+              style={{
+                color: isPlayer ? "#6ee7b7" : "#fde68a",
+                fontStyle: "italic",
+                display: "block",
+                marginBottom: "4px",
+                textShadow: "1px 1px 0 rgba(0,0,0,0.5)",
+              }}
+            >
+              {message.text.split("\n")[0]}
+            </span>
+            <span>{message.text.split("\n").slice(1).join("\n")}</span>
+          </>
+        ) : (
+          message.text
+        )}
       </div>
     </div>
   );
@@ -208,7 +270,7 @@ export function DialogueModal() {
       const fallbackResponse: Dialogue = {
         id: Date.now(),
         speaker: npcName,
-        text: "I'm not sure how to respond to that. Is there something else you'd like to discuss?",
+        text: `*${npcName} looks puzzled and scratches chin*\nForgive me, brave adventurer. The winds of thought have scattered my words. Pray, speak of something else that interests thee?`,
         choices: [],
       };
 
@@ -267,34 +329,105 @@ export function DialogueModal() {
 
   return (
     <Portal>
-      <div className="fixed inset-0 flex items-end justify-center pointer-events-none z-10 px-4 pb-4 md:pb-8">
-        <div className="w-full max-w-2xl bg-gray-900/95 backdrop-blur-lg border border-indigo-500/30 rounded-t-lg shadow-2xl pointer-events-auto max-h-[80vh] flex flex-col transform transition-all duration-200 ease-in-out animate-fadeIn">
+      <div className="fixed inset-0 flex items-end justify-center pointer-events-none z-50 ">
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "650px",
+            backgroundColor: "#292524",
+            borderStyle: "solid",
+            borderWidth: "4px",
+            borderColor: "#b45309",
+            boxShadow: "0 0 0 2px #78350f, 0 10px 15px -3px rgba(0, 0, 0, 0.7)",
+            pointerEvents: "auto",
+            maxHeight: "80vh",
+            display: "flex",
+            flexDirection: "column",
+            transform: "translateY(0)",
+            transition: "all 200ms ease-in-out",
+            animation: "fadeIn 300ms ease-out",
+            imageRendering: "pixelated",
+          }}
+        >
           {/* Header with title and controls */}
-          <div className="flex justify-between items-center p-3 border-b border-indigo-500/20 bg-gradient-to-r from-indigo-900/50 to-purple-900/50 rounded-t-lg">
-            <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-              <div className="w-7 h-7 bg-indigo-600 rounded-full flex items-center justify-center shadow-md">
-                <MessageSquare className="w-3.5 h-3.5 text-white" />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "12px",
+              borderBottom: "3px solid #92400e",
+              backgroundColor: "#b45309",
+              backgroundImage:
+                "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.1) 5px, rgba(0,0,0,0.1) 10px)",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "16px",
+                fontWeight: "bold",
+                color: "#fef3c7",
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                fontFamily: "monospace",
+                textShadow: "2px 2px 0 #000",
+                letterSpacing: "0.5px",
+              }}
+            >
+              <div
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  backgroundColor: "#92400e",
+                  borderStyle: "solid",
+                  borderWidth: "2px",
+                  borderColor: "#78350f",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <MessageSquare className="w-3.5 h-3.5 text-yellow-200" />
               </div>
-              <span className="text-indigo-100">{npcName}</span>
+              <span>{npcName}</span>
             </h2>
-            <div className="flex gap-3">
+            <div style={{ display: "flex", gap: "8px" }}>
               <button
                 onClick={handleResetConversation}
-                className="text-indigo-300 hover:text-white transition-colors p-1.5 hover:bg-indigo-700/30 rounded-full"
                 title="Reset conversation"
                 disabled={isGeneratingAI || isModelLoading}
+                style={{
+                  color: "#fef3c7",
+                  padding: "4px",
+                  backgroundColor:
+                    isGeneratingAI || isModelLoading ? "#78350f" : "#92400e",
+                  borderStyle: "solid",
+                  borderWidth: "2px",
+                  borderColor: "#78350f",
+                  cursor:
+                    isGeneratingAI || isModelLoading
+                      ? "not-allowed"
+                      : "pointer",
+                  opacity: isGeneratingAI || isModelLoading ? 0.5 : 1,
+                }}
               >
-                <RefreshCw
-                  size={16}
-                  className={isGeneratingAI ? "opacity-50" : ""}
-                />
+                <RefreshCw size={16} />
               </button>
               <button
                 onClick={handleCloseDialogue}
-                className="text-indigo-300 hover:text-white transition-colors p-1.5 hover:bg-indigo-700/30 rounded-full"
                 title="Close dialogue"
+                style={{
+                  color: "#fef3c7",
+                  padding: "4px",
+                  backgroundColor: "#92400e",
+                  borderStyle: "solid",
+                  borderWidth: "2px",
+                  borderColor: "#78350f",
+                  cursor: "pointer",
+                }}
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
           </div>
@@ -302,10 +435,18 @@ export function DialogueModal() {
           {/* Message history */}
           <div
             ref={messagesContainerRef}
-            className="overflow-y-auto custom-scrollbar flex-grow p-3 space-y-3"
             style={{
-              height: "40vh",
-              maxHeight: "400px",
+              overflowY: "auto",
+              flexGrow: 1,
+              padding: "16px",
+              height: "45vh",
+              maxHeight: "450px",
+              backgroundColor: "#1c1917",
+              borderBottom: "3px solid #78350f",
+              backgroundImage:
+                "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEklEQVQImWNgYGD4z0AswK4SAFXuAf8EPy+xAAAAAElFTkSuQmCC')",
+              backgroundRepeat: "repeat",
+              backgroundSize: "4px 4px",
             }}
           >
             {messages.map((message) => (
@@ -317,17 +458,51 @@ export function DialogueModal() {
 
           {/* Loading indicators */}
           {isModelLoading && (
-            <div className="border-t border-indigo-500/20 py-2 px-3 flex justify-center items-center bg-purple-900/30">
-              <Loader2 className="w-4 h-4 text-purple-400 animate-spin mr-2" />
-              <span className="text-purple-300 text-sm font-medium">
+            <div
+              className="h-full w-full opacity-50 absolute"
+              style={{
+                borderTop: "2px solid #78350f",
+                padding: "8px 10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#000a",
+              }}
+            >
+              <Loader2 className="w-4 h-4 text-yellow-200 animate-spin mr-2" />
+              <span
+                style={{
+                  color: "#fef3c7",
+                  fontSize: "11px",
+                  fontWeight: "medium",
+                  fontFamily: "monospace",
+                }}
+              >
                 Loading AI model...
               </span>
             </div>
           )}
           {isGeneratingAI && !isModelLoading && (
-            <div className="border-t border-indigo-500/20 py-2 px-3 flex justify-center items-center bg-indigo-900/20">
-              <Loader2 className="w-4 h-4 text-indigo-400 animate-spin mr-2" />
-              <span className="text-indigo-300 text-sm font-medium">
+            <div
+              className="absolute opacity-20 inset-0 flex items-end justify-center pointer-events-none z-50 "
+              style={{
+                borderTop: "2px solid #78350f",
+                padding: "8px 10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#000",
+              }}
+            >
+              <Loader2 className="w-4 h-4 text-yellow-200 animate-spin mr-2" />
+              <span
+                style={{
+                  color: "#fef3c7",
+                  fontSize: "11px",
+                  fontWeight: "medium",
+                  fontFamily: "monospace",
+                }}
+              >
                 Generating response...
               </span>
             </div>
@@ -335,11 +510,12 @@ export function DialogueModal() {
 
           {/* User input field */}
           <div
-            className={`border-t border-indigo-500/20 p-3 ${
-              inputFocused ? "bg-indigo-900/20" : "bg-gray-900/70"
-            } transition-colors duration-200`}
+            style={{
+              borderTop: "2px solid #78350f",
+              padding: "10px",
+            }}
           >
-            <div className="flex items-center gap-2">
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <Input
                 ref={inputRef}
                 type="text"
@@ -351,16 +527,49 @@ export function DialogueModal() {
                 }}
                 onFocus={() => setInputFocused(true)}
                 onBlur={() => setInputFocused(false)}
-                placeholder="Type your message..."
-                className="flex-grow bg-gray-800/60 border border-indigo-500/30 rounded-md px-3 py-2 text-white text-sm placeholder-indigo-300/40 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                placeholder="What say ye, brave adventurer?"
+                style={{
+                  flexGrow: 1,
+                  backgroundColor: "#1c1917",
+                  borderStyle: "solid",
+                  borderWidth: "3px",
+                  borderColor: "#92400e",
+                  borderRadius: "0",
+                  padding: "8px 12px",
+                  color: "#fef3c7",
+                  fontSize: "13px",
+                  fontFamily: "monospace",
+                  outline: "none",
+                  boxShadow: "inset 2px 2px 0 rgba(0,0,0,0.3)",
+                }}
                 disabled={isGeneratingAI || isModelLoading}
               />
               <button
                 onClick={handleSendMessage}
                 disabled={isGeneratingAI || isModelLoading || !userInput.trim()}
-                className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-900/40 disabled:cursor-not-allowed p-2 rounded-md flex items-center justify-center transition-colors shadow-md"
+                style={{
+                  backgroundColor:
+                    isGeneratingAI || isModelLoading || !userInput.trim()
+                      ? "#78350f"
+                      : "#b45309",
+                  borderStyle: "solid",
+                  borderWidth: "2px",
+                  borderColor: "#92400e",
+                  padding: "6px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor:
+                    isGeneratingAI || isModelLoading || !userInput.trim()
+                      ? "not-allowed"
+                      : "pointer",
+                  opacity:
+                    isGeneratingAI || isModelLoading || !userInput.trim()
+                      ? 0.5
+                      : 1,
+                }}
               >
-                <Send className="w-4 h-4 text-white" />
+                <Send className="w-4 h-4 text-yellow-200" />
               </button>
             </div>
           </div>

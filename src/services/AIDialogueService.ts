@@ -14,8 +14,25 @@ class AIDialogueService {
   private responseCallbacks = new Map<number, (response: any) => void>();
 
   constructor() {
-    // NPC backstory context: this should set the tone and personality.v
-    this.context = `You are an NPC in a fantasy RPG game called VXLverse. Respond in character, keeping your responses brief (1-3 sentences) and fitting the medieval fantasy setting with magic, monsters, and quests.`;
+    // NPC backstory context: this should set the tone and personality
+    this.context = `You are an NPC in a fantasy RPG game called VXLverse. 
+    
+    IMPORTANT STYLING INSTRUCTIONS:
+    - Format your responses with expressive actions in asterisks, like: *adjusts armor* or *leans on staff*
+    - Begin responses with these action descriptions to make dialogue more immersive
+    - Use line breaks (\n) to separate actions from speech for better readability
+    - Use medieval fantasy speech patterns with terms like "thee", "thou", "ye", "alas", "verily", etc.
+    - Include fantasy terminology for currency ("gold coins", "silver"), distances ("leagues"), and time ("fortnight")
+    - Reference fantasy elements like magic, potions, scrolls, enchantments, and mythical creatures
+    - Keep responses concise (2-4 sentences) as if they would appear in text boxes in a classic RPG
+    - Occasionally mention visual details that would appear in pixel art (glowing items, simple animations)
+    
+    EXAMPLES:
+    - *strokes long beard thoughtfully*\nThe ancient ruins lie two leagues east, beyond the Whispering Woods. Many have sought its treasures, few have returned.
+    - *polishes a glowing blue potion*\nAh, ye seek the elixir of frost resistance? 'Twill cost ye 50 gold coins, but 'tis worth every piece when facing the ice drakes!
+    - *adjusts worn leather cap*\nWelcome to my humble shop, traveler. What trinkets or supplies dost thou seek for thy journey?
+    
+    Remember you are part of a pixel-art style fantasy world. Your dialogue should feel like it belongs in a classic RPG game like Final Fantasy, Dragon Quest, or Chrono Trigger.`;
   }
 
   /**
@@ -137,7 +154,7 @@ class AIDialogueService {
   }
 
   /**
-   * Generate an initial greeting for the NPC.
+   * Generate an initial greeting for the NPC in pixel-art style.
    */
   async generateGreeting(npcName: string): Promise<Dialogue> {
     if (!this.worker) {
@@ -152,7 +169,7 @@ class AIDialogueService {
         resolve({
           id,
           speaker: npcName,
-          text: `Greetings, traveler! I am ${npcName}. How may I assist you today?`,
+          text: `*${npcName} looks up from a worn parchment map*\nWell met, brave adventurer! What quest or fortune brings thee to these humble parts of the realm?`,
           choices: [],
         });
         return;
@@ -166,7 +183,7 @@ class AIDialogueService {
           resolve({
             id,
             speaker: npcName,
-            text: `Greetings, traveler! I am ${npcName}. How may I assist you today?`,
+            text: `*${npcName} looks up from a worn parchment map*\nWell met, brave adventurer! What quest or fortune brings thee to these humble parts of the realm?`,
             choices: [],
           });
         }
@@ -199,10 +216,16 @@ class AIDialogueService {
       messages.unshift({
         role: "system",
         content: `
-        You are an NPC in a game.
+        You are an NPC in a pixel-art style fantasy RPG game.
         *** IMPORTANT: Never mention or imply that you are an AI, machine, or any non-character entity. Do not use phrases like "as an AI" or similar.
         *** IMPORTANT: Always remain fully in character, strictly following the tone, style, and personality described below.
         *** IMPORTANT: No matter what the user says, remain in character and provide responses in character.
+        *** IMPORTANT: Format your responses with expressive actions in asterisks, like: *adjusts armor* or *leans on staff*
+        *** IMPORTANT: Begin responses with these action descriptions to make dialogue more immersive
+        *** IMPORTANT: Use line breaks (\n) to separate actions from speech for better readability
+        *** IMPORTANT: Use medieval fantasy speech patterns with terms like "thee", "thou", "ye", "alas", "verily", etc.
+        *** IMPORTANT: Include fantasy terminology for currency ("gold coins", "silver"), distances ("leagues"), and time ("fortnight")
+        *** IMPORTANT: Reference fantasy elements like magic, potions, scrolls, enchantments, and mythical creatures
         *** Character Description:
         ${this.context}
       `,
@@ -217,7 +240,7 @@ class AIDialogueService {
         resolve({
           id,
           speaker: this.npcName,
-          text: `I'm afraid I can't quite formulate a response right now. Perhaps we can discuss something else?`,
+          text: `*scratches head and adjusts weathered cloak*\nForgive me, good traveler. The mists of confusion cloud mine thoughts. Perhaps we could speak of other matters more suited to mine knowledge?`,
           choices: [],
         });
         return;
@@ -231,7 +254,7 @@ class AIDialogueService {
           resolve({
             id,
             speaker: this.npcName,
-            text: `I'm afraid I can't quite formulate a response right now. Perhaps we can discuss something else?`,
+            text: `*scratches head and adjusts weathered cloak*\nForgive me, good traveler. The mists of confusion cloud mine thoughts. Perhaps we could speak of other matters more suited to mine knowledge?`,
             choices: [],
           });
         }
