@@ -14,6 +14,12 @@ VXLverse is a powerful browser-based 3D game creation platform that allows users
 
 > **Create, Play, Share** - Build immersive 3D worlds and games directly in your browser with our intuitive voxel editor.
 
+### Pixel-Art RPG Interface
+
+![VXLverse Pixel-Art RPG UI](/public/Demo2.png)
+
+> **Immersive Game Experience** - Engage players with authentic pixel-art RPG interfaces, dialogue systems, and game HUD.
+
 ## Features
 
 ### Intuitive Editor
@@ -22,7 +28,7 @@ VXLverse is a powerful browser-based 3D game creation platform that allows users
 - **Properties Panel**: Customize object properties, appearance, and behaviors
 - **Grid & Snapping System**: Precise object placement with customizable grid settings
 - **3D Model Library**: Access a growing collection of pre-made 3D models
-- **Quest System**: Create interactive game objectives and storylines
+- **Quest System**: Create interactive game objectives and storylines with pixel-art RPG-style UI
 - **Requirements System**: Set up game progression mechanics and conditions
 
 ### Advanced Tools
@@ -30,6 +36,7 @@ VXLverse is a powerful browser-based 3D game creation platform that allows users
 - **Transform Tools**: Move, rotate, and scale objects with precision
 - **Brush Tool**: Paint and modify voxel-based objects
 - **Preview Mode**: Test your game in real-time within the editor
+- **Pixel-Art RPG UI**: Immersive game interface with retro-style HUD, dialogue system, and inventory
 
 ### Technical Capabilities
 
@@ -37,6 +44,7 @@ VXLverse is a powerful browser-based 3D game creation platform that allows users
 - **State Management**: Efficient state handling with Zustand
 - **Responsive UI**: Modern interface built with Tailwind CSS and Framer Motion
 - **Asset Management**: Integrated with PocketBase for model storage and retrieval
+- **Pixel-Perfect Styling**: Authentic pixel-art aesthetics with consistent design language
 
 ## Getting Started
 
@@ -92,6 +100,12 @@ VXLverse is a powerful browser-based 3D game creation platform that allows users
 2. Navigate to the Properties Panel on the right
 3. Use the Quest and Requirements tabs to set up game interactions
 
+### Customizing Game UI
+
+1. Access the game components in the src/components/game directory
+2. Modify the pixel-art RPG styling to match your game's aesthetic
+3. Test your changes in Preview Mode to see the immersive UI in action
+
 ## Architecture
 
 VXLverse is built with a component-based architecture using React and TypeScript. The main components include:
@@ -100,6 +114,9 @@ VXLverse is built with a component-based architecture using React and TypeScript
 - **ScenePanel**: Manages scene hierarchy and object library
 - **PropertiesPanel**: Controls object properties and game logic
 - **EditorScene**: Handles 3D rendering and object manipulation
+- **GameHUD**: Pixel-art style heads-up display for in-game information
+- **DialogueModal**: Immersive RPG-style dialogue system
+- **Inventory/QuestLog**: Retro-styled game systems with consistent pixel aesthetics
 
 State management is handled through Zustand stores, with the primary store being `editorStore.ts`.
 
@@ -126,6 +143,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **Voxel-Based Design**: Intuitive building blocks make 3D creation accessible to everyone
 - **Real-Time Collaboration**: Work together with friends on the same project simultaneously
 - **Cross-Platform Publishing**: Deploy your games to web, mobile, and desktop platforms
+- **Authentic Pixel-Art UI**: Immersive retro-style game interfaces that enhance player experience
+- **Cohesive RPG Systems**: Integrated dialogue, inventory, and quest systems with consistent styling
 
 ## Community and Support
 
@@ -136,7 +155,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Keywords
 
-voxel editor, 3D game creation, browser game maker, no-code game development, three.js game engine, voxel modeling, interactive 3D, web-based game editor, game design platform, 3D world builder
+voxel editor, 3D game creation, browser game maker, no-code game development, three.js game engine, voxel modeling, interactive 3D, web-based game editor, game design platform, 3D world builder, pixel-art UI, retro RPG interface, game HUD design
 
 ---
 

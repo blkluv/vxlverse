@@ -32,8 +32,25 @@ function ProgressBar({
   toColor = "to-red-500",
 }: ProgressBarProps) {
   const pct = Math.min(100, Math.max(0, (current / max) * 100));
+  
+  // Convert Tailwind color classes to actual color values
+  const getColorValue = (colorClass: string) => {
+    const colorMap: Record<string, string> = {
+      "from-red-700": "#b91c1c",
+      "to-red-500": "#ef4444",
+      "from-blue-700": "#1d4ed8",
+      "to-blue-500": "#3b82f6",
+      "from-purple-700": "#7e22ce",
+      "to-indigo-500": "#6366f1"
+    };
+    return colorMap[colorClass] || colorClass;
+  };
+  
+  const fromColorValue = getColorValue(fromColor);
+  const toColorValue = getColorValue(toColor);
+  
   return (
-    <div 
+    <div
       style={{
         position: "relative",
         width: "100%",
@@ -42,27 +59,36 @@ function ProgressBar({
         backgroundColor: "#1c1917",
         borderStyle: "solid",
         borderWidth: "2px",
-        borderColor: "#78350f",
+        borderColor: "#92400e #78350f #78350f #92400e",
         boxShadow: "inset 0 0 5px rgba(0,0,0,0.5)",
         imageRendering: "pixelated",
+        marginBottom: "4px"
       }}
     >
       <div
-        className={cn(
-          lowPulse && "animate-pulse"
-        )}
-        style={{ 
+        style={{
           position: "absolute",
           left: 0,
           top: 0,
           height: "100%",
           width: `${pct}%`,
-          background: `linear-gradient(to right, ${fromColor.replace("from-", "")} 0%, ${toColor.replace("to-", "")} 100%)`,
+          background: `linear-gradient(to right, ${fromColorValue} 0%, ${toColorValue} 100%)`,
           transition: "width 0.3s ease-out",
           borderRight: pct < 100 ? "2px solid #000" : "none",
+          animation: lowPulse ? "pulse 2s infinite" : "none"
         }}
       />
+      {/* Pixelated overlay pattern for texture */}
       <div 
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage: "linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)",
+          backgroundSize: "4px 4px",
+          opacity: 0.5
+        }}
+      />
+      <div
         style={{
           position: "absolute",
           inset: 0,
@@ -141,8 +167,9 @@ export function GameHUD({
               backgroundColor: "#1c1917",
               borderStyle: "solid",
               borderWidth: "4px",
-              borderColor: "#b45309",
-              boxShadow: "0 0 0 2px #78350f, 0 0 10px 2px rgba(217, 119, 6, 0.3), 0 10px 15px -3px rgba(0, 0, 0, 0.7)",
+              borderImage: "linear-gradient(to bottom right, #b45309, #78350f) 1",
+              boxShadow:
+                "0 0 0 2px #78350f, 0 0 10px 2px rgba(217, 119, 6, 0.3), 0 10px 15px -3px rgba(0, 0, 0, 0.7)",
               padding: "20px",
               maxWidth: "300px",
               width: "90%",
@@ -155,66 +182,73 @@ export function GameHUD({
             transition={{ duration: 0.3 }}
           >
             <div style={{ textAlign: "center" }}>
-              <div 
-                style={{ 
-                  fontSize: "48px", 
+              <div
+                style={{
+                  fontSize: "48px",
                   marginBottom: "12px",
                   textShadow: "2px 2px 0 #000",
                 }}
               >
                 🏆
               </div>
-              <h2 
-                style={{ 
-                  fontSize: "24px", 
-                  fontWeight: "bold", 
+              <h2
+                style={{
+                  fontSize: "24px",
+                  fontWeight: "bold",
                   marginBottom: "12px",
                   color: "#fef3c7",
                   fontFamily: "monospace",
                   textShadow: "2px 2px 0 #000",
+                  letterSpacing: "1px",
+                  textTransform: "uppercase"
                 }}
               >
                 Level Up!
               </h2>
-              <p 
-                style={{ 
-                  fontSize: "16px", 
+              <p
+                style={{
+                  fontSize: "16px",
                   marginBottom: "16px",
                   color: "#e5e7eb",
                   fontFamily: "monospace",
                 }}
               >
                 You are now level{" "}
-                <span style={{ color: "#fcd34d", fontWeight: "bold" }}>{level}</span>
+                <span style={{ color: "#fcd34d", fontWeight: "bold" }}>
+                  {level}
+                </span>
               </p>
-              <div 
-                style={{ 
-                  backgroundColor: "rgba(255, 255, 255, 0.1)", 
-                  padding: "12px", 
+              <div
+                style={{
+                  backgroundColor: "#292524",
+                  padding: "12px",
                   marginBottom: "16px",
                   borderStyle: "solid",
                   borderWidth: "2px",
-                  borderColor: "#78350f",
+                  borderColor: "#92400e #78350f #78350f #92400e",
                 }}
               >
-                <p 
-                  style={{ 
-                    fontWeight: "500", 
-                    marginBottom: "8px", 
+                <p
+                  style={{
+                    fontWeight: "bold",
+                    marginBottom: "8px",
                     fontSize: "14px",
                     color: "#fef3c7",
                     fontFamily: "monospace",
+                    textShadow: "1px 1px 0 #000",
                   }}
                 >
                   Stats increased:
                 </p>
-                <div 
-                  style={{ 
-                    display: "grid", 
-                    gridTemplateColumns: "1fr 1fr", 
-                    gap: "8px", 
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: "8px",
                     fontSize: "14px",
                     fontFamily: "monospace",
+                    color: "#fef3c7",
+                    textShadow: "1px 1px 0 #000",
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "center" }}>
@@ -236,7 +270,7 @@ export function GameHUD({
                   backgroundColor: "#b45309",
                   borderStyle: "solid",
                   borderWidth: "2px",
-                  borderColor: "#92400e",
+                  borderColor: "#92400e #78350f #78350f #92400e",
                   color: "#fef3c7",
                   fontWeight: "bold",
                   padding: "8px 16px",
@@ -244,6 +278,9 @@ export function GameHUD({
                   textShadow: "1px 1px 0 #000",
                   cursor: "pointer",
                   boxShadow: "2px 2px 0 rgba(0,0,0,0.3)",
+                  textTransform: "uppercase",
+                  letterSpacing: "1px",
+                  fontSize: "14px"
                 }}
                 onClick={() => setShowLevelUp(false)}
               >
@@ -255,10 +292,32 @@ export function GameHUD({
       </AnimatePresence>
 
       {/* TOP BAR */}
-      <div className="pointer-events-auto bg-black/50 border-b border-gray-700 shadow-sm flex items-center justify-between px-4 py-2">
+      <div 
+        style={{
+          pointerEvents: "auto",
+          backgroundColor: "#1c1917",
+          borderBottom: "2px solid #78350f",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "8px 12px",
+          imageRendering: "pixelated"
+        }}
+      >
         {/* Left: Time & Day */}
-        <div className="flex items-center space-x-2 text-sm font-semibold">
-          <span className="text-base">
+        <div 
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            fontSize: "12px",
+            fontFamily: "monospace",
+            fontWeight: "bold",
+            color: "#fef3c7",
+            textShadow: "1px 1px 0 #000"
+          }}
+        >
+          <span style={{ fontSize: "16px" }}>
             {timeOfDay === "morning" && "🌅"}
             {timeOfDay === "noon" && "☀️"}
             {timeOfDay === "evening" && "🌆"}
@@ -269,19 +328,60 @@ export function GameHUD({
           </span>
         </div>
         {/* Right: Level & Money */}
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 border-2 border-yellow-300 flex items-center justify-center text-black text-sm sm:text-base font-extrabold shadow-sm">
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <div 
+            style={{
+              width: isMobile ? "28px" : "32px",
+              height: isMobile ? "28px" : "32px",
+              background: "linear-gradient(to bottom right, #fbbf24, #b45309)",
+              borderStyle: "solid",
+              borderWidth: "2px",
+              borderColor: "#92400e",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fef3c7",
+              fontSize: isMobile ? "12px" : "14px",
+              fontFamily: "monospace",
+              fontWeight: "bold",
+              textShadow: "1px 1px 0 #000",
+              boxShadow: "2px 2px 0 rgba(0,0,0,0.3)"
+            }}
+          >
             {level}
           </div>
-          <div className="flex items-center bg-white/10 rounded-full px-2 py-1 text-sm">
-            <span className="mr-1 text-yellow-300">💰</span>
-            <span className="font-bold">{money}</span>
+          <div 
+            style={{
+              display: "flex",
+              alignItems: "center",
+              backgroundColor: "#78350f",
+              borderStyle: "solid",
+              borderWidth: "2px",
+              borderColor: "#92400e",
+              padding: "4px 8px",
+              fontSize: "12px",
+              fontFamily: "monospace",
+              color: "#fef3c7",
+              textShadow: "1px 1px 0 #000"
+            }}
+          >
+            <span style={{ marginRight: "4px" }}>💰</span>
+            <span style={{ fontWeight: "bold" }}>{money}</span>
           </div>
         </div>
       </div>
 
       {/* RESOURCE BARS (Health, Energy, XP) */}
-      <div className="grid md:grid-cols-1 max-w-96  gap-1 grid-cols-3 mt-2 px-2">
+      <div 
+        style={{
+          display: "grid",
+          gridTemplateColumns: isMobile ? "repeat(3, 1fr)" : "1fr",
+          maxWidth: "384px",
+          gap: "4px",
+          marginTop: "8px",
+          padding: "0 8px"
+        }}
+      >
         <ProgressBar
           label="HP"
           icon="❤️"
@@ -315,16 +415,57 @@ export function GameHUD({
       <div className="flex-1" />
 
       {/* BOTTOM BAR */}
-      <div className="pointer-events-auto    flex justify-end py-2">
-        <div className="flex items-center space-x-3">
+      <div 
+        style={{
+          pointerEvents: "auto",
+          display: "flex",
+          justifyContent: "flex-end",
+          padding: "8px"
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           {/* Inventory */}
           <button
             onClick={onOpenInventory}
-            className="relative w-12 h-12 rounded-full bg-gray-800 hover:bg-gray-700 text-white text-xl flex items-center justify-center transition transform hover:scale-105 shadow-sm"
+            style={{
+              position: "relative",
+              width: "40px",
+              height: "40px",
+              backgroundColor: "#1c1917",
+              borderStyle: "solid",
+              borderWidth: "2px",
+              borderColor: "#78350f",
+              color: "#fef3c7",
+              fontSize: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              boxShadow: "2px 2px 0 rgba(0,0,0,0.3)",
+              imageRendering: "pixelated"
+            }}
           >
             🎒
             {inventoryCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[0.65rem] rounded-full w-5 h-5 flex items-center justify-center border border-red-400 shadow-sm">
+              <span 
+                style={{
+                  position: "absolute",
+                  top: "-6px",
+                  right: "-6px",
+                  backgroundColor: "#b91c1c",
+                  color: "white",
+                  fontSize: "10px",
+                  width: "18px",
+                  height: "18px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  border: "1px solid #f87171",
+                  boxShadow: "1px 1px 0 rgba(0,0,0,0.3)",
+                  fontFamily: "monospace",
+                  fontWeight: "bold"
+                }}
+              >
                 {inventoryCount}
               </span>
             )}
@@ -333,11 +474,46 @@ export function GameHUD({
           {/* Quest Log */}
           <button
             onClick={onOpenQuestLog}
-            className="relative w-12 h-12 rounded-full bg-gray-800 hover:bg-gray-700 text-white text-xl flex items-center justify-center transition transform hover:scale-105 shadow-sm"
+            style={{
+              position: "relative",
+              width: "40px",
+              height: "40px",
+              backgroundColor: "#1c1917",
+              borderStyle: "solid",
+              borderWidth: "2px",
+              borderColor: "#78350f",
+              color: "#fef3c7",
+              fontSize: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              boxShadow: "2px 2px 0 rgba(0,0,0,0.3)",
+              imageRendering: "pixelated"
+            }}
           >
             📜
             {activeQuest && (
-              <span className="absolute -top-1 -right-1 bg-yellow-500 text-white text-[0.65rem] rounded-full w-5 h-5 flex items-center justify-center border border-yellow-400 shadow-sm animate-pulse">
+              <span 
+                style={{
+                  position: "absolute",
+                  top: "-6px",
+                  right: "-6px",
+                  backgroundColor: "#d97706",
+                  color: "white",
+                  fontSize: "10px",
+                  width: "18px",
+                  height: "18px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  border: "1px solid #fbbf24",
+                  boxShadow: "1px 1px 0 rgba(0,0,0,0.3)",
+                  fontFamily: "monospace",
+                  fontWeight: "bold",
+                  animation: "pulse 2s infinite"
+                }}
+              >
                 !
               </span>
             )}
@@ -346,7 +522,22 @@ export function GameHUD({
           {/* Map */}
           <button
             onClick={onOpenMap}
-            className="w-12 h-12 rounded-full bg-gray-800 hover:bg-gray-700 text-white text-xl flex items-center justify-center transition transform hover:scale-105 shadow-sm"
+            style={{
+              width: "40px",
+              height: "40px",
+              backgroundColor: "#1c1917",
+              borderStyle: "solid",
+              borderWidth: "2px",
+              borderColor: "#78350f",
+              color: "#fef3c7",
+              fontSize: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              boxShadow: "2px 2px 0 rgba(0,0,0,0.3)",
+              imageRendering: "pixelated"
+            }}
           >
             🗺️
           </button>
