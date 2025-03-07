@@ -1,20 +1,28 @@
 import Ecctrl, { EcctrlAnimation } from "ecctrl";
 import { KeyboardControls } from "@react-three/drei";
 import { Hero } from "./Hero";
-
+import * as THREE from "three";
 const animationSet = {
-  idle: "HumanArmature|Man_Idle",
-  walk: "HumanArmature|Man_Walk",
-  run: "HumanArmature|Man_Run",
-  jump: "HumanArmature|Man_Jump",
-  jumpIdle: "HumanArmature|Man_RunningJump",
-  jumpLand: "HumanArmature|Man_Standing",
-  fall: "HumanArmature|Man_Death", // Falling could be represented by a death animation
-  action1: "HumanArmature|Man_Clapping",
-  action2: "HumanArmature|Man_Sitting",
-  action3: "HumanArmature|Man_Punch",
-  action4: "HumanArmature|Man_SwordSlash", // Attack action
+  idle: "Idle",
+  walk: "Walk",
+  run: "run",
+  jump: "jump",
+  jumpIdle: "jump",
+  jumpLand: "jump",
+  fall: "jump", // Falling now uses the valid "jump" action
 };
+
+type ActionName =
+  | "Armature.001|mixamo.com|Layer0"
+  | "Armature.001|mixamo.com|Layer0.001"
+  | "Armature.001|mixamo.com|Layer0.002"
+  | "Idle"
+  | "jump"
+  | "Run"
+  | "Run.001"
+  | "Walk"
+  | "SwordSlash";
+
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
   { name: "backward", keys: ["ArrowDown", "KeyS"] },
