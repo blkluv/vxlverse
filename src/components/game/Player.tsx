@@ -1,27 +1,16 @@
 import Ecctrl, { EcctrlAnimation } from "ecctrl";
 import { KeyboardControls } from "@react-three/drei";
 import { Hero } from "./Hero";
-import * as THREE from "three";
 const animationSet = {
   idle: "Idle",
   walk: "Walk",
   run: "run",
   jump: "jump",
   jumpIdle: "jump",
-  jumpLand: "jump",
+  jumpLand: "land",
   fall: "jump", // Falling now uses the valid "jump" action
+  action1: "Attack",
 };
-
-type ActionName =
-  | "Armature.001|mixamo.com|Layer0"
-  | "Armature.001|mixamo.com|Layer0.001"
-  | "Armature.001|mixamo.com|Layer0.002"
-  | "Idle"
-  | "jump"
-  | "Run"
-  | "Run.001"
-  | "Walk"
-  | "SwordSlash";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },

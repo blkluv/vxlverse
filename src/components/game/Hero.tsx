@@ -22,36 +22,35 @@ type ActionName =
   | "Armature.001|mixamo.com|Layer0.001"
   | "Armature.001|mixamo.com|Layer0.002"
   | "Idle"
+  | "Armature.001|mixamo.com|Layer0.004"
+  | "Attack"
   | "jump"
+  | "land"
   | "run"
   | "Run"
   | "Run.001"
   | "Walk";
-type GLTFActions = Record<ActionName, THREE.AnimationAction>;
+export type GLTFActions = Record<ActionName, THREE.AnimationAction>;
 
 export function Hero(props: JSX.IntrinsicElements["group"]) {
   const group = useRef<THREE.Group>(null);
-  const { nodes, materials, animations } = useGLTF("/player.glb") as GLTFResult;
+  const { nodes, materials } = useGLTF("/player.glb") as GLTFResult;
   return (
-    <group
-      ref={group}
-      {...props}
-      scale={0.9}
-      position={[0, -0.9, 0]}
-      dispose={null}
-    >
-      <group name="Scene">
-        <group name="Armature" rotation={[Math.PI / 2, 0, 0]}>
-          <skinnedMesh
-            name="model_T"
-            geometry={nodes.model_T.geometry}
-            material={materials["Body.003"]}
-            skeleton={nodes.model_T.skeleton}
-          />
-          <primitive object={nodes.mixamorigHips} />
+    <>
+      <group ref={group} {...props} dispose={null}>
+        <group name="Scene">
+          <group name="Armature" rotation={[Math.PI / 2, 0, 0]}>
+            <skinnedMesh
+              name="model_T"
+              geometry={nodes.model_T.geometry}
+              material={materials["Body.003"]}
+              skeleton={nodes.model_T.skeleton}
+            />
+            <primitive object={nodes.mixamorigHips} />
+          </group>
         </group>
       </group>
-    </group>
+    </>
   );
 }
 
