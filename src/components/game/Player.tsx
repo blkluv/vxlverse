@@ -1,13 +1,10 @@
-import { useState, useRef } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
-import { Vector3 } from "three";
+import { useEffect, useRef } from "react";
 import Ecctrl, { EcctrlAnimation } from "ecctrl";
-import { KeyboardControls, useKeyboardControls } from "@react-three/drei";
+import { KeyboardControls } from "@react-three/drei";
 import { Hero } from "./Hero";
-import { Fireball } from "./Fireball";
+import { RapierRigidBody } from "@react-three/rapier";
+import { useEnemyStore } from "../../stores/enemyStore";
 import { useGameStore } from "../../stores/gameStore";
-import { Box } from "lucide-react";
-import { RapierRigidBody, useRapier } from "@react-three/rapier";
 
 const animationSet = {
   idle: "Idle",
@@ -28,9 +25,6 @@ const keyboardMap = [
   { name: "jump", keys: ["Space"] },
   { name: "run", keys: ["Shift"] },
   { name: "action1", keys: ["1"] },
-  { name: "action2", keys: ["2"] },
-  { name: "action3", keys: ["3"] },
-  { name: "action4", keys: ["KeyF"] },
 ];
 
 export function Player() {

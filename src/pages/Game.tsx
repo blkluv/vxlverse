@@ -5,17 +5,17 @@ import { QuestLog } from "../components/game/QuestLog";
 import { Inventory } from "../components/game/Inventory";
 import { DialogueModal } from "../components/game/DialogueModal";
 import { Canvas } from "@react-three/fiber";
-import { Sky } from "@react-three/drei";
+import { Sky, StatsGl } from "@react-three/drei";
 import { Suspense, useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useEnemyStore } from "../stores/enemyStore";
-import { EnemyRewardModal } from "../components/game/EnemyReward";
-import { LevelUpModal } from "../components/game/LevelUpModal";
+import { LevelUp, LevelUpModal } from "../components/game/LevelUp";
 import { useParams } from "react-router-dom";
 import { GameScene } from "../components/game/Scene";
 import { Joystick } from "../components/game/Joystick";
 import { useGame } from "../hooks/useGame";
 import { Quests } from "../components/game/Quests";
+import { FloatingReward, Rewards } from "../components/game/Rewards";
 
 export function Game() {
   const { id } = useParams<{ id: string }>();
@@ -103,19 +103,19 @@ export function Game() {
 
       {/* Game UI */}
       <GameHUD />
-      <Joystick />
 
       {/* Modals */}
       {gameState.inventoryOpen && <Inventory />}
       {gameState.questLogOpen && <QuestLog />}
       <DialogueModal />
-      {/* Reward Modal */}
-      {rewards && !gameState.showLevelUp && (
-        <EnemyRewardModal rewards={rewards} onClose={clearRewards} />
-      )}
-
-      {gameState.showLevelUp && <LevelUpModal />}
+      <LevelUp />
       <Quests />
+      <Rewards />
+
+      {!gameState.inventoryOpen &&
+        !gameState.questLogOpen &&
+        !gameState.showLevelUp &&
+        !rewards && <Joystick />}
     </div>
   );
 }

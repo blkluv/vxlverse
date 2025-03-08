@@ -3,9 +3,9 @@ import { Howl } from "howler";
 
 const SOUNDS = {
   background: {
-    src: "/mp3/creepy-halloween-bell-trap-melody-247720.mp3",
+    src: "/mp3/bg.m4a",
     loop: true,
-    volume: 0.2,
+    volume: 0.3,
   },
   hit: {
     src: "/mp3/hit-sound-effect-240898.mp3",
@@ -21,6 +21,10 @@ const SOUNDS = {
   },
   teleport: {
     src: "/mp3/teleport-90137.mp3",
+    volume: 0.5,
+  },
+  attack: {
+    src: "/mp3/fireball.mp3",
     volume: 0.5,
   },
   npcGreeting: {
@@ -55,8 +59,12 @@ const SOUNDS = {
     src: "/mp3/levelup.mp3",
     volume: 0.6,
   },
-  notAllowed:{
+  notAllowed: {
     src: "/mp3/wrong-47985.mp3",
+    volume: 0.6,
+  },
+  hurt: {
+    src: "/mp3/hurt.mp3",
     volume: 0.6,
   },
   dialogueStart: {
@@ -78,7 +86,7 @@ const SOUNDS = {
   itemGet: {
     src: "/mp3/collect-5930.mp3",
     volume: 0.6,
-  }
+  },
 };
 
 type SoundType = keyof typeof SOUNDS;
@@ -87,7 +95,7 @@ export function useSound() {
   const soundsRef = useRef<Record<SoundType, Howl>>(
     {} as Record<SoundType, Howl>
   );
-  
+
   // Cache for custom sound URLs
   const customSoundsCache = useRef<Record<string, Howl>>({});
 
@@ -107,22 +115,24 @@ export function useSound() {
     return () => {
       // Unload predefined sounds
       Object.values(soundsRef.current).forEach((sound) => sound.unload());
-      
+
       // Unload custom sounds
-      Object.values(customSoundsCache.current).forEach((sound) => sound.unload());
+      Object.values(customSoundsCache.current).forEach((sound) =>
+        sound.unload()
+      );
     };
   }, []);
 
   const playSound = useCallback((soundInput: SoundType | string) => {
     // Check if it's a predefined sound type
-    if (typeof soundInput === 'string' && soundInput in SOUNDS) {
+    if (typeof soundInput === "string" && soundInput in SOUNDS) {
       const sound = soundsRef.current[soundInput as SoundType];
       if (sound) {
         sound.play();
       }
-    } 
+    }
     // Handle custom sound URL
-    else if (typeof soundInput === 'string' && soundInput.startsWith('http')) {
+    else if (typeof soundInput === "string" && soundInput.startsWith("http")) {
       // Check if we already have this sound cached
       if (customSoundsCache.current[soundInput]) {
         customSoundsCache.current[soundInput].play();
@@ -134,10 +144,10 @@ export function useSound() {
             volume: 0.5,
             html5: true, // This helps with streaming audio from external URLs
           });
-          
+
           // Cache the sound
           customSoundsCache.current[soundInput] = newSound;
-          
+
           // Play it
           newSound.play();
         } catch (error) {
@@ -149,14 +159,17 @@ export function useSound() {
 
   const stopSound = useCallback((soundInput: SoundType | string) => {
     // Check if it's a predefined sound type
-    if (typeof soundInput === 'string' && soundInput in SOUNDS) {
+    if (typeof soundInput === "string" && soundInput in SOUNDS) {
       const sound = soundsRef.current[soundInput as SoundType];
       if (sound) {
         sound.stop();
       }
-    } 
+    }
     // Handle custom sound URL
-    else if (typeof soundInput === 'string' && customSoundsCache.current[soundInput]) {
+    else if (
+      typeof soundInput === "string" &&
+      customSoundsCache.current[soundInput]
+    ) {
       customSoundsCache.current[soundInput].stop();
     }
   }, []);

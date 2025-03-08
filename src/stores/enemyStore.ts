@@ -54,11 +54,11 @@ export const useEnemyStore = create<EnemyState>()(
 
       // Get player level and scale enemy accordingly
       const playerLevel = useGameStore.getState().playerStats.level;
-      
+
       // Enemy level will be -2 to +2 of player level
       const levelDiff = Math.floor(Math.random() * 5) - 2;
       const enemyLevel = Math.max(1, playerLevel + levelDiff);
-      
+
       // Scale enemy stats based on level
       const levelScale = enemyLevel / baseEnemy.level;
       const health = Math.floor(baseEnemy.health * levelScale * 1.5); // 50% more HP than equivalent player level
@@ -113,8 +113,9 @@ export const useEnemyStore = create<EnemyState>()(
 
       // Calculate dropped loot
       const droppedLoot: { itemId: string; amount: number }[] = [];
-      const randomLoot = enemy.loot[Math.floor(Math.random() * enemy.loot.length)];
-      
+      const randomLoot =
+        enemy.loot[Math.floor(Math.random() * enemy.loot.length)];
+
       if (Math.random() <= randomLoot.chance) {
         const itemId = randomLoot.itemId;
         const amount = randomLoot.amount * Math.floor(Math.random() * 5);
@@ -132,11 +133,14 @@ export const useEnemyStore = create<EnemyState>()(
         set((state) => ({
           enemies: state.enemies.filter((e) => e.id !== id),
           dyingEnemies: state.dyingEnemies.filter((e) => e !== id),
-          rewards: droppedLoot.length > 0 ? {
-            itemId: droppedLoot[0].itemId,
-            amount: droppedLoot[0].amount,
-            xp: enemy.xp
-          } : null
+          rewards:
+            droppedLoot.length > 0
+              ? {
+                  itemId: droppedLoot[0].itemId,
+                  amount: droppedLoot[0].amount,
+                  xp: enemy.xp,
+                }
+              : null,
         }));
       }, 1000);
     },

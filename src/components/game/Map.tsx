@@ -1,11 +1,9 @@
-import { motion } from "framer-motion";
 import { useEditorStore } from "../../stores/editorStore";
 import { useGameStore } from "../../stores/gameStore";
 import { X, Compass } from "lucide-react";
 import { Portal } from "../Portal";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
-import { SceneWrapper } from "../SceneWrapper";
 import { useSound } from "../../hooks/useSound";
 import { GameScene } from "./Scene";
 

@@ -30,10 +30,11 @@ function Floor() {
 export function GameScene({ sceneData }: SceneProps) {
   const { scene } = useThree();
 
-  const { playSound } = useSound();
+  const { playSound, stopSound } = useSound();
 
   useEffect(() => {
-    // playSound("background");
+    stopSound("background");
+    playSound("background");
   }, [sceneData?.fog, scene]);
 
   if (!sceneData) return null;
@@ -55,6 +56,9 @@ export function GameScene({ sceneData }: SceneProps) {
           background={sceneData.background === "environment"}
         />
       )}
+      <gridHelper args={[100, 100]} position={[0, 0.1, 0]}>
+        <meshBasicMaterial color="#1a1a1a" side={2} attach="material" />
+      </gridHelper>
 
       <ambientLight intensity={sceneData.ambientLight || 0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
