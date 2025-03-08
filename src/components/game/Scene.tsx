@@ -8,10 +8,10 @@ import { Player } from "./Player";
 import { useSound } from "../../hooks/useSound";
 import { useEnemyStore } from "../../stores/enemyStore";
 import { Enemy } from "./Enemy";
+import { Fireball } from "./FireBall";
 
 interface SceneProps {
   sceneData?: SceneType;
-  isPreview?: boolean;
 }
 
 function Floor() {
@@ -27,7 +27,7 @@ function Floor() {
   );
 }
 
-export function GameScene({ sceneData, isPreview }: SceneProps) {
+export function GameScene({ sceneData }: SceneProps) {
   const { scene } = useThree();
 
   const { playSound } = useSound();
@@ -61,8 +61,9 @@ export function GameScene({ sceneData, isPreview }: SceneProps) {
 
       <Physics>
         <Floor />
+        <Fireball />
 
-        {!isPreview && <Player />}
+        <Player />
         {/* Spawn Enemies */}
         <Suspense fallback={null}>
           {enemies.map((enemy) => (

@@ -28,7 +28,7 @@ export function Joystick() {
             opacity: 0.8,
           }),
         }}
-        buttonNumber={0}
+        buttonNumber={2}
       />
     </div>
   );

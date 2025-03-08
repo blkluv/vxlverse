@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { persist } from "zustand/middleware";
 import { Dialogue, Quest } from "../types";
+import { Vector3 } from "three";
 
 // Default scene ID
 const DEFAULT_SCENE_ID = "village-scene";
@@ -19,6 +20,11 @@ interface PlayerStats {
 }
 
 interface GameState {
+  attack?: {
+    initial: Vector3;
+    target: Vector3;
+  } | null;
+  setAttack: (attack: GameState["attack"]) => void;
   playerStats: PlayerStats;
   timeOfDay: "morning" | "noon" | "evening" | "night";
   gameTime: {
@@ -26,6 +32,8 @@ interface GameState {
     minutes: number;
     day: number;
   };
+  currentEnemy?: string | null;
+  setCurrentEnemy: (id: string | null) => void;
   currentSceneId: string;
   activeQuest: Quest | null;
   activeNpc: string | null;
@@ -84,6 +92,9 @@ export const useGameStore = create<GameState>()(
         maxEnergy: 100,
         damage: 10, // Starting damage
       },
+      setAttack: (attack) => set({ attack }),
+      currentEnemy: null,
+      setCurrentEnemy: (id) => set({ currentEnemy: id }),
       timeOfDay: "morning",
       gameTime: {
         hours: 6,
