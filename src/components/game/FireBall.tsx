@@ -59,48 +59,41 @@ export function Fireball() {
   if (!attack) return null;
 
   return (
-    <RigidBody
-      ref={fireBallRef}
-      type="dynamic"
-      colliders="ball"
-      gravityScale={-20}
-      position={[attack.initial.x, attack.initial.y, attack.initial.z]}
-      onCollisionEnter={(e) => {
-        joystick.releaseAllButtons();
-        gameStore.setAttack(null);
-        playSound("hurt");
-        if (gameStore.currentEnemy)
-          enemyStore.damageEnemy(
-            gameStore.currentEnemy,
-            gameStore.playerStats?.damage ?? 1
-          );
-      }}
+    <Trail
+      width={5}
+      color={"#ff2d00"}
+      length={2}
+      decay={2}
+      attenuation={(width) => width * 3}
+      local={false} /* This ensures the trail follows world space movement */
     >
-      <Trail
-        width={5}
-        color={"#ff2d00"}
-        length={2}
-        decay={2}
-        attenuation={(width) => width * 3}
+      <RigidBody
+        ref={fireBallRef}
+        type="dynamic"
+        colliders="ball"
+        gravityScale={-20}
+        position={[attack.initial.x, attack.initial.y, attack.initial.z]}
+        onCollisionEnter={(e) => {
+          joystick.releaseAllButtons();
+          gameStore.setAttack(null);
+          playSound("hurt");
+          if (gameStore.currentEnemy)
+            enemyStore.damageEnemy(
+              gameStore.currentEnemy,
+              gameStore.playerStats?.damage ?? 1
+            );
+        }}
       >
         <Sphere ref={sphereRef} args={[0.3, 32, 32]}>
-          {/* Standard material with emissive glow */}
-          {/* <meshStandardMaterial
-            color="#ff5500"
-            emissive="#ff2200"
-            emissiveIntensity={2}
-            toneMapped={false}
-          /> */}
           <MeshWobbleMaterial
-            speed={10}
-            factor={20.3}
+            speed={100}
+            factor={100}
             color="#ff5500"
             emissive="#ff2200"
             emissiveIntensity={2}
-            toneMapped={true}
           />
         </Sphere>
-      </Trail>
-    </RigidBody>
+      </RigidBody>
+    </Trail>
   );
 }

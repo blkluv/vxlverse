@@ -71,6 +71,7 @@ export const Hero = forwardRef<RapierRigidBody>(function (
       // Create a proper Vector3 for the target position
       const targetPos = new THREE.Vector3(enemyPos.x, enemyPos.y, enemyPos.z);
 
+      window.pos = playerPos;
       // Set the attack with proper positio dns
       gameStore.setAttack({
         initial: new THREE.Vector3(playerPos.x, playerPos.y + 1, playerPos.z),

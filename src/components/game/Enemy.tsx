@@ -45,6 +45,8 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
   // Animation setup
   const { actions } = useAnimations(animations, enemyRef);
 
+  useEffect(() => {}, []);
+
   // Check for health changes to show damage numbers
   useEffect(() => {
     if (enemy.health < lastHealth) {
@@ -132,17 +134,17 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
   }, [actions, isDying, showDamage, playSound]);
 
   // Handle dying animation and scaling down
-  useFrame((_, delta) => {
-    if (isDying && enemyRef.current) {
-      // Fade out by scaling down
-      enemyRef.current.scale.multiplyScalar(0.99);
+  // useFrame((_, delta) => {
+  //   if (isDying && enemyRef.current) {
+  //     // Fade out by scaling down
+  //     enemyRef.current.scale.multiplyScalar(0.99);
 
-      // Sink into the ground
-      if (enemyRef.current.position.y > -1) {
-        enemyRef.current.position.y -= delta * 0.5;
-      }
-    }
-  });
+  //     // Sink into the ground
+  //     if (enemyRef.current.position.y > -1) {
+  //       enemyRef.current.position.y -= delta * 0.5;
+  //     }
+  //   }
+  // });
 
   return (
     <group
