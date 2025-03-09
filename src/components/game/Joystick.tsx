@@ -49,7 +49,7 @@ export function Joystick() {
       />
       <div className="fixed pointer-events-auto bottom-6 right-6 flex flex-col gap-5">
         <button
-          className="w-14 h-14 rounded-lg bg-gradient-to-br from-amber-700 to-amber-900 text-white flex items-center justify-center border-2 border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.5)] active:shadow-[0_0_8px_rgba(245,158,11,0.8)] active:scale-95 transition-all duration-150 relative overflow-hidden before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-transparent before:to-amber-300/20"
+          className="w-14 h-14 rounded-full bg-gradient-to-br from-amber-700 to-amber-900 text-white flex items-center justify-center border-2 border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.5)] active:shadow-[0_0_8px_rgba(245,158,11,0.8)] active:scale-95 transition-all duration-150 relative overflow-hidden before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-transparent before:to-amber-300/20"
           onClick={attack}
           aria-label="Attack"
         >
@@ -63,7 +63,7 @@ export function Joystick() {
         </button>
 
         <button
-          className="w-14 h-14 rounded-lg bg-gradient-to-br from-emerald-700 to-emerald-900 text-white flex items-center justify-center border-2 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)] active:shadow-[0_0_8px_rgba(16,185,129,0.8)] active:scale-95 transition-all duration-150 relative overflow-hidden before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-transparent before:to-emerald-300/20"
+          className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-700 to-emerald-900 text-white flex items-center justify-center border-2 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)] active:shadow-[0_0_8px_rgba(16,185,129,0.8)] active:scale-95 transition-all duration-150 relative overflow-hidden before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-transparent before:to-emerald-300/20"
           onClick={jump}
           aria-label="Jump"
         >

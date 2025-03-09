@@ -112,10 +112,7 @@ export function Game() {
       <Quests />
       <Rewards />
 
-      {!gameState.inventoryOpen &&
-        !gameState.questLogOpen &&
-        !gameState.showLevelUp &&
-        !rewards && <Joystick />}
+      {!gameState.inventoryOpen && !gameState.questLogOpen && !gameState.showLevelUp && <Joystick />}
     </div>
   );
 }

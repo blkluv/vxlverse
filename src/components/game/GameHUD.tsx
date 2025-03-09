@@ -191,30 +191,6 @@ export function GameHUD({
           <HUDButton icon="💰" onClick={() => {}} tooltip="Shop" />
         </div>
       </div>
-
-      {/* Resource Bars */}
-      <div className="p-2 mt-1 w-full md:max-w-96 ">
-        {/* Container with pixelated border */}
-        <ProgressBar
-          label="HP"
-          icon="🔴"
-          current={health}
-          max={maxHealth}
-          lowPulse={healthLow}
-          fromColor="from-red-700"
-          toColor="to-red-500"
-        />
-        <div className="relative">
-          <ProgressBar
-            label={`Lvl ${level}`}
-            icon="⭐"
-            current={xp}
-            max={xpNeeded}
-            fromColor="from-purple-700"
-            toColor="to-indigo-500"
-          />
-        </div>
-      </div>
     </div>
   );
 }
