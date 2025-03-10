@@ -98,46 +98,39 @@ export const Hero = forwardRef<RapierRigidBody>(function (
     <group ref={group} {...props} position={[0, -0.9, 0]} dispose={null}>
       {height && (
         <Html position={[0, height * 1.7, 0]} sprite center>
-          <div className="pointer-events-none flex gap-1 items-center">
-            {/* Name with level badge */}
-            {/* Enhanced health bar */}
-            <div className="flex items-center justify-center  text-[10px] px-1  bg-gradient-to-br from-blue-900 to-blue-700 border border-white/30 shadow-lg">
-              <span className="text-white font-bold">{level}</span>
-            </div>
-            <div className="relative w-[100px]">
-              {/* Health bar container */}
-              <div className="w-full h-2 p-px bg-black/70  overflow-hidden">
-                {/* Health bar fill */}
-                <div
-                  className="h-full transition-all duration-300 ease-out"
-                  style={{
-                    width: `${(health / maxHealth) * 100}%`,
-                    background: `linear-gradient(to bottom, ${getHealthBarColor(
-                      health,
-                      maxHealth
-                    )}, ${getHealthBarColor(health, maxHealth)}90)`,
-                    boxShadow: `0 0 4px ${getHealthBarColor(
-                      health,
-                      maxHealth
-                    )}`,
-                  }}
-                ></div>
-                {/* Tick marks */}
-                <div className="absolute inset-0 flex justify-between px-0.5 pointer-events-none">
-                  {[...Array(9)].map((_, i) => (
-                    <div key={i} className="h-2 w-px bg-black/20"></div>
-                  ))}
-                </div>
+          <div className="pointer-events-none">
+            {/* Simple RPG status bars */}
+            <div className="flex items-center gap-1.5 p-0.5">
+              {/* Level indicator */}
+              <div className="flex items-center justify-center w-5 h-5 bg-[#2A2A2A] border-2 border-[#4A4A4A]  shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black">
+                <span className="text-[#7FE4FF] text-[10px] font-bold">
+                  {level}
+                </span>
               </div>
-              <div className="relative bg-black/70 w-full">
-                <div
-                  className="mt-0.5 "
-                  style={{
-                    width: `${(xp / xpNeeded) * 100}%`,
-                    background: "linear-gradient(to right, #FFC10790, #FFC107)",
-                    height: "5px",
-                  }}
-                />
+
+              {/* Bars container */}
+              <div className="w-[80px]">
+                {/* Health bar */}
+                <div className="w-full h-2 bg-[#2A2A2A] border border-[#4A4A4A]  shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black overflow-hidden mb-1">
+                  <div
+                    className="h-full transition-all duration-300"
+                    style={{
+                      width: `${(health / maxHealth) * 100}%`,
+                      backgroundColor: "#7FE4FF",
+                    }}
+                  ></div>
+                </div>
+
+                {/* XP bar */}
+                <div className="w-full h-1 bg-[#2A2A2A]  border-[#4A4A4A]  shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black overflow-hidden">
+                  <div
+                    className="h-full transition-all duration-300"
+                    style={{
+                      width: `${(xp / xpNeeded) * 100}%`,
+                      backgroundColor: "#FFD700",
+                    }}
+                  ></div>
+                </div>
               </div>
             </div>
           </div>

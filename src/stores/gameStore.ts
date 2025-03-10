@@ -95,7 +95,7 @@ export const useGameStore = create<GameState>()(
       setAttack: (attack) => set({ attack }),
       currentEnemy: null,
       setCurrentEnemy: (id) => set({ currentEnemy: id }),
-      timeOfDay: "morning",
+      timeOfDay: "night",
       gameTime: {
         hours: 6,
         minutes: 0,

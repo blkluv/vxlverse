@@ -1,11 +1,51 @@
 import { useState } from "react";
 import { useGameStore } from "../../stores/gameStore";
-import { Search, X, Info, DollarSign, Package, Check } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Search, X, Info, DollarSign, Check } from "lucide-react";
 import { GAME_ITEMS } from "../../types";
 import { Portal } from "../Portal";
 import { useSound } from "../../hooks/useSound";
 import { Input } from "../UI/input";
+
+// Add keyframe animation for slide-in-right
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #1A1A1A;
+    border: 2px solid #4A4A4A;
+    border-radius: 2px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #2A2A2A;
+    border: 2px solid #4A4A4A;
+    border-radius: 2px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #3A3A3A;
+  }
+`;
+document.head.appendChild(style);
 
 const CATEGORIES = [
   { id: "all", label: "All Items", emoji: "📦" },
@@ -54,12 +94,12 @@ export function Inventory() {
     // Show sale notification
     const notification = document.createElement("div");
     notification.className =
-      "fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2  flex items-center gap-2 animate-slide-up";
+      "fixed bottom-4 right-4 bg-[#2A2A2A] text-[#7FE4FF] px-4 py-2 border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black flex items-center gap-2 animate-slide-up";
     notification.innerHTML = `
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-5 h-5 text-[#FFD700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
       </svg>
-      Sold ${item.name} for ${sellValue} coins!
+      <span>Sold <span class="text-[#FFD700]">${item.name}</span> for <span class="text-[#FFD700]">${sellValue} coins</span>!</span>
     `;
     document.body.appendChild(notification);
     setTimeout(() => notification.remove(), 2000);
@@ -98,15 +138,15 @@ export function Inventory() {
   return (
     <Portal>
       <div
-        className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-2 md:p-8"
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-2 md:p-8 z-[9999]"
         onClick={() => setIsOpen(false)}
       >
         <div
-          className="bg-gray-900/95  w-full md:w-[900px] h-[90vh] md:h-[600px] shadow-xl border border-gray-800/50 flex flex-col md:flex-row overflow-hidden"
+          className="bg-[#2A2A2A] w-full md:w-[900px] h-[90vh] md:h-[600px] border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black flex flex-col md:flex-row overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Left Sidebar - Categories (Hidden on mobile, shown as top bar) */}
-          <div className="md:hidden p-3 bg-gray-900/50 border-b border-gray-800/50 overflow-x-auto">
+          <div className="md:hidden p-3 bg-[#1A1A1A] border-b-2 border-[#4A4A4A] overflow-x-auto">
             <div className="flex gap-2">
               {CATEGORIES.map((category) => {
                 const itemCount =
@@ -123,10 +163,10 @@ export function Inventory() {
                       playSound("select");
                       setSelectedCategory(category.id);
                     }}
-                    className={`flex-shrink-0 px-3 py-1.5  text-center transition-all ${
+                    className={`flex-shrink-0 px-3 py-1.5 text-center transition-all border-2 rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black ${
                       selectedCategory === category.id
-                        ? "bg-blue-500/20 text-blue-100"
-                        : "bg-gray-800/50 text-gray-300"
+                        ? "bg-[#3A3A3A] border-[#4A4A4A] text-[#7FE4FF]"
+                        : "bg-[#2A2A2A] border-[#4A4A4A] text-[#7FE4FF] hover:bg-[#3A3A3A]"
                     }`}
                   >
                     <div className="flex items-center gap-1.5">
@@ -135,10 +175,10 @@ export function Inventory() {
                         {category.label}
                       </span>
                       <span
-                        className={`text-xs px-1.5 py-0.5  ${
+                        className={`text-xs px-1.5 py-0.5 border rounded-sm ${
                           selectedCategory === category.id
-                            ? "bg-blue-500/30 text-blue-200"
-                            : "bg-gray-800 text-gray-400"
+                            ? "bg-[#2A2A2A] border-[#4A4A4A] text-[#7FE4FF]"
+                            : "bg-[#1A1A1A] border-[#4A4A4A] text-[#7FE4FF]"
                         }`}
                       >
                         {itemCount}
@@ -151,9 +191,9 @@ export function Inventory() {
           </div>
 
           {/* Desktop Categories Sidebar */}
-          <div className="hidden md:block w-48 bg-gray-900/50 border-r border-gray-800/50">
+          <div className="hidden md:block w-48 bg-[#1A1A1A] border-r-2 border-[#4A4A4A]">
             <div className="p-4">
-              <div className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">
+              <div className="text-xs font-bold text-[#7FE4FF] uppercase tracking-wider mb-3">
                 Categories
               </div>
               <div className="space-y-1">
@@ -173,10 +213,10 @@ export function Inventory() {
                         playSound("select");
                         setSelectedCategory(category.id);
                       }}
-                      className={`w-full px-3 py-2  text-left transition-all flex items-center justify-between group ${
+                      className={`w-full px-3 py-2 text-left transition-all flex items-center justify-between group border-2 rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black mb-2 ${
                         selectedCategory === category.id
-                          ? "bg-blue-500/20 text-blue-100"
-                          : "hover:bg-gray-800/50 text-gray-300"
+                          ? "bg-[#3A3A3A] border-[#4A4A4A] text-[#7FE4FF]"
+                          : "bg-[#2A2A2A] border-[#4A4A4A] text-[#7FE4FF] hover:bg-[#3A3A3A]"
                       }`}
                     >
                       <div className="flex items-center gap-2">
@@ -184,10 +224,10 @@ export function Inventory() {
                         <span className="text-sm">{category.label}</span>
                       </div>
                       <span
-                        className={`text-xs px-1.5 py-0.5  ${
+                        className={`text-xs px-1.5 py-0.5 border rounded-sm ${
                           selectedCategory === category.id
-                            ? "bg-blue-500/30 text-blue-200"
-                            : "bg-gray-800 text-gray-400"
+                            ? "bg-[#2A2A2A] border-[#4A4A4A] text-[#7FE4FF]"
+                            : "bg-[#1A1A1A] border-[#4A4A4A] text-[#7FE4FF]"
                         }`}
                       >
                         {itemCount}
@@ -202,46 +242,46 @@ export function Inventory() {
           {/* Main Content */}
           <div className="flex-1 flex flex-col min-w-0">
             {/* Header */}
-            <div className="p-3 md:p-4 border-b border-gray-800/50 flex items-center justify-between bg-gray-900/50">
+            <div className="p-3 md:p-4 border-b-2 border-[#4A4A4A] flex items-center justify-between bg-[#1A1A1A]">
               <div className="flex items-center gap-2 md:gap-3">
                 <div className="text-xl md:text-2xl">🎒</div>
                 <div>
-                  <h2 className="text-base md:text-lg font-bold text-white">
+                  <h2 className="text-base md:text-lg font-bold text-[#7FE4FF]">
                     Inventory
                   </h2>
-                  <div className="text-xs md:text-sm text-gray-400">
+                  <div className="text-xs md:text-sm text-[#4A4A4A]">
                     {inventory.length} items
                   </div>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 md:p-2 hover:bg-gray-800  transition-colors"
+                className="p-1.5 bg-[#2A2A2A] border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black hover:bg-[#3A3A3A] active:translate-y-[2px] active:translate-x-[2px] active:shadow-none transition-all"
               >
-                <X className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
+                <X className="w-4 h-4 md:w-5 md:h-5 text-[#7FE4FF]" />
               </button>
             </div>
 
             {/* Search Bar */}
-            <div className="p-3 md:p-4 border-b border-gray-800/50 bg-gray-900/30">
+            <div className="p-3 md:p-4 border-b-2 border-[#4A4A4A] bg-[#1A1A1A]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7FE4FF]" />
                 <Input
                   type="text"
                   placeholder="Search items..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 md:py-2.5 bg-gray-800/50  text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                  className="w-full pl-9 pr-4 py-2 md:py-2.5 bg-[#2A2A2A] border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black text-sm text-[#7FE4FF] placeholder-[#4A4A4A] focus:outline-none focus:ring-2 focus:ring-[#7FE4FF]/50"
                 />
               </div>
             </div>
 
             {/* Items Grid */}
-            <div className="flex-1 p-3 md:p-4 overflow-y-auto custom-scrollbar">
+            <div className="flex-1 p-3 md:p-4 overflow-y-auto custom-scrollbar bg-[#1A1A1A]">
               {filteredItems.length === 0 ? (
                 <div className="text-center py-8">
                   <div className="text-4xl mb-3">📦</div>
-                  <p className="text-gray-400">No items found</p>
+                  <p className="text-[#7FE4FF]">No items found</p>
                 </div>
               ) : (
                 <div
@@ -264,10 +304,10 @@ export function Inventory() {
                           playSound("select");
                           setSelectedItem(item.id);
                         }}
-                        className={`p-3 md:p-4  border transition-all ${
+                        className={`p-3 md:p-4 border-2 rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black transition-all ${
                           selectedItem === item.id
-                            ? "bg-blue-500/20 border-blue-500/50 ring-1 ring-blue-500/50"
-                            : "bg-gray-800/50 border-gray-700/50 hover:bg-gray-800"
+                            ? "bg-[#3A3A3A] border-[#4A4A4A] text-[#7FE4FF]"
+                            : "bg-[#2A2A2A] border-[#4A4A4A] text-[#7FE4FF] hover:bg-[#3A3A3A]"
                         }`}
                       >
                         <div className="flex items-center gap-3 md:gap-4">
@@ -275,13 +315,13 @@ export function Inventory() {
                             {details.emoji}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium text-gray-100 truncate">
+                            <div className="text-sm font-medium text-[#7FE4FF] truncate">
                               {details.name}
                             </div>
-                            <div className="text-xs text-gray-400">
+                            <div className="text-xs text-[#4A4A4A]">
                               Quantity: {item.amount}
                             </div>
-                            <div className="flex items-center gap-1 mt-1.5 md:mt-2 text-xs text-yellow-400">
+                            <div className="flex items-center gap-1 mt-1.5 md:mt-2 text-xs text-[#FFD700]">
                               <span className="text-base md:text-lg">💰</span>
                               {details.value}
                             </div>
@@ -303,22 +343,24 @@ export function Inventory() {
           {/* Right Sidebar - Item Details (Full screen on mobile) */}
           {selectedItemDetails && (
             <div
-              className="absolute md:relative right-0 top-0 md:w-[350px] h-full bg-gray-900/95 md:bg-gray-900/50 border-l border-gray-800/50 overflow-hidden"
+              className="absolute md:relative right-0 top-0 md:w-[350px] h-full bg-[#2A2A2A] border-l-2 border-[#4A4A4A] overflow-hidden animate-slide-in-right"
               style={{
                 zIndex: window.innerWidth < 768 ? 50 : 1,
+                animationDuration: '0.3s',
+                animationTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
               <div className="p-4 md:p-6">
                 <div className="flex items-center justify-between mb-4 md:mb-6">
                   <div className="flex items-center gap-2 md:gap-3">
-                    <div className="w-10 h-10 md:w-12 md:h-12  bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
-                      <Info className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-[#3A3A3A] border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black flex items-center justify-center">
+                      <Info className="w-5 h-5 md:w-6 md:h-6 text-[#7FE4FF]" />
                     </div>
                     <div>
-                      <h2 className="text-lg md:text-xl font-bold text-white">
+                      <h2 className="text-lg md:text-xl font-bold text-[#7FE4FF]">
                         Details
                       </h2>
-                      <div className="text-xs md:text-sm text-blue-400">
+                      <div className="text-xs md:text-sm text-[#4A4A4A]">
                         Item Information
                       </div>
                     </div>
@@ -328,7 +370,7 @@ export function Inventory() {
                       playSound("select");
                       setSelectedItem(null);
                     }}
-                    className="p-1.5 md:p-2 hover:bg-gray-800/50  transition-colors"
+                    className="p-1.5 bg-[#2A2A2A] border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black hover:bg-[#3A3A3A] active:translate-y-[2px] active:translate-x-[2px] active:shadow-none transition-all"
                   >
                     <X className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
                   </button>
@@ -353,29 +395,29 @@ export function Inventory() {
 
                   {/* Description */}
                   <div>
-                    <h4 className="text-xs md:text-sm font-medium text-gray-400 uppercase tracking-wider mb-2">
+                    <h4 className="text-xs md:text-sm font-bold text-[#7FE4FF] uppercase tracking-wider mb-2">
                       Description
                     </h4>
-                    <p className="text-sm md:text-base text-gray-300">
+                    <p className="text-sm md:text-base text-[#7FE4FF] bg-[#3A3A3A] p-3 border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black">
                       {selectedItemDetails.description}
                     </p>
                   </div>
 
                   {/* Stats */}
                   <div>
-                    <h4 className="text-xs md:text-sm font-medium text-gray-400 uppercase tracking-wider mb-2">
+                    <h4 className="text-xs md:text-sm font-bold text-[#7FE4FF] uppercase tracking-wider mb-2">
                       Stats
                     </h4>
                     <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-400">Value</span>
-                        <span className="text-yellow-400">
+                      <div className="flex items-center justify-between text-sm bg-[#3A3A3A] p-2 border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black">
+                        <span className="text-[#7FE4FF]">Value</span>
+                        <span className="text-[#FFD700]">
                           {selectedItemDetails.value} coins
                         </span>
                       </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-400">Sell Price</span>
-                        <span className="text-yellow-400">
+                      <div className="flex items-center justify-between text-sm bg-[#3A3A3A] p-2 border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black">
+                        <span className="text-[#7FE4FF]">Sell Price</span>
+                        <span className="text-[#FFD700]">
                           {Math.floor(selectedItemDetails.value * 0.7)} coins
                         </span>
                       </div>
@@ -386,7 +428,7 @@ export function Inventory() {
                   <div className="flex flex-col gap-2">
                     <button
                       onClick={() => handleSellItem(selectedItemDetails.id)}
-                      className="w-full px-4 py-2.5  bg-gradient-to-br from-yellow-500 to-yellow-700 text-white font-medium text-sm hover:from-yellow-600 hover:to-yellow-800 transition-all flex items-center justify-center gap-2"
+                      className="w-full px-4 py-2.5 bg-[#2A2A2A] text-[#FFD700] border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black hover:bg-[#3A3A3A] active:translate-y-[2px] active:translate-x-[2px] active:shadow-none transition-all font-medium text-sm flex items-center justify-center gap-2"
                     >
                       <DollarSign className="w-4 h-4" />
                       Sell Item

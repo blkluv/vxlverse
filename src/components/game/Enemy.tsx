@@ -1,5 +1,13 @@
 import { useRef, useState, useEffect, useMemo } from "react";
-import { useGLTF, useAnimations, Ring, Html } from "@react-three/drei";
+import {
+  useGLTF,
+  useAnimations,
+  Ring,
+  Html,
+  Sphere,
+  Cylinder,
+} from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 import { Enemy as EnemyType } from "../../types";
 import { useGameStore } from "../../stores/gameStore";
 import { useEnemyStore } from "../../stores/enemyStore";
@@ -9,9 +17,25 @@ import { useSound } from "../../hooks/useSound";
 // Helper function to get health bar color based on percentage
 export function getHealthBarColor(current: number, max: number): string {
   const percentage = current / max;
-  if (percentage > 0.6) return "#4CAF50"; // Green
+  if (percentage > 0.6) return "#4CAF10"; // Green
   if (percentage > 0.3) return "#FFC107"; // Yellow/Orange
   return "#F44336"; // Red
+}
+
+// Pulsing ring component with proper animation
+function PulsingRing() {
+  const ringRef = useRef<THREE.Mesh>(null);
+
+  return (
+    <Ring
+      args={[1.8, 2.3, 64]}
+      position={[0, 0.07, 0]}
+      rotation={[-Math.PI / 2, 0, 0]}
+      ref={ringRef}
+    >
+      <meshBasicMaterial color={"#ff9900"} transparent toneMapped={false} />
+    </Ring>
+  );
 }
 
 export function Enemy({ enemy }: { enemy: EnemyType }) {
@@ -28,13 +52,6 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
   const [showDamage, setShowDamage] = useState(false);
   const [lastHealth, setLastHealth] = useState(enemy.health);
   const [damageAmount, setDamageAmount] = useState(0);
-
-  // Get enemy color based on level
-  const getEnemyColor = () => {
-    if (enemy.level > 10) return "#ff5500";
-    if (enemy.level > 5) return "#ff9900";
-    return "#3388ff";
-  };
 
   // Animation setup
   const { actions } = useAnimations(animations, enemyRef);
@@ -129,32 +146,21 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
               </span>
             </div>
 
-            {/* Enhanced health bar */}
-            <div className="relative w-[100px]">
+            {/* Enhanced health bar - styled like Hero component */}
+            <div className="w-[80px]">
               {/* Health bar container */}
-              <div className="w-full h-2 p-px bg-black rounded-sm overflow-hidden">
+              <div className="w-full h-2 bg-[#2A2A2A] border border-[#4A4A4A] shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black overflow-hidden">
                 {/* Health bar fill */}
                 <div
-                  className="h-full transition-all duration-300 ease-out"
+                  className="h-full transition-all duration-300"
                   style={{
                     width: `${(enemy.health / enemy.maxHealth) * 100}%`,
-                    background: `linear-gradient(to bottom, ${getHealthBarColor(
+                    backgroundColor: getHealthBarColor(
                       enemy.health,
                       enemy.maxHealth
-                    )}, ${getHealthBarColor(enemy.health, enemy.maxHealth)}90)`,
-                    boxShadow: `0 0 4px ${getHealthBarColor(
-                      enemy.health,
-                      enemy.maxHealth
-                    )}`,
+                    ),
                   }}
                 ></div>
-
-                {/* Tick marks */}
-                <div className="absolute inset-0 flex justify-between px-0.5 pointer-events-none">
-                  {[...Array(9)].map((_, i) => (
-                    <div key={i} className="h-full w-px bg-black/20"></div>
-                  ))}
-                </div>
               </div>
             </div>
           </div>
@@ -168,29 +174,44 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
           onClick={(e) => {
             e.stopPropagation();
             setCurrentEnemy(enemy.id);
-            playSound("attack");
+            playSound("dialogueChoice");
           }}
           onPointerOver={() => (document.body.style.cursor = "pointer")}
           onPointerOut={() => (document.body.style.cursor = "default")}
         >
-          {/* Selection ring */}
+          {/* Selection indicator */}
           {active && (
-            <Ring
-              args={[enemy.scale * 0.8, enemy.scale * 1.2, 32]}
-              rotation={[-Math.PI / 2, 0, 0]}
-              position={[0, 0.05, 0]}
-            >
-              <meshBasicMaterial
-                color={getEnemyColor()}
-                transparent
-                opacity={0.7}
-                toneMapped={false}
-              />
-            </Ring>
+            <group>
+              {/* Glowing ring on the ground */}
+              <Ring
+                args={[2.5, 3, 64]}
+                position={[0, 0.05, 0]}
+                rotation={[-Math.PI / 2, 0, 0]}
+              >
+                <meshBasicMaterial
+                  color={"#ffcc00"}
+                  transparent
+                  opacity={0.7}
+                  toneMapped={false}
+                />
+              </Ring>
+
+              {/* Pulsing inner ring */}
+              <PulsingRing />
+
+              {/* Subtle vertical light beam */}
+              <Cylinder args={[2, 2, height * 2]}>
+                <meshBasicMaterial
+                  depthWrite={false}
+                  color={"#ffcc00"}
+                  transparent
+                  opacity={0.05}
+                  toneMapped={false}
+                />
+              </Cylinder>
+            </group>
           )}
-
           {/* Enemy model */}
-
           <primitive
             ref={enemyRef}
             object={scene}
@@ -199,9 +220,7 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
             castShadow
             receiveShadow
           />
-
           {/* Health bar - only show when active */}
-
           {/* Damage number */}
           {showDamage && (
             <Html
@@ -234,6 +253,7 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
               </div>
             </Html>
           )}
+          BS
         </group>
       </group>
     </group>

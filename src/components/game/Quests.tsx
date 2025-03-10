@@ -25,34 +25,36 @@ export function Quests() {
   if (!store.activeNpc) return;
   return (
     <Portal>
-      <div className="fixed left-0 top-0 w-screen md:items-end items-start   h-screen z-50 flex  pointer-events-none">
+      <div className="fixed left-0 top-0 w-screen md:items-end items-start h-screen z-[9999] flex pointer-events-auto">
         <div
-          className="overflow-hidden animate-fadeIn"
+          className="overflow-hidden animate-fadeIn pointer-events-auto"
           style={{
             borderStyle: "solid",
-            borderWidth: "3px",
-            borderColor: "#92400e #78350f #78350f #92400e",
-            backgroundColor: "#292524",
+            borderWidth: "2px",
+            borderColor: "#4A4A4A",
+            backgroundColor: "#2A2A2A",
             imageRendering: "pixelated",
+            boxShadow: "2px 2px 0px 0px #000000",
+            outline: "1px solid black",
           }}
         >
           <div
             style={{
-              backgroundColor: "#b45309",
-              borderBottom: "2px solid #92400e",
+              backgroundColor: "#2A2A2A",
+              borderBottom: "2px solid #4A4A4A",
               padding: "4px 8px",
             }}
           >
             <h4
               style={{
-                color: "#fef3c7",
+                color: "#7FE4FF",
                 fontSize: "11px",
-                fontFamily: "monospace",
                 fontWeight: "bold",
-                textShadow: "1px 1px 0 #000",
+                textTransform: "uppercase",
+                letterSpacing: "0.05em",
               }}
             >
-              AVAILABLE QUESTS
+              Available Quests
             </h4>
           </div>
           <div className="max-h-48 overflow-y-auto" style={{ padding: "2px" }}>
@@ -68,19 +70,18 @@ export function Quests() {
                     width: "100%",
                     textAlign: "left",
                     padding: "6px 8px",
-                    borderBottom: "2px solid #78350f",
+                    borderBottom: "2px solid #4A4A4A",
                     backgroundColor: meetsRequirement
                       ? "transparent"
                       : "rgba(0,0,0,0.3)",
                     opacity: meetsRequirement ? 1 : 0.7,
                     cursor: meetsRequirement ? "pointer" : "not-allowed",
                     transition: "background-color 0.2s",
-                    fontFamily: "monospace",
                     imageRendering: "pixelated",
                   }}
                   onMouseOver={(e) => {
                     if (meetsRequirement) {
-                      e.currentTarget.style.backgroundColor = "#92400e";
+                      e.currentTarget.style.backgroundColor = "#3A3A3A";
                     }
                   }}
                   onMouseOut={(e) => {
@@ -101,15 +102,14 @@ export function Quests() {
                         style={{
                           fontSize: "11px",
                           fontWeight: "bold",
-                          color: meetsRequirement ? "#fef3c7" : "#9ca3af",
-                          textShadow: "1px 1px 0 #000",
+                          color: meetsRequirement ? "#7FE4FF" : "#4A4A4A",
                         }}
                       >
                         {quest.title}
                       </h5>
                       <p
                         style={{
-                          color: "#9ca3af",
+                          color: "#7FE4FF",
                           fontSize: "10px",
                           marginTop: "2px",
                           whiteSpace: "nowrap",
@@ -151,7 +151,7 @@ export function Quests() {
                         display: "flex",
                         alignItems: "center",
                         fontSize: "10px",
-                        color: "#fef3c7",
+                        color: "#FFD700",
                       }}
                     >
                       <span style={{ marginRight: "2px" }}>💰</span>
@@ -162,7 +162,7 @@ export function Quests() {
                         display: "flex",
                         alignItems: "center",
                         fontSize: "10px",
-                        color: "#bfdbfe",
+                        color: "#7FE4FF",
                       }}
                     >
                       <span style={{ marginRight: "2px" }}>✨</span>

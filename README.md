@@ -14,6 +14,15 @@ VXLverse is a powerful browser-based 3D game creation platform that allows users
 
 > **Create, Play, Share** - Build immersive 3D worlds and games directly in your browser with our intuitive voxel editor.
 
+### Gameplay Demo
+
+<video width="100%" controls>
+  <source src="/public/video/gameplaydemo.webm" type="video/webm">
+  Your browser does not support the video tag.
+</video>
+
+> **See VXLverse in Action** - Watch the gameplay demo to experience the immersive voxel-based gaming environment.
+
 ### Pixel-Art RPG Interface
 
 ![VXLverse Pixel-Art RPG UI](/public/Demo2.png)

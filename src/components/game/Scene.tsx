@@ -1,5 +1,5 @@
 import { Suspense, useEffect } from "react";
-import { Environment } from "@react-three/drei";
+import { Environment, Stars } from "@react-three/drei";
 import { Physics, RigidBody } from "@react-three/rapier";
 import { GameObject } from "./GameObject";
 import { Scene as SceneType } from "../../types";
@@ -62,7 +62,7 @@ export function GameScene({ sceneData }: SceneProps) {
 
       <ambientLight intensity={sceneData.ambientLight || 0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
-
+      <Stars />
       <Physics>
         <Floor />
         <Fireball />
@@ -70,8 +70,8 @@ export function GameScene({ sceneData }: SceneProps) {
         <Player />
         {/* Spawn Enemies */}
         <Suspense fallback={null}>
-          {enemies.map((enemy) => (
-            <Enemy key={enemy.id} enemy={enemy} />
+          {enemies.map((enemy, idx) => (
+            <Enemy key={enemy.id + idx} enemy={enemy} />
           ))}
         </Suspense>
         {/* Scene Objects */}

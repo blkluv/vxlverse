@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { Howl } from "howler";
 
+// Sound configuration
 const SOUNDS = {
   background: {
     src: "/mp3/bg.m4a",
@@ -91,87 +92,158 @@ const SOUNDS = {
 
 type SoundType = keyof typeof SOUNDS;
 
-export function useSound() {
-  const soundsRef = useRef<Record<SoundType, Howl>>(
-    {} as Record<SoundType, Howl>
-  );
+// Create a singleton for sound management to prevent multiple initializations
+const soundManager = (() => {
+  // Store loaded sounds
+  const loadedSounds: Record<SoundType, Howl> = {} as Record<SoundType, Howl>;
+  // Store custom URL sounds
+  const customSounds: Record<string, Howl> = {};
+  // Track if initialization has occurred
+  let initialized = false;
 
-  // Cache for custom sound URLs
-  const customSoundsCache = useRef<Record<string, Howl>>({});
+  // Queue for sounds requested before initialization
+  const pendingPlayQueue: Array<SoundType | string> = [];
 
-  useEffect(() => {
-    // Initialize sounds
-    Object.entries(SOUNDS).forEach(([key, config]) => {
-      soundsRef.current[key as SoundType] = new Howl({
+  // Initialize all predefined sounds
+  const initialize = () => {
+    if (initialized) return;
+
+    // Only load frequently used sounds immediately
+    // Others will be loaded on demand
+    const prioritySounds: SoundType[] = ["select", "collect", "hit"];
+
+    prioritySounds.forEach((key) => {
+      const config = SOUNDS[key];
+      loadedSounds[key] = new Howl({
+        src: [config.src],
+        loop: config.loop || false,
+        volume: config.volume || 1,
+        preload: true,
+      });
+    });
+
+    initialized = true;
+
+    // Play any sounds that were requested before initialization
+    while (pendingPlayQueue.length > 0) {
+      const sound = pendingPlayQueue.shift();
+      if (sound) play(sound);
+    }
+  };
+
+  // Get or create a Howl instance for a predefined sound
+  const getSound = (type: SoundType): Howl => {
+    if (!loadedSounds[type]) {
+      const config = SOUNDS[type];
+      loadedSounds[type] = new Howl({
         src: [config.src],
         loop: config.loop || false,
         volume: config.volume || 1,
       });
-    });
+    }
+    return loadedSounds[type];
+  };
 
-    // Start background music
+  // Play a sound (predefined or custom URL)
+  const play = (soundInput: SoundType | string): void => {
+    if (!initialized) {
+      pendingPlayQueue.push(soundInput);
+      return;
+    }
 
-    // Cleanup
-    return () => {
-      // Unload predefined sounds
-      Object.values(soundsRef.current).forEach((sound) => sound.unload());
-
-      // Unload custom sounds
-      Object.values(customSoundsCache.current).forEach((sound) =>
-        sound.unload()
-      );
-    };
-  }, []);
-
-  const playSound = useCallback((soundInput: SoundType | string) => {
-    // Check if it's a predefined sound type
+    // Handle predefined sounds
     if (typeof soundInput === "string" && soundInput in SOUNDS) {
-      const sound = soundsRef.current[soundInput as SoundType];
-      if (sound) {
+      const sound = getSound(soundInput as SoundType);
+      if (sound && sound.state() === "loaded") {
         sound.play();
+      } else if (sound) {
+        // If sound is still loading, play when loaded
+        sound.once("load", () => {
+          sound.play();
+        });
       }
     }
     // Handle custom sound URL
     else if (typeof soundInput === "string" && soundInput.startsWith("http")) {
-      // Check if we already have this sound cached
-      if (customSoundsCache.current[soundInput]) {
-        customSoundsCache.current[soundInput].play();
+      if (customSounds[soundInput]) {
+        customSounds[soundInput].play();
       } else {
-        // Create and cache a new Howl instance for this URL
         try {
           const newSound = new Howl({
             src: [soundInput],
             volume: 0.5,
-            html5: true, // This helps with streaming audio from external URLs
+            html5: true,
           });
 
-          // Cache the sound
-          customSoundsCache.current[soundInput] = newSound;
+          customSounds[soundInput] = newSound;
 
-          // Play it
-          newSound.play();
+          // Play when loaded
+          newSound.once("load", () => {
+            newSound.play();
+          });
         } catch (error) {
           console.error("Error playing custom sound:", error);
         }
       }
     }
+  };
+
+  // Stop a sound
+  const stop = (soundInput: SoundType | string): void => {
+    if (!initialized) return;
+
+    if (
+      typeof soundInput === "string" &&
+      soundInput in SOUNDS &&
+      loadedSounds[soundInput as SoundType]
+    ) {
+      loadedSounds[soundInput as SoundType].stop();
+    } else if (typeof soundInput === "string" && customSounds[soundInput]) {
+      customSounds[soundInput].stop();
+    }
+  };
+
+  // Clean up all sounds
+  const cleanup = (): void => {
+    Object.values(loadedSounds).forEach((sound) => {
+      if (sound) sound.unload();
+    });
+
+    Object.values(customSounds).forEach((sound) => {
+      if (sound) sound.unload();
+    });
+  };
+
+  return {
+    initialize,
+    play,
+    stop,
+    cleanup,
+  };
+})();
+
+export function useSound() {
+  const initialized = useRef(false);
+
+  useEffect(() => {
+    if (!initialized.current) {
+      soundManager.initialize();
+      initialized.current = true;
+    }
+
+    return () => {
+      // No need to clean up on component unmount
+      // The singleton will handle cleanup when the app unmounts
+    };
+  }, []);
+
+  // Memoize these callbacks to prevent unnecessary re-renders
+  const playSound = useCallback((soundInput: SoundType | string) => {
+    soundManager.play(soundInput);
   }, []);
 
   const stopSound = useCallback((soundInput: SoundType | string) => {
-    // Check if it's a predefined sound type
-    if (typeof soundInput === "string" && soundInput in SOUNDS) {
-      const sound = soundsRef.current[soundInput as SoundType];
-      if (sound) {
-        sound.stop();
-      }
-    }
-    // Handle custom sound URL
-    else if (
-      typeof soundInput === "string" &&
-      customSoundsCache.current[soundInput]
-    ) {
-      customSoundsCache.current[soundInput].stop();
-    }
+    soundManager.stop(soundInput);
   }, []);
 
   return { playSound, stopSound };

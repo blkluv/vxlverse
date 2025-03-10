@@ -77,42 +77,36 @@ export function Game() {
 
   return (
     <div className="w-full h-screen relative select-none">
+      {/* Game UI */}
+
+      {/* Modals */}
+      {/* <DialogueModal /> */}
+      <LevelUp />
+      <Quests />
+      <Rewards />
       <div key={gameState.currentSceneId} className="w-full h-full">
         {/* 3D Scene */}
 
         <Canvas shadows camera={{ position: [0, 5, 10], fov: 50 }}>
-          <Suspense fallback={null}>
-            <GameScene sceneData={currentScene} />
-            <Sky sunPosition={getSunPosition() as [number, number, number]} />
-          </Suspense>
+          <GameScene sceneData={currentScene} />
+          <Sky sunPosition={getSunPosition() as [number, number, number]} />
         </Canvas>
-
-        {/* Scene Name Indicator */}
-        <AnimatePresence>
-          {showSceneName && (
-            <div className="absolute top-20 left-1/2 -translate-x-1/2 pointer-events-none">
-              <div className="bg-black/80 backdrop-blur-sm px-6 py-2 ">
-                <h2 className="text-xl font-bold text-white">
-                  {currentScene?.name}
-                </h2>
-              </div>
-            </div>
-          )}
-        </AnimatePresence>
       </div>
-
-      {/* Game UI */}
-      <GameHUD />
-
-      {/* Modals */}
+      {!gameState.inventoryOpen &&
+        !gameState.questLogOpen &&
+        !gameState.showLevelUp && <Joystick />}
       {gameState.inventoryOpen && <Inventory />}
       {gameState.questLogOpen && <QuestLog />}
-      <DialogueModal />
-      <LevelUp />
-      <Quests />
-      <Rewards />
-
-      {!gameState.inventoryOpen && !gameState.questLogOpen && !gameState.showLevelUp && <Joystick />}
+      <GameHUD />
+      {/* <video
+        onEnded={(e) => {
+          e.currentTarget.remove();
+        }}
+        className="fixed z-50 top-0 left-0 w-full h-full object-cover"
+        src="/video/intro.webm"
+        autoPlay
+        muted
+      /> */}
     </div>
   );
 }

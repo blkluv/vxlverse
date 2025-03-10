@@ -1,26 +1,9 @@
-import { useMemo, useRef, useEffect, useState } from "react";
-import {
-  useGLTF,
-  useAnimations,
-  Html,
-  Billboard,
-  Outlines,
-  Box,
-} from "@react-three/drei";
+import { useMemo, useRef, useEffect, useState, Suspense } from "react";
+import { useGLTF, useAnimations, Html } from "@react-three/drei";
 import { useGameStore } from "../../stores/gameStore";
 import * as THREE from "three";
 import { SkeletonUtils } from "three-stdlib";
-import type { GameObject, Quest } from "../../types";
-import {
-  MessageSquare,
-  Scroll,
-  X,
-  ChevronDown,
-  ChevronRight,
-  Award,
-  Star,
-} from "lucide-react";
-import { Portal } from "../Portal";
+import type { GameObject } from "../../types";
 import { useSound } from "../../hooks/useSound";
 import { cn } from "../UI";
 
@@ -58,24 +41,19 @@ function useGltfMemo(url: string) {
 }
 
 export function GameObject(props: GameObject & { thumbnail: string }) {
-  useGLTF.preload(props.modelUrl);
-  const gameStore = useGameStore();
   const gltf = useGltfMemo(props.modelUrl);
   const { actions } = useAnimations(gltf.animations, gltf.scene);
   const ref = useRef<THREE.Group>(null);
-  const [showInteractionMenu, setShowInteractionMenu] = useState(false);
-  const [showQuestList, setShowQuestList] = useState(false);
+  const [showInteractionMenu] = useState(false);
   const { playSound } = useSound();
 
   // Game store data and actions
   const setActiveNpc = useGameStore((state) => state.setActiveNpc);
-  const setQuestGiverOpen = useGameStore((state) => state.setQuestGiverOpen);
 
   // Assume NPC has quests if it's an NPC type and there are available quests
   const hasQuests = props.type === "npc";
 
   // Mock player level - replace with actual player level from your game store
-  const playerLevel = 4;
   useEffect(() => {
     if (props.animations?.idle) {
       actions[props.animations.idle]?.play();
@@ -93,9 +71,8 @@ export function GameObject(props: GameObject & { thumbnail: string }) {
       scale: new THREE.Vector3(props.scale.x, props.scale.y, props.scale.z),
     };
   }, [props.position, props.rotation, props.scale]);
-
   return (
-    <>
+    <Suspense>
       <primitive
         onClick={(e: THREE.Event) => {
           // @ts-ignore
@@ -104,7 +81,6 @@ export function GameObject(props: GameObject & { thumbnail: string }) {
           if (props.type === "npc") {
             // Instead of immediately setting active NPC, show the interaction menu
             setActiveNpc(props.id);
-            playSound("select");
             playSound("select");
           }
         }}
@@ -152,6 +128,6 @@ export function GameObject(props: GameObject & { thumbnail: string }) {
           </Html>
         </group>
       )}
-    </>
+    </Suspense>
   );
 }
