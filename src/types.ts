@@ -216,6 +216,15 @@ export interface Quest {
   completed: boolean;
 }
 
+export interface FarmZone {
+  enabled: boolean;
+  enemyType: "knight" | "mage" | "dragon" | "demon";
+  spawnRate: number; // in seconds
+  maxEnemies: number;
+  items: (string | { id: string; dropChance: number })[]; // item IDs that can be dropped with individual drop chances
+  dropChance: number; // global drop chance percentage
+}
+
 export interface Scene {
   id: string;
   showGrid: boolean;
@@ -249,6 +258,7 @@ export interface Scene {
     loop: boolean;
   };
   description?: string;
+  farmZone?: FarmZone;
 }
 
 export interface GameObject {
@@ -272,4 +282,12 @@ export interface GameObject {
     hit?: string;
   };
   interactionSound?: string;
+  physics?: {
+    enabled: boolean;
+    type: "fixed" | "dynamic" | "kinematicPosition" | "kinematicVelocity";
+    mass?: number;
+    colliders?: "cuboid" | "ball" | "capsule" | "trimesh" | "hull";
+    restitution?: number;
+    friction?: number;
+  };
 }

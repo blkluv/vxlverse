@@ -40,6 +40,7 @@ import { pb } from "../lib/pocketbase";
 import { Player } from "../components/game/Player";
 import { Physics, RigidBody } from "@react-three/rapier";
 import { AxesHelper } from "three";
+import { GameScene } from "../components/game/Scene";
 
 // Updated keyboard mapping for tools
 const KEYBOARD_MAP = [
@@ -576,9 +577,7 @@ export function _Editor({ gameId }: { gameId: string }) {
                 <Tooltip position="top" content="Publish">
                   <button
                     onClick={async (e) => {
-                      e.currentTarget.style.opacity = "0.5";
                       if (!gameId) return;
-                      console.log(gameId);
 
                       // Always get the latest state when saving
                       const latestState = useEditorStore.getState();
@@ -593,7 +592,6 @@ export function _Editor({ gameId }: { gameId: string }) {
                           snapPrecision: latestState.snapPrecision,
                         },
                       });
-                      e.currentTarget.style.opacity = "1";
                     }}
                     className="w-10 h-full flex items-center justify-center transition-all duration-200 text-slate-400 hover:bg-green-900/30 hover:text-green-300"
                   >
@@ -612,19 +610,27 @@ export function _Editor({ gameId }: { gameId: string }) {
               camera={{ position: [5, 5, 5], fov: 50 }}
               className="w-full relative h-full"
             >
-              <group position={[0, 0.3, 0]} rotation={[1.2, 0, 0]}>
-                <Hero />
-              </group>
-              <axesHelper />
-
               {showMetrics && <Perf className="absolute w-80 top-8 left-0" />}
-              <EditorScene
-                showGrid={showGrid}
-                gridSnap={gridSnap}
-                transformMode={transformMode}
-                focusOnObject={focusOnObject}
-                orbitControlsRef={orbitControlsRef}
-              />
+              {isPreviewMode ? (
+                <GameScene
+                  isPreview={isPreviewMode}
+                  sceneData={scenes.find((s) => s.id === currentSceneId)}
+                />
+              ) : (
+                <>
+                  <group position={[0, 0.3, 0]} rotation={[1.2, 0, 0]}>
+                    <Hero />
+                  </group>
+                  <axesHelper />
+                  <EditorScene
+                    showGrid={showGrid}
+                    gridSnap={gridSnap}
+                    transformMode={transformMode}
+                    focusOnObject={focusOnObject}
+                    orbitControlsRef={orbitControlsRef}
+                  />
+                </>
+              )}
               {/* @ts-ignore */}
               <OrbitControls ref={orbitControlsRef} makeDefault />
             </Canvas>

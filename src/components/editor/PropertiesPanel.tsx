@@ -10,6 +10,7 @@ import { ObjectSettingsPanel } from "./properties/ObjectSettingsPanel";
 import { TransformPanel } from "./properties/transform";
 import { AnimationsPanel } from "./properties/animations";
 import { SoundPanel } from "./properties/sounds";
+import { PhysicsPanel } from "./properties/PhysicsPanel";
 
 type TabType = "properties" | "quest" | "scene";
 
@@ -104,6 +105,7 @@ export function PropertiesPanel() {
                     <>
                       <ObjectSettingsPanel />
                       <TransformPanel />
+                      <PhysicsPanel />
                       <AnimationsPanel />
                       <SoundPanel />
                     </>

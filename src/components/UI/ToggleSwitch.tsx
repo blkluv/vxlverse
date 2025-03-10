@@ -4,11 +4,14 @@ import { motion } from "framer-motion";
 interface ToggleSwitchProps {
   isOn: boolean;
   onToggle?: () => void;
-  color?: "blue" | "green" | "amber" | "purple" | "cyan";
+  color?: "blue" | "green" | "amber" | "purple" | "cyan" | "red";
   size?: "sm" | "md" | "lg";
   disabled?: boolean;
   label?: string;
   labelPosition?: "left" | "right";
+  id?: string;
+  name?: string;
+  ariaLabel?: string;
 }
 
 export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
@@ -19,6 +22,9 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   disabled = false,
   label,
   labelPosition = "right",
+  id,
+  name,
+  ariaLabel,
 }) => {
   // Color configurations
   const colorVariants = {
@@ -47,10 +53,16 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       dot: "bg-gradient-to-br from-white to-purple-50",
     },
     cyan: {
-      bg: "bg-gradient-to-r from-cyan-400 to-blue-500",
+      bg: "bg-gradient-to-r from-cyan-400 to-cyan-500", // Fixed cyan gradient
       border: "border-cyan-500/30",
       shadow: "shadow-cyan-500/20",
       dot: "bg-gradient-to-br from-white to-cyan-50",
+    },
+    red: {
+      bg: "bg-gradient-to-r from-red-400 to-red-500",
+      border: "border-red-500/30",
+      shadow: "shadow-red-500/20",
+      dot: "bg-gradient-to-br from-white to-red-50",
     },
   };
 
@@ -78,27 +90,48 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       text: "text-base",
     },
   };
+  
+  // Animation variants for the dot
+  const dotVariants = {
+    off: { x: 0 },
+    on: { x: size === 'sm' ? 16 : size === 'md' ? 20 : 28 }
+  };
 
   const selectedColor = colorVariants[color];
   const selectedSize = sizeVariants[size];
 
+  const generateUniqueId = () => {
+    return id || `toggle-${Math.random().toString(36).substring(2, 9)}`;
+  };
+  
+  const toggleId = generateUniqueId();
+  
   const renderToggle = () => (
     <button
+      id={toggleId}
+      name={name}
       onClick={disabled ? undefined : onToggle}
       aria-pressed={isOn}
+      aria-label={ariaLabel || label || 'Toggle'}
       disabled={disabled}
-      className={`relative ${selectedSize.track} flex items-center -full ${
+      className={`relative ${selectedSize.track} flex items-center rounded-full ${
         selectedSize.padding
       } cursor-pointer transition-colors duration-300 ${
         isOn
           ? `${selectedColor.bg} ${selectedColor.border} border`
           : "bg-slate-700/80 border border-slate-600/50"
-      } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+      } ${disabled ? "opacity-50 cursor-not-allowed" : ""} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${color}-500/50`}
+      role="switch"
+      type="button"
     >
-      <div
-        className={`${selectedSize.dot} -full shadow-md ${
+      <motion.div
+        className={`${selectedSize.dot} rounded-full shadow-md ${
           isOn ? `${selectedColor.dot} ${selectedColor.shadow}` : "bg-white"
         }`}
+        initial={isOn ? "on" : "off"}
+        animate={isOn ? "on" : "off"}
+        variants={dotVariants}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
       />
     </button>
   );
@@ -113,13 +146,14 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         labelPosition === "left" ? "flex-row-reverse" : "flex-row"
       }`}
     >
-      <span
+      <label
+        htmlFor={toggleId}
         className={`${selectedSize.text} text-slate-300 ${
           disabled ? "opacity-50" : ""
-        }`}
+        } cursor-pointer select-none`}
       >
         {label}
-      </span>
+      </label>
       {renderToggle()}
     </div>
   );

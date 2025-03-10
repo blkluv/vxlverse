@@ -6,6 +6,11 @@ import { SkeletonUtils } from "three-stdlib";
 import type { GameObject } from "../../types";
 import { useSound } from "../../hooks/useSound";
 import { cn } from "../UI";
+import {
+  ColliderOptions,
+  RigidBody,
+  RigidBodyAutoCollider,
+} from "@react-three/rapier";
 
 // same url multiple GLTF instances
 function useGltfMemo(url: string) {
@@ -40,7 +45,27 @@ function useGltfMemo(url: string) {
   };
 }
 
-export function GameObject(props: GameObject & { thumbnail: string }) {
+function PhysicsWrapper({
+  children,
+  physics,
+}: {
+  children: React.ReactNode;
+  physics?: GameObject["physics"];
+}) {
+  if (physics?.enabled) {
+    return (
+      <RigidBody
+        type="fixed"
+        colliders={physics.colliders as RigidBodyAutoCollider}
+      >
+        {children}
+      </RigidBody>
+    );
+  }
+  return <>{children}</>;
+}
+
+export function GameObject(props: GameObject) {
   const gltf = useGltfMemo(props.modelUrl);
   const { actions } = useAnimations(gltf.animations, gltf.scene);
   const ref = useRef<THREE.Group>(null);
@@ -73,23 +98,27 @@ export function GameObject(props: GameObject & { thumbnail: string }) {
   }, [props.position, props.rotation, props.scale]);
   return (
     <Suspense>
-      <primitive
-        onClick={(e: THREE.Event) => {
-          // @ts-ignore
-          e.stopPropagation();
+      {props.physics?.enabled && (
+        <PhysicsWrapper physics={props.physics}>
+          <primitive
+            onClick={(e: THREE.Event) => {
+              // @ts-ignore
+              e.stopPropagation();
 
-          if (props.type === "npc") {
-            // Instead of immediately setting active NPC, show the interaction menu
-            setActiveNpc(props.id);
-            playSound("select");
-          }
-        }}
-        ref={ref}
-        scale={scale}
-        position={position}
-        rotation={rotation}
-        object={gltf.scene}
-      />
+              if (props.type === "npc") {
+                // Instead of immediately setting active NPC, show the interaction menu
+                setActiveNpc(props.id);
+                playSound("select");
+              }
+            }}
+            ref={ref}
+            scale={scale}
+            position={position}
+            rotation={rotation}
+            object={gltf.scene}
+          />
+        </PhysicsWrapper>
+      )}
 
       {/* Quest indicator */}
       {hasQuests && gltf.height && (

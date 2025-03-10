@@ -12,6 +12,7 @@ import { Fireball } from "./FireBall";
 
 interface SceneProps {
   sceneData?: SceneType;
+  isPreview?: boolean;
 }
 
 function Floor() {
@@ -27,7 +28,7 @@ function Floor() {
   );
 }
 
-export function GameScene({ sceneData }: SceneProps) {
+export function GameScene({ sceneData, isPreview }: SceneProps) {
   const { scene } = useThree();
 
   const { playSound, stopSound } = useSound();
@@ -44,9 +45,10 @@ export function GameScene({ sceneData }: SceneProps) {
   const stopSpawning = useEnemyStore((state) => state.stopSpawning);
 
   useEffect(() => {
+    if (!sceneData?.farmZone?.enabled) return;
     startSpawning();
     return () => stopSpawning();
-  }, [startSpawning, stopSpawning]);
+  }, [startSpawning, stopSpawning, sceneData?.farmZone?.enabled]);
 
   return (
     <>
@@ -63,7 +65,7 @@ export function GameScene({ sceneData }: SceneProps) {
       <ambientLight intensity={sceneData.ambientLight || 0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
       <Stars />
-      <Physics>
+      <Physics debug={isPreview}>
         <Floor />
         <Fireball />
 
@@ -76,12 +78,7 @@ export function GameScene({ sceneData }: SceneProps) {
         </Suspense>
         {/* Scene Objects */}
         {sceneData.objects.map((object) => (
-          <GameObject
-            {...object}
-            thumbnail={object.modelUrl
-              .replace("scene_", "thumbnail_")
-              .replace(".glb", ".webp")}
-          />
+          <GameObject {...object} />
         ))}
       </Physics>
     </>

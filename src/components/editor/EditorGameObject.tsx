@@ -1,18 +1,9 @@
 import { useMemo, useRef, useState, useEffect } from "react";
-import {
-  useGLTF,
-  TransformControls,
-  useAnimations,
-  Helper,
-  Box,
-  useHelper,
-  Gltf,
-} from "@react-three/drei";
+import { useGLTF, TransformControls, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
 import { useEditorStore } from "../../stores/editorStore";
-import { toast } from "../UI/Toast";
 import { useSound } from "../../hooks/useSound";
 
 /**

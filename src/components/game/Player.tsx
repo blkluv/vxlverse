@@ -31,7 +31,7 @@ export function Player() {
   const ref = useRef<RapierRigidBody>(null);
   return (
     <KeyboardControls map={keyboardMap}>
-      <Ecctrl ref={ref} animated camMinDis={30} camMaxDis={20}>
+      <Ecctrl ref={ref} animated camMinDis={30} camMaxDis={10}>
         <EcctrlAnimation characterURL="/player.glb" animationSet={animationSet}>
           <Hero ref={ref} />
         </EcctrlAnimation>
