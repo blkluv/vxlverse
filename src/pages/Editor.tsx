@@ -6,7 +6,7 @@ import {
   OrbitControls,
   useKeyboardControls,
 } from "@react-three/drei";
-import { useEffect, useState, useRef, Suspense } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useEditorStore } from "../stores/editorStore";
 import { Perf } from "r3f-perf";
 import {
@@ -33,12 +33,13 @@ import {
 import { toast } from "../components/UI/Toast";
 import { EditorScene } from "../components/editor/EditorScene";
 import { Tooltip } from "../components/UI/Tooltip";
-import { Player } from "../components/game/Player";
 import { Hero } from "../components/game/Hero";
 import { useParams } from "react-router-dom";
-import { pb } from "../lib/pocketbase";
 import { useGame } from "../hooks/useGame";
-import { useSyncGameState } from "../hooks/useSyncEditor";
+import { pb } from "../lib/pocketbase";
+import { Player } from "../components/game/Player";
+import { Physics, RigidBody } from "@react-three/rapier";
+import { AxesHelper } from "three";
 
 // Updated keyboard mapping for tools
 const KEYBOARD_MAP = [
@@ -107,7 +108,6 @@ export function _Editor({ gameId }: { gameId: string }) {
   }, [scenes, createNewScene]);
   const { id } = useParams<{ id: string }>();
   useGame(id!);
-  useSyncGameState(id!);
   const [subscribeKeys] = useKeyboardControls();
 
   useEffect(() => {
@@ -575,14 +575,25 @@ export function _Editor({ gameId }: { gameId: string }) {
 
                 <Tooltip position="top" content="Publish">
                   <button
-                    onClick={() => {
-                      const { publishGame } = useUpdateGame();
+                    onClick={async (e) => {
+                      e.currentTarget.style.opacity = "0.5";
+                      if (!gameId) return;
+                      console.log(gameId);
 
-                      if (gameId) {
-                        publishGame(gameId);
-                      } else {
-                        toast.error("Game ID not found");
-                      }
+                      // Always get the latest state when saving
+                      const latestState = useEditorStore.getState();
+
+                      await pb.collection("games").update(gameId, {
+                        gameConf: {
+                          scenes: latestState.scenes,
+                          currentSceneId: latestState.currentSceneId,
+                          gridSnap: latestState.gridSnap,
+                          showGrid: latestState.showGrid,
+                          gridSize: latestState.gridSize,
+                          snapPrecision: latestState.snapPrecision,
+                        },
+                      });
+                      e.currentTarget.style.opacity = "1";
                     }}
                     className="w-10 h-full flex items-center justify-center transition-all duration-200 text-slate-400 hover:bg-green-900/30 hover:text-green-300"
                   >
@@ -601,7 +612,11 @@ export function _Editor({ gameId }: { gameId: string }) {
               camera={{ position: [5, 5, 5], fov: 50 }}
               className="w-full relative h-full"
             >
-              <Hero />
+              <group position={[0, 0.3, 0]} rotation={[1.2, 0, 0]}>
+                <Hero />
+              </group>
+              <axesHelper />
+
               {showMetrics && <Perf className="absolute w-80 top-8 left-0" />}
               <EditorScene
                 showGrid={showGrid}
