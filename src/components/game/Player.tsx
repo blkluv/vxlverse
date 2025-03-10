@@ -24,7 +24,7 @@ const keyboardMap = [
   { name: "rightward", keys: ["ArrowRight", "KeyD"] },
   { name: "jump", keys: ["Space"] },
   { name: "run", keys: ["Shift"] },
-  { name: "action1", keys: ["1"] },
+  { name: "action1", keys: ["1", "!"] },
 ];
 
 export function Player() {
