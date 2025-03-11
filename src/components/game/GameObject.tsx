@@ -98,27 +98,25 @@ export function GameObject(props: GameObject) {
   }, [props.position, props.rotation, props.scale]);
   return (
     <Suspense>
-      {props.physics?.enabled && (
-        <PhysicsWrapper physics={props.physics}>
-          <primitive
-            onClick={(e: THREE.Event) => {
-              // @ts-ignore
-              e.stopPropagation();
+      <PhysicsWrapper physics={props.physics}>
+        <primitive
+          onClick={(e: THREE.Event) => {
+            // @ts-ignore
+            e.stopPropagation();
 
-              if (props.type === "npc") {
-                // Instead of immediately setting active NPC, show the interaction menu
-                setActiveNpc(props.id);
-                playSound("select");
-              }
-            }}
-            ref={ref}
-            scale={scale}
-            position={position}
-            rotation={rotation}
-            object={gltf.scene}
-          />
-        </PhysicsWrapper>
-      )}
+            if (props.type === "npc") {
+              // Instead of immediately setting active NPC, show the interaction menu
+              setActiveNpc(props.id);
+              playSound("select");
+            }
+          }}
+          ref={ref}
+          scale={scale}
+          position={position}
+          rotation={rotation}
+          object={gltf.scene}
+        />
+      </PhysicsWrapper>
 
       {/* Quest indicator */}
       {hasQuests && gltf.height && (

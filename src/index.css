@@ -236,7 +236,6 @@ canvas {
 }
 
 /* Import medieval-style font */
-@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&display=swap");
 
 .font-medieval {
   font-family: "Cinzel", serif;

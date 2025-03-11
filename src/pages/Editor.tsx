@@ -112,6 +112,7 @@ export function _Editor({ gameId }: { gameId: string }) {
   const [subscribeKeys] = useKeyboardControls();
 
   useEffect(() => {
+    if (isPreviewMode) return;
     // Translate tool
     const unsubscribeTranslate = subscribeKeys(
       (state) => state.translate,
@@ -268,6 +269,7 @@ export function _Editor({ gameId }: { gameId: string }) {
       unsubscribeDelete();
     };
   }, [
+    isPreviewMode,
     selectedObjectId,
     currentSceneId,
     subscribeKeys,

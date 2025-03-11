@@ -25,7 +25,7 @@ export function Quests() {
   if (!store.activeNpc) return;
   return (
     <Portal>
-      <div className="fixed left-0 top-0 w-screen md:items-end items-start h-screen z-[9999] flex pointer-events-auto">
+      <div className="fixed left-0 top-0 w-screen md:items-end items-start h-screen z-50 flex pointer-events-auto">
         <div
           className="overflow-hidden animate-fadeIn pointer-events-auto"
           style={{

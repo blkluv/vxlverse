@@ -2,108 +2,153 @@ import { Portal } from "../Portal";
 import { useGameStore } from "../../stores/gameStore";
 import { useSound } from "../../hooks/useSound";
 import { useEffect, useState, useRef, useCallback, memo } from "react";
-import { aiDialogueService } from "../../services/AIDialogueService";
 import { useEditorStore } from "../../stores/editorStore";
-import { MessageSquare, User, Loader2, X, Send, RefreshCw } from "lucide-react";
+import {
+  X,
+  Send,
+  RefreshCw,
+  Loader2,
+  MessageSquare,
+  Shield,
+  Sword,
+} from "lucide-react";
 import { Dialogue } from "../../types";
 import { Input } from "../UI";
 
-// Message component for better performance
-const MessageItem = memo(({ message }: { message: Dialogue }) => {
-  const isPlayer = message.speaker === "Player";
+const MessageItem = memo(
+  ({ message, npcName }: { message: Dialogue; npcName: string }) => {
+    const isPlayer = message.role === "user";
+    const { playSound } = useSound();
 
-  return (
-    <div style={{ marginBottom: "16px" }}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          marginBottom: "6px",
-        }}
-      >
+    // Play sound effect when component mounts
+    useEffect(() => {
+      if (isPlayer) {
+        playSound("click");
+      } else {
+        playSound("click");
+      }
+    }, []);
+
+    return (
+      <div className="mb-4 animate-fadeIn [image-rendering:pixelated] hover:scale-[1.01] transition-all duration-200">
         <div
-          style={{
-            width: "28px",
-            height: "28px",
-            backgroundColor: isPlayer ? "#047857" : "#92400e",
-            borderStyle: "solid",
-            borderWidth: "2px",
-            borderColor: isPlayer ? "#065f46" : "#78350f",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            imageRendering: "pixelated",
-            boxShadow: "2px 2px 0 rgba(0,0,0,0.3)",
-          }}
+          className={`relative ${
+            isPlayer ? "ml-[30px] mr-[2px]" : "ml-[2px] mr-[30px]"
+          }`}
         >
-          {isPlayer ? (
-            <User className="w-4 h-4 text-emerald-200" />
-          ) : (
-            <MessageSquare className="w-4 h-4 text-yellow-200" />
+          {/* NPC Name tag with enhanced glowing effect */}
+          {!isPlayer && (
+            <div className="relative z-20 flex items-center gap-1 mb-[2px] ml-[2px]">
+              <div className="h-[4px] w-[4px] bg-[#7FE4FF] animate-pulse shadow-[0_0_8px_rgba(127,228,255,0.8)]" />
+              <h3 className="text-[11px] font-bold text-[#7FE4FF] uppercase tracking-[0.05em] drop-shadow-[0_0_3px_rgba(127,228,255,0.7)]">
+                {npcName}
+              </h3>
+            </div>
           )}
+
+          <div className="relative">
+            {/* Message bubble background with enhanced gradient */}
+            <div
+              className={`absolute inset-0 border-2 border-[#4A4A4A] shadow-[2px_2px_0px_0px_#000000] outline outline-[1px] outline-black [image-rendering:pixelated] ${
+                isPlayer
+                  ? "bg-gradient-to-br from-[#3A3A3A] via-[#323232] to-[#2A2A2A]"
+                  : "bg-gradient-to-br from-[#2A2A2A] via-[#222222] to-[#1A1A1A]"
+              }`}
+            ></div>
+
+            {/* Decorative corner pixels with pulse animation */}
+            <div className="absolute top-0 left-0 w-[2px] h-[2px] bg-[#7FE4FF] animate-pulse opacity-70"></div>
+            <div className="absolute bottom-0 right-0 w-[2px] h-[2px] bg-[#7FE4FF] animate-pulse opacity-70"></div>
+
+            {/* Character icon with animated glow */}
+            {isPlayer ? (
+              <div className="absolute -left-[26px] top-1/2 -translate-y-1/2 w-[20px] h-[20px] bg-[#3A3A3A] border-2 border-[#4A4A4A] flex items-center justify-center shadow-[1px_1px_0px_0px_#000000] outline outline-[1px] outline-black overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A]"></div>
+                <Sword size={12} className="relative z-10 text-[#FF7F7F] drop-shadow-[0_0_5px_rgba(255,127,127,0.7)]" />
+              </div>
+            ) : (
+              <div className="absolute -right-[26px] top-1/2 -translate-y-1/2 w-[20px] h-[20px] bg-[#2A2A2A] border-2 border-[#4A4A4A] flex items-center justify-center shadow-[1px_1px_0px_0px_#000000] outline outline-[1px] outline-black overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A]"></div>
+                <Shield size={12} className="relative z-10 text-[#7FE4FF] drop-shadow-[0_0_5px_rgba(127,228,255,0.7)]" />
+              </div>
+            )}
+
+            {/* Message text with enhanced styling and effects */}
+            <div className={`relative z-10 p-3 ${isPlayer ? "pl-4" : "pr-4"}`}>
+              {message.content.includes("*") ? (
+                <>
+                  {/* Action/emote text with enhanced glow effect */}
+                  <p className="italic text-md mb-2 text-[#7FE4FF] font-semibold drop-shadow-[0_0_5px_rgba(127,228,255,0.8)] tracking-wide animate-pulse">
+                    {message.content.split("\n")[0]}
+                  </p>
+                  {/* Regular message text with improved styling */}
+                  <div className="relative group">
+                    <p className="text-md text-white leading-relaxed tracking-wide transition-all duration-300 group-hover:text-[#f0f0f0]">
+                      {message.content.split("\n").slice(1).join("\n")}
+                    </p>
+                    {/* Enhanced highlight effect with animation */}
+                    <div className="absolute -inset-1 bg-[#7FE4FF] opacity-5 blur-sm rounded-lg group-hover:opacity-10 transition-opacity duration-300"></div>
+                  </div>
+                </>
+              ) : (
+                <div className="relative group">
+                  {/* Text with custom letter spacing and line height for better readability */}
+                  <p className="text-md text-white leading-relaxed tracking-wide transition-all duration-300 group-hover:text-[#f0f0f0]">
+                    {/* Highlight keywords in the text */}
+                    {highlightKeywords(message.content, isPlayer)}
+                  </p>
+                  {/* Enhanced text highlight effect with hover animation */}
+                  <div className="absolute -inset-1 bg-[#7FE4FF] opacity-5 blur-sm rounded-lg group-hover:opacity-10 transition-opacity duration-300"></div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-        <h3
-          style={{
-            fontSize: "14px",
-            fontWeight: "bold",
-            color: isPlayer ? "#6ee7b7" : "#fef3c7",
-            fontFamily: "monospace",
-            textShadow: "1px 1px 0 #000",
-          }}
-        >
-          {message.speaker}
-        </h3>
       </div>
-      <div
-        style={{
-          color: "#e5e7eb",
-          fontSize: "15px",
-          lineHeight: "1.5",
-          paddingLeft: "36px",
-          paddingRight: "8px",
-          fontFamily: "monospace",
-          backgroundColor: isPlayer
-            ? "rgba(4, 120, 87, 0.2)"
-            : "rgba(146, 64, 14, 0.2)",
-          borderLeft: isPlayer ? "3px solid #065f46" : "3px solid #78350f",
-          padding: "8px 12px 8px 36px",
-          borderRadius: "0 4px 4px 0",
-          boxShadow: "2px 2px 0 rgba(0,0,0,0.1)",
-          whiteSpace: "pre-line", // This preserves line breaks in the text
-
-          fontWeight: "bold",
-          display: "flex",
-          alignItems: "center",
-          gap: "10px",
-          textShadow: "2px 2px 0 #000",
-          letterSpacing: "0.5px",
-        }}
-      >
-        {message.text.includes("*") ? (
-          <>
-            <span
-              style={{
-                color: isPlayer ? "#6ee7b7" : "#fde68a",
-                fontStyle: "italic",
-                display: "block",
-                marginBottom: "4px",
-                textShadow: "1px 1px 0 rgba(0,0,0,0.5)",
-              }}
-            >
-              {message.text.split("\n")[0]}
-            </span>
-            <span>{message.text.split("\n").slice(1).join("\n")}</span>
-          </>
-        ) : (
-          message.text
-        )}
-      </div>
-    </div>
-  );
-});
-
+    );
+  }
+);
 MessageItem.displayName = "MessageItem";
+
+// Helper function to highlight keywords in the message content
+const highlightKeywords = (text: string, isPlayer: boolean) => {
+  // Keywords to highlight for NPCs (blue glow)
+  const npcKeywords = ['quest', 'mission', 'reward', 'secret', 'magic', 'ancient', 'legend', 'treasure'];
+  
+  // Keywords to highlight for player (red glow)
+  const playerKeywords = ['help', 'where', 'what', 'how', 'who', 'when', 'why'];
+  
+  const keywords = isPlayer ? playerKeywords : npcKeywords;
+  
+  // Split the text into parts based on keywords
+  let parts = [text];
+  
+  keywords.forEach(keyword => {
+    const newParts: string[] = [];
+    parts.forEach(part => {
+      const regex = new RegExp(`(${keyword})`, 'gi');
+      const splitPart = part.split(regex);
+      newParts.push(...splitPart);
+    });
+    parts = newParts;
+  });
+  
+  // Return the parts with highlighted keywords
+  return parts.map((part, index) => {
+    const lowercasePart = part.toLowerCase();
+    if (keywords.some(keyword => lowercasePart === keyword.toLowerCase())) {
+      return (
+        <span 
+          key={index} 
+          className={`font-semibold ${isPlayer ? 'text-[#FF9F9F] drop-shadow-[0_0_3px_rgba(255,127,127,0.5)]' : 'text-[#9FEFFF] drop-shadow-[0_0_3px_rgba(127,228,255,0.5)]'}`}
+        >
+          {part}
+        </span>
+      );
+    }
+    return <span key={index}>{part}</span>;
+  });
+};
 
 export function DialogueModal() {
   const { playSound } = useSound();
@@ -113,190 +158,178 @@ export function DialogueModal() {
   }));
   const scenes = useEditorStore((state) => state.scenes);
 
-  // UI state
   const [userInput, setUserInput] = useState("");
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const [isModelLoading, setIsModelLoading] = useState(false);
   const [npcName, setNpcName] = useState("");
-  const [messages, setMessages] = useState<Dialogue[]>([]);
+  const [messages, setMessages] = useState<Dialogue[]>([
+    {
+      role: "assistant",
+      content: `Hello, I'm ${npcName}. How can I help you today?`,
+    },
+  ]);
+  // Input focus state for styling enhancements
   const [inputFocused, setInputFocused] = useState(false);
+  const [showTypingIndicator, setShowTypingIndicator] = useState(false);
+  const [messageAnimation, setMessageAnimation] = useState(true);
 
-  // Refs
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  // Initialize the dialogue when an NPC is selected
   const init = useCallback(async () => {
-    setMessages([]);
-    setIsGeneratingAI(false);
-    setIsModelLoading(true);
     if (!activeNpc) return;
 
-    try {
-      // Initialize the AI service
-      await aiDialogueService.initialize(npcName);
-    } catch (error) {
-      console.error("Failed to initialize AI service:", error);
-    } finally {
-      setIsModelLoading(false);
+    const storedData = localStorage.getItem(`dialogue_${activeNpc}`);
+    if (storedData) {
+      try {
+        const { messages: storedMessages, npcName: storedName } =
+          JSON.parse(storedData);
+        setMessages(storedMessages);
+        setNpcName(storedName);
+        setIsGeneratingAI(false);
+        setIsModelLoading(false);
+        return;
+      } catch (error) {
+        console.error("Failed to parse stored dialogue:", error);
+      }
     }
+    setMessages([]);
+    setIsGeneratingAI(false);
+    setIsModelLoading(false);
 
-    // Find the scene containing the active NPC
     const currentScene = scenes.find((scene) =>
       scene.objects.some((obj) => obj.id === activeNpc)
     );
 
     if (currentScene) {
-      // Find the NPC object in the scene
       const npcObject = currentScene.objects.find(
         (obj) => obj.id === activeNpc
       );
-
       if (npcObject) {
-        // Set NPC name
         setNpcName(npcObject.name || "NPC");
-
-        // Set the NPC description as context for the AI dialogue
-        if (npcObject.description) {
-          aiDialogueService.setContext(npcObject.description);
-        }
-
-        // Generate initial greeting
         generateInitialGreeting(npcObject.name || "NPC");
       }
     }
   }, [activeNpc, scenes]);
 
-  // Generate initial NPC greeting
   const generateInitialGreeting = useCallback(
     async (name: string) => {
-      if (!aiDialogueService.isReady()) {
-        // Wait for model to be ready
-        setIsModelLoading(true);
-        try {
-          await aiDialogueService.initialize(name);
-        } catch (error) {
-          console.error("Failed to initialize AI service:", error);
-        } finally {
-          setIsModelLoading(false);
-        }
-      }
-
       setIsGeneratingAI(true);
       try {
-        const greetingDialogue = await aiDialogueService.generateGreeting(name);
-        setMessages([greetingDialogue]);
-        playSound("dialogueStart");
+        const initialGreeting: Dialogue = {
+          role: "assistant",
+          content: `Hello, I'm ${name}. How can I help you today?`,
+        };
+
+        setMessages([initialGreeting]);
+
+        if (activeNpc) {
+          localStorage.setItem(
+            `dialogue_${activeNpc}`,
+            JSON.stringify({
+              messages: [initialGreeting],
+              npcName: name,
+            })
+          );
+        }
       } catch (error) {
         console.error("Failed to generate greeting:", error);
-        // Fallback greeting
-        const fallbackMessage: Dialogue = {
-          id: Date.now(),
-          speaker: name,
-          text: `Greetings, traveler. How may I help you today?`,
-          choices: [],
-        };
-        setMessages([fallbackMessage]);
       } finally {
         setIsGeneratingAI(false);
       }
     },
-    [playSound]
+    [activeNpc]
   );
 
-  // Handle user message submission
   const handleSendMessage = useCallback(async () => {
-    if (!userInput.trim() || isGeneratingAI || isModelLoading) return;
+    if (!userInput.trim()) return;
 
-    // Create player message
     const playerMessage: Dialogue = {
-      id: Date.now(),
-      speaker: "Player",
-      text: userInput,
-      choices: [],
+      role: "user",
+      content: userInput,
     };
 
-    // Add to messages
-    setMessages((prev) => [...prev, playerMessage]);
+    const updatedMessages = [...messages, playerMessage];
+    setMessages(updatedMessages);
     setUserInput("");
-
-    // Generate AI response
     setIsGeneratingAI(true);
+    setShowTypingIndicator(true);
+
     try {
-      // Create conversation history for context
-      const conversationMessages: {
-        role: "system" | "user" | "assistant";
-        content: string;
-      }[] = [
-        {
-          role: "system",
-          content:
-            aiDialogueService.getContext() ||
-            `You are ${npcName}, an NPC in a fantasy game.`,
-        },
-      ];
-
-      // Add previous messages to conversation history
-      messages.forEach((msg) => {
-        const role =
-          msg.speaker === "Player" ? ("user" as const) : ("assistant" as const);
-        conversationMessages.push({
-          role: role,
-          content: msg.text,
-        });
-      });
-
-      // Add current user message
-      conversationMessages.push({
-        role: "user",
-        content: userInput,
-      });
-
-      const response = await aiDialogueService.generateResponse(
-        conversationMessages
+      const currentScene = scenes.find((scene) =>
+        scene.objects.some((obj) => obj.id === activeNpc)
+      );
+      const npcObject = currentScene?.objects.find(
+        (obj) => obj.id === activeNpc
       );
 
-      // The AIDialogueService now sets the speaker name correctly, but we'll ensure it matches
-      // our NPC name just in case
-      const responseWithCorrectSpeaker = {
-        ...response,
-        speaker: response.speaker || npcName,
-      };
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          back_story: npcObject?.description,
+          messages: updatedMessages,
+        }),
+      });
 
-      setMessages((prev) => [...prev, responseWithCorrectSpeaker]);
+      const data = await response.json();
+
+      if (data.messages) {
+        setMessages(data.messages);
+        if (activeNpc) {
+          localStorage.setItem(
+            `dialogue_${activeNpc}`,
+            JSON.stringify({
+              messages: data.messages,
+              npcName,
+            })
+          );
+        }
+      }
     } catch (error) {
-      console.error("Failed to generate response:", error);
-      // Fallback response
-      const fallbackResponse: Dialogue = {
-        id: Date.now(),
-        speaker: npcName,
-        text: `*${npcName} looks puzzled and scratches chin*\nForgive me, brave adventurer. The winds of thought have scattered my words. Pray, speak of something else that interests thee?`,
-        choices: [],
-      };
-
-      setMessages((prev) => [...prev, fallbackResponse]);
+      console.error("API call failed:", error);
+      setMessages([
+        ...updatedMessages,
+        {
+          role: "assistant",
+          content:
+            "Sorry, I'm having trouble connecting. Please try again later.",
+        },
+      ]);
     } finally {
       setIsGeneratingAI(false);
+      setShowTypingIndicator(false);
     }
-  }, [userInput, isGeneratingAI, messages, npcName]);
+  }, [userInput, npcName, messages, activeNpc, scenes]);
 
-  // Handle closing the dialogue
   const handleCloseDialogue = useCallback(() => {
+    if (activeNpc) {
+      localStorage.setItem(
+        `dialogue_${activeNpc}`,
+        JSON.stringify({
+          messages,
+          npcName,
+        })
+      );
+    }
     setActiveNpc(null);
     setMessages([]);
     setUserInput("");
-    playSound("dialogueEnd");
-  }, [playSound, setActiveNpc]);
+  }, [activeNpc, messages, npcName, setActiveNpc]);
 
-  // Handle resetting the conversation
   const handleResetConversation = useCallback(() => {
     if (npcName) {
       setMessages([]);
+      if (activeNpc) {
+        localStorage.removeItem(`dialogue_${activeNpc}`);
+      }
       generateInitialGreeting(npcName);
     }
-  }, [npcName, generateInitialGreeting]);
+  }, [npcName, activeNpc, generateInitialGreeting]);
 
-  // Auto-scroll to bottom when messages change
   useEffect(() => {
     if (messagesContainerRef.current && messages.length > 0) {
       messagesContainerRef.current.scrollTop =
@@ -304,7 +337,6 @@ export function DialogueModal() {
     }
   }, [messages]);
 
-  // Focus input field when dialogue opens or after AI generation completes
   useEffect(() => {
     if (activeNpc && inputRef.current && !isGeneratingAI && !isModelLoading) {
       inputRef.current.focus();
@@ -315,261 +347,216 @@ export function DialogueModal() {
     if (activeNpc) {
       init();
     }
-
-    // Cleanup worker when component unmounts
-    return () => {
-      if (!activeNpc) {
-        aiDialogueService.terminate();
-      }
-    };
+    return () => {};
   }, [activeNpc, init]);
 
-  // Don't render if no active NPC
+  // Play sound when modal opens
+  useEffect(() => {
+    if (activeNpc) {
+      playSound("click");
+    }
+  }, [activeNpc, playSound]);
+
+  const handleSendWithSound = useCallback(() => {
+    playSound("click");
+    handleSendMessage();
+  }, [handleSendMessage, playSound]);
+
   if (!activeNpc) return null;
 
   return (
     <Portal>
-      <div className="fixed inset-0 flex items-end justify-center pointer-events-none z-50 ">
+      <div className="fixed left-0 bottom-0 w-screen h-screen z-[9999] flex items-end justify-center pointer-events-none">
+        {/* Background overlay with scanlines effect */}
         <div
-          style={{
-            width: "100%",
-            maxWidth: "650px",
-            backgroundColor: "#292524",
-            borderStyle: "solid",
-            borderWidth: "4px",
-            borderColor: "#b45309",
-            boxShadow: "0 0 0 2px #78350f, 0 10px 15px -3px rgba(0, 0, 0, 0.7)",
-            pointerEvents: "auto",
-            maxHeight: "80vh",
-            display: "flex",
-            flexDirection: "column",
-            transform: "translateY(0)",
-            transition: "all 200ms ease-in-out",
-            animation: "fadeIn 300ms ease-out",
-            imageRendering: "pixelated",
-          }}
-        >
-          {/* Header with title and controls */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "12px",
-              borderBottom: "3px solid #92400e",
-              backgroundColor: "#b45309",
-              backgroundImage:
-                "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.1) 5px, rgba(0,0,0,0.1) 10px)",
-            }}
-          >
-            <h2
-              style={{
-                fontSize: "16px",
-                fontWeight: "bold",
-                color: "#fef3c7",
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                fontFamily: "monospace",
-                textShadow: "2px 2px 0 #000",
-                letterSpacing: "0.5px",
-              }}
-            >
-              <div
-                style={{
-                  width: "24px",
-                  height: "24px",
-                  backgroundColor: "#92400e",
-                  borderStyle: "solid",
-                  borderWidth: "2px",
-                  borderColor: "#78350f",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <MessageSquare className="w-3.5 h-3.5 text-yellow-200" />
-              </div>
-              <span>{npcName}</span>
+          className="absolute inset-0 bg-black/30 pointer-events-auto"
+          onClick={handleCloseDialogue}
+        ></div>
+
+        {/* Main dialog container with pixelated border and glow effect */}
+        <div className="w-full max-w-[700px] max-h-[90vh] flex flex-col animate-fadeIn overflow-hidden pointer-events-auto bg-gradient-to-b from-[#2A2A2A] to-[#1A1A1A] border-2 border-[#4A4A4A] shadow-[0_0_15px_rgba(127,228,255,0.3)] outline outline-[1px] outline-black [image-rendering:pixelated]  relative">
+          {/* Decorative corner pixels */}
+          <div className="absolute top-0 left-0 w-[4px] h-[4px] bg-[#7FE4FF]"></div>
+          <div className="absolute top-0 right-0 w-[4px] h-[4px] bg-[#7FE4FF]"></div>
+          <div className="absolute bottom-0 left-0 w-[4px] h-[4px] bg-[#7FE4FF]"></div>
+          <div className="absolute bottom-0 right-0 w-[4px] h-[4px] bg-[#7FE4FF]"></div>
+
+          {/* Enhanced scanlines effect with CRT flicker */}
+          <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_bottom,rgba(0,0,0,0)_0%,rgba(0,0,0,0)_50%,rgba(0,0,0,0.3)_50%,rgba(0,0,0,0.3)_100%)] bg-[length:100%_4px] z-50 opacity-20 animate-[flicker_8s_infinite]"></div>
+          
+          {/* Subtle vignette effect */}
+          <div className="absolute inset-0 pointer-events-none bg-radial-gradient z-40 opacity-40"></div>
+
+          {/* Header with improved styling */}
+          <div className="flex justify-between items-center bg-gradient-to-r from-[#1A1A1A] to-[#2A2A2A] border-b-2 border-[#4A4A4A] py-2 px-3 relative z-10">
+            <h2 className="text-[#7FE4FF] text-[12px] font-bold uppercase tracking-[0.05em] flex items-center gap-2">
+              <MessageSquare size={14} className="text-[#7FE4FF]" />
+              <span className="drop-shadow-[0_0_3px_rgba(127,228,255,0.7)]">
+                {npcName}
+              </span>
             </h2>
-            <div style={{ display: "flex", gap: "8px" }}>
+            <div className="flex gap-2">
               <button
-                onClick={handleResetConversation}
+                onClick={() => {
+                  playSound("click");
+                  handleResetConversation();
+                }}
                 title="Reset conversation"
                 disabled={isGeneratingAI || isModelLoading}
-                style={{
-                  color: "#fef3c7",
-                  padding: "4px",
-                  backgroundColor:
-                    isGeneratingAI || isModelLoading ? "#78350f" : "#92400e",
-                  borderStyle: "solid",
-                  borderWidth: "2px",
-                  borderColor: "#78350f",
-                  cursor:
-                    isGeneratingAI || isModelLoading
-                      ? "not-allowed"
-                      : "pointer",
-                  opacity: isGeneratingAI || isModelLoading ? 0.5 : 1,
-                }}
+                className="p-[3px] bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A] border-2 border-[#4A4A4A] shadow-[1px_1px_0px_0px_#000000] [image-rendering:pixelated] disabled:cursor-not-allowed disabled:opacity-50 hover:bg-[#4A4A4A] hover:shadow-[0_0_5px_rgba(127,228,255,0.5)] transition-all duration-200"
               >
-                <RefreshCw size={16} />
+                <RefreshCw size={12} className="text-[#7FE4FF]" />
               </button>
               <button
-                onClick={handleCloseDialogue}
-                title="Close dialogue"
-                style={{
-                  color: "#fef3c7",
-                  padding: "4px",
-                  backgroundColor: "#92400e",
-                  borderStyle: "solid",
-                  borderWidth: "2px",
-                  borderColor: "#78350f",
-                  cursor: "pointer",
+                onClick={() => {
+                  playSound("click");
+                  handleCloseDialogue();
                 }}
+                title="Close dialogue"
+                className="p-[3px] bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A] border-2 border-[#4A4A4A] shadow-[1px_1px_0px_0px_#000000] [image-rendering:pixelated] hover:bg-[#4A4A4A] hover:shadow-[0_0_5px_rgba(127,228,255,0.5)] transition-all duration-200"
               >
-                <X size={16} />
+                <X size={12} className="text-[#7FE4FF]" />
               </button>
             </div>
           </div>
 
-          {/* Message history */}
+          {/* Message history with enhanced custom scrollbar and background */}
           <div
             ref={messagesContainerRef}
+            className="overflow-y-auto flex-grow p-4 h-[60vh] max-h-[600px] bg-[#1A1A1A] border-b-2 border-[#4A4A4A] relative z-10 scrollbar-thin scrollbar-thumb-[#4A4A4A] scrollbar-track-[#2A2A2A]"
             style={{
-              overflowY: "auto",
-              flexGrow: 1,
-              padding: "16px",
-              height: "45vh",
-              maxHeight: "450px",
-              backgroundColor: "#1c1917",
-              borderBottom: "3px solid #78350f",
               backgroundImage:
-                "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEklEQVQImWNgYGD4z0AswK4SAFXuAf8EPy+xAAAAAElFTkSuQmCC')",
+                "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAEklEQVQImWNgYGD4z0AEGBiQAFAAazB6YzD1PAAAAABJRU5ErkJggg==')",
               backgroundRepeat: "repeat",
-              backgroundSize: "4px 4px",
+              backgroundSize: "2px 2px",
             }}
           >
-            {messages.map((message) => (
-              <div key={message.id} className="animate-fadeIn">
-                <MessageItem message={message} />
+            {/* Decorative grid lines */}
+            <div className="absolute inset-0 pointer-events-none" 
+              style={{
+                backgroundImage: "linear-gradient(to right, rgba(127,228,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(127,228,255,0.05) 1px, transparent 1px)",
+                backgroundSize: "20px 20px"
+              }}>
+            </div>
+            
+            {/* Toggle animation button */}
+            <button 
+              onClick={() => setMessageAnimation(!messageAnimation)}
+              className="absolute top-2 right-2 z-20 p-1 bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A] border border-[#4A4A4A] rounded-sm opacity-50 hover:opacity-100 transition-opacity duration-200"
+              title={messageAnimation ? "Disable animations" : "Enable animations"}
+            >
+              <div className="w-3 h-3 bg-[#7FE4FF] opacity-70"></div>
+            </button>
+            
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`transition-all duration-300 ${messageAnimation ? 'animate-fadeIn' : ''}`}
+                style={messageAnimation ? { animationDelay: `${index * 80}ms` } : {}}
+              >
+                <MessageItem message={message} npcName={npcName} />
               </div>
             ))}
+
+            {/* Enhanced typing indicator */}
+            {showTypingIndicator && (
+              <div className="ml-[2px] mr-[30px] mt-[4px] animate-fadeIn">
+                <div className="relative max-w-[80px]">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A] border-2 border-[#4A4A4A] shadow-[2px_2px_0px_0px_#000000] outline outline-[1px] outline-black [image-rendering:pixelated]"></div>
+                  <div className="relative z-10 flex items-center justify-center gap-2 py-2 px-[8px]">
+                    <div className="w-[5px] h-[5px] bg-[#7FE4FF] animate-[pulse_1s_infinite] delay-[0ms] rounded-full shadow-[0_0_5px_rgba(127,228,255,0.7)]"></div>
+                    <div className="w-[5px] h-[5px] bg-[#7FE4FF] animate-[pulse_1s_infinite] delay-[200ms] rounded-full shadow-[0_0_5px_rgba(127,228,255,0.7)]"></div>
+                    <div className="w-[5px] h-[5px] bg-[#7FE4FF] animate-[pulse_1s_infinite] delay-[400ms] rounded-full shadow-[0_0_5px_rgba(127,228,255,0.7)]"></div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Loading indicators */}
+          {/* Enhanced loading indicator */}
           {isModelLoading && (
-            <div
-              className="h-full w-full opacity-50 absolute"
-              style={{
-                borderTop: "2px solid #78350f",
-                padding: "8px 10px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#000a",
-              }}
-            >
-              <Loader2 className="w-4 h-4 text-yellow-200 animate-spin mr-2" />
-              <span
-                style={{
-                  color: "#fef3c7",
-                  fontSize: "11px",
-                  fontWeight: "medium",
-                  fontFamily: "monospace",
-                }}
-              >
-                Loading AI model...
-              </span>
-            </div>
-          )}
-          {isGeneratingAI && !isModelLoading && (
-            <div
-              className="absolute opacity-20 inset-0 flex items-end justify-center pointer-events-none z-50 "
-              style={{
-                borderTop: "2px solid #78350f",
-                padding: "8px 10px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#000",
-              }}
-            >
-              <Loader2 className="w-4 h-4 text-yellow-200 animate-spin mr-2" />
-              <span
-                style={{
-                  color: "#fef3c7",
-                  fontSize: "11px",
-                  fontWeight: "medium",
-                  fontFamily: "monospace",
-                }}
-              >
-                Generating response...
-              </span>
+            <div className="absolute inset-0 flex justify-center items-center p-2 bg-[rgba(0,0,0,0.8)] backdrop-blur-sm z-20">
+              <div className="bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A] py-[8px] px-[12px] border-2 border-[#4A4A4A] shadow-[2px_2px_0px_0px_#000000] outline outline-[1px] outline-black flex items-center gap-[8px] [image-rendering:pixelated]">
+                <Loader2
+                  size={14}
+                  className="text-[#7FE4FF] animate-spin drop-shadow-[0_0_5px_rgba(127,228,255,0.7)]"
+                />
+                <span className="text-[#7FE4FF] text-[12px] font-bold drop-shadow-[0_0_3px_rgba(127,228,255,0.7)]">
+                  Loading...
+                </span>
+              </div>
             </div>
           )}
 
-          {/* User input field */}
-          <div
-            style={{
-              borderTop: "2px solid #78350f",
-              padding: "10px",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <Input
-                ref={inputRef}
-                type="text"
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                onKeyDown={(e) => {
-                  e.stopPropagation();
-                  e.key === "Enter" && handleSendMessage();
-                }}
-                onFocus={() => setInputFocused(true)}
-                onBlur={() => setInputFocused(false)}
-                placeholder="What say ye, brave adventurer?"
-                style={{
-                  flexGrow: 1,
-                  backgroundColor: "#1c1917",
-                  borderStyle: "solid",
-                  borderWidth: "3px",
-                  borderColor: "#92400e",
-                  borderRadius: "0",
-                  padding: "8px 12px",
-                  color: "#fef3c7",
-                  fontSize: "13px",
-                  fontFamily: "monospace",
-                  outline: "none",
-                  boxShadow: "inset 2px 2px 0 rgba(0,0,0,0.3)",
-                }}
+          {/* Enhanced input field with character counter and suggestions */}
+          <div className="border-t-2 border-[#4A4A4A] py-3 px-4 bg-gradient-to-r from-[#1A1A1A] to-[#2A2A2A] relative z-10">
+            {/* Quick suggestion buttons */}
+            <div className="flex flex-wrap gap-1 mb-2">
+              <button 
+                onClick={() => setUserInput("Tell me about your quest")} 
+                className="text-[10px] py-1 px-2 bg-[#2A2A2A] border border-[#4A4A4A] text-[#7FE4FF] hover:bg-[#3A3A3A] transition-colors duration-200"
                 disabled={isGeneratingAI || isModelLoading}
-              />
-              <button
-                onClick={handleSendMessage}
-                disabled={isGeneratingAI || isModelLoading || !userInput.trim()}
-                style={{
-                  backgroundColor:
-                    isGeneratingAI || isModelLoading || !userInput.trim()
-                      ? "#78350f"
-                      : "#b45309",
-                  borderStyle: "solid",
-                  borderWidth: "2px",
-                  borderColor: "#92400e",
-                  padding: "6px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor:
-                    isGeneratingAI || isModelLoading || !userInput.trim()
-                      ? "not-allowed"
-                      : "pointer",
-                  opacity:
-                    isGeneratingAI || isModelLoading || !userInput.trim()
-                      ? 0.5
-                      : 1,
-                }}
               >
-                <Send className="w-4 h-4 text-yellow-200" />
+                Ask about quest
+              </button>
+              <button 
+                onClick={() => setUserInput("What items do you have?")} 
+                className="text-[10px] py-1 px-2 bg-[#2A2A2A] border border-[#4A4A4A] text-[#7FE4FF] hover:bg-[#3A3A3A] transition-colors duration-200"
+                disabled={isGeneratingAI || isModelLoading}
+              >
+                Ask about items
+              </button>
+              <button 
+                onClick={() => setUserInput("Tell me about yourself")} 
+                className="text-[10px] py-1 px-2 bg-[#2A2A2A] border border-[#4A4A4A] text-[#7FE4FF] hover:bg-[#3A3A3A] transition-colors duration-200"
+                disabled={isGeneratingAI || isModelLoading}
+              >
+                Ask about background
+              </button>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <div className="relative flex-grow">
+                <Input
+                  ref={inputRef}
+                  type="text"
+                  value={userInput}
+                  onChange={(e) => setUserInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    e.stopPropagation();
+                    if (e.key === "Enter") {
+                      playSound("click");
+                      handleSendMessage();
+                    }
+                  }}
+                  onFocus={() => setInputFocused(true)}
+                  onBlur={() => setInputFocused(false)}
+                  placeholder="Enter your message..."
+                  className={`w-full bg-[#1A1A1A] border-2 ${inputFocused ? 'border-[#7FE4FF]' : 'border-[#4A4A4A]'} py-2 px-[8px] text-white text-[11px] outline-none [image-rendering:pixelated] transition-all duration-200 ${
+                    isGeneratingAI || isModelLoading
+                      ? "opacity-50"
+                      : "opacity-100"
+                  }`}
+                  style={{
+                    boxShadow: inputFocused ? '0 0 8px rgba(127,228,255,0.4)' : 'none'
+                  }}
+                  disabled={isGeneratingAI || isModelLoading}
+                />
+                
+                {/* Character counter */}
+                <div className={`absolute right-2 bottom-1 text-[9px] ${userInput.length > 100 ? 'text-[#FF7F7F]' : inputFocused ? 'text-[#9FEFFF]' : 'text-[#7FE4FF]'} ${inputFocused ? 'opacity-100' : 'opacity-70'} transition-all duration-200`}>
+                  {userInput.length}/150
+                </div>
+              </div>
+              
+              <button
+                onClick={handleSendWithSound}
+                disabled={isGeneratingAI || isModelLoading || !userInput.trim()}
+                className="p-2 bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A] border-2 border-[#4A4A4A] flex items-center justify-center shadow-[1px_1px_0px_0px_#000000] [image-rendering:pixelated] disabled:cursor-not-allowed disabled:opacity-50 hover:bg-[#4A4A4A] hover:shadow-[0_0_5px_rgba(127,228,255,0.5)] transition-all duration-200 relative group"
+              >
+                <Send size={12} className="text-[#7FE4FF] group-hover:scale-110 transition-transform duration-200" />
+                {/* Subtle glow effect on hover */}
+                <div className="absolute inset-0 bg-[#7FE4FF] opacity-0 group-hover:opacity-10 transition-opacity duration-200"></div>
               </button>
             </div>
           </div>

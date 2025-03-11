@@ -80,9 +80,8 @@ export function Game() {
       {/* Game UI */}
 
       {/* Modals */}
-      {/* <DialogueModal /> */}
       <LevelUp />
-      <Quests />
+      {/* <Quests /> */}
       <Rewards />
       <div key={gameState.currentSceneId} className="w-full h-full">
         {/* 3D Scene */}
@@ -107,6 +106,7 @@ export function Game() {
         autoPlay
         muted
       /> */}
+      <DialogueModal />
     </div>
   );
 }

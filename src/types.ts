@@ -129,10 +129,8 @@ export interface Model3D {
 }
 
 export interface Dialogue {
-  id: number;
-  speaker: string;
-  text: string;
-  choices?: DialogueChoice[];
+  role: "user" | "assistant";
+  content: string;
 }
 
 export interface DialogueChoice {
