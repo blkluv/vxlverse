@@ -64,12 +64,18 @@ const MessageItem = memo(
             {isPlayer ? (
               <div className="absolute -left-[26px] top-1/2 -translate-y-1/2 w-[20px] h-[20px] bg-[#3A3A3A] border-2 border-[#4A4A4A] flex items-center justify-center shadow-[1px_1px_0px_0px_#000000] outline outline-[1px] outline-black overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A]"></div>
-                <Sword size={12} className="relative z-10 text-[#FF7F7F] drop-shadow-[0_0_5px_rgba(255,127,127,0.7)]" />
+                <Sword
+                  size={12}
+                  className="relative z-10 text-[#FF7F7F] drop-shadow-[0_0_5px_rgba(255,127,127,0.7)]"
+                />
               </div>
             ) : (
               <div className="absolute -right-[26px] top-1/2 -translate-y-1/2 w-[20px] h-[20px] bg-[#2A2A2A] border-2 border-[#4A4A4A] flex items-center justify-center shadow-[1px_1px_0px_0px_#000000] outline outline-[1px] outline-black overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A]"></div>
-                <Shield size={12} className="relative z-10 text-[#7FE4FF] drop-shadow-[0_0_5px_rgba(127,228,255,0.7)]" />
+                <Shield
+                  size={12}
+                  className="relative z-10 text-[#7FE4FF] drop-shadow-[0_0_5px_rgba(127,228,255,0.7)]"
+                />
               </div>
             )}
 
@@ -113,34 +119,47 @@ MessageItem.displayName = "MessageItem";
 // Helper function to highlight keywords in the message content
 const highlightKeywords = (text: string, isPlayer: boolean) => {
   // Keywords to highlight for NPCs (blue glow)
-  const npcKeywords = ['quest', 'mission', 'reward', 'secret', 'magic', 'ancient', 'legend', 'treasure'];
-  
+  const npcKeywords = [
+    "quest",
+    "mission",
+    "reward",
+    "secret",
+    "magic",
+    "ancient",
+    "legend",
+    "treasure",
+  ];
+
   // Keywords to highlight for player (red glow)
-  const playerKeywords = ['help', 'where', 'what', 'how', 'who', 'when', 'why'];
-  
+  const playerKeywords = ["help", "where", "what", "how", "who", "when", "why"];
+
   const keywords = isPlayer ? playerKeywords : npcKeywords;
-  
+
   // Split the text into parts based on keywords
   let parts = [text];
-  
-  keywords.forEach(keyword => {
+
+  keywords.forEach((keyword) => {
     const newParts: string[] = [];
-    parts.forEach(part => {
-      const regex = new RegExp(`(${keyword})`, 'gi');
+    parts.forEach((part) => {
+      const regex = new RegExp(`(${keyword})`, "gi");
       const splitPart = part.split(regex);
       newParts.push(...splitPart);
     });
     parts = newParts;
   });
-  
+
   // Return the parts with highlighted keywords
   return parts.map((part, index) => {
     const lowercasePart = part.toLowerCase();
-    if (keywords.some(keyword => lowercasePart === keyword.toLowerCase())) {
+    if (keywords.some((keyword) => lowercasePart === keyword.toLowerCase())) {
       return (
-        <span 
-          key={index} 
-          className={`font-semibold ${isPlayer ? 'text-[#FF9F9F] drop-shadow-[0_0_3px_rgba(255,127,127,0.5)]' : 'text-[#9FEFFF] drop-shadow-[0_0_3px_rgba(127,228,255,0.5)]'}`}
+        <span
+          key={index}
+          className={`font-semibold ${
+            isPlayer
+              ? "text-[#FF9F9F] drop-shadow-[0_0_3px_rgba(255,127,127,0.5)]"
+              : "text-[#9FEFFF] drop-shadow-[0_0_3px_rgba(127,228,255,0.5)]"
+          }`}
         >
           {part}
         </span>
@@ -337,8 +356,15 @@ export function DialogueModal() {
     }
   }, [messages]);
 
+  // Helper function to detect if we're on a mobile device
+  const isMobileDevice = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+      (window.innerWidth <= 768);
+  };
+
   useEffect(() => {
-    if (activeNpc && inputRef.current && !isGeneratingAI && !isModelLoading) {
+    // Only auto-focus on desktop devices
+    if (activeNpc && inputRef.current && !isGeneratingAI && !isModelLoading && !isMobileDevice()) {
       inputRef.current.focus();
     }
   }, [activeNpc, isGeneratingAI, isModelLoading]);
@@ -383,7 +409,7 @@ export function DialogueModal() {
 
           {/* Enhanced scanlines effect with CRT flicker */}
           <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_bottom,rgba(0,0,0,0)_0%,rgba(0,0,0,0)_50%,rgba(0,0,0,0.3)_50%,rgba(0,0,0,0.3)_100%)] bg-[length:100%_4px] z-50 opacity-20 animate-[flicker_8s_infinite]"></div>
-          
+
           {/* Subtle vignette effect */}
           <div className="absolute inset-0 pointer-events-none bg-radial-gradient z-40 opacity-40"></div>
 
@@ -432,27 +458,35 @@ export function DialogueModal() {
             }}
           >
             {/* Decorative grid lines */}
-            <div className="absolute inset-0 pointer-events-none" 
+            <div
+              className="absolute inset-0 pointer-events-none"
               style={{
-                backgroundImage: "linear-gradient(to right, rgba(127,228,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(127,228,255,0.05) 1px, transparent 1px)",
-                backgroundSize: "20px 20px"
-              }}>
-            </div>
-            
+                backgroundImage:
+                  "linear-gradient(to right, rgba(127,228,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(127,228,255,0.05) 1px, transparent 1px)",
+                backgroundSize: "20px 20px",
+              }}
+            ></div>
+
             {/* Toggle animation button */}
-            <button 
+            <button
               onClick={() => setMessageAnimation(!messageAnimation)}
               className="absolute top-2 right-2 z-20 p-1 bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A] border border-[#4A4A4A] rounded-sm opacity-50 hover:opacity-100 transition-opacity duration-200"
-              title={messageAnimation ? "Disable animations" : "Enable animations"}
+              title={
+                messageAnimation ? "Disable animations" : "Enable animations"
+              }
             >
               <div className="w-3 h-3 bg-[#7FE4FF] opacity-70"></div>
             </button>
-            
+
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`transition-all duration-300 ${messageAnimation ? 'animate-fadeIn' : ''}`}
-                style={messageAnimation ? { animationDelay: `${index * 80}ms` } : {}}
+                className={`transition-all duration-300 ${
+                  messageAnimation ? "animate-fadeIn" : ""
+                }`}
+                style={
+                  messageAnimation ? { animationDelay: `${index * 80}ms` } : {}
+                }
               >
                 <MessageItem message={message} npcName={npcName} />
               </div>
@@ -492,29 +526,29 @@ export function DialogueModal() {
           <div className="border-t-2 border-[#4A4A4A] py-3 px-4 bg-gradient-to-r from-[#1A1A1A] to-[#2A2A2A] relative z-10">
             {/* Quick suggestion buttons */}
             <div className="flex flex-wrap gap-1 mb-2">
-              <button 
-                onClick={() => setUserInput("Tell me about your quest")} 
+              <button
+                onClick={() => setUserInput("Tell me about your quest")}
                 className="text-[10px] py-1 px-2 bg-[#2A2A2A] border border-[#4A4A4A] text-[#7FE4FF] hover:bg-[#3A3A3A] transition-colors duration-200"
                 disabled={isGeneratingAI || isModelLoading}
               >
                 Ask about quest
               </button>
-              <button 
-                onClick={() => setUserInput("What items do you have?")} 
+              <button
+                onClick={() => setUserInput("What items do you have?")}
                 className="text-[10px] py-1 px-2 bg-[#2A2A2A] border border-[#4A4A4A] text-[#7FE4FF] hover:bg-[#3A3A3A] transition-colors duration-200"
                 disabled={isGeneratingAI || isModelLoading}
               >
                 Ask about items
               </button>
-              <button 
-                onClick={() => setUserInput("Tell me about yourself")} 
+              <button
+                onClick={() => setUserInput("Tell me about yourself")}
                 className="text-[10px] py-1 px-2 bg-[#2A2A2A] border border-[#4A4A4A] text-[#7FE4FF] hover:bg-[#3A3A3A] transition-colors duration-200"
                 disabled={isGeneratingAI || isModelLoading}
               >
                 Ask about background
               </button>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <div className="relative flex-grow">
                 <Input
@@ -532,29 +566,46 @@ export function DialogueModal() {
                   onFocus={() => setInputFocused(true)}
                   onBlur={() => setInputFocused(false)}
                   placeholder="Enter your message..."
-                  className={`w-full bg-[#1A1A1A] border-2 ${inputFocused ? 'border-[#7FE4FF]' : 'border-[#4A4A4A]'} py-2 px-[8px] text-white text-[11px] outline-none [image-rendering:pixelated] transition-all duration-200 ${
+                  className={`w-full bg-[#1A1A1A] border-2 ${
+                    inputFocused ? "border-[#7FE4FF]" : "border-[#4A4A4A]"
+                  } py-2 px-[8px] text-white text-[11px] outline-none [image-rendering:pixelated] transition-all duration-200 ${
                     isGeneratingAI || isModelLoading
                       ? "opacity-50"
                       : "opacity-100"
                   }`}
                   style={{
-                    boxShadow: inputFocused ? '0 0 8px rgba(127,228,255,0.4)' : 'none'
+                    boxShadow: inputFocused
+                      ? "0 0 8px rgba(127,228,255,0.4)"
+                      : "none",
                   }}
                   disabled={isGeneratingAI || isModelLoading}
                 />
-                
+
                 {/* Character counter */}
-                <div className={`absolute right-2 bottom-1 text-[9px] ${userInput.length > 100 ? 'text-[#FF7F7F]' : inputFocused ? 'text-[#9FEFFF]' : 'text-[#7FE4FF]'} ${inputFocused ? 'opacity-100' : 'opacity-70'} transition-all duration-200`}>
+                <div
+                  className={`absolute right-2 bottom-1 text-[9px] ${
+                    userInput.length > 100
+                      ? "text-[#FF7F7F]"
+                      : inputFocused
+                      ? "text-[#9FEFFF]"
+                      : "text-[#7FE4FF]"
+                  } ${
+                    inputFocused ? "opacity-100" : "opacity-70"
+                  } transition-all duration-200`}
+                >
                   {userInput.length}/150
                 </div>
               </div>
-              
+
               <button
                 onClick={handleSendWithSound}
                 disabled={isGeneratingAI || isModelLoading || !userInput.trim()}
                 className="p-2 bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A] border-2 border-[#4A4A4A] flex items-center justify-center shadow-[1px_1px_0px_0px_#000000] [image-rendering:pixelated] disabled:cursor-not-allowed disabled:opacity-50 hover:bg-[#4A4A4A] hover:shadow-[0_0_5px_rgba(127,228,255,0.5)] transition-all duration-200 relative group"
               >
-                <Send size={12} className="text-[#7FE4FF] group-hover:scale-110 transition-transform duration-200" />
+                <Send
+                  size={12}
+                  className="text-[#7FE4FF] group-hover:scale-110 transition-transform duration-200"
+                />
                 {/* Subtle glow effect on hover */}
                 <div className="absolute inset-0 bg-[#7FE4FF] opacity-0 group-hover:opacity-10 transition-opacity duration-200"></div>
               </button>

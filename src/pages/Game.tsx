@@ -85,7 +85,11 @@ export function Game() {
       <Rewards />
       <div key={gameState.currentSceneId} className="w-full h-full">
         {/* 3D Scene */}
-
+        <img
+          className="absolute top-0 m-4 w-20 left-0 z-30"
+          src="/icons/large-logo.png"
+          alt="VXLverse"
+        />
         <Canvas shadows camera={{ position: [0, 5, 10], fov: 50 }}>
           <GameScene sceneData={currentScene} />
           <Sky sunPosition={getSunPosition() as [number, number, number]} />

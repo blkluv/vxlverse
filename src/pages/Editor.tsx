@@ -359,7 +359,6 @@ export function _Editor({ gameId }: { gameId: string }) {
               <Plus size={14} className="text-white" />
             </button>
           </div>
-
           <div className="absolute z-50 bottom-0 h-10  bg-slate-900 backdrop-blur-sm border-b border-slate-800 right-0 w-full flex justify-center">
             {/* Tools section */}
             <div className="flex h-full items-center">
@@ -603,7 +602,6 @@ export function _Editor({ gameId }: { gameId: string }) {
               </div>
             </div>
           </div>
-
           {currentSceneId ? (
             <Canvas
               key={currentSceneId}
@@ -641,6 +639,12 @@ export function _Editor({ gameId }: { gameId: string }) {
               No scene selected
             </div>
           )}
+          <img
+            className="absolute bottom-12 w-20 left-0 z-50"
+            src="/icons/large-logo.png"
+            alt="VXLverse"
+          />
+          erse
         </div>
         <PropertiesPanel />
       </div>
