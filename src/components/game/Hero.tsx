@@ -97,7 +97,14 @@ export const Hero = forwardRef<RapierRigidBody>(function (
   return (
     <group ref={group} {...props} position={[0, -0.9, 0]} dispose={null}>
       {height && (
-        <Html position={[0, height * 1.7, 0]} sprite center>
+        <Html
+          zIndexRange={[0, 0]}
+          occlude
+          prepend
+          position={[0, height * 1.7, 0]}
+          sprite
+          center
+        >
           <div className="pointer-events-none">
             {/* Simple RPG status bars */}
             <div className="flex items-center gap-1.5 p-0.5">

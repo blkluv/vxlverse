@@ -10,15 +10,21 @@
 
 VXLverse is a powerful browser-based 3D game creation platform that allows users to build, customize, and share interactive voxel experiences without writing code. Combining the flexibility of voxel-based design with modern web technologies, VXLverse makes game development accessible to creators of all skill levels - from beginners to experienced developers.
 
-![VXLverse Demo](/public/Demo.png)
+![VXLverse Demo](/public/demo-images/Demo.png)
 
 > **Create, Play, Share** - Build immersive 3D worlds and games directly in your browser with our intuitive voxel editor.
 
 ### Pixel-Art RPG Interface
 
-![VXLverse Pixel-Art RPG UI](/public/Demo2.png)
+![VXLverse Pixel-Art RPG UI](/public/demo-images/Demo2.png)
 
 > **Immersive Game Experience** - Engage players with authentic pixel-art RPG interfaces, dialogue systems, and game HUD.
+
+### AI-Powered NPC Conversations
+
+![VXLverse NPC Dialogue](/public/demo-images/Npc_Dialogue.png)
+
+> **Dynamic Character Interactions** - Create NPCs with rich backstories and personalities using our LLM integration for natural, AI-driven conversations.
 
 ## Features
 
@@ -30,6 +36,7 @@ VXLverse is a powerful browser-based 3D game creation platform that allows users
 - **3D Model Library**: Access a growing collection of pre-made 3D models
 - **Quest System**: Create interactive game objectives and storylines with pixel-art RPG-style UI
 - **Requirements System**: Set up game progression mechanics and conditions
+- **AI-Powered NPCs**: Give your characters rich backstories and enable natural conversations using LLM integration
 
 ### Advanced Tools
 
@@ -37,6 +44,7 @@ VXLverse is a powerful browser-based 3D game creation platform that allows users
 - **Brush Tool**: Paint and modify voxel-based objects
 - **Preview Mode**: Test your game in real-time within the editor
 - **Pixel-Art RPG UI**: Immersive game interface with retro-style HUD, dialogue system, and inventory
+- **LLM Integration**: Create AI-driven NPC conversations by providing character backstories
 
 ### Technical Capabilities
 
@@ -45,6 +53,7 @@ VXLverse is a powerful browser-based 3D game creation platform that allows users
 - **Responsive UI**: Modern interface built with Tailwind CSS and Framer Motion
 - **Asset Management**: Integrated with PocketBase for model storage and retrieval
 - **Pixel-Perfect Styling**: Authentic pixel-art aesthetics with consistent design language
+- **AI Integration**: Powered by Mistral AI for natural language processing and dynamic NPC interactions
 
 ## Getting Started
 
@@ -99,6 +108,7 @@ VXLverse is a powerful browser-based 3D game creation platform that allows users
 1. Select an object in your scene
 2. Navigate to the Properties Panel on the right
 3. Use the Quest and Requirements tabs to set up game interactions
+4. Add NPC backstories to enable AI-powered conversations
 
 ### Customizing Game UI
 
@@ -115,7 +125,7 @@ VXLverse is built with a component-based architecture using React and TypeScript
 - **PropertiesPanel**: Controls object properties and game logic
 - **EditorScene**: Handles 3D rendering and object manipulation
 - **GameHUD**: Pixel-art style heads-up display for in-game information
-- **DialogueModal**: Immersive RPG-style dialogue system
+- **DialogueModal**: Immersive RPG-style dialogue system with AI-powered conversations
 - **Inventory/QuestLog**: Retro-styled game systems with consistent pixel aesthetics
 
 State management is handled through Zustand stores, with the primary store being `editorStore.ts`.
@@ -145,6 +155,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **Cross-Platform Publishing**: Deploy your games to web, mobile, and desktop platforms
 - **Authentic Pixel-Art UI**: Immersive retro-style game interfaces that enhance player experience
 - **Cohesive RPG Systems**: Integrated dialogue, inventory, and quest systems with consistent styling
+- **AI-Powered Characters**: Create NPCs with unique personalities and dynamic conversations using LLM integration
 
 ## Community and Support
 
@@ -155,7 +166,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Keywords
 
-voxel editor, 3D game creation, browser game maker, no-code game development, three.js game engine, voxel modeling, interactive 3D, web-based game editor, game design platform, 3D world builder, pixel-art UI, retro RPG interface, game HUD design
+voxel editor, 3D game creation, browser game maker, no-code game development, three.js game engine, voxel modeling, interactive 3D, web-based game editor, game design platform, 3D world builder, pixel-art UI, retro RPG interface, game HUD design, AI-powered NPCs, LLM integration, dynamic conversations, character backstories
 
 ---
 

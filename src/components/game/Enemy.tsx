@@ -129,6 +129,9 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
     <group>
       {active && (
         <Html
+          zIndexRange={[0, 0]}
+          occlude
+          prepend
           position={[enemy.position.x, height * 1.5, enemy.position.z]}
           center
           sprite

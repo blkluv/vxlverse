@@ -124,7 +124,10 @@ export function GameObject(props: GameObject) {
           <Html
             distanceFactor={15}
             center
-            position={[0, gltf.height * (showInteractionMenu ? 0.5 : 1.1), 0]}
+            position={[0, gltf.height * (showInteractionMenu ? 0.5 : 1.3), 0]}
+            zIndexRange={[0, 0]}
+            occlude
+            prepend
           >
             <div className="flex flex-col items-center gap-2">
               {/* Pixel-art sprite style quest indicator */}
