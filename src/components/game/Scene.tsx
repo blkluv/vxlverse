@@ -30,25 +30,23 @@ function Floor() {
 
 export function GameScene({ sceneData, isPreview }: SceneProps) {
   const { scene } = useThree();
-
   const { playSound, stopSound } = useSound();
+  const enemies = useEnemyStore((state) => state.enemies);
+  const startSpawning = useEnemyStore((state) => state.startSpawning);
+  const stopSpawning = useEnemyStore((state) => state.stopSpawning);
 
   useEffect(() => {
     stopSound("background");
     playSound("background");
-  }, [sceneData?.fog, scene]);
-
-  if (!sceneData) return null;
-  const enemies = useEnemyStore((state) => state.enemies);
-
-  const startSpawning = useEnemyStore((state) => state.startSpawning);
-  const stopSpawning = useEnemyStore((state) => state.stopSpawning);
+  }, [sceneData?.fog, scene, playSound, stopSound]);
 
   useEffect(() => {
     if (!sceneData?.farmZone?.enabled) return;
     startSpawning();
     return () => stopSpawning();
   }, [startSpawning, stopSpawning, sceneData?.farmZone?.enabled]);
+
+  if (!sceneData) return null;
 
   return (
     <>
