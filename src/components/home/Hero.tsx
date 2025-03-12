@@ -79,7 +79,7 @@ export function Hero() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <a
-                href="/play/village-scene"
+                href="/play/6b2v99o3632rad6"
                 className="group px-8 py-4  bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium 
                          hover:from-blue-600 hover:to-blue-700 transition-all flex items-center gap-2 shadow-lg shadow-blue-500/25"
               >

@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/icons/ios/32.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>
       VXLverse - 3D Game Creation Platform | Build, Customize & Share
     </title>
@@ -24,25 +27,65 @@
       content="black-translucent"
     />
     <meta name="apple-mobile-web-app-title" content="VXLverse" />
-    
+
     <!-- Apple Touch Icons (multiple sizes required for iOS) -->
     <link rel="apple-touch-icon" href="/icons/ios/192.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="/icons/ios/152.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/ios/180.png" />
     <link rel="apple-touch-icon" sizes="167x167" href="/icons/ios/167.png" />
-    
+
     <!-- iOS Splash Screens -->
-    <link rel="apple-touch-startup-image" media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="/icons/ios/splash/640x1136.png" />
-    <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/icons/ios/splash/750x1334.png" />
-    <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" href="/icons/ios/splash/828x1792.png" />
-    <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" href="/icons/ios/splash/1242x2688.png" />
-    <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="/icons/ios/splash/1125x2436.png" />
-    <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)" href="/icons/ios/splash/1242x2208.png" />
-    <link rel="apple-touch-startup-image" media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" href="/icons/ios/splash/1536x2048.png" />
-    <link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" href="/icons/ios/splash/1668x2224.png" />
-    <link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" href="/icons/ios/splash/1668x2388.png" />
-    <link rel="apple-touch-startup-image" media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" href="/icons/ios/splash/2048x2732.png" />
-    
+    <link
+      rel="apple-touch-startup-image"
+      media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+      href="/icons/ios/splash/640x1136.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+      href="/icons/ios/splash/750x1334.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
+      href="/icons/ios/splash/828x1792.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
+      href="/icons/ios/splash/1242x2688.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+      href="/icons/ios/splash/1125x2436.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)"
+      href="/icons/ios/splash/1242x2208.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+      href="/icons/ios/splash/1536x2048.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+      href="/icons/ios/splash/1668x2224.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
+      href="/icons/ios/splash/1668x2388.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+      href="/icons/ios/splash/2048x2732.png"
+    />
+
     <link rel="manifest" href="/manifest.json" />
 
     <!-- Open Graph / Facebook -->
@@ -75,20 +118,45 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      // Register service worker for PWA functionality
+      // Service worker management - only register in production
       if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("/sw.js")
-            .then((registration) => {
-              console.log(
-                "Service Worker registered with scope:",
-                registration.scope
+        const isDevelopment =
+          window.location.hostname === "localhost" ||
+          window.location.hostname.includes("127.0.0.1");
+
+        window.addEventListener("load", async () => {
+          // In development: unregister all service workers to prevent caching issues
+          if (isDevelopment) {
+            const registrations =
+              await navigator.serviceWorker.getRegistrations();
+            for (let registration of registrations) {
+              registration.unregister();
+              console.log("Service Worker unregistered for development");
+            }
+
+            // Clear all caches to ensure fresh content
+            if (window.caches) {
+              const cacheNames = await window.caches.keys();
+              await Promise.all(
+                cacheNames.map((cacheName) => window.caches.delete(cacheName))
               );
-            })
-            .catch((error) => {
-              console.error("Service Worker registration failed:", error);
-            });
+              console.log("All caches cleared for development");
+            }
+          }
+          // In production: register the service worker
+          else {
+            navigator.serviceWorker
+              .register("/sw.js")
+              .then((registration) => {
+                console.log(
+                  "Service Worker registered with scope:",
+                  registration.scope
+                );
+              })
+              .catch((error) => {
+                console.error("Service Worker registration failed:", error);
+              });
+          }
         });
       }
     </script>

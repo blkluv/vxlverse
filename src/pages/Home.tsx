@@ -46,38 +46,17 @@ const FEATURED_GAMES = [
 
 export function Home() {
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const isAuthenticated = pb.authStore.isValid;
-
-  const { user, logout } = useAuthStore();
-
-  const handleCreateGame = () => {
-    if (!isAuthenticated) {
-      return;
-    } else {
-      setShowCreateModal(true);
-    }
-  };
-
-  const handleLogout = () => {
-    pb.authStore.clear();
-    logout();
-  };
 
   return (
     <div className="min-h-screen bg-gray-900">
-      <Header
-        isAuthenticated={isAuthenticated}
-        user={user}
-        handleCreateGame={handleCreateGame}
-        handleLogout={handleLogout}
-      />
+      <Header />
 
       {/* Main Content */}
       <main>
         <Hero />
-        
+
         <Features />
-        
+
         <HowItWorks />
 
         {/* Featured Games */}
@@ -95,9 +74,9 @@ export function Home() {
         </section>
 
         <Testimonials />
-        
+
         <PopularTags />
-        
+
         <CallToAction />
       </main>
 

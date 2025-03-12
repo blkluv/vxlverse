@@ -18,7 +18,7 @@ interface Game {
   title: string;
   description: string;
   thumbnail?: string;
-  creator: string;
+  owner: string;
   rating?: number;
   players?: number;
   updated?: string;
@@ -36,8 +36,7 @@ const DEFAULT_THUMBNAIL =
 
 export function GameCard({ game, index, onDelete }: GameCardProps) {
   const { user } = useAuthStore();
-  const isOwner = user?.id === game.creator;
-  const [isHovered, setIsHovered] = useState(false);
+  const isOwner = user?.id === game.owner;
   const [isLiked, setIsLiked] = useState(false);
 
   const handleDelete = async () => {
@@ -51,12 +50,10 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
   };
 
   return (
-    <div
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
       className="group relative h-[20rem]  overflow-hidden backdrop-blur-sm bg-gradient-to-br from-gray-800/30 via-gray-900/30 to-black/30 border border-gray-700/30 hover:border-blue-500/50 shadow-xl hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 flex flex-col"
     >
       {/* Thumbnail with glass effect */}
@@ -102,13 +99,7 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
 
         {/* Title and Actions */}
         <div className="relative flex items-start justify-between gap-2 mb-2">
-          <h3
-            animate={{ color: isHovered ? "#60A5FA" : "#FFFFFF" }}
-            transition={{ duration: 0.3 }}
-            className="text-base font-bold truncate"
-          >
-            {game.title}
-          </h3>
+          <h3 className="text-base font-bold truncate">{game.title}</h3>
           {isOwner && (
             <div className="flex gap-1 flex-shrink-0">
               <Link
@@ -176,6 +167,6 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

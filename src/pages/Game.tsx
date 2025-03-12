@@ -78,7 +78,11 @@ export function Game() {
   return (
     <div className="w-full h-screen relative select-none">
       {/* Game UI */}
-
+      <img
+        src="/keyControls.png"
+        className="z-50 pointer-events-none md:block hidden absolute bottom-0 opacity-40 m-4 w-80 left-0"
+        alt=""
+      />
       {/* Modals */}
       <LevelUp />
       {/* <Quests /> */}

@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { Dialogue } from "../../types";
 import { Input } from "../UI";
+import { pb } from "../../lib/pocketbase";
+import { useParams } from "react-router-dom";
 
 const MessageItem = memo(
   ({ message, npcName }: { message: Dialogue; npcName: string }) => {
@@ -198,20 +200,6 @@ export function DialogueModal() {
   const init = useCallback(async () => {
     if (!activeNpc) return;
 
-    const storedData = localStorage.getItem(`dialogue_${activeNpc}`);
-    if (storedData) {
-      try {
-        const { messages: storedMessages, npcName: storedName } =
-          JSON.parse(storedData);
-        setMessages(storedMessages);
-        setNpcName(storedName);
-        setIsGeneratingAI(false);
-        setIsModelLoading(false);
-        return;
-      } catch (error) {
-        console.error("Failed to parse stored dialogue:", error);
-      }
-    }
     setMessages([]);
     setIsGeneratingAI(false);
     setIsModelLoading(false);
@@ -241,16 +229,6 @@ export function DialogueModal() {
         };
 
         setMessages([initialGreeting]);
-
-        if (activeNpc) {
-          localStorage.setItem(
-            `dialogue_${activeNpc}`,
-            JSON.stringify({
-              messages: [initialGreeting],
-              npcName: name,
-            })
-          );
-        }
       } catch (error) {
         console.error("Failed to generate greeting:", error);
       } finally {
@@ -259,7 +237,7 @@ export function DialogueModal() {
     },
     [activeNpc]
   );
-
+  const { id } = useParams<{ id: string }>();
   const handleSendMessage = useCallback(async () => {
     if (!userInput.trim()) return;
 
@@ -282,31 +260,27 @@ export function DialogueModal() {
         (obj) => obj.id === activeNpc
       );
 
-      const response = await fetch("/api/chat", {
+      // Get the current game ID if available
+
+      const response = await pb.send("/api/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
         body: JSON.stringify({
+          npc_id: activeNpc,
           back_story: npcObject?.description,
           messages: updatedMessages,
+          game_id: id,
+          npc_name: npcName || "Unknown NPC",
         }),
       });
 
-      const data = await response.json();
-
-      if (data.messages) {
-        setMessages(data.messages);
-        if (activeNpc) {
-          localStorage.setItem(
-            `dialogue_${activeNpc}`,
-            JSON.stringify({
-              messages: data.messages,
-              npcName,
-            })
-          );
+      // Check if we have a successful response with messages
+      if (response.success && response.messages) {
+        // Log user authentication information if available
+        if (response.user) {
+          console.log("User info:", response.user);
         }
+
+        setMessages(response.messages);
       }
     } catch (error) {
       console.error("API call failed:", error);
@@ -322,18 +296,9 @@ export function DialogueModal() {
       setIsGeneratingAI(false);
       setShowTypingIndicator(false);
     }
-  }, [userInput, npcName, messages, activeNpc, scenes]);
+  }, [userInput, id, npcName, messages, activeNpc, scenes]);
 
   const handleCloseDialogue = useCallback(() => {
-    if (activeNpc) {
-      localStorage.setItem(
-        `dialogue_${activeNpc}`,
-        JSON.stringify({
-          messages,
-          npcName,
-        })
-      );
-    }
     setActiveNpc(null);
     setMessages([]);
     setUserInput("");
@@ -342,9 +307,7 @@ export function DialogueModal() {
   const handleResetConversation = useCallback(() => {
     if (npcName) {
       setMessages([]);
-      if (activeNpc) {
-        localStorage.removeItem(`dialogue_${activeNpc}`);
-      }
+
       generateInitialGreeting(npcName);
     }
   }, [npcName, activeNpc, generateInitialGreeting]);
@@ -358,13 +321,22 @@ export function DialogueModal() {
 
   // Helper function to detect if we're on a mobile device
   const isMobileDevice = () => {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-      (window.innerWidth <= 768);
+    return (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      ) || window.innerWidth <= 768
+    );
   };
 
   useEffect(() => {
     // Only auto-focus on desktop devices
-    if (activeNpc && inputRef.current && !isGeneratingAI && !isModelLoading && !isMobileDevice()) {
+    if (
+      activeNpc &&
+      inputRef.current &&
+      !isGeneratingAI &&
+      !isModelLoading &&
+      !isMobileDevice()
+    ) {
       inputRef.current.focus();
     }
   }, [activeNpc, isGeneratingAI, isModelLoading]);

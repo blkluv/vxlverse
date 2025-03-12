@@ -22,9 +22,11 @@ const fetcher = async (id: string) => {
 export function useGame(id: string) {
   localStorage.removeItem("editor-store");
   const { data, error, isLoading, mutate } = useSWR(id, fetcher, {
+    revalidateOnFocus: false,
     onSuccess: (data) => {
       useEditorStore.setState((s) => ({
         ...s,
+        currentSceneId: data?.gameConf?.scenes[0]?.id ?? "",
         scenes: data?.gameConf?.scenes ?? [],
       }));
     },

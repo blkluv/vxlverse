@@ -16,8 +16,6 @@ import {
   RotateCcw,
   Grid3X3,
   Play,
-  Undo,
-  Redo,
   Minimize,
   Expand,
   ExpandIcon,
@@ -29,6 +27,9 @@ import {
   Gauge,
   Eye,
   Save,
+  BellIcon,
+  ShareIcon,
+  Share,
 } from "lucide-react";
 import { toast } from "../components/UI/Toast";
 import { EditorScene } from "../components/editor/EditorScene";
@@ -37,9 +38,6 @@ import { Hero } from "../components/game/Hero";
 import { useParams } from "react-router-dom";
 import { useGame } from "../hooks/useGame";
 import { pb } from "../lib/pocketbase";
-import { Player } from "../components/game/Player";
-import { Physics, RigidBody } from "@react-three/rapier";
-import { AxesHelper } from "three";
 import { GameScene } from "../components/game/Scene";
 
 // Updated keyboard mapping for tools
@@ -71,7 +69,7 @@ export function Editor() {
   );
 }
 
-export function _Editor({ gameId }: { gameId: string }) {
+export function _Editor() {
   const {
     scenes,
     currentSceneId,
@@ -527,16 +525,6 @@ export function _Editor({ gameId }: { gameId: string }) {
                     <Gauge className="w-4 h-4" />
                   </button>
                 </Tooltip>
-                <Tooltip position="top" content="Undo (Ctrl+Z)">
-                  <button className="w-10 h-full flex items-center justify-center transition-all duration-200 text-slate-400 hover:bg-slate-700/40 hover:text-white">
-                    <Undo className="w-4 h-4" />
-                  </button>
-                </Tooltip>
-                <Tooltip position="top" content="Redo (Ctrl+Y)">
-                  <button className="w-10 h-full flex items-center justify-center transition-all duration-200 text-slate-400 hover:bg-slate-700/40 hover:text-white">
-                    <Redo className="w-4 h-4" />
-                  </button>
-                </Tooltip>
               </div>
 
               {/* View Mode Group */}
@@ -572,31 +560,6 @@ export function _Editor({ gameId }: { gameId: string }) {
                     }`}
                   >
                     <Play className="w-4 h-4" />
-                  </button>
-                </Tooltip>
-
-                <Tooltip position="top" content="Publish">
-                  <button
-                    onClick={async (e) => {
-                      if (!gameId) return;
-
-                      // Always get the latest state when saving
-                      const latestState = useEditorStore.getState();
-
-                      await pb.collection("games").update(gameId, {
-                        gameConf: {
-                          scenes: latestState.scenes,
-                          currentSceneId: latestState.currentSceneId,
-                          gridSnap: latestState.gridSnap,
-                          showGrid: latestState.showGrid,
-                          gridSize: latestState.gridSize,
-                          snapPrecision: latestState.snapPrecision,
-                        },
-                      });
-                    }}
-                    className="w-10 h-full flex items-center justify-center transition-all duration-200 text-slate-400 hover:bg-green-900/30 hover:text-green-300"
-                  >
-                    <Save className="w-4 h-4" />
                   </button>
                 </Tooltip>
               </div>

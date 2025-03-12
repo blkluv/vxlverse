@@ -78,7 +78,7 @@ export function GameScene({ sceneData, isPreview }: SceneProps) {
         </Suspense>
         {/* Scene Objects */}
         {sceneData.objects.map((object) => (
-          <GameObject {...object} />
+          <GameObject key={object.id} {...object} />
         ))}
       </Physics>
     </>

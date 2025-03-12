@@ -6,6 +6,7 @@ import { Games } from "./pages/Games";
 import { Profile } from "./pages/Profile";
 import { Favorites } from "./pages/Favorites";
 import { Settings } from "./pages/Settings";
+import { Login } from "./pages/Login";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { ToastContainer } from "./components/UI/Toast";
 
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/games" element={<Games />} />
         <Route path="/play/:id" element={<Game />} />
+        <Route path="/login" element={<Login />} />
         <Route
           path="/editor/:id"
           element={
