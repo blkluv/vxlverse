@@ -1,6 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { ScenePanel } from "../components/editor/ScenePanel";
 import { PropertiesPanel } from "../components/editor/PropertiesPanel";
+import { ModelLibrary } from "../components/editor/ModelLibrary";
 import {
   KeyboardControls,
   OrbitControls,
@@ -30,6 +31,7 @@ import {
   BellIcon,
   ShareIcon,
   Share,
+  Package,
 } from "lucide-react";
 import { toast } from "../components/UI/Toast";
 import { EditorScene } from "../components/editor/EditorScene";
@@ -89,6 +91,7 @@ export function _Editor() {
     createNewScene,
   } = useEditorStore();
   const [showMetrics, setShowMetrics] = useState(false);
+  const [showModelLibrary, setShowModelLibrary] = useState(false);
   const [activeTool, setActiveTool] = useState<string>("move");
   const [transformMode, setTransformMode] = useState<
     "translate" | "rotate" | "scale"
@@ -306,9 +309,11 @@ export function _Editor() {
     <div className="flex flex-col w-full h-screen bg-slate-900">
       {/* Main toolbar */}
 
-      <div className="grid h-full grid-cols-[350px_1fr_350px]  overflow-hidden">
-        <ScenePanel />
-        <div className="relative max-h-screen flex-1">
+      <div className="editorLayout">
+        <div className="hierarchy">
+          <ScenePanel />
+        </div>
+        <div className="editor-canvas">
           {/* Scene tabs */}
           <div className="absolute h-8 no-scrollbar top-0 left-0 right-0 z-50 flex overflow-x-auto bg-slate-900 backdrop-blur-sm border-b border-slate-800">
             {scenes.map((scene) => (
@@ -525,6 +530,18 @@ export function _Editor() {
                     <Gauge className="w-4 h-4" />
                   </button>
                 </Tooltip>
+                <Tooltip position="top" content="Model Library">
+                  <button
+                    onClick={() => setShowModelLibrary(!showModelLibrary)}
+                    className={`w-10 h-full flex items-center justify-center transition-all duration-200 ${
+                      showModelLibrary
+                        ? "bg-gradient-to-b from-blue-600/30 to-blue-500/20 text-blue-300 border-b-2 border-blue-400 shadow-[0_2px_4px_rgba(59,130,246,0.2)]"
+                        : "text-slate-400 hover:bg-slate-700/40 hover:text-white"
+                    }`}
+                  >
+                    <Package className="w-4 h-4" />
+                  </button>
+                </Tooltip>
               </div>
 
               {/* View Mode Group */}
@@ -607,9 +624,10 @@ export function _Editor() {
             src="/icons/large-logo.png"
             alt="VXLverse"
           />
-          erse
         </div>
-        <PropertiesPanel />
+        <div className="inspector no-scrollbar ">
+          <PropertiesPanel />
+        </div>
       </div>
     </div>
   );

@@ -51,7 +51,7 @@ export function PropertiesPanel() {
     );
 
   return (
-    <div className="h-full z-50  flex flex-col bg-slate-900/90 border-l border-slate-800/50">
+    <div className="h-full z-50 no-scrollbar flex flex-col bg-slate-900/90 border-l border-slate-800/50">
       {/* Tab Navigation */}
       <div
         className={clsx(
@@ -97,7 +97,7 @@ export function PropertiesPanel() {
       {/* Panel Content */}
       <div className="flex-1 overflow-auto ">
         <>
-          <div className="h-screen pb-20 no-scrollbar overflow-y-auto">
+          <div className="h-full pb-20 no-scrollbar overflow-y-auto">
             <div className="p-2 space-y-2">
               {activeTab === "properties" && (
                 <>
@@ -107,10 +107,9 @@ export function PropertiesPanel() {
                       <TransformPanel />
                       <PhysicsPanel />
                       <AnimationsPanel />
-                      <SoundPanel />
                     </>
                   ) : (
-                    <div className="flex flex-col items-center justify-center h-[70vh] p-6 text-center">
+                    <div className="flex flex-col items-center justify-center h-full p-6 text-center">
                       <div className="bg-slate-800/40 border border-slate-700/30  p-8 shadow-lg max-w-xs">
                         <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 p-4  mb-4 mx-auto w-16 h-16 flex items-center justify-center border border-blue-500/20">
                           <Box className="w-8 h-8 text-blue-400/80" />
@@ -148,7 +147,7 @@ export function PropertiesPanel() {
                       }}
                     />
                   ) : (
-                    <div className="flex flex-col items-center justify-center h-[70vh] p-6 text-center">
+                    <div className="flex flex-col items-center justify-center h-full p-6 text-center">
                       <div className="bg-slate-800/40 border border-slate-700/30  p-8 shadow-lg max-w-xs">
                         <div className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 p-4  mb-4 mx-auto w-16 h-16 flex items-center justify-center border border-indigo-500/20">
                           <FileCode className="w-8 h-8 text-indigo-400/80" />

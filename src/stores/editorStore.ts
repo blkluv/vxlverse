@@ -299,7 +299,6 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
       scenes: [...state.scenes, newScene],
       currentSceneId: id,
     }));
-    toast.success(`Scene created: ${name}`);
   },
   setIsTransforming: (isTransforming) => set({ isTransforming }),
   setFocusOnObject: (focus) => set({ focusOnObject: focus }),

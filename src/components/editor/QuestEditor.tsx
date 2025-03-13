@@ -52,12 +52,7 @@ export function QuestEditor() {
   return (
     <div className="space-y-2">
       {currentScene.quests.map((quest) => (
-        <div
-          key={quest.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="p-3  bg-gray-700 hover:bg-gray-600"
-        >
+        <div key={quest.id} className="p-3  bg-gray-700 hover:bg-gray-600">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <MessageSquare className="w-4 h-4" />
