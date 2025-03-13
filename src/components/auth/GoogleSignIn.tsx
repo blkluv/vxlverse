@@ -2,8 +2,15 @@ import { useState } from "react";
 import { pb } from "../../lib/pocketbase";
 import { useAuthStore } from "../../stores/authStore";
 import { useNavigate, useLocation } from "react-router-dom";
+import { cn } from "../UI";
 
-export function GoogleSignIn() {
+export function GoogleSignIn({
+  onSuccess,
+  className,
+}: {
+  onSuccess?: () => void;
+  className?: string;
+}) {
   const [loading, setLoading] = useState(false);
   const { setUser } = useAuthStore();
   const navigate = useNavigate();
@@ -19,7 +26,7 @@ export function GoogleSignIn() {
       await pb.collection("users").listAuthMethods({
         provider: "google",
       });
-      
+
       const authData = await pb.collection("users").authWithOAuth2({
         provider: "google",
       });
@@ -32,6 +39,9 @@ export function GoogleSignIn() {
     } catch (err: any) {
       console.error("Google auth error:", err);
     } finally {
+      if (onSuccess) {
+        onSuccess();
+      }
       setLoading(false);
     }
   };
@@ -40,7 +50,10 @@ export function GoogleSignIn() {
     <button
       onClick={handleGoogleLogin}
       disabled={loading}
-      className="flex items-center justify-center gap-1 px-3 py-1.5 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-sm disabled:opacity-50 transition-colors"
+      className={cn(
+        "flex items-center justify-center gap-1 px-3 py-1.5 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-sm disabled:opacity-50 transition-colors",
+        className
+      )}
     >
       {loading ? (
         "Signing in..."

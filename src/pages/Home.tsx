@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CreateGameModal } from "../components/game/CreateGameModal";
 import { useAuthStore } from "../stores/authStore";
 import { Hero } from "../components/home/Hero";
@@ -46,6 +46,26 @@ const FEATURED_GAMES = [
 
 export function Home() {
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const { isAuthenticated } = useAuthStore();
+
+  useEffect(() => {
+    // Event listener for opening the create game modal from other components
+    const handleOpenCreateModal = () => {
+      if (isAuthenticated) {
+        setShowCreateModal(true);
+      }
+    };
+
+    window.addEventListener("open-create-game-modal", handleOpenCreateModal);
+
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener(
+        "open-create-game-modal",
+        handleOpenCreateModal
+      );
+    };
+  }, [isAuthenticated]);
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -85,8 +105,8 @@ export function Home() {
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         onSuccess={() => {
-          // Refresh or update the game list if needed
-          window.location.reload(); // Simple reload to show the new game
+          // Just close the modal, navigation will be handled in the modal itself
+          setShowCreateModal(false);
         }}
       />
     </div>

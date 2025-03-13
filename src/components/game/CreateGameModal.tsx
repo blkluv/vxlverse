@@ -5,6 +5,7 @@ import { useAuthStore } from "../../stores/authStore";
 import { motion } from "framer-motion";
 import { Image, Upload, X, Loader2 } from "lucide-react";
 import { Input } from "../UI/input";
+import { useNavigate } from "react-router-dom";
 
 interface CreateGameModalProps {
   isOpen: boolean;
@@ -59,7 +60,7 @@ export function CreateGameModal({
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
     );
   };
-
+  const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
@@ -72,20 +73,22 @@ export function CreateGameModal({
       formDataToSend.append("description", formData.description);
       formDataToSend.append("owner", user.id);
       formDataToSend.append("isPublic", String(formData.isPublic));
-      formDataToSend.append("tags", JSON.stringify(selectedTags));
+      // formDataToSend.append("tags", JSON.stringify(selectedTags));
       formDataToSend.append("gameConf", JSON.stringify(formData.gameConf));
 
       if (thumbnail) {
         formDataToSend.append("thumbnail", thumbnail);
       }
 
-      await pb.collection("games").create(formDataToSend);
+      const x = await pb.collection("games").create(formDataToSend);
       onSuccess();
       onClose();
       setFormData({ title: "", description: "", isPublic: true, gameConf: {} });
       setThumbnail(null);
       setThumbnailPreview("");
       setSelectedTags([]);
+      console.log(x);
+      navigate(`/editor/${x.id}`);
     } catch (error) {
       console.error("Failed to create game:", error);
     } finally {
