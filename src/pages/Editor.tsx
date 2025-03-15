@@ -32,6 +32,7 @@ import {
   ShareIcon,
   Share,
   Package,
+  Box,
 } from "lucide-react";
 import { toast } from "../components/UI/Toast";
 import { EditorScene } from "../components/editor/EditorScene";
@@ -41,6 +42,8 @@ import { useParams } from "react-router-dom";
 import { useGame } from "../hooks/useGame";
 import { pb } from "../lib/pocketbase";
 import { GameScene } from "../components/game/Scene";
+import { NewSceneModal } from "../components/editor/NewSceneModal";
+import { ModelSelector } from "../components/editor/ModelSelector";
 
 // Updated keyboard mapping for tools
 const KEYBOARD_MAP = [
@@ -58,6 +61,7 @@ const KEYBOARD_MAP = [
   { name: "metrics", keys: ["KeyM"] },
   { name: "escape", keys: ["Escape"] },
   { name: "duplicate", keys: ["KeyD"] },
+  { name: "add object", keys: ["KeyO"] },
   // Changed delete key to the dedicated Delete key
   { name: "delete", keys: ["Backspace"] },
 ];
@@ -66,7 +70,7 @@ export function Editor() {
   const { id = "" } = useParams<{ id: string }>();
   return (
     <KeyboardControls map={KEYBOARD_MAP}>
-      <_Editor gameId={id} />
+      <_Editor />
     </KeyboardControls>
   );
 }
@@ -87,11 +91,14 @@ export function _Editor() {
     duplicateObject,
     removeScene,
     removeObject,
+    addObject,
     brushActive,
     createNewScene,
+    setShowModelSelector,
   } = useEditorStore();
   const [showMetrics, setShowMetrics] = useState(false);
   const [showModelLibrary, setShowModelLibrary] = useState(false);
+  const [showNewSceneModal, setShowNewSceneModal] = useState(false);
   const [activeTool, setActiveTool] = useState<string>("move");
   const [transformMode, setTransformMode] = useState<
     "translate" | "rotate" | "scale"
@@ -122,6 +129,15 @@ export function _Editor() {
           setActiveTool("move");
           toggleBrushMode(false);
           setTransformMode("translate");
+        }
+      }
+    );
+    // Add object tool
+    const unsubscribeAddObject = subscribeKeys(
+      (state) => state["add object"],
+      (pressed) => {
+        if (pressed) {
+          setShowModelSelector(true);
         }
       }
     );
@@ -215,6 +231,7 @@ export function _Editor() {
       (state) => state.escape,
       (pressed) => {
         if (pressed) {
+          setShowModelSelector(false);
           toggleBrushMode(false);
           setSelectedObject(null);
         }
@@ -268,6 +285,7 @@ export function _Editor() {
       unsubscribeEscape();
       unsubscribeDuplicate();
       unsubscribeDelete();
+      unsubscribeAddObject();
     };
   }, [
     isPreviewMode,
@@ -351,19 +369,36 @@ export function _Editor() {
               </button>
             ))}
             <button
-              onClick={() => {
-                createNewScene(`Scene ${scenes.length + 1}`);
-                toggleBrushMode(false);
-                setSelectedObject(null);
-              }}
-              className="px-2 w-fit text-blue-500 bg-slate-900/50  py-2 text-xs font-medium flex items-center gap-2 whitespace-nowrap transition-all "
+              onClick={() => setShowNewSceneModal(true)}
+              className="px-2 w-fit text-blue-500 bg-slate-900/50 py-2 text-xs font-medium flex items-center gap-2 whitespace-nowrap transition-all"
               title="Add New Scene"
             >
               <Plus size={14} className="text-white" />
             </button>
+
+            {/* New Scene Modal */}
+            {showNewSceneModal && (
+              <NewSceneModal onClose={() => setShowNewSceneModal(false)} />
+            )}
           </div>
+
           <div className="absolute z-50 bottom-0 h-10  bg-slate-900 backdrop-blur-sm border-b border-slate-800 right-0 w-full flex justify-center">
             {/* Tools section */}
+            <Tooltip position="top" content="Add Object (O)">
+              <button
+                disabled={!selectedObjectId}
+                onClick={() => {
+                  setShowModelSelector(true);
+                }}
+                className={`w-10 h-full flex items-center justify-center transition-all duration-200 ${
+                  isPreviewMode
+                    ? "bg-gradient-to-b from-green-600/30 to-green-500/20 text-green-300 border-b-2 border-green-400 shadow-[0_2px_4px_rgba(74,222,128,0.2)]"
+                    : "text-slate-400 hover:bg-green-900/30 hover:text-green-300"
+                }`}
+              >
+                <Box className="w-4 h-4" />
+              </button>
+            </Tooltip>
             <div className="flex h-full items-center">
               {/* Transform Tools Group */}
               <div className="flex h-full border-r border-slate-700/20">
@@ -582,6 +617,7 @@ export function _Editor() {
               </div>
             </div>
           </div>
+          <ModelSelector />
           {currentSceneId ? (
             <Canvas
               key={currentSceneId}

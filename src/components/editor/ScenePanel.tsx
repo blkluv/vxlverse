@@ -23,6 +23,7 @@ import { Input } from "../UI/input";
 import { Tooltip } from "../UI/Tooltip";
 import * as THREE from "three";
 import { ModelLibrary } from "./ModelLibrary";
+import { ObjectHierarchyPanel } from "./ObjectHierarchyPanel";
 
 // Function to get the appropriate icon based on object type
 const getObjectTypeIcon = (type: string | undefined, isSelected: boolean) => {
@@ -153,119 +154,7 @@ export function ScenePanel() {
 
       <div className="flex flex-col h-full overflow-hidden">
         {/* OBJECTS SECTION */}
-        <section className="flex-1 hidden lg:flex flex-col overflow-hidden border-b border-slate-800/70">
-          <div
-            className="px-3 py-2 bg-slate-800/30 border-b border-slate-800/50 flex justify-between items-center cursor-pointer hover:bg-slate-800/40 transition-colors"
-            onClick={() => setObjectsExpanded(!objectsExpanded)}
-          >
-            <h3 className="text-xs font-medium text-slate-200 flex items-center">
-              <Box className="w-3.5 h-3.5 text-blue-400 mr-1.5" />
-              {currentScene?.objects.length
-                ? `Hierarchy  (${currentScene.objects.length})`
-                : "Hierarchy"}
-            </h3>
-          </div>
-
-          <div className="p-3 space-y-1.5 overflow-y-auto custom-scrollbar flex-grow">
-            {currentScene?.objects.length === 0 && (
-              <div className="flex flex-col items-center justify-center h-full text-center p-6 bg-slate-800/20 border border-slate-700/20 ">
-                <Box className="w-12 h-12 text-slate-500 mb-3 opacity-50" />
-                <p className="text-sm font-medium text-slate-300">
-                  No objects in this scene
-                </p>
-                <p className="text-xs text-slate-500 mt-2 mb-4 max-w-[220px]">
-                  Add 3D models from the library below to populate your scene
-                </p>
-                <button className="px-3 py-1.5 text-xs font-medium bg-blue-600/20 text-blue-400  hover:bg-blue-600/30 transition-colors flex items-center gap-1.5">
-                  <Plus size={12} />
-                  Add Object
-                </button>
-              </div>
-            )}
-            {currentScene?.objects.map((object) => {
-              const hasQuests = object.quests && object.quests.length > 0;
-              const questCount = object.quests?.length || 0;
-
-              return (
-                <div
-                  key={object.id}
-                  className={`group p-1  cursor-pointer border transition-all ${
-                    selectedObjectId === object.id
-                      ? "bg-gradient-to-r from-blue-500/20 to-blue-500/5 border-blue-500/40 shadow-[0_0_8px_rgba(59,130,246,0.2)]"
-                      : "hover:bg-slate-800/70 opacity-70 border-transparent hover:border-slate-700/50"
-                  }`}
-                  onClick={() => setSelectedObject(object.id)}
-                >
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <div
-                        className={`w-5 h-5 flex items-center justify-center  ${
-                          selectedObjectId === object.id
-                            ? "bg-blue-500/30"
-                            : "bg-slate-800/70"
-                        }`}
-                      >
-                        {getObjectTypeIcon(
-                          object.type,
-                          selectedObjectId === object.id
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 min-w-0">
-                        <span
-                          className={`text-xs font-medium truncate ${
-                            selectedObjectId === object.id
-                              ? "text-blue-100"
-                              : "text-slate-200"
-                          }`}
-                        >
-                          {object.name}
-                        </span>
-                        {hasQuests && (
-                          <div className="flex items-center gap-1">
-                            <Tooltip
-                              position="top"
-                              content={questCount + " quests"}
-                            >
-                              <ScrollText
-                                size={12}
-                                className="text-amber-400"
-                              />
-                            </Tooltip>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Tooltip content="Duplicate">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (!currentSceneId || !selectedObjectId) return;
-                            duplicateObject(currentSceneId, selectedObjectId);
-                          }}
-                          className="p-1.5  hover:bg-slate-700/70 text-slate-400 hover:text-slate-200 transition-colors"
-                        >
-                          <Copy size={12} />
-                        </button>
-                      </Tooltip>
-                      <Tooltip content="Delete">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeObject(currentSceneId!, object.id);
-                          }}
-                          className="p-1.5  hover:bg-red-900/30 text-slate-400 hover:text-red-400 transition-colors"
-                        >
-                          <Trash2 size={12} />
-                        </button>
-                      </Tooltip>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
+        <ObjectHierarchyPanel />
         {/* MODELS SECTION */}
         <section className="flex-1 flex flex-col overflow-hidden min-h-[200px]">
           <div

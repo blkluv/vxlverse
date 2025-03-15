@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Scene } from "../../types";
+import { useState, useRef } from "react";
+import { Scene, GameObject } from "../../types";
 import {
   Box,
   Copy,
@@ -14,9 +14,14 @@ import {
   Maximize,
   Plus,
   Check,
+  Save,
+  X,
 } from "lucide-react";
 import { useEditorStore } from "../../stores/editorStore";
 import { Tooltip } from "../UI/Tooltip";
+import { pb } from "../../lib/pocketbase";
+import { toast } from "../UI/Toast";
+import { Input } from "../UI";
 
 interface ObjectHierarchyPanelProps {
   scene: Scene;
@@ -79,10 +84,18 @@ const getObjectTypeIcon = (type: string | undefined, isSelected: boolean) => {
   }
 };
 
-export function ObjectHierarchyPanel({ scene }: ObjectHierarchyPanelProps) {
+export function ObjectHierarchyPanel() {
   const [expanded, setExpanded] = useState(true);
   const [showSaveIndicator, setShowSaveIndicator] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [templateName, setTemplateName] = useState("");
+  const [templateCategory, setTemplateCategory] = useState("default");
+  const [isSavingHierarchy, setIsSavingHierarchy] = useState(false);
+  const [objectToSave, setObjectToSave] = useState<GameObject | null>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
+  const { scenes, currentSceneId } = useEditorStore();
+  const scene = scenes.find((scene) => scene.id === currentSceneId);
   // Get data from the editor store
   const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
   const setSelectedObject = useEditorStore((state) => state.setSelectedObject);
@@ -95,8 +108,92 @@ export function ObjectHierarchyPanel({ scene }: ObjectHierarchyPanelProps) {
     setTimeout(() => setShowSaveIndicator(false), 1500);
   };
 
+  // Open modal for saving a template
+  const openSaveModal = (
+    object: GameObject | null = null,
+    isHierarchy = false
+  ) => {
+    setObjectToSave(object);
+    setIsSavingHierarchy(isHierarchy);
+
+    // Set default name based on what's being saved
+    if (isHierarchy && scene) {
+      setTemplateName(`${scene.name || "Scene"} Hierarchy Template`);
+      setTemplateCategory("hierarchy");
+    } else if (object) {
+      setTemplateName(`${object.name} Template`);
+      setTemplateCategory("default");
+    }
+
+    setShowModal(true);
+
+    // Focus the input field after the modal is shown
+    setTimeout(() => {
+      if (nameInputRef.current) {
+        nameInputRef.current.focus();
+      }
+    }, 100);
+  };
+
+  // Save template to PocketBase
+  const saveTemplate = () => {
+    const userId = pb.authStore.model?.id;
+    if (!userId) {
+      toast.error("You must be logged in to save templates");
+      return;
+    }
+
+    if (isSavingHierarchy && scene) {
+      // Save hierarchy template
+      if (!scene.objects || scene.objects.length === 0) {
+        toast.error("Cannot save an empty hierarchy as template");
+        return;
+      }
+
+      const templateData = {
+        name: templateName,
+        template: JSON.stringify(scene.objects),
+        userId,
+      };
+
+      pb.collection("templates")
+        .create(templateData)
+        .then(() => {
+          toast.success("Hierarchy template saved");
+          showSaveAnimation();
+          setShowModal(false);
+        })
+        .catch((error) => {
+          console.error("Failed to save hierarchy template:", error);
+          toast.error("Failed to save hierarchy template");
+        });
+    } else if (objectToSave) {
+      // Save single object template
+      const templateData = {
+        name: templateName,
+        template: JSON.stringify(objectToSave),
+        userId,
+        category: templateCategory,
+      };
+
+      pb.collection("templates")
+        .create(templateData)
+        .then(() => {
+          toast.success(`Template saved: ${templateName}`);
+          showSaveAnimation();
+          setShowModal(false);
+        })
+        .catch((error) => {
+          console.error("Failed to save template:", error);
+          toast.error("Failed to save template");
+        });
+    }
+  };
+
+  if (!scene) return null;
+
   return (
-    <div className="bg-gradient-to-b from-slate-800/40 to-slate-800/30 border border-slate-700/40 overflow-hidden shadow-md mt-2">
+    <div className="bg-gradient-to-b flex-1 from-slate-800/40 to-slate-800/30 border border-slate-700/40 overflow-hidden shadow-md mt-2">
       <div
         className="flex justify-between items-center p-2.5 cursor-pointer hover:bg-slate-700/30 transition-colors"
         onClick={() => setExpanded(!expanded)}
@@ -113,12 +210,18 @@ export function ObjectHierarchyPanel({ scene }: ObjectHierarchyPanelProps) {
             </div>
           )}
         </h3>
-        <div className="flex items-center">
-          {expanded ? (
-            <Minimize className="w-3.5 h-3.5 text-slate-400" />
-          ) : (
-            <Maximize className="w-3.5 h-3.5 text-slate-400" />
-          )}
+        <div className="flex items-center gap-2">
+          <Tooltip position="left" content="Save Hierarchy as Template">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                openSaveModal(null, true);
+              }}
+              className="p-1 hover:bg-emerald-900/30 text-slate-400 hover:text-emerald-400 transition-colors "
+            >
+              <Save size={14} />
+            </button>
+          </Tooltip>
         </div>
       </div>
 
@@ -226,6 +329,62 @@ export function ObjectHierarchyPanel({ scene }: ObjectHierarchyPanelProps) {
                   );
                 })
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Template Save Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-slate-800 border border-slate-700  shadow-xl w-96 max-w-full">
+            <div className="flex justify-between items-center p-4 border-b border-slate-700">
+              <h3 className="text-sm font-medium text-slate-200">
+                {isSavingHierarchy
+                  ? "Save Hierarchy as Template"
+                  : "Save Object as Template"}
+              </h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-slate-400 hover:text-slate-200"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <div className="p-4">
+              <div className="mb-4">
+                <label className="block text-xs font-medium text-slate-300 mb-1">
+                  Template Name
+                </label>
+                <Input
+                  ref={nameInputRef}
+                  type="text"
+                  value={templateName}
+                  onChange={(e) => setTemplateName(e.target.value)}
+                  className="w-full bg-slate-900/50 border border-slate-700  px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter template name"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 mt-6">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="px-3 py-1.5 text-xs font-medium bg-slate-700 text-slate-300  hover:bg-slate-600 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={saveTemplate}
+                  disabled={!templateName.trim()}
+                  className={`px-3 py-1.5 text-xs font-medium  ${
+                    !templateName.trim()
+                      ? "bg-emerald-900/30 text-emerald-700 cursor-not-allowed"
+                      : "bg-emerald-600 text-white hover:bg-emerald-500"
+                  } transition-colors`}
+                >
+                  Save Template
+                </button>
+              </div>
             </div>
           </div>
         </div>
