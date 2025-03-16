@@ -267,10 +267,10 @@ canvas {
   .editorLayout {
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-template-rows: 45vh auto 50vh;
+    grid-template-rows: 30px 45vh 50vh;
     grid-template-areas:
+      "toolbar scene-selector"
       "toolbar editor-canvas"
-      "scene-selector scene-selector"
       "inspector inspector";
     height: 100vh;
     width: 100vw;
