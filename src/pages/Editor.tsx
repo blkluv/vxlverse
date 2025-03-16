@@ -386,7 +386,6 @@ export function _Editor() {
             {/* Tools section */}
             <Tooltip position="top" content="Add Object (O)">
               <button
-                disabled={!selectedObjectId}
                 onClick={() => {
                   setShowModelSelector(true);
                 }}

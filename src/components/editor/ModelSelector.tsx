@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useEditorStore } from "../../stores/editorStore";
 import { Model3D } from "../../types";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
   X,
@@ -12,9 +11,8 @@ import {
   ExternalLink,
   Play,
   Sparkles,
-  Clock,
   FileText,
-  FileCode, // Using FileText instead of License which doesn't exist
+  FileCode,
 } from "lucide-react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
@@ -225,6 +223,12 @@ export function ModelSelector() {
     setIsAnimationPlaying(false);
     setAvailableAnimations([]);
     setSelectedAnimation("");
+
+    // Clear Three.js cache when switching models to prevent disappearing
+    if (selectedModel) {
+      // Force Three.js to release cached resources
+      useGLTF.clear(selectedModel.glb);
+    }
   }, [selectedModel]);
 
   const categories = [
@@ -454,7 +458,11 @@ export function ModelSelector() {
                 {categories.map((category) => (
                   <button
                     key={category}
-                    onClick={() => setSelectedCategory(category)}
+                    onClick={() => {
+                      setCurrentPage(1);
+                      setSearchQuery("");
+                      setSelectedCategory(category);
+                    }}
                     className={`px-3 py-1.5  text-sm font-medium transition-all flex-shrink-0 ${
                       selectedCategory === category
                         ? "bg-blue-500/20 text-blue-300 ring-1 ring-blue-500/30"
@@ -527,20 +535,12 @@ export function ModelSelector() {
                           </h3>
                           <div className="flex items-center gap-1 mt-1">
                             {model.attribution_url ? (
-                              <a
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                }}
-                                href={model.attribution_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-400 flex items-center gap-1 hover:underline"
-                              >
+                              <>
                                 <User className="w-3 h-3" />
                                 <span className="text-[10px] truncate">
                                   {model.creator || "Unknown"}
                                 </span>
-                              </a>
+                              </>
                             ) : (
                               <div className="text-slate-400 flex items-center gap-1">
                                 <User className="w-3 h-3" />
