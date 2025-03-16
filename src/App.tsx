@@ -1,4 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+} from "react-router-dom";
 import { Editor } from "./pages/Editor";
 import { Game } from "./pages/Game";
 import { Home } from "./pages/Home";
@@ -59,6 +65,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        {/* Catch-all route to redirect to home page */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
