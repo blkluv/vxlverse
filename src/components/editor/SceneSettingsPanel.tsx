@@ -138,6 +138,8 @@ export function SceneSettingsPanel({
         </div>
       </div>
 
+      <ObjectHierarchyPanel />
+
       <SoundPanel />
     </div>
   );

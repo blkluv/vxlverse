@@ -252,51 +252,48 @@ canvas {
 
 .editorLayout {
   display: grid;
-  grid-template-columns: 350px 1fr 350px;
-  grid-template-areas: "hierarchy editor inspector ";
+  grid-template-columns: auto 1fr 400px;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "toolbar editor-canvas inspector"
+    "toolbar editor-canvas inspector"
+    "toolbar scene-selector inspector";
   height: 100vh;
+  width: 100vw;
   overflow: hidden;
 }
 
 @media (max-width: 1024px) {
   .editorLayout {
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 30vh 40vh 30vh;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 45vh auto 50vh;
     grid-template-areas:
-      "inspector"
-      "editor"
-      "hierarchy";
-  }
-
-  .hierarchy {
-    grid-area: hierarchy;
-    overflow-y: auto;
-  }
-
-  .editor-canvas {
-    grid-area: editor;
-  }
-
-  .inspector {
-    grid-area: inspector;
-    overflow-y: auto;
+      "toolbar editor-canvas"
+      "scene-selector scene-selector"
+      "inspector inspector";
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
   }
 }
 
-.hierarchy {
-  max-height: 100vh;
-  grid-area: hierarchy;
-  overflow-y: auto;
+.toolbar {
+  grid-area: toolbar;
 }
 
 .editor-canvas {
-  grid-area: editor;
-  max-height: 100vh;
-  position: relative;
+  grid-area: editor-canvas;
+}
+
+.scene-selector {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  grid-area: scene-selector;
+  overflow-y: auto;
 }
 
 .inspector {
-  max-height: 100vh;
   grid-area: inspector;
+  overflow-y: auto;
+  height: 100%;
 }

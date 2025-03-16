@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import clsx from "clsx";
 import toast from "react-hot-toast";
 import { FileCode, Settings, Box, Layout } from "lucide-react";
@@ -9,7 +8,6 @@ import { SceneSettingsPanel } from "./SceneSettingsPanel";
 import { ObjectSettingsPanel } from "./properties/ObjectSettingsPanel";
 import { TransformPanel } from "./properties/transform";
 import { AnimationsPanel } from "./properties/animations";
-import { SoundPanel } from "./properties/sounds";
 import { PhysicsPanel } from "./properties/PhysicsPanel";
 
 type TabType = "properties" | "quest" | "scene";
@@ -51,12 +49,11 @@ export function PropertiesPanel() {
     );
 
   return (
-    <div className="h-full z-50 no-scrollbar flex flex-col bg-slate-900/90 border-l border-slate-800/50">
+    <div className="h-full inspector flex flex-col bg-slate-900/90 border-l border-slate-800/50 z-10">
       {/* Tab Navigation */}
       <div
         className={clsx(
-          "grid mb-2 h-8 grid-cols-3 border-b border-white/10",
-          {}
+          "grid mb-2 h-8 grid-cols-3 border-b border-white/10 sticky top-0 z-20 bg-slate-900"
         )}
       >
         <button
@@ -95,7 +92,7 @@ export function PropertiesPanel() {
       </div>
 
       {/* Panel Content */}
-      <div className="flex-1 overflow-auto ">
+      <div className="flex-1 overflow-auto no-scrollbar">
         <>
           <div className="h-full pb-20 no-scrollbar overflow-y-auto">
             <div className="p-2 space-y-2">

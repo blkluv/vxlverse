@@ -142,7 +142,7 @@ export function NewSceneModal({ onClose }: NewSceneModalProps) {
         </div>
 
         {/* Content */}
-        <div className="grid overflow-hidden">
+        <div className="grid md:grid-cols-2 h-full overflow-hidden">
           {/* Left panel: Template selection */}
           <div className="w-full border-r border-slate-700 p-4 flex flex-col">
             {/* Scene name input */}

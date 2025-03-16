@@ -185,6 +185,7 @@ export function EditorScene({
       {/* Grid */}
       {showGrid && (
         <Grid
+          position={[0, 0.5, 0]}
           args={[100, 100]}
           cellSize={0.5}
           cellThickness={0.5}

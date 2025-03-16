@@ -5,7 +5,7 @@ import { EditorState, useEditorStore } from "../stores/editorStore";
 export interface Game {
   id: string;
   gameConf: EditorState;
-  title: string;
+  name: string;
   description: string;
   thumbnail?: string;
   creator: string;
