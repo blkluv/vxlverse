@@ -2,13 +2,12 @@ import { Canvas } from "@react-three/fiber";
 import { PropertiesPanel } from "../components/editor/PropertiesPanel";
 import { KeyboardControls, OrbitControls } from "@react-three/drei";
 import { useEffect, useState, useRef } from "react";
-import { useEditorStore } from "../stores/editorStore";
+import { debounce, useEditorStore } from "../stores/editorStore";
 import { Perf } from "r3f-perf";
 import { EditorScene } from "../components/editor/EditorScene";
 import { Hero } from "../components/game/Hero";
 import { useParams } from "react-router-dom";
 import { useGame } from "../hooks/useGame";
-import { GameScene } from "../components/game/Scene";
 import { ModelSelector } from "../components/editor/ModelSelector";
 import { Toolbar } from "../components/editor/Toolbar";
 import { SceneSelector } from "../components/editor/toolbar/SceneSelector";
@@ -45,25 +44,26 @@ export function Editor() {
 }
 
 export function _Editor() {
-  const {
-    scenes,
-    currentSceneId,
-    toggleBrushMode,
-    gridSnap,
-    showGrid,
-    setSelectedObject,
-    setCurrentScene,
-    removeScene,
-    createNewScene,
-  } = useEditorStore();
+  const { scenes, currentSceneId, gridSnap, showGrid, createNewScene } =
+    useEditorStore();
   const [showMetrics, setShowMetrics] = useState(false);
   const [showNewSceneModal, setShowNewSceneModal] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(0);
   const [transformMode, setTransformMode] = useState<
     "translate" | "rotate" | "scale"
   >("translate");
-  const [isPreviewMode, setIsPreviewMode] = useState(false);
   const orbitControlsRef = useRef();
   const focusOnObject = useEditorStore((state) => state.focusOnObject);
+
+  const handleResize = debounce(() => {
+    setForceUpdate((prev) => prev + 1);
+  }, 1000);
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [scenes]);
 
   // Create a default scene if none exists
   useEffect(() => {
@@ -73,9 +73,6 @@ export function _Editor() {
   }, [scenes, createNewScene]);
   const { id } = useParams<{ id: string }>();
   useGame(id!);
-  const togglePreviewMode = () => {
-    setIsPreviewMode((prev) => !prev);
-  };
 
   return (
     <div className="flex flex-col w-full h-screen bg-slate-900">
@@ -101,33 +98,25 @@ export function _Editor() {
         <div className="editor-canvas">
           {currentSceneId ? (
             <Canvas
-              key={currentSceneId}
+              key={currentSceneId + forceUpdate}
               shadows
               gl={{ preserveDrawingBuffer: true }}
               camera={{ position: [5, 5, 5], fov: 50 }}
               className="w-full relative h-full"
             >
               {showMetrics && <Perf className="absolute w-80 top-0 left-0" />}
-              {isPreviewMode ? (
-                <GameScene
-                  isPreview={isPreviewMode}
-                  sceneData={scenes.find((s) => s.id === currentSceneId)}
-                />
-              ) : (
-                <>
-                  <group position={[0, 0.3, 0]} rotation={[1.2, 0, 0]}>
-                    <Hero />
-                  </group>
-                  <axesHelper />
-                  <EditorScene
-                    showGrid={showGrid}
-                    gridSnap={gridSnap}
-                    transformMode={transformMode}
-                    focusOnObject={focusOnObject}
-                    orbitControlsRef={orbitControlsRef}
-                  />
-                </>
-              )}
+
+              <group position={[0, 0.3, 0]} rotation={[1.2, 0, 0]}>
+                <Hero />
+              </group>
+              <axesHelper />
+              <EditorScene
+                showGrid={showGrid}
+                gridSnap={gridSnap}
+                transformMode={transformMode}
+                focusOnObject={focusOnObject}
+                orbitControlsRef={orbitControlsRef}
+              />
               {/* @ts-ignore */}
               <OrbitControls ref={orbitControlsRef} makeDefault />
             </Canvas>

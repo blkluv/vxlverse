@@ -197,7 +197,7 @@ export function ModelSelector() {
   const [onlyAnimated, setOnlyAnimated] = useState(false);
   const [selectedModel, setSelectedModel] = useState<Model3D | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isAnimationPlaying, setIsAnimationPlaying] = useState(false);
+  const [isAnimationPlaying, setIsAnimationPlaying] = useState(true);
   const [availableAnimations, setAvailableAnimations] = useState<string[]>([]);
   const [selectedAnimation, setSelectedAnimation] = useState<string>("");
   const ITEMS_PER_PAGE = 12;
@@ -220,7 +220,6 @@ export function ModelSelector() {
 
   // Reset animation state when model changes
   useEffect(() => {
-    setIsAnimationPlaying(false);
     setAvailableAnimations([]);
     setSelectedAnimation("");
 
@@ -606,42 +605,6 @@ export function ModelSelector() {
 
                 <div className="col-span-2 absolute top-2 left-2 flex items-start justify-between bg-slate-800/30 p-3 rounded">
                   <div className="flex items-center gap-3">
-                    {selectedModel?.animated && (
-                      <button
-                        onClick={() =>
-                          setIsAnimationPlaying(!isAnimationPlaying)
-                        }
-                        className="bg-purple-500/20 p-2 rounded-full hover:bg-purple-500/40 transition-colors"
-                        title={
-                          isAnimationPlaying
-                            ? "Pause animation"
-                            : "Play animation"
-                        }
-                      >
-                        {isAnimationPlaying ? (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="text-purple-400"
-                          >
-                            <rect x="6" y="4" width="4" height="16"></rect>
-                            <rect x="14" y="4" width="4" height="16"></rect>
-                          </svg>
-                        ) : (
-                          <Play
-                            className="w-5 h-5 text-purple-400"
-                            fill="currentColor"
-                          />
-                        )}
-                      </button>
-                    )}
                     <div>
                       <h3 className="text-lg font-medium text-white">
                         {selectedModel.name}
@@ -681,7 +644,7 @@ export function ModelSelector() {
                                 : "bg-slate-800/50 text-slate-300 hover:bg-slate-700/50"
                             }`}
                           >
-                            {anim}
+                            action {index}
                           </button>
                         ))}
                       </div>

@@ -53,7 +53,7 @@ export function PropertiesPanel() {
       {/* Tab Navigation */}
       <div
         className={clsx(
-          "grid mb-2 h-8 grid-cols-3 border-b border-white/10 sticky top-0 z-20 bg-slate-900"
+          "grid mb-2 border-t md:border-t-0 border-white/10 h-8 grid-cols-3 border-b  sticky top-0 z-20 bg-slate-900"
         )}
       >
         <button

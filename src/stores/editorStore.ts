@@ -305,7 +305,7 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
 }));
 
 // Debounce function to limit how often a function can be called
-const debounce = <T extends (...args: any[]) => any>(
+export const debounce = <T extends (...args: any[]) => any>(
   func: T,
   wait: number
 ): ((...args: Parameters<T>) => void) => {

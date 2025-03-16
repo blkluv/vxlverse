@@ -245,7 +245,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-    <div className="toolbar h-full  overflow-auto no-scrollbar bg-slate-900 backdrop-blur-sm border-r border-slate-800 flex flex-col justify-start ">
+    <div className="toolbar h-full  overflow-auto no-scrollbar bg-slate-900 backdrop-blur-sm border-r border-slate-600 flex flex-col justify-start ">
       {/* Add Object Tool */}
 
       {/* Transform Tools Group */}
@@ -419,15 +419,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({
           className={`w-10 h-10 hidden md:flex  items-center justify-center transition-all duration-200 ${"text-slate-400 hover:bg-slate-700/40 hover:text-white"}`}
         >
           <Expand className="w-4 h-4" />
-        </button>
-      </Tooltip>
-      <div className="my-auto" />
-
-      <Tooltip position="right" content="Account">
-        <button
-          className={`w-10 border-t border-slate-700 mt-auto h-9 flex items-center justify-center transition-all duration-200 ${"text-slate-400 hover:bg-slate-700/40 hover:text-white"}`}
-        >
-          <User className="w-4 h-4" />
         </button>
       </Tooltip>
     </div>
