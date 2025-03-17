@@ -23,13 +23,18 @@ export function GoogleSignIn({
     setLoading(true);
     try {
       // List auth methods is not necessary but kept for reference
-      await pb.collection("users").listAuthMethods({
+      pb.collection("users").listAuthMethods({
         provider: "google",
       });
 
-      const authData = await pb.collection("users").authWithOAuth2({
-        provider: "google",
-      });
+      const authData = await pb
+        .collection("users")
+        .authWithOAuth2({
+          provider: "google",
+        })
+        .finally(() => {
+          setLoading(false);
+        });
 
       if (authData) {
         setUser(authData.record);
