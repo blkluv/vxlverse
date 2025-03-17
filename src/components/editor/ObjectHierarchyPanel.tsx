@@ -21,7 +21,7 @@ import { useEditorStore } from "../../stores/editorStore";
 import { Tooltip } from "../UI/Tooltip";
 import { pb } from "../../lib/pocketbase";
 import { toast } from "../UI/Toast";
-import { Input } from "../UI";
+import { Input, cn } from "../UI";
 
 interface ObjectHierarchyPanelProps {
   scene: Scene;
@@ -84,7 +84,7 @@ const getObjectTypeIcon = (type: string | undefined, isSelected: boolean) => {
   }
 };
 
-export function ObjectHierarchyPanel() {
+export function ObjectHierarchyPanel(props: { className?: string }) {
   const [expanded, setExpanded] = useState(true);
   const [showSaveIndicator, setShowSaveIndicator] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -94,7 +94,7 @@ export function ObjectHierarchyPanel() {
   const [objectToSave, setObjectToSave] = useState<GameObject | null>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
-  const { scenes, currentSceneId } = useEditorStore();
+  const { scenes, currentSceneId, setShowModelSelector } = useEditorStore();
   const scene = scenes.find((scene) => scene.id === currentSceneId);
   // Get data from the editor store
   const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
@@ -193,7 +193,12 @@ export function ObjectHierarchyPanel() {
   if (!scene) return null;
 
   return (
-    <div className="bg-gradient-to-b flex-1 from-slate-800/40 to-slate-800/30 border border-slate-700/40 overflow-hidden shadow-md mt-2">
+    <div
+      className={cn(
+        `bg-gradient-to-b w-full flex-1 h-fit from-slate-800 to-slate-900 border border-slate-700/40 overflow-hidden shadow-md border-r-2`,
+        props.className
+      )}
+    >
       <div
         className="flex justify-between items-center p-2.5 cursor-pointer hover:bg-slate-700/30 transition-colors"
         onClick={() => setExpanded(!expanded)}
@@ -238,7 +243,12 @@ export function ObjectHierarchyPanel() {
                   <p className="text-[10px] text-slate-500 mt-1 mb-3 max-w-[180px]">
                     Add 3D models from the library to populate your scene
                   </p>
-                  <button className="px-2 py-1 text-[10px] font-medium bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 transition-colors flex items-center gap-1">
+                  <button
+                    onClick={(e) => {
+                      setShowModelSelector(true);
+                    }}
+                    className="px-2 py-1 text-[10px] font-medium bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 transition-colors flex items-center gap-1"
+                  >
                     <Plus size={10} />
                     Add Object
                   </button>
@@ -274,7 +284,7 @@ export function ObjectHierarchyPanel() {
                           </div>
                           <div className="flex items-center gap-2 min-w-0">
                             <span
-                              className={`text-xs font-medium truncate ${
+                              className={`text-[10px] font-medium truncate ${
                                 selectedObjectId === object.id
                                   ? "text-blue-100"
                                   : "text-slate-200"

@@ -56,7 +56,7 @@ export function GoogleSignIn({
       onClick={handleGoogleLogin}
       disabled={loading}
       className={cn(
-        "flex items-center justify-center gap-1 px-3 py-1.5 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-sm disabled:opacity-50 transition-colors",
+        "flex items-center justify-center gap-1 px-3 py-1.5 text-sm text-white bg-blue-600 hover:bg-blue-700 sm disabled:opacity-50 transition-colors",
         className
       )}
     >

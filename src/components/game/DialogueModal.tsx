@@ -95,7 +95,7 @@ const MessageItem = memo(
                       {message.content.split("\n").slice(1).join("\n")}
                     </p>
                     {/* Enhanced highlight effect with animation */}
-                    <div className="absolute -inset-1 bg-[#7FE4FF] opacity-5 blur-sm rounded-lg group-hover:opacity-10 transition-opacity duration-300"></div>
+                    <div className="absolute -inset-1 bg-[#7FE4FF] opacity-5 blur-sm lg group-hover:opacity-10 transition-opacity duration-300"></div>
                   </div>
                 </>
               ) : (
@@ -106,7 +106,7 @@ const MessageItem = memo(
                     {highlightKeywords(message.content, isPlayer)}
                   </p>
                   {/* Enhanced text highlight effect with hover animation */}
-                  <div className="absolute -inset-1 bg-[#7FE4FF] opacity-5 blur-sm rounded-lg group-hover:opacity-10 transition-opacity duration-300"></div>
+                  <div className="absolute -inset-1 bg-[#7FE4FF] opacity-5 blur-sm lg group-hover:opacity-10 transition-opacity duration-300"></div>
                 </div>
               )}
             </div>
@@ -442,7 +442,7 @@ export function DialogueModal() {
             {/* Toggle animation button */}
             <button
               onClick={() => setMessageAnimation(!messageAnimation)}
-              className="absolute top-2 right-2 z-20 p-1 bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A] border border-[#4A4A4A] rounded-sm opacity-50 hover:opacity-100 transition-opacity duration-200"
+              className="absolute top-2 right-2 z-20 p-1 bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A] border border-[#4A4A4A] sm opacity-50 hover:opacity-100 transition-opacity duration-200"
               title={
                 messageAnimation ? "Disable animations" : "Enable animations"
               }
@@ -470,9 +470,9 @@ export function DialogueModal() {
                 <div className="relative max-w-[80px]">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A] border-2 border-[#4A4A4A] shadow-[2px_2px_0px_0px_#000000] outline outline-[1px] outline-black [image-rendering:pixelated]"></div>
                   <div className="relative z-10 flex items-center justify-center gap-2 py-2 px-[8px]">
-                    <div className="w-[5px] h-[5px] bg-[#7FE4FF] animate-[pulse_1s_infinite] delay-[0ms] rounded-full shadow-[0_0_5px_rgba(127,228,255,0.7)]"></div>
-                    <div className="w-[5px] h-[5px] bg-[#7FE4FF] animate-[pulse_1s_infinite] delay-[200ms] rounded-full shadow-[0_0_5px_rgba(127,228,255,0.7)]"></div>
-                    <div className="w-[5px] h-[5px] bg-[#7FE4FF] animate-[pulse_1s_infinite] delay-[400ms] rounded-full shadow-[0_0_5px_rgba(127,228,255,0.7)]"></div>
+                    <div className="w-[5px] h-[5px] bg-[#7FE4FF] animate-[pulse_1s_infinite] delay-[0ms] full shadow-[0_0_5px_rgba(127,228,255,0.7)]"></div>
+                    <div className="w-[5px] h-[5px] bg-[#7FE4FF] animate-[pulse_1s_infinite] delay-[200ms] full shadow-[0_0_5px_rgba(127,228,255,0.7)]"></div>
+                    <div className="w-[5px] h-[5px] bg-[#7FE4FF] animate-[pulse_1s_infinite] delay-[400ms] full shadow-[0_0_5px_rgba(127,228,255,0.7)]"></div>
                   </div>
                 </div>
               </div>

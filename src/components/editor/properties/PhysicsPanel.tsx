@@ -23,7 +23,7 @@ const Tooltip: React.FC<TooltipProps> = ({ children, content }) => {
         {children}
       </div>
       {showTooltip && (
-        <div className="absolute z-50 w-48 p-2 text-xs bg-slate-900 border border-slate-700 rounded-md shadow-lg text-slate-300 -translate-x-1/2 left-1/2 bottom-full mb-2">
+        <div className="absolute z-50 w-48 p-2 text-xs bg-slate-900 border border-slate-700 md shadow-lg text-slate-300 -translate-x-1/2 left-1/2 bottom-full mb-2">
           {content}
           <div className="absolute w-2 h-2 bg-slate-900 border-b border-r border-slate-700 transform rotate-45 left-1/2 -translate-x-1/2 -bottom-1"></div>
         </div>
@@ -120,7 +120,7 @@ export function PhysicsPanel() {
             type="button"
             onClick={() => onChange(option.value)}
             className={cn(
-              "flex flex-col items-center justify-center p-1 rounded transition-all",
+              "flex flex-col items-center justify-center p-1  transition-all",
               "text-[10px] border",
               value === option.value
                 ? "bg-blue-500/20 border-blue-500/50 text-blue-300"
@@ -176,7 +176,7 @@ export function PhysicsPanel() {
         min={min}
         max={max}
         step={step}
-        className="w-full h-7 px-2 text-[11px] bg-slate-900/80 border border-slate-700/50 text-slate-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/50"
+        className="w-full h-7 px-2 text-[11px] bg-slate-900/80 border border-slate-700/50 text-slate-300 sm focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/50"
       />
     </div>
   );
@@ -199,7 +199,7 @@ export function PhysicsPanel() {
       case "capsule":
         return {
           description: "Pill-shaped collider",
-          tooltip: "Cylinder with rounded ends, good for character controllers",
+          tooltip: "Cylinder with  ends, good for character controllers",
         };
       case "trimesh":
         return {
@@ -217,7 +217,7 @@ export function PhysicsPanel() {
   };
 
   return (
-    <div className="bg-slate-800/30 border border-slate-700/30 overflow-hidden rounded-sm">
+    <div className="bg-slate-800/30 border border-slate-700/30 overflow-hidden sm">
       <div
         className="flex justify-between items-center p-2.5 cursor-pointer hover:bg-slate-800/50 transition-colors"
         onClick={() => setExpanded(!expanded)}
@@ -261,7 +261,7 @@ export function PhysicsPanel() {
               <div className="flex items-center gap-1.5">
                 <Checkbox
                   id="physics-enabled"
-                  className="w-4 h-4 text-blue-500/50 bg-slate-700/80 border border-slate-600/50 focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/50 rounded-none"
+                  className="w-4 h-4 text-blue-500/50 bg-slate-700/80 border border-slate-600/50 focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/50 none"
                   checked={physics.enabled}
                   onChange={handleTogglePhysics}
                 />

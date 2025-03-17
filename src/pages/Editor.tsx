@@ -26,11 +26,22 @@ const KEYBOARD_MAP = [
   { name: "redo", keys: ["KeyY"] },
   { name: "focus", keys: ["KeyF"] },
   { name: "full screen", keys: ["Meta+KeyF"] },
-  { name: "play", keys: ["KeyP"] },
   { name: "metrics", keys: ["KeyM"] },
   { name: "escape", keys: ["Escape"] },
   { name: "duplicate", keys: ["KeyD"] },
   { name: "add object", keys: ["KeyO"] },
+  {
+    name: "new scene",
+    keys: ["KeyN"],
+  },
+
+  { name: "nextObject", keys: ["KeyK"] },
+  { name: "prevObject", keys: ["KeyJ"] },
+  { name: "sceneTab", keys: ["1"] },
+  { name: "propertiesTab", keys: ["2"] },
+  { name: "questTab", keys: ["3"] },
+  { name: "shortcutInfo", keys: ["?"] },
+
   // Changed delete key to the dedicated Delete key
   { name: "delete", keys: ["Backspace"] },
 ];
@@ -47,14 +58,12 @@ export function _Editor() {
   const { scenes, currentSceneId, gridSnap, showGrid, createNewScene } =
     useEditorStore();
   const [showMetrics, setShowMetrics] = useState(false);
-  const [showNewSceneModal, setShowNewSceneModal] = useState(false);
   const [forceUpdate, setForceUpdate] = useState(0);
   const [transformMode, setTransformMode] = useState<
     "translate" | "rotate" | "scale"
   >("translate");
   const orbitControlsRef = useRef();
   const focusOnObject = useEditorStore((state) => state.focusOnObject);
-
   const handleResize = debounce(() => {
     setForceUpdate((prev) => prev + 1);
   }, 1000);
@@ -83,19 +92,17 @@ export function _Editor() {
 
       <div className="editorLayout">
         <div className="scene-selector">
-          <SceneSelector
-            showNewSceneModal={showNewSceneModal}
-            setShowNewSceneModal={setShowNewSceneModal}
-          />
+          <SceneSelector />
         </div>
-        <div className="toolbar">
+        <div className="toolbar flex">
           <Toolbar
             setTransformMode={setTransformMode}
             setShowMetrics={setShowMetrics}
             showMetrics={showMetrics}
           />
         </div>
-        <div className="editor-canvas">
+
+        <div className="editor-canvas  ">
           {currentSceneId ? (
             <Canvas
               key={currentSceneId + forceUpdate}
@@ -104,7 +111,9 @@ export function _Editor() {
               camera={{ position: [5, 5, 5], fov: 50 }}
               className="w-full relative h-full"
             >
-              {showMetrics && <Perf className="absolute w-80 top-0 left-0" />}
+              {showMetrics && (
+                <Perf className="absolute z-10 w-80 top-0 left-0" />
+              )}
 
               <group position={[0, 0.3, 0]} rotation={[1.2, 0, 0]}>
                 <Hero />
@@ -129,7 +138,7 @@ export function _Editor() {
         <PropertiesPanel />
       </div>
       <img
-        className="absolute hidden md:block bottom-12 left-12 w-20 z-50"
+        className="absolute hidden md:block bottom-12 left-12 w-20 z-40"
         src="/icons/large-logo.png"
         alt="VXLverse"
       />

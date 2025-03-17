@@ -1,15 +1,11 @@
-import { Layout, Plus, Trash } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import { useEditorStore } from "../../../stores/editorStore";
 import { NewSceneModal } from "../NewSceneModal";
-import { cn } from "../../UI";
+import { useEffect, useState } from "react";
+import { useKeyboardControls } from "@react-three/drei";
 
-export function SceneSelector({
-  showNewSceneModal,
-  setShowNewSceneModal,
-}: {
-  showNewSceneModal: boolean;
-  setShowNewSceneModal: (value: boolean) => void;
-}) {
+export function SceneSelector() {
+  const [showNewSceneModal, setShowNewSceneModal] = useState(false);
   const {
     scenes,
     currentSceneId,
@@ -18,6 +14,33 @@ export function SceneSelector({
     setCurrentScene,
     removeScene,
   } = useEditorStore();
+
+  const [subscribeKeys] = useKeyboardControls();
+
+  useEffect(() => {
+    const unsubscribeEsc = subscribeKeys(
+      (state) => state.escape,
+      (pressed) => {
+        if (pressed) {
+          setShowNewSceneModal(false);
+        }
+      }
+    );
+    const unsubscribeNewScene = subscribeKeys(
+      (state) => state["new scene"],
+      (pressed) => {
+        if (pressed) {
+          setShowNewSceneModal(true);
+        }
+      }
+    );
+
+    return () => {
+      unsubscribeEsc();
+      unsubscribeNewScene();
+    };
+  }, [subscribeKeys]);
+
   return (
     <div className="h-full w-full no-scrollbar top-0 left-0 right-0 z-50 flex overflow-x-auto bg-slate-900 backdrop-blur-sm border-b border-slate-800">
       {scenes.map((scene) => (

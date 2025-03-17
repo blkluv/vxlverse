@@ -81,7 +81,7 @@ export function ModelLibrary() {
       {/* Header */}
       <div className="p-4 border-b border-slate-800/50 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="p-2 bg-blue-500/10 rounded-sm">
+          <div className="p-2 bg-blue-500/10 sm">
             <Package className="w-4 h-4 text-blue-400" />
           </div>
           <h2 className="text-lg font-medium text-slate-100">Model Library</h2>
@@ -97,7 +97,7 @@ export function ModelLibrary() {
             placeholder="Search models..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 bg-slate-800/50 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 border border-slate-700/50 rounded-sm"
+            className="w-full pl-9 pr-3 py-2 bg-slate-800/50 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 border border-slate-700/50 sm"
           />
         </div>
 
@@ -106,7 +106,7 @@ export function ModelLibrary() {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-2 py-1 text-xs font-medium transition-all flex-shrink-0 rounded-sm ${
+              className={`px-2 py-1 text-xs font-medium transition-all flex-shrink-0 sm ${
                 selectedCategory === category
                   ? "bg-blue-500/20 text-blue-300 ring-1 ring-blue-500/30"
                   : "bg-slate-800/50 text-slate-300 hover:bg-slate-800"
@@ -122,7 +122,7 @@ export function ModelLibrary() {
       <div className="flex-1 overflow-y-auto custom-scrollbar">
         {loading ? (
           <div className="text-center py-12">
-            <div className="animate-spin w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-3" />
+            <div className="animate-spin w-6 h-6 border-2 border-blue-500 border-t-transparent full mx-auto mb-3" />
             <p className="text-slate-400 text-sm">Loading models...</p>
           </div>
         ) : filteredModels.length === 0 ? (
@@ -136,7 +136,7 @@ export function ModelLibrary() {
               <button
                 key={model.id}
                 onClick={() => setSelectedModel(model)}
-                className={`flex flex-col p-2 transition-all rounded-sm ${
+                className={`flex flex-col p-2 transition-all sm ${
                   selectedModel?.id === model.id
                     ? "bg-blue-500/20 ring-1 ring-blue-500/30"
                     : "bg-slate-800/50 hover:bg-slate-800/80"
@@ -186,14 +186,14 @@ export function ModelLibrary() {
           <div className="p-3 flex gap-2">
             <button
               onClick={handleAddToScene}
-              className="flex-1 py-2 px-3 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-sm flex items-center justify-center gap-1.5"
+              className="flex-1 py-2 px-3 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium sm flex items-center justify-center gap-1.5"
             >
               <Plus className="w-3.5 h-3.5" />
               Add to Scene
             </button>
             <button
               onClick={handleUseAsBrush}
-              className="flex-1 py-2 px-3 bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium rounded-sm flex items-center justify-center gap-1.5"
+              className="flex-1 py-2 px-3 bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium sm flex items-center justify-center gap-1.5"
             >
               Use as Brush
             </button>

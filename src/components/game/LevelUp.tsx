@@ -106,7 +106,7 @@ export function LevelUp() {
 
             {/* Glow effect */}
             <motion.div
-              className="absolute inset-0 bg-gradient-radial from-amber-500/20 to-transparent rounded-full blur-xl"
+              className="absolute inset-0 bg-gradient-radial from-amber-500/20 to-transparent full blur-xl"
               animate={{
                 scale: [0.8, 1.2, 0.8],
                 opacity: [0.2, 0.5, 0.2],
@@ -121,7 +121,7 @@ export function LevelUp() {
             {/* Level Up Notification */}
             <motion.div
               variants={notificationVariants}
-              className="px-4 py-2 bg-gradient-to-r from-yellow-900/95 to-yellow-800/95 border-2 border-yellow-400 rounded-lg text-yellow-200 font-pixel text-sm shadow-xl flex items-center whitespace-nowrap relative overflow-hidden"
+              className="px-4 py-2 bg-gradient-to-r from-yellow-900/95 to-yellow-800/95 border-2 border-yellow-400 lg text-yellow-200 font-pixel text-sm shadow-xl flex items-center whitespace-nowrap relative overflow-hidden"
             >
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 to-yellow-300/5"
@@ -151,7 +151,7 @@ export function LevelUp() {
             {/* Stats Notification */}
             <motion.div
               variants={notificationVariants}
-              className="px-4 py-2 bg-gradient-to-r from-amber-900/95 to-amber-800/95 border-2 border-amber-400 rounded-lg text-amber-200 font-pixel text-sm shadow-xl flex items-center whitespace-nowrap relative overflow-hidden"
+              className="px-4 py-2 bg-gradient-to-r from-amber-900/95 to-amber-800/95 border-2 border-amber-400 lg text-amber-200 font-pixel text-sm shadow-xl flex items-center whitespace-nowrap relative overflow-hidden"
             >
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-amber-400/10 to-amber-300/5"

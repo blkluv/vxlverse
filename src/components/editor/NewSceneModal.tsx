@@ -23,6 +23,7 @@ interface NewSceneModalProps {
 
 export function NewSceneModal({ onClose }: NewSceneModalProps) {
   const { createNewScene, addObject } = useEditorStore();
+
   const [sceneName, setSceneName] = useState(
     `mpoapostolis-template-${Math.floor(Math.random() * 1000)}`
   );

@@ -90,11 +90,11 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       text: "text-base",
     },
   };
-  
+
   // Animation variants for the dot
   const dotVariants = {
     off: { x: 0 },
-    on: { x: size === 'sm' ? 16 : size === 'md' ? 20 : 28 }
+    on: { x: size === "sm" ? 16 : size === "md" ? 20 : 28 },
   };
 
   const selectedColor = colorVariants[color];
@@ -103,29 +103,31 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   const generateUniqueId = () => {
     return id || `toggle-${Math.random().toString(36).substring(2, 9)}`;
   };
-  
+
   const toggleId = generateUniqueId();
-  
+
   const renderToggle = () => (
     <button
       id={toggleId}
       name={name}
       onClick={disabled ? undefined : onToggle}
       aria-pressed={isOn}
-      aria-label={ariaLabel || label || 'Toggle'}
+      aria-label={ariaLabel || label || "Toggle"}
       disabled={disabled}
-      className={`relative ${selectedSize.track} flex items-center rounded-full ${
+      className={`relative ${selectedSize.track} flex items-center full ${
         selectedSize.padding
       } cursor-pointer transition-colors duration-300 ${
         isOn
           ? `${selectedColor.bg} ${selectedColor.border} border`
           : "bg-slate-700/80 border border-slate-600/50"
-      } ${disabled ? "opacity-50 cursor-not-allowed" : ""} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${color}-500/50`}
+      } ${
+        disabled ? "opacity-50 cursor-not-allowed" : ""
+      } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${color}-500/50`}
       role="switch"
       type="button"
     >
       <motion.div
-        className={`${selectedSize.dot} rounded-full shadow-md ${
+        className={`${selectedSize.dot} full shadow-md ${
           isOn ? `${selectedColor.dot} ${selectedColor.shadow}` : "bg-white"
         }`}
         initial={isOn ? "on" : "off"}

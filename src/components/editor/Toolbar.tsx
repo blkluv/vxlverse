@@ -12,12 +12,7 @@ import {
   Grid3X3,
   Eye,
   Gauge,
-  Package,
-  Minimize,
   Expand,
-  Play,
-  User,
-  Settings,
 } from "lucide-react";
 import { Tooltip } from "../UI/Tooltip";
 import { useEditorStore } from "../../stores/editorStore";

@@ -65,23 +65,23 @@ export const Tooltip: React.FC<TooltipProps> = ({
   // Position classes based on position prop
   const getTooltipStyles = () => {
     const baseStyles = {
-      position: 'fixed',
+      position: "fixed",
       zIndex: 9999,
-      transform: '',
+      transform: "",
     } as React.CSSProperties;
 
     switch (position) {
       case "top":
-        baseStyles.transform = 'translate(-50%, -100%)';
+        baseStyles.transform = "translate(-50%, -100%)";
         break;
       case "bottom":
-        baseStyles.transform = 'translate(-50%, 10px)';
+        baseStyles.transform = "translate(-50%, 10px)";
         break;
       case "left":
-        baseStyles.transform = 'translate(-100%, -50%)';
+        baseStyles.transform = "translate(-100%, -50%)";
         break;
       case "right":
-        baseStyles.transform = 'translate(10px, -50%)';
+        baseStyles.transform = "translate(10px, -50%)";
         break;
     }
 
@@ -91,42 +91,42 @@ export const Tooltip: React.FC<TooltipProps> = ({
   // Arrow position classes
   const getArrowStyles = () => {
     const baseStyles = {
-      position: 'absolute',
-      width: '8px',
-      height: '8px',
-      background: '#1e293b', // bg-slate-800
-      transform: 'rotate(45deg)',
-      border: '1px solid #334155', // border-slate-700
+      position: "absolute",
+      width: "8px",
+      height: "8px",
+      background: "#1e293b", // bg-slate-800
+      transform: "rotate(45deg)",
+      border: "1px solid #334155", // border-slate-700
     } as React.CSSProperties;
 
     switch (position) {
       case "top":
-        baseStyles.bottom = '-4px';
-        baseStyles.left = '50%';
-        baseStyles.marginLeft = '-4px';
-        baseStyles.borderTop = 'none';
-        baseStyles.borderLeft = 'none';
+        baseStyles.bottom = "-4px";
+        baseStyles.left = "50%";
+        baseStyles.marginLeft = "-4px";
+        baseStyles.borderTop = "none";
+        baseStyles.borderLeft = "none";
         break;
       case "bottom":
-        baseStyles.top = '-4px';
-        baseStyles.left = '50%';
-        baseStyles.marginLeft = '-4px';
-        baseStyles.borderBottom = 'none';
-        baseStyles.borderRight = 'none';
+        baseStyles.top = "-4px";
+        baseStyles.left = "50%";
+        baseStyles.marginLeft = "-4px";
+        baseStyles.borderBottom = "none";
+        baseStyles.borderRight = "none";
         break;
       case "left":
-        baseStyles.right = '-4px';
-        baseStyles.top = '50%';
-        baseStyles.marginTop = '-4px';
-        baseStyles.borderLeft = 'none';
-        baseStyles.borderBottom = 'none';
+        baseStyles.right = "-4px";
+        baseStyles.top = "50%";
+        baseStyles.marginTop = "-4px";
+        baseStyles.borderLeft = "none";
+        baseStyles.borderBottom = "none";
         break;
       case "right":
-        baseStyles.left = '-4px';
-        baseStyles.top = '50%';
-        baseStyles.marginTop = '-4px';
-        baseStyles.borderRight = 'none';
-        baseStyles.borderTop = 'none';
+        baseStyles.left = "-4px";
+        baseStyles.top = "50%";
+        baseStyles.marginTop = "-4px";
+        baseStyles.borderRight = "none";
+        baseStyles.borderTop = "none";
         break;
     }
 
@@ -144,7 +144,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
       {isVisible && content && (
         <Portal>
           <div
-            className="px-2 py-1 text-xs font-medium text-white bg-slate-800 border border-slate-700 shadow-lg shadow-black/20 whitespace-nowrap rounded-sm"
+            className="px-2 py-1 text-xs font-medium text-white bg-slate-800 border border-slate-700 shadow-lg shadow-black/20 whitespace-nowrap sm"
             style={{
               ...getTooltipStyles(),
               top: tooltipPosition.top,

@@ -303,7 +303,7 @@ export function TransformPanel() {
                       e.stopPropagation();
                       toggleScaleLink();
                     }}
-                    className="p-1 rounded hover:bg-slate-700/50 transition-colors"
+                    className="p-1  hover:bg-slate-700/50 transition-colors"
                     title={
                       scaleLinked ? "Unlink scale values" : "Link scale values"
                     }

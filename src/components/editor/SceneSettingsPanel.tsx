@@ -114,13 +114,13 @@ export function SceneSettingsPanel({
                     />
                     <label
                       htmlFor="toggle-farm-zone"
-                      className={`relative inline-flex h-3.5 w-7 items-center rounded-full cursor-pointer transition-colors duration-200 ease-in-out
+                      className={`relative inline-flex h-3.5 w-7 items-center full cursor-pointer transition-colors duration-200 ease-in-out
                         ${
                           scene.farmZone?.enabled
                             ? "bg-gradient-to-r from-red-500 to-red-600 shadow-inner shadow-red-700/30"
                             : "bg-gradient-to-r from-slate-700 to-slate-800"
                         }
-                        after:content-[''] after:absolute after:h-2.5 after:w-2.5 after:rounded-full 
+                        after:content-[''] after:absolute after:h-2.5 after:w-2.5 after:full 
                         after:bg-white after:shadow-sm after:transition-all after:duration-200 after:left-0.5 after:top-0.5
                         peer-checked:after:translate-x-3.5 peer-focus:outline-none
                         hover:${
@@ -138,7 +138,7 @@ export function SceneSettingsPanel({
         </div>
       </div>
 
-      <ObjectHierarchyPanel />
+      <ObjectHierarchyPanel className="bg-opacity-70" />
 
       <SoundPanel />
     </div>

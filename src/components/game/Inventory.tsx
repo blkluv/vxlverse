@@ -7,7 +7,7 @@ import { useSound } from "../../hooks/useSound";
 import { Input } from "../UI/input";
 
 // Add keyframe animation for slide-in-right
-const style = document.createElement('style');
+const style = document.createElement("style");
 style.textContent = `
   @keyframes slide-in-right {
     from {
@@ -94,7 +94,7 @@ export function Inventory() {
     // Show sale notification
     const notification = document.createElement("div");
     notification.className =
-      "fixed bottom-4 right-4 bg-[#2A2A2A] text-[#7FE4FF] px-4 py-2 border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black flex items-center gap-2 animate-slide-up";
+      "fixed bottom-4 right-4 bg-[#2A2A2A] text-[#7FE4FF] px-4 py-2 border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black flex items-center gap-2 animate-slide-up";
     notification.innerHTML = `
       <svg class="w-5 h-5 text-[#FFD700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -142,7 +142,7 @@ export function Inventory() {
         onClick={() => setIsOpen(false)}
       >
         <div
-          className="bg-[#2A2A2A] w-full md:w-[900px] h-[90vh] md:h-[600px] border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black flex flex-col md:flex-row overflow-hidden"
+          className="bg-[#2A2A2A] w-full md:w-[900px] h-[90vh] md:h-[600px] border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black flex flex-col md:flex-row overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Left Sidebar - Categories (Hidden on mobile, shown as top bar) */}
@@ -163,7 +163,7 @@ export function Inventory() {
                       playSound("select");
                       setSelectedCategory(category.id);
                     }}
-                    className={`flex-shrink-0 px-3 py-1.5 text-center transition-all border-2 rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black ${
+                    className={`flex-shrink-0 px-3 py-1.5 text-center transition-all border-2 sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black ${
                       selectedCategory === category.id
                         ? "bg-[#3A3A3A] border-[#4A4A4A] text-[#7FE4FF]"
                         : "bg-[#2A2A2A] border-[#4A4A4A] text-[#7FE4FF] hover:bg-[#3A3A3A]"
@@ -175,7 +175,7 @@ export function Inventory() {
                         {category.label}
                       </span>
                       <span
-                        className={`text-xs px-1.5 py-0.5 border rounded-sm ${
+                        className={`text-xs px-1.5 py-0.5 border sm ${
                           selectedCategory === category.id
                             ? "bg-[#2A2A2A] border-[#4A4A4A] text-[#7FE4FF]"
                             : "bg-[#1A1A1A] border-[#4A4A4A] text-[#7FE4FF]"
@@ -213,7 +213,7 @@ export function Inventory() {
                         playSound("select");
                         setSelectedCategory(category.id);
                       }}
-                      className={`w-full px-3 py-2 text-left transition-all flex items-center justify-between group border-2 rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black mb-2 ${
+                      className={`w-full px-3 py-2 text-left transition-all flex items-center justify-between group border-2 sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black mb-2 ${
                         selectedCategory === category.id
                           ? "bg-[#3A3A3A] border-[#4A4A4A] text-[#7FE4FF]"
                           : "bg-[#2A2A2A] border-[#4A4A4A] text-[#7FE4FF] hover:bg-[#3A3A3A]"
@@ -224,7 +224,7 @@ export function Inventory() {
                         <span className="text-sm">{category.label}</span>
                       </div>
                       <span
-                        className={`text-xs px-1.5 py-0.5 border rounded-sm ${
+                        className={`text-xs px-1.5 py-0.5 border sm ${
                           selectedCategory === category.id
                             ? "bg-[#2A2A2A] border-[#4A4A4A] text-[#7FE4FF]"
                             : "bg-[#1A1A1A] border-[#4A4A4A] text-[#7FE4FF]"
@@ -256,7 +256,7 @@ export function Inventory() {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 bg-[#2A2A2A] border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black hover:bg-[#3A3A3A] active:translate-y-[2px] active:translate-x-[2px] active:shadow-none transition-all"
+                className="p-1.5 bg-[#2A2A2A] border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black hover:bg-[#3A3A3A] active:translate-y-[2px] active:translate-x-[2px] active:shadow-none transition-all"
               >
                 <X className="w-4 h-4 md:w-5 md:h-5 text-[#7FE4FF]" />
               </button>
@@ -271,7 +271,7 @@ export function Inventory() {
                   placeholder="Search items..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 md:py-2.5 bg-[#2A2A2A] border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black text-sm text-[#7FE4FF] placeholder-[#4A4A4A] focus:outline-none focus:ring-2 focus:ring-[#7FE4FF]/50"
+                  className="w-full pl-9 pr-4 py-2 md:py-2.5 bg-[#2A2A2A] border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black text-sm text-[#7FE4FF] placeholder-[#4A4A4A] focus:outline-none focus:ring-2 focus:ring-[#7FE4FF]/50"
                 />
               </div>
             </div>
@@ -304,7 +304,7 @@ export function Inventory() {
                           playSound("select");
                           setSelectedItem(item.id);
                         }}
-                        className={`p-3 md:p-4 border-2 rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black transition-all ${
+                        className={`p-3 md:p-4 border-2 sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black transition-all ${
                           selectedItem === item.id
                             ? "bg-[#3A3A3A] border-[#4A4A4A] text-[#7FE4FF]"
                             : "bg-[#2A2A2A] border-[#4A4A4A] text-[#7FE4FF] hover:bg-[#3A3A3A]"
@@ -346,14 +346,14 @@ export function Inventory() {
               className="absolute md:relative right-0 top-0 md:w-[350px] h-full bg-[#2A2A2A] border-l-2 border-[#4A4A4A] overflow-hidden animate-slide-in-right"
               style={{
                 zIndex: window.innerWidth < 768 ? 50 : 1,
-                animationDuration: '0.3s',
-                animationTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                animationDuration: "0.3s",
+                animationTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             >
               <div className="p-4 md:p-6">
                 <div className="flex items-center justify-between mb-4 md:mb-6">
                   <div className="flex items-center gap-2 md:gap-3">
-                    <div className="w-10 h-10 md:w-12 md:h-12 bg-[#3A3A3A] border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black flex items-center justify-center">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-[#3A3A3A] border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black flex items-center justify-center">
                       <Info className="w-5 h-5 md:w-6 md:h-6 text-[#7FE4FF]" />
                     </div>
                     <div>
@@ -370,7 +370,7 @@ export function Inventory() {
                       playSound("select");
                       setSelectedItem(null);
                     }}
-                    className="p-1.5 bg-[#2A2A2A] border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black hover:bg-[#3A3A3A] active:translate-y-[2px] active:translate-x-[2px] active:shadow-none transition-all"
+                    className="p-1.5 bg-[#2A2A2A] border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black hover:bg-[#3A3A3A] active:translate-y-[2px] active:translate-x-[2px] active:shadow-none transition-all"
                   >
                     <X className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
                   </button>
@@ -398,7 +398,7 @@ export function Inventory() {
                     <h4 className="text-xs md:text-sm font-bold text-[#7FE4FF] uppercase tracking-wider mb-2">
                       Description
                     </h4>
-                    <p className="text-sm md:text-base text-[#7FE4FF] bg-[#3A3A3A] p-3 border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black">
+                    <p className="text-sm md:text-base text-[#7FE4FF] bg-[#3A3A3A] p-3 border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black">
                       {selectedItemDetails.description}
                     </p>
                   </div>
@@ -409,13 +409,13 @@ export function Inventory() {
                       Stats
                     </h4>
                     <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm bg-[#3A3A3A] p-2 border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black">
+                      <div className="flex items-center justify-between text-sm bg-[#3A3A3A] p-2 border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black">
                         <span className="text-[#7FE4FF]">Value</span>
                         <span className="text-[#FFD700]">
                           {selectedItemDetails.value} coins
                         </span>
                       </div>
-                      <div className="flex items-center justify-between text-sm bg-[#3A3A3A] p-2 border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black">
+                      <div className="flex items-center justify-between text-sm bg-[#3A3A3A] p-2 border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black">
                         <span className="text-[#7FE4FF]">Sell Price</span>
                         <span className="text-[#FFD700]">
                           {Math.floor(selectedItemDetails.value * 0.7)} coins
@@ -428,7 +428,7 @@ export function Inventory() {
                   <div className="flex flex-col gap-2">
                     <button
                       onClick={() => handleSellItem(selectedItemDetails.id)}
-                      className="w-full px-4 py-2.5 bg-[#2A2A2A] text-[#FFD700] border-2 border-[#4A4A4A] rounded-sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black hover:bg-[#3A3A3A] active:translate-y-[2px] active:translate-x-[2px] active:shadow-none transition-all font-medium text-sm flex items-center justify-center gap-2"
+                      className="w-full px-4 py-2.5 bg-[#2A2A2A] text-[#FFD700] border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black hover:bg-[#3A3A3A] active:translate-y-[2px] active:translate-x-[2px] active:shadow-none transition-all font-medium text-sm flex items-center justify-center gap-2"
                     >
                       <DollarSign className="w-4 h-4" />
                       Sell Item

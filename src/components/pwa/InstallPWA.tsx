@@ -77,7 +77,7 @@ export function InstallPWA() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 bg-gray-800 text-white p-4 rounded-lg shadow-lg z-50 flex flex-col md:max-w-md md:mx-auto">
+    <div className="fixed bottom-4 left-4 right-4 bg-gray-800 text-white p-4 lg shadow-lg z-50 flex flex-col md:max-w-md md:mx-auto">
       <div className="flex items-start justify-between">
         <div className="flex items-center">
           <img
@@ -116,13 +116,13 @@ export function InstallPWA() {
       <div className="mt-4 flex justify-end space-x-3">
         <button
           onClick={onDismiss}
-          className="px-3 py-1.5 text-sm bg-gray-700 hover:bg-gray-600 rounded-md transition-colors"
+          className="px-3 py-1.5 text-sm bg-gray-700 hover:bg-gray-600 md transition-colors"
         >
           Not now
         </button>
         <button
           onClick={onInstallClick}
-          className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
+          className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 md transition-colors"
         >
           Install
         </button>

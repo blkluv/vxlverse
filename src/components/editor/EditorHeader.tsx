@@ -4,6 +4,7 @@ import { Tooltip } from "../UI/Tooltip";
 import { useParams } from "react-router-dom";
 import { useEditorStore } from "../../stores/editorStore";
 import { useGame } from "../../hooks/useGame";
+import { ShortcutsInfo } from "./ShortcutsInfo";
 
 type EditorHeaderProps = {
   setShowMetrics: (show: boolean) => void;
@@ -35,12 +36,13 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
         {/* Right side - Action buttons */}
         <div className="flex items-center space-x-3">
           {/* Play button */}
+          <ShortcutsInfo />
 
           {/* Settings button */}
           <Tooltip content="Settings" position="bottom">
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className="flex items-center justify-center p-1.5 rounded-sm transition-colors bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-white"
+              className="flex items-center justify-center p-1.5 sm transition-colors bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-white"
             >
               <Settings className="h-4 w-4" />
             </button>
@@ -49,7 +51,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
             <a
               target="_blank"
               href={`/play/${id}`}
-              className={`flex items-center justify-center p-1.5 rounded-sm transition-colors ${"bg-green-500/20 text-green-400 hover:bg-green-500/30"}`}
+              className={`flex items-center justify-center p-1.5 sm transition-colors ${"bg-green-500/20 text-green-400 hover:bg-green-500/30"}`}
             >
               <Play className="h-4 w-4" />
             </a>
@@ -61,7 +63,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
 
       {/* Settings panel - shows when Settings is clicked */}
       {showSettings && (
-        <div className="absolute right-0 top-10 w-64 bg-slate-800 border border-slate-700 shadow-lg z-50 rounded-bl-md">
+        <div className="absolute right-0 top-10 w-64 bg-slate-800 border border-slate-700 shadow-lg z-50 bl-md">
           <div className="p-3">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-white text-sm font-medium">Settings</h3>
@@ -82,10 +84,10 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
                   onClick={() => setGridSnap(!gridSnap)}
                   className={`w-8 h-4 ${
                     gridSnap ? "bg-blue-600" : "bg-slate-700"
-                  } rounded-full relative cursor-pointer transition-colors`}
+                  } full relative cursor-pointer transition-colors`}
                 >
                   <div
-                    className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all duration-200 ${
+                    className={`absolute top-0.5 w-3 h-3 bg-white full transition-all duration-200 ${
                       gridSnap ? "left-4" : "left-0.5"
                     }`}
                   ></div>
@@ -98,10 +100,10 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
                   onClick={() => setShowMetrics(!showMetrics)}
                   className={`w-8 h-4 ${
                     showMetrics ? "bg-blue-600" : "bg-slate-700"
-                  } rounded-full relative cursor-pointer transition-colors`}
+                  } full relative cursor-pointer transition-colors`}
                 >
                   <div
-                    className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all duration-200 ${
+                    className={`absolute top-0.5 w-3 h-3 bg-white full transition-all duration-200 ${
                       showMetrics ? "left-4" : "left-0.5"
                     }`}
                   ></div>
@@ -114,10 +116,10 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
                   onClick={() => setIsPublic(!isPublic)}
                   className={`w-8 h-4 ${
                     isPublic ? "bg-blue-600" : "bg-slate-700"
-                  } rounded-full relative cursor-pointer transition-colors`}
+                  } full relative cursor-pointer transition-colors`}
                 >
                   <div
-                    className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all duration-200 ${
+                    className={`absolute top-0.5 w-3 h-3 bg-white full transition-all duration-200 ${
                       isPublic ? "left-4" : "left-0.5"
                     }`}
                   ></div>
@@ -125,7 +127,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
               </div>
 
               <div className="pt-2 border-t border-slate-700">
-                <button className="w-full text-xs bg-blue-600 hover:bg-blue-700 text-white py-1.5 rounded transition-colors">
+                <button className="w-full text-xs bg-blue-600 hover:bg-blue-700 text-white py-1.5  transition-colors">
                   Save Settings
                 </button>
               </div>

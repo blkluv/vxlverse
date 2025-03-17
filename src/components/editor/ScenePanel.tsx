@@ -219,7 +219,7 @@ export function ScenePanel() {
                         <div className="text-xs  justify-between font-medium text-slate-200 truncate flex items-center gap-1">
                           <span>{model.name}</span>
                           {model?.animated && (
-                            <span className="inline-flex  text-[10px] items-center px-1.5 py-0.5 rounded-full  font-medium bg-yellow-900/40 text-yellow-300 border border-yellow-700/50">
+                            <span className="inline-flex  text-[10px] items-center px-1.5 py-0.5 full  font-medium bg-yellow-900/40 text-yellow-300 border border-yellow-700/50">
                               Animated
                             </span>
                           )}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import toast from "react-hot-toast";
 import { FileCode, Settings, Box, Layout } from "lucide-react";
@@ -9,32 +9,100 @@ import { ObjectSettingsPanel } from "./properties/ObjectSettingsPanel";
 import { TransformPanel } from "./properties/transform";
 import { AnimationsPanel } from "./properties/animations";
 import { PhysicsPanel } from "./properties/PhysicsPanel";
+import { useKeyboardControls } from "@react-three/drei";
 
 type TabType = "properties" | "quest" | "scene";
 
 export function PropertiesPanel() {
-  const currentSceneId = useEditorStore((state) => state.currentSceneId);
-  const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
-  const scenes = useEditorStore((state) => state.scenes);
+  const { setSelectedObject, selectedObjectId, currentSceneId, scenes } =
+    useEditorStore((state) => state);
   const currentScene = scenes.find((scene) => scene.id === currentSceneId);
-  const selectedObject = currentScene?.objects.find(
-    (obj) => obj.id === selectedObjectId
-  );
+
   const updateObject = useEditorStore((state) => state.updateObject);
   const updateScene = useEditorStore((state) => state.updateScene);
+  const [activeTab, setActiveTab] = useState<TabType>("scene");
+  const hasSelectedObject = Boolean(selectedObjectId);
 
-  // Grid and snapping state/actions
-  const gridSnap = useEditorStore((state) => state.gridSnap);
-  const showGrid = useEditorStore((state) => state.showGrid);
-  const gridSize = useEditorStore((state) => state.gridSize);
-  const snapPrecision = useEditorStore((state) => state.snapPrecision);
-  const toggleGridSnap = useEditorStore((state) => state.toggleGridSnap);
-  const toggleGrid = useEditorStore((state) => state.toggleGrid);
-  const setGridSize = useEditorStore((state) => state.setGridSize);
-  const setSnapPrecision = useEditorStore((state) => state.setSnapPrecision);
+  const selectObject = useCallback(
+    (dir: "next" | "prev") => {
+      // Retrieve the current scene
+      const currentScene = scenes.find((scene) => scene.id === currentSceneId);
+      if (!currentScene) return;
 
-  const [activeTab, setActiveTab] = useState<TabType>("properties");
-  const hasSelectedObject = Boolean(selectedObject);
+      // Find the index of the currently selected object
+      const currentIndex =
+        currentScene.objects.findIndex((obj) => obj.id === selectedObjectId) ??
+        0;
+
+      // Calculate the new index based on the direction
+      let newIndex = dir === "next" ? currentIndex + 1 : currentIndex - 1;
+
+      // Optional: Wrap around if out of bounds
+      if (newIndex < 0) {
+        newIndex = currentScene.objects.length - 1;
+      } else if (newIndex >= currentScene.objects.length) {
+        newIndex = 0;
+      }
+
+      // Set the selected object using the new index
+      const nextObject = currentScene.objects[newIndex];
+      if (nextObject) {
+        setSelectedObject(nextObject.id);
+      }
+    },
+    [currentSceneId, selectedObjectId, scenes, setSelectedObject]
+  );
+
+  const [subscribeKeys] = useKeyboardControls();
+  useEffect(() => {
+    const unsubscribeSceneTab = subscribeKeys(
+      (state) => state.sceneTab,
+      (pressed) => {
+        if (pressed) {
+          setActiveTab("scene");
+        }
+      }
+    );
+    const unsubscribePropertiesTab = subscribeKeys(
+      (state) => state.propertiesTab,
+      (pressed) => {
+        if (pressed) {
+          setActiveTab("properties");
+        }
+      }
+    );
+    const unsubscribeQuestTab = subscribeKeys(
+      (state) => state.questTab,
+      (pressed) => {
+        if (pressed) {
+          setActiveTab("quest");
+        }
+      }
+    );
+    const unsubscribeNextObject = subscribeKeys(
+      (state) => state.nextObject,
+      (pressed) => {
+        if (pressed) {
+          selectObject("next");
+        }
+      }
+    );
+    const unsubscribePrevObject = subscribeKeys(
+      (state) => state.prevObject,
+      (pressed) => {
+        if (pressed) {
+          selectObject("prev");
+        }
+      }
+    );
+    return () => {
+      unsubscribeSceneTab();
+      unsubscribePropertiesTab();
+      unsubscribeQuestTab();
+      unsubscribeNextObject();
+      unsubscribePrevObject();
+    };
+  }, [subscribeKeys, selectObject]);
 
   // Common tab button styles
   const getTabButtonClasses = (tab: TabType) =>
@@ -131,12 +199,12 @@ export function PropertiesPanel() {
                 <>
                   {hasSelectedObject ? (
                     <QuestPanel
-                      object={selectedObject}
+                      object={selectedObjectId}
                       onChange={(updates) => {
                         if (currentSceneId) {
                           updateObject(
                             currentSceneId,
-                            selectedObject.id,
+                            selectedObjectId,
                             updates
                           );
                           toast.success("Quest settings updated");
@@ -173,14 +241,6 @@ export function PropertiesPanel() {
                     updateScene(currentScene.id, updates);
                     toast.success("Scene settings updated");
                   }}
-                  showGrid={showGrid}
-                  onToggleGrid={toggleGrid}
-                  gridSnap={gridSnap}
-                  onToggleGridSnap={toggleGridSnap}
-                  gridSize={gridSize}
-                  onGridSizeChange={setGridSize}
-                  snapPrecision={snapPrecision}
-                  onSnapPrecisionChange={setSnapPrecision}
                 />
               )}
             </div>

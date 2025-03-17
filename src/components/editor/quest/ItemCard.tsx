@@ -19,8 +19,8 @@ export function ItemCard({ item, onRemove }: ItemCardProps) {
   if (!gameItem) return null;
 
   return (
-    <motion.div 
-      className="flex items-center justify-between p-2 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-800/90 border border-slate-700/70 shadow-md hover:shadow-lg hover:border-slate-600/80 hover:from-slate-800/95 hover:to-slate-800/95 transition-all duration-200 rounded-sm"
+    <motion.div
+      className="flex items-center justify-between p-2 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-800/90 border border-slate-700/70 shadow-md hover:shadow-lg hover:border-slate-600/80 hover:from-slate-800/95 hover:to-slate-800/95 transition-all duration-200 sm"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -10 }}
@@ -28,7 +28,7 @@ export function ItemCard({ item, onRemove }: ItemCardProps) {
       layout
     >
       <div className="flex items-center gap-2.5">
-        <motion.div 
+        <motion.div
           className="text-xl flex items-center justify-center w-9 h-9 bg-gradient-to-br from-slate-700/60 to-slate-800/60 border border-slate-600/40 shadow-inner"
           whileHover={{ scale: 1.1 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
@@ -52,7 +52,7 @@ export function ItemCard({ item, onRemove }: ItemCardProps) {
             e.stopPropagation();
             onRemove();
           }}
-          className="p-1.5 text-slate-400 hover:bg-red-500/20 hover:text-red-300 transition-all rounded-sm"
+          className="p-1.5 text-slate-400 hover:bg-red-500/20 hover:text-red-300 transition-all sm"
           title="Remove item"
           aria-label="Remove item"
           whileHover={{ scale: 1.2, color: "#f87171" }}

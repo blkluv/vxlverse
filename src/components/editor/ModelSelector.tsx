@@ -267,13 +267,13 @@ export function ModelSelector() {
     }
 
     return (
-      <div className=" space-y-1 sticky bottom-0  bg-slate-900 border-t border-slate-800 items-center justify-between mt-4 px-4 py-2 bg-slate-800/30 rounded">
+      <div className=" space-y-1 sticky bottom-0  bg-slate-900 border-t border-slate-800 items-center justify-between mt-4 px-4 py-2 bg-slate-800/30 ">
         <div className="flex w-full items-center justify-evenly gap-1">
           {/* First page button */}
           <button
             onClick={() => setCurrentPage(1)}
             disabled={currentPage === 1}
-            className="p-1.5 rounded bg-slate-800/50 text-slate-400 disabled:opacity-50 hover:bg-slate-700/50"
+            className="p-1.5  bg-slate-800/50 text-slate-400 disabled:opacity-50 hover:bg-slate-700/50"
             title="First page"
           >
             <svg
@@ -296,7 +296,7 @@ export function ModelSelector() {
           <button
             onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
             disabled={currentPage === 1}
-            className="p-1.5 rounded bg-slate-800/50 text-slate-400 disabled:opacity-50 hover:bg-slate-700/50"
+            className="p-1.5  bg-slate-800/50 text-slate-400 disabled:opacity-50 hover:bg-slate-700/50"
             title="Previous page"
           >
             <svg
@@ -318,7 +318,7 @@ export function ModelSelector() {
             <button
               key={number}
               onClick={() => setCurrentPage(number)}
-              className={`w-7 h-7 flex items-center justify-center rounded text-xs font-medium ${
+              className={`w-7 h-7 flex items-center justify-center  text-xs font-medium ${
                 currentPage === number
                   ? "bg-blue-500/20 text-blue-300 ring-1 ring-blue-500/30"
                   : "bg-slate-800/50 text-slate-300 hover:bg-slate-700/50"
@@ -334,7 +334,7 @@ export function ModelSelector() {
               setCurrentPage((prev) => Math.min(totalPages, prev + 1))
             }
             disabled={currentPage === totalPages}
-            className="p-1.5 rounded bg-slate-800/50 text-slate-400 disabled:opacity-50 hover:bg-slate-700/50"
+            className="p-1.5  bg-slate-800/50 text-slate-400 disabled:opacity-50 hover:bg-slate-700/50"
             title="Next page"
           >
             <svg
@@ -356,7 +356,7 @@ export function ModelSelector() {
           <button
             onClick={() => setCurrentPage(totalPages)}
             disabled={currentPage === totalPages}
-            className="p-1.5 rounded bg-slate-800/50 text-slate-400 disabled:opacity-50 hover:bg-slate-700/50"
+            className="p-1.5  bg-slate-800/50 text-slate-400 disabled:opacity-50 hover:bg-slate-700/50"
             title="Last page"
           >
             <svg
@@ -427,7 +427,7 @@ export function ModelSelector() {
                       onlyAnimated
                         ? "bg-purple-500/20 text-purple-300 ring-1 ring-purple-500/30"
                         : "bg-slate-800/50 text-slate-400"
-                    } hover:bg-slate-800 transition-colors rounded`}
+                    } hover:bg-slate-800 transition-colors `}
                     title="Show only animated models"
                   >
                     <Play
@@ -435,7 +435,7 @@ export function ModelSelector() {
                       fill={onlyAnimated ? "currentColor" : "none"}
                     />
                     <span className="text-xs font-medium">Animated</span>
-                    <span className="ml-1 px-1.5 py-0.5 text-[10px] rounded-full bg-slate-700/50 text-slate-300">
+                    <span className="ml-1 px-1.5 py-0.5 text-[10px] full bg-slate-700/50 text-slate-300">
                       {onlyAnimated ? "ON" : "OFF"}
                     </span>
                   </button>
@@ -512,7 +512,7 @@ export function ModelSelector() {
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-20 h-20 overflow-hidden bg-slate-800 flex-shrink-0 relative rounded">
+                        <div className="w-20 h-20 overflow-hidden bg-slate-800 flex-shrink-0 relative ">
                           <img
                             src={model.thumbnail}
                             alt={model.name}
@@ -520,7 +520,7 @@ export function ModelSelector() {
                             loading="lazy"
                           />
                           {model?.animated && (
-                            <div className="absolute bottom-1 right-1 bg-purple-900/70 p-0.5 rounded-full">
+                            <div className="absolute bottom-1 right-1 bg-purple-900/70 p-0.5 full">
                               <Play
                                 className="w-3 h-3 text-purple-300"
                                 fill="currentColor"
@@ -603,18 +603,18 @@ export function ModelSelector() {
                   <OrbitControls />
                 </Canvas>
 
-                <div className="col-span-2 absolute top-2 left-2 flex items-start justify-between bg-slate-800/30 p-3 rounded">
+                <div className="col-span-2 absolute top-2 left-2 flex items-start justify-between bg-slate-800/30 p-3 ">
                   <div className="flex items-center gap-3">
                     <div>
                       <h3 className="text-lg font-medium text-white">
                         {selectedModel.name}
                       </h3>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs px-2 py-0.5 bg-slate-700/50 text-slate-300 rounded">
+                        <span className="text-xs px-2 py-0.5 bg-slate-700/50 text-slate-300 ">
                           {selectedModel.category || "Uncategorized"}
                         </span>
                         {selectedModel?.animated && (
-                          <span className="text-xs px-2 py-0.5 bg-purple-900/40 text-purple-300 rounded border border-purple-700/50">
+                          <span className="text-xs px-2 py-0.5 bg-purple-900/40 text-purple-300  border border-purple-700/50">
                             {isAnimationPlaying
                               ? "Animation Playing"
                               : "Animated Model"}
@@ -627,7 +627,7 @@ export function ModelSelector() {
 
                 {/* Animation Controls */}
                 {selectedModel?.animated && availableAnimations.length > 0 && (
-                  <div className="absolute top-2 right-12 bg-slate-800/30 p-3 rounded">
+                  <div className="absolute top-2 right-12 bg-slate-800/30 p-3 ">
                     <div className="flex flex-col gap-2">
                       <h4 className="text-xs font-medium text-slate-300">
                         Animations
@@ -655,7 +655,7 @@ export function ModelSelector() {
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950 to-slate-950/0 p-6">
                   <div className="max-w-2xl mx-auto space-y-4">
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2 bg-slate-800/20 p-3 rounded">
+                      <div className="space-y-2 bg-slate-800/20 p-3 ">
                         <div className="text-xs text-slate-300 font-medium flex items-center gap-2 mb-2">
                           <Sparkles className="w-4 h-4 text-amber-400" />
                           Attribution
@@ -677,7 +677,7 @@ export function ModelSelector() {
                         )}
                       </div>
 
-                      <div className="space-y-2 bg-slate-800/20 p-3 rounded">
+                      <div className="space-y-2 bg-slate-800/20 p-3 ">
                         <div className="text-xs text-slate-300 font-medium flex items-center gap-2">
                           <FileText className="w-4 h-4 text-green-400" />
                           License
@@ -706,7 +706,7 @@ export function ModelSelector() {
                         <button
                           onClick={handleAddToScene}
                           disabled={!selectedModel}
-                          className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white transition-all duration-300 disabled:opacity-50 disabled:hover:from-blue-500 disabled:hover:to-violet-500 rounded-md"
+                          className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white transition-all duration-300 disabled:opacity-50 disabled:hover:from-blue-500 disabled:hover:to-violet-500 md"
                         >
                           <Plus className="w-4 h-4" />
                           Add to Scene
