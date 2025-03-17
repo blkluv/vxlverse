@@ -1,11 +1,19 @@
-import { useState } from "react";
-import { Move, Minimize, Maximize, RotateCcw } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import {
+  Move,
+  Minimize,
+  Maximize,
+  RotateCcw,
+  Link,
+  Unlink,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "../../UI/input";
 import { useEditorStore } from "../../../stores/editorStore";
 
 export function TransformPanel() {
   const [expanded, setExpanded] = useState(true);
+  const [scaleLinked, setScaleLinked] = useState(true);
 
   // Get state from the store
   const currentSceneId = useEditorStore((state) => state.currentSceneId);
@@ -19,46 +27,63 @@ export function TransformPanel() {
     (obj) => obj.id === selectedObjectId
   );
 
-  // If no scene or no selected object, don't render
   if (!currentScene || !selectedObject) return null;
 
   const handlePositionChange = (axis: "x" | "y" | "z", value: number) => {
-    if (currentScene.id) {
-      const position = { ...(selectedObject.position || { x: 0, y: 0, z: 0 }) };
-      position[axis] = value;
-      updateObject(currentScene.id, selectedObject.id, { position });
-    }
+    const position = { ...(selectedObject.position || { x: 0, y: 0, z: 0 }) };
+    position[axis] = value;
+    updateObject(currentScene.id, selectedObject.id, { position });
   };
 
   const handleRotationChange = (axis: "x" | "y" | "z", value: number) => {
-    if (currentScene.id) {
-      const rotation = { ...(selectedObject.rotation || { x: 0, y: 0, z: 0 }) };
-      rotation[axis] = value;
-      updateObject(currentScene.id, selectedObject.id, { rotation });
-    }
+    const rotation = { ...(selectedObject.rotation || { x: 0, y: 0, z: 0 }) };
+    rotation[axis] = value;
+    updateObject(currentScene.id, selectedObject.id, { rotation });
   };
 
   const handleScaleChange = (axis: "x" | "y" | "z", value: number) => {
-    if (currentScene.id) {
+    if (scaleLinked) {
+      // If linked, update all axes to the new value.
+      updateObject(currentScene.id, selectedObject.id, {
+        scale: { x: value, y: value, z: value },
+      });
+    } else {
+      // Otherwise update only the specified axis.
       const scale = { ...(selectedObject.scale || { x: 1, y: 1, z: 1 }) };
       scale[axis] = value;
       updateObject(currentScene.id, selectedObject.id, { scale });
     }
   };
 
-  // Reusable transform input component
+  const toggleScaleLink = () => {
+    setScaleLinked((prev) => {
+      const newLinked = !prev;
+      // When linking, unify all scale axes to the current X value (or default to 1)
+      if (newLinked) {
+        const xVal = selectedObject.scale?.x || 1;
+        updateObject(currentScene.id, selectedObject.id, {
+          scale: { x: xVal, y: xVal, z: xVal },
+        });
+      }
+      return newLinked;
+    });
+  };
+
+  // Modified TransformInput preserves focus by managing its own state.
   const TransformInput = ({
     axis,
     value,
     onChange,
     color,
     step = 0.1,
+    disabled = false,
   }: {
     axis: "x" | "y" | "z";
     value: number;
     onChange: (value: number) => void;
     color: "red" | "green" | "blue";
     step?: number;
+    disabled?: boolean;
   }) => {
     const colorMap = {
       red: {
@@ -85,11 +110,36 @@ export function TransformPanel() {
     };
 
     const colors = colorMap[color];
+    const [localValue, setLocalValue] = useState(value);
+    const [inputValue, setInputValue] = useState(value.toString());
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    // Only update local state when input isn't focused.
+    useEffect(() => {
+      if (document.activeElement !== inputRef.current) {
+        setLocalValue(value);
+        setInputValue(value.toString());
+      }
+    }, [value]);
+
+    const handleBlur = () => {
+      const parsed = parseFloat(inputValue);
+      if (!isNaN(parsed)) {
+        setLocalValue(parsed);
+        onChange(parsed);
+      } else {
+        setInputValue(localValue.toString());
+      }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setInputValue(e.target.value);
+    };
 
     return (
       <div className="flex items-center">
         <div
-          className={`w-5 h-5 flex-shrink-0 flex items-center justify-center  ${colors.bg} ${colors.border} border mr-1.5`}
+          className={`w-5 h-5 flex-shrink-0 flex items-center justify-center ${colors.bg} ${colors.border} border mr-1.5`}
         >
           <span className={`text-[10px] font-bold ${colors.text}`}>
             {axis.toUpperCase()}
@@ -97,10 +147,13 @@ export function TransformPanel() {
         </div>
         <div className="flex-grow relative">
           <Input
+            ref={inputRef}
             type="number"
-            value={value}
-            onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
+            value={inputValue}
+            onChange={handleChange}
+            onBlur={handleBlur}
             step={step}
+            disabled={disabled}
             className={`w-full h-7 px-2 text-[11px] bg-slate-900/80 border border-slate-700/50 ${
               colors.text
             } placeholder-slate-500 focus:outline-none focus:ring-1 ${colors.focusRing.replace(
@@ -109,7 +162,7 @@ export function TransformPanel() {
             )} focus:border-none ${colors.focusBorder.replace(
               "focus-within:",
               "focus:"
-            )}`}
+            )} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
             onKeyDown={(e) => e.stopPropagation()}
             onKeyUp={(e) => e.stopPropagation()}
             onKeyPress={(e) => e.stopPropagation()}
@@ -120,14 +173,15 @@ export function TransformPanel() {
     );
   };
 
-  // Reusable section component
   const TransformSection = ({
     title,
     onReset,
+    extraControls,
     children,
   }: {
     title: string;
     onReset: () => void;
+    extraControls?: React.ReactNode;
     children: React.ReactNode;
   }) => (
     <div className="mb-4 last:mb-0">
@@ -136,10 +190,11 @@ export function TransformPanel() {
           <span className="text-[11px] font-medium text-blue-300/90">
             {title}
           </span>
+          {extraControls && <div className="ml-2">{extraControls}</div>}
         </div>
         <button
           onClick={onReset}
-          className="flex items-center px-1.5 py-0.5 text-[10px] text-slate-400 hover:text-blue-400 bg-slate-800/40 hover:bg-slate-800/60  transition-colors"
+          className="flex items-center px-1.5 py-0.5 text-[10px] text-slate-400 hover:text-blue-400 bg-slate-800/40 hover:bg-slate-800/60 transition-colors"
           title={`Reset ${title}`}
         >
           <RotateCcw className="w-3 h-3 mr-1" />
@@ -151,7 +206,7 @@ export function TransformPanel() {
   );
 
   return (
-    <div className="bg-slate-800/30 border border-slate-700/30  overflow-hidden">
+    <div className="bg-slate-800/30 border border-slate-700/30 overflow-hidden">
       <div
         className="flex justify-between items-center p-2.5 cursor-pointer hover:bg-slate-800/50 transition-colors"
         onClick={() => setExpanded(!expanded)}
@@ -168,105 +223,126 @@ export function TransformPanel() {
       </div>
 
       {expanded && (
-        <div className="overflow-hidden">
-          <div className="p-3 pt-2 border-t border-slate-700/30">
-            {/* Position */}
-            <TransformSection
-              title="Position"
-              onReset={() => {
-                if (currentScene.id) {
+        <AnimatePresence>
+          <motion.div
+            className="overflow-hidden"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            <div className="p-3 pt-2 border-t border-slate-700/30">
+              {/* Position */}
+              <TransformSection
+                title="Position"
+                onReset={() =>
                   updateObject(currentScene.id, selectedObject.id, {
                     position: { x: 0, y: 0, z: 0 },
-                  });
+                  })
                 }
-              }}
-            >
-              <TransformInput
-                axis="x"
-                value={selectedObject.position?.x || 0}
-                onChange={(value) => handlePositionChange("x", value)}
-                color="red"
-              />
-              <TransformInput
-                axis="y"
-                value={selectedObject.position?.y || 0}
-                onChange={(value) => handlePositionChange("y", value)}
-                color="green"
-              />
-              <TransformInput
-                axis="z"
-                value={selectedObject.position?.z || 0}
-                onChange={(value) => handlePositionChange("z", value)}
-                color="blue"
-              />
-            </TransformSection>
+              >
+                <TransformInput
+                  axis="x"
+                  value={selectedObject.position?.x || 0}
+                  onChange={(value) => handlePositionChange("x", value)}
+                  color="red"
+                />
+                <TransformInput
+                  axis="y"
+                  value={selectedObject.position?.y || 0}
+                  onChange={(value) => handlePositionChange("y", value)}
+                  color="green"
+                />
+                <TransformInput
+                  axis="z"
+                  value={selectedObject.position?.z || 0}
+                  onChange={(value) => handlePositionChange("z", value)}
+                  color="blue"
+                />
+              </TransformSection>
 
-            {/* Rotation */}
-            <TransformSection
-              title="Rotation"
-              onReset={() => {
-                if (currentScene.id) {
+              {/* Rotation */}
+              <TransformSection
+                title="Rotation"
+                onReset={() =>
                   updateObject(currentScene.id, selectedObject.id, {
                     rotation: { x: 0, y: 0, z: 0 },
-                  });
+                  })
                 }
-              }}
-            >
-              <TransformInput
-                axis="x"
-                value={selectedObject.rotation?.x || 0}
-                onChange={(value) => handleRotationChange("x", value)}
-                color="red"
-              />
-              <TransformInput
-                axis="y"
-                value={selectedObject.rotation?.y || 0}
-                onChange={(value) => handleRotationChange("y", value)}
-                color="green"
-              />
-              <TransformInput
-                axis="z"
-                value={selectedObject.rotation?.z || 0}
-                onChange={(value) => handleRotationChange("z", value)}
-                color="blue"
-              />
-            </TransformSection>
+              >
+                <TransformInput
+                  axis="x"
+                  value={selectedObject.rotation?.x || 0}
+                  onChange={(value) => handleRotationChange("x", value)}
+                  color="red"
+                />
+                <TransformInput
+                  axis="y"
+                  value={selectedObject.rotation?.y || 0}
+                  onChange={(value) => handleRotationChange("y", value)}
+                  color="green"
+                />
+                <TransformInput
+                  axis="z"
+                  value={selectedObject.rotation?.z || 0}
+                  onChange={(value) => handleRotationChange("z", value)}
+                  color="blue"
+                />
+              </TransformSection>
 
-            {/* Scale */}
-            <TransformSection
-              title="Scale"
-              onReset={() => {
-                if (currentScene.id) {
+              {/* Scale */}
+              <TransformSection
+                title="Scale"
+                onReset={() =>
                   updateObject(currentScene.id, selectedObject.id, {
                     scale: { x: 1, y: 1, z: 1 },
-                  });
+                  })
                 }
-              }}
-            >
-              <TransformInput
-                axis="x"
-                value={selectedObject.scale?.x || 1}
-                onChange={(value) => handleScaleChange("x", value)}
-                color="red"
-                step={0.1}
-              />
-              <TransformInput
-                axis="y"
-                value={selectedObject.scale?.y || 1}
-                onChange={(value) => handleScaleChange("y", value)}
-                color="green"
-                step={0.1}
-              />
-              <TransformInput
-                axis="z"
-                value={selectedObject.scale?.z || 1}
-                onChange={(value) => handleScaleChange("z", value)}
-                color="blue"
-                step={0.1}
-              />
-            </TransformSection>
-          </div>
-        </div>
+                extraControls={
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleScaleLink();
+                    }}
+                    className="p-1 rounded hover:bg-slate-700/50 transition-colors"
+                    title={
+                      scaleLinked ? "Unlink scale values" : "Link scale values"
+                    }
+                  >
+                    {scaleLinked ? (
+                      <Link className="w-3 h-3 text-blue-400" />
+                    ) : (
+                      <Unlink className="w-3 h-3 text-slate-400" />
+                    )}
+                  </button>
+                }
+              >
+                <TransformInput
+                  axis="x"
+                  value={selectedObject.scale?.x || 1}
+                  onChange={(value) => handleScaleChange("x", value)}
+                  color="red"
+                  step={0.1}
+                />
+                <TransformInput
+                  axis="y"
+                  value={selectedObject.scale?.y || 1}
+                  onChange={(value) => handleScaleChange("y", value)}
+                  color="green"
+                  step={0.1}
+                  disabled={scaleLinked}
+                />
+                <TransformInput
+                  axis="z"
+                  value={selectedObject.scale?.z || 1}
+                  onChange={(value) => handleScaleChange("z", value)}
+                  color="blue"
+                  step={0.1}
+                  disabled={scaleLinked}
+                />
+              </TransformSection>
+            </div>
+          </motion.div>
+        </AnimatePresence>
       )}
     </div>
   );
