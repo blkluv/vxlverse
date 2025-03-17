@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Play, Settings, Share2 } from "lucide-react";
+import { ChevronLeft, Play, Settings, Share2 } from "lucide-react";
 import { Tooltip } from "../UI/Tooltip";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEditorStore } from "../../stores/editorStore";
 import { useGame } from "../../hooks/useGame";
 import { ShortcutsInfo } from "./ShortcutsInfo";
@@ -25,11 +25,17 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
       <div className="flex items-center justify-between px-2 h-10">
         {/* Left side - Logo and title */}
         <div className="flex items-center">
-          <img
-            src="/icons/large-logo.png"
-            alt="VXLverse"
-            className="w-8 mr-4 border-r border-slate-800 pr-2"
-          />
+          <Link to="/">
+            <img
+              src="/icons/large-logo.png"
+              alt="VXLverse"
+              className="w-8 mr-4 border-r border-slate-800 pr-2"
+            />
+          </Link>
+          <Link to="/">
+            <ChevronLeft className="w-4 h-4 mr-2" />
+            Back
+          </Link>
           <span className="text-white text-sm font-medium">{game?.name}</span>
         </div>
 

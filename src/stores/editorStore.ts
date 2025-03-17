@@ -8,13 +8,17 @@ import { pb } from "../lib/pocketbase";
 const DEFAULT_SCENES = [] as Scene[];
 
 // Helper function to create a new scene with default values
-const createDefaultScene = (name: string, id: string): Scene => ({
+const createDefaultScene = (
+  name: string,
+  id: string,
+  objects: GameObject[] = []
+): Scene => ({
   id,
   name,
   showGrid: true,
   gridSize: 1,
   snapPrecision: 0.1,
-  objects: [],
+  objects,
   environment: "sunset",
   background: "environment",
   ambientLight: 0.5,
@@ -83,7 +87,7 @@ export interface EditorState {
   setShowGrid: (show: boolean) => void;
   setGridSize: (size: number) => void;
   setSnapPrecision: (precision: number) => void;
-  createNewScene: (name: string) => void;
+  createNewScene: (name: string, objects?: GameObject[]) => void;
   setIsTransforming: (isTransforming: boolean) => void;
   setFocusOnObject: (focus: boolean) => void;
 }
@@ -290,9 +294,9 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
       toast.info(`Snap precision set to ${precision}`);
     }
   },
-  createNewScene: (name) => {
+  createNewScene: (name, objects) => {
     const id = crypto.randomUUID();
-    const newScene = createDefaultScene(name, id);
+    const newScene = createDefaultScene(name, id, objects);
     set((state) => ({
       brushActive: false,
       brushTemplate: null,

@@ -58,7 +58,7 @@ export function SceneSelector() {
               : "bg-transparent text-slate-400 hover:text-white hover:bg-slate-800/30"
           }`}
         >
-          <span className="truncate text-[10px]">{scene.name}</span>
+          <span className="truncate text-[10px] mr-auto">{scene.name}</span>
           <Trash
             size={12}
             className="ml-2  min-w-6 text-slate-500 hover:text-red-500"

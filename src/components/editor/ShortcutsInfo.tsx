@@ -49,6 +49,7 @@ export function ShortcutsInfo() {
         { key: "W", description: "Translate tool" },
         { key: "E", description: "Rotate tool" },
         { key: "R", description: "Scale tool" },
+        { key: "B", description: "Brush tool" },
       ],
     },
     {
@@ -66,7 +67,8 @@ export function ShortcutsInfo() {
       title: "Object Management",
       shortcuts: [
         { key: "D", description: "Duplicate object" },
-        { key: "M", description: "Add new object" },
+        { key: "O", description: "Add new object" },
+        { key: "N", description: "New scene" },
         { key: "Backspace", description: "Delete selected object" },
         { key: "K", description: "Select next object" },
         { key: "J", description: "Select previous object" },
@@ -78,6 +80,7 @@ export function ShortcutsInfo() {
         { key: "1", description: "Scene panel" },
         { key: "2", description: "Properties panel" },
         { key: "3", description: "Quest panel" },
+        { key: "?", description: "Toggle shortcuts panel" },
       ],
     },
   ];
@@ -105,7 +108,7 @@ export function ShortcutsInfo() {
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
-              className="bg-gradient-to-b from-slate-900 to-slate-800 border border-slate-700/80 lg shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-auto p-6"
+              className="bg-gradient-to-b from-slate-900 to-slate-800 border border-slate-700/80 lg shadow-2xl max-w-3xl w-full max-h-[85vh] overflow-auto p-6"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-4">

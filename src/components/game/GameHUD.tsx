@@ -1,6 +1,7 @@
 import { Coins } from "lucide-react";
 import { useGameStore } from "../../stores/gameStore";
 import { useSound } from "../../hooks/useSound";
+import { Link } from "react-router-dom";
 
 export function GameHUD() {
   const { playSound } = useSound();
@@ -41,6 +42,17 @@ export function GameHUD() {
 
       {/* Bottom row with buttons */}
       <div className="flex text-xs justify-end gap-1.5">
+        <Link to="/">
+          <button
+            onClick={() => {
+              playSound("select");
+              setMapOpen(true);
+            }}
+            className="relative z-[9999] bg-[#2A2A2A] p-1.5 border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black hover:bg-[#3A3A3A] active:translate-y-[2px] active:translate-x-[2px] active:shadow-none transition-all"
+          >
+            <span className="text-[#7FE4FF] font-bold">🏠</span>
+          </button>
+        </Link>
         <button
           onClick={() => {
             playSound("select");
@@ -50,15 +62,7 @@ export function GameHUD() {
         >
           <span className="text-[#7FE4FF] font-bold">📋</span>
         </button>
-        <button
-          onClick={() => {
-            playSound("select");
-            setMapOpen(true);
-          }}
-          className="relative z-[9999] bg-[#2A2A2A] p-1.5 border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black hover:bg-[#3A3A3A] active:translate-y-[2px] active:translate-x-[2px] active:shadow-none transition-all"
-        >
-          <span className="text-[#7FE4FF] font-bold">🗺️</span>
-        </button>
+
         <button
           onClick={() => {
             playSound("select");

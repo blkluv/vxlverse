@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
+import { Suspense, useState } from "react";
 import { X, Search, FileSymlink } from "lucide-react";
 import { useEditorStore } from "../../stores/editorStore";
-import { pb } from "../../lib/pocketbase";
-import useSWR from "swr";
 import { ModalPortal } from "../UI/ModalPortal";
 import { Canvas } from "@react-three/fiber";
 import {
@@ -10,12 +8,10 @@ import {
   Grid,
   PerspectiveCamera,
   Environment,
-  Center,
-  Box,
-  Html,
-  Float,
 } from "@react-three/drei";
-import { GameObject } from "../../types";
+import { useTemplates } from "../../hooks/useTemplates";
+import { EditorGameObject } from "./EditorGameObject";
+import { Object3D } from "three";
 
 interface NewSceneModalProps {
   onClose: () => void;
@@ -29,102 +25,30 @@ export function NewSceneModal({ onClose }: NewSceneModalProps) {
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
-  const [previewObjects, setPreviewObjects] = useState<GameObject[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>("all");
 
-  // Fetch templates from PocketBase
-  const fetcher = async () => {
-    const response = await pb.collection("templates").getList(1, 50, {
-      sort: "-created",
-    });
-    return response.items;
-  };
-
-  const { data: templates, error, isLoading } = useSWR("templates", fetcher);
-
-  // Filter templates based on search query and active filter
-  const filteredTemplates = templates?.filter((template: any) => {
-    // First apply search query filter
-    const matchesSearch = template.name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-
-    // Then apply category filter
-    if (activeFilter === "all") return matchesSearch;
-    if (activeFilter === "most-used") {
-      // Assuming templates have a 'usageCount' property, or we could use creation date as proxy
-      return matchesSearch && (template.usageCount > 5 || template.featured);
-    }
-    if (activeFilter === "recent") {
-      // Filter for templates created in the last 30 days
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      return matchesSearch && new Date(template.created) >= thirtyDaysAgo;
-    }
-    // Filter by category
-    return matchesSearch && template.category === activeFilter;
-  });
-
-  // When a template is selected, parse its data for preview
-  useEffect(() => {
-    if (selectedTemplate && templates) {
-      try {
-        const template = templates.find((t: any) => t.id === selectedTemplate);
-        if (template) {
-          const templateData = JSON.parse(template.template);
-
-          if (Array.isArray(templateData)) {
-            setPreviewObjects(templateData);
-          } else {
-            setPreviewObjects([templateData]);
-          }
-        }
-      } catch (error) {
-        console.error("Error parsing template data:", error);
-        setPreviewObjects([]);
-      }
-    } else {
-      setPreviewObjects([]);
-    }
-  }, [selectedTemplate, templates]);
+  const { templates, isLoading, error } = useTemplates();
 
   const handleCreateScene = () => {
     if (!sceneName.trim()) return;
 
     // Create a new scene
-    const newSceneId = crypto.randomUUID();
-    createNewScene(sceneName);
-
-    // Add objects from template if selected
-    if (selectedTemplate) {
-      previewObjects.forEach((obj: GameObject) => {
-        addObject(newSceneId, obj);
-      });
-    }
+    const templateObjects = selectTemplate?.template?.map((obj) => {
+      const uuid = new Object3D().uuid;
+      // Ensure the object has a valid ID
+      return {
+        ...obj,
+        id: uuid,
+      };
+    });
+    createNewScene(sceneName, templateObjects);
 
     onClose();
   };
 
-  // 3D preview components
-  const TemplateObject = ({ object }: { object: GameObject }) => {
-    const { position, rotation, scale, type } = object;
-
-    // Default position, rotation, scale
-    const pos = [position?.x || 0, position?.y || 0, position?.z || 0];
-    const rot = [rotation?.x || 0, rotation?.y || 0, rotation?.z || 0];
-    const scl = [scale?.x || 1, scale?.y || 1, scale?.z || 1];
-
-    return (
-      <Box
-        args={[1, 1, 1]}
-        position={pos as [number, number, number]}
-        rotation={rot as [number, number, number]}
-        scale={scl as [number, number, number]}
-        castShadow
-        receiveShadow
-      ></Box>
-    );
-  };
+  const selectTemplate = templates?.find(
+    (template) => template.id === selectedTemplate
+  );
 
   return (
     <ModalPortal>
@@ -241,13 +165,13 @@ export function NewSceneModal({ onClose }: NewSceneModalProps) {
                 <div className="text-center py-4 text-red-400 text-sm">
                   Error loading templates
                 </div>
-              ) : filteredTemplates?.length === 0 ? (
+              ) : templates?.length === 0 ? (
                 <div className="text-center py-4 text-slate-400 text-sm">
                   No templates found
                 </div>
               ) : (
                 <div className="space-y-2">
-                  {filteredTemplates?.map((template: any) => (
+                  {templates?.map((template: any) => (
                     <div
                       key={template.id}
                       className={`p-2.5 border  cursor-pointer transition-all ${
@@ -307,7 +231,7 @@ export function NewSceneModal({ onClose }: NewSceneModalProps) {
                 gl={{ antialias: true }}
               >
                 <PerspectiveCamera makeDefault position={[5, 5, 5]} fov={50} />
-                <OrbitControls enableDamping autoRotate />
+                <OrbitControls enableDamping />
 
                 {/* Environment */}
                 <Environment preset="city" background={false} />
@@ -332,31 +256,11 @@ export function NewSceneModal({ onClose }: NewSceneModalProps) {
                   position={[0, -0.01, 0]}
                 />
 
-                {/* Objects */}
-                {previewObjects.length > 0 ? (
-                  <Center>
-                    {previewObjects.map((obj, index) => (
-                      <TemplateObject key={obj.id || index} object={obj} />
-                    ))}
-                  </Center>
-                ) : (
-                  <Float
-                    speed={1.5}
-                    rotationIntensity={0.2}
-                    floatIntensity={0.5}
-                  >
-                    <Box args={[1, 1, 1]} position={[0, 0.5, 0]} castShadow>
-                      <meshStandardMaterial color="#6366f1" />
-                    </Box>
-                    <Html position={[0, 2, 0]} center>
-                      <div className="px-3 py-1.5 bg-slate-800/80 backdrop-blur-sm text-white text-xs  whitespace-nowrap">
-                        {selectedTemplate
-                          ? "Loading template..."
-                          : "Select a template"}
-                      </div>
-                    </Html>
-                  </Float>
-                )}
+                <Suspense fallback={null}>
+                  {selectTemplate?.template?.map((obj, index) => (
+                    <EditorGameObject isSelected={false} key={index} {...obj} />
+                  ))}
+                </Suspense>
               </Canvas>
             </div>
           </div>
