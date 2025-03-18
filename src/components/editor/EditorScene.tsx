@@ -4,18 +4,14 @@ import {
   Environment,
   Grid,
   Sky,
-  Sphere,
   Cloud,
   Stars,
-  Gltf,
   GizmoHelper,
   GizmoViewport,
 } from "@react-three/drei";
-import { GameObject } from "../GameObjectWrapper";
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { Scene as SceneType } from "../../types";
-import { toast } from "../UI/Toast";
 import { EditorGameObject } from "./EditorGameObject";
 
 interface EditorSceneProps {
@@ -121,7 +117,6 @@ export function EditorScene({
         placeObjectWithBrush(currentSceneId, position);
 
         // Show success toast
-        toast.success("Object placed successfully");
       }
     } else {
       // Check if we're currently transforming an object

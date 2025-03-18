@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { Button } from "../../UI/Button";
 import { useGLTF } from "@react-three/drei";
-import toast from "react-hot-toast";
 import { GLTF } from "three-stdlib";
 import { useEditorStore } from "../../../stores/editorStore";
 
@@ -154,8 +153,6 @@ export function AnimationsPanel() {
       updateObject(currentScene.id, selectedObject.id, {
         animations: updatedAnimations,
       });
-
-      toast(`${animationName} set as ${state} animation`);
     }
   };
 
@@ -166,8 +163,6 @@ export function AnimationsPanel() {
       updateObject(currentScene.id, selectedObject.id, {
         activeAnimation: animationName,
       });
-
-      toast(`Previewing ${animationName}`);
     }
   };
 

@@ -9,6 +9,7 @@ import { useSound } from "../../hooks/useSound";
 import { useEnemyStore } from "../../stores/enemyStore";
 import { Enemy } from "./Enemy";
 import { Fireball } from "./FireBall";
+import { useParams } from "react-router-dom";
 
 interface SceneProps {
   sceneData?: SceneType;
@@ -28,17 +29,17 @@ function Floor() {
   );
 }
 
-export function GameScene({ sceneData, isPreview }: SceneProps) {
+export function GameScene({ sceneData }: SceneProps) {
   const { scene } = useThree();
   const { playSound, stopSound } = useSound();
   const enemies = useEnemyStore((state) => state.enemies);
   const startSpawning = useEnemyStore((state) => state.startSpawning);
   const stopSpawning = useEnemyStore((state) => state.stopSpawning);
-
+  const { debug: isPreview } = useParams<{ debug: string }>();
   useEffect(() => {
     stopSound("background");
     playSound("background");
-  }, [sceneData?.fog, scene, playSound, stopSound]);
+  }, [scene, playSound, stopSound]);
 
   useEffect(() => {
     if (!sceneData?.farmZone?.enabled) return;
@@ -63,7 +64,7 @@ export function GameScene({ sceneData, isPreview }: SceneProps) {
       <ambientLight intensity={sceneData.ambientLight || 0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
       <Stars />
-      <Physics debug={isPreview}>
+      <Physics debug={true}>
         <Floor />
         <Fireball />
 

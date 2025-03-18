@@ -32,10 +32,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
               className="w-8 mr-4 border-r border-slate-800 pr-2"
             />
           </Link>
-          <Link to="/">
-            <ChevronLeft className="w-4 h-4 mr-2" />
-            Back
-          </Link>
+
           <span className="text-white text-sm font-medium">{game?.name}</span>
         </div>
 
@@ -56,7 +53,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
           <Tooltip content={"Play Game"} position="bottom">
             <a
               target="_blank"
-              href={`/play/${id}`}
+              href={`/play/${id}?debug=true`}
               className={`flex items-center justify-center p-1.5 sm transition-colors ${"bg-green-500/20 text-green-400 hover:bg-green-500/30"}`}
             >
               <Play className="h-4 w-4" />

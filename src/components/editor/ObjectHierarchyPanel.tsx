@@ -20,7 +20,6 @@ import {
 import { useEditorStore } from "../../stores/editorStore";
 import { Tooltip } from "../UI/Tooltip";
 import { pb } from "../../lib/pocketbase";
-import { toast } from "../UI/Toast";
 import { Input, cn } from "../UI";
 
 interface ObjectHierarchyPanelProps {
@@ -139,14 +138,12 @@ export function ObjectHierarchyPanel(props: { className?: string }) {
   const saveTemplate = () => {
     const userId = pb.authStore.model?.id;
     if (!userId) {
-      toast.error("You must be logged in to save templates");
       return;
     }
 
     if (isSavingHierarchy && scene) {
       // Save hierarchy template
       if (!scene.objects || scene.objects.length === 0) {
-        toast.error("Cannot save an empty hierarchy as template");
         return;
       }
 
@@ -159,13 +156,11 @@ export function ObjectHierarchyPanel(props: { className?: string }) {
       pb.collection("templates")
         .create(templateData)
         .then(() => {
-          toast.success("Hierarchy template saved");
           showSaveAnimation();
           setShowModal(false);
         })
         .catch((error) => {
           console.error("Failed to save hierarchy template:", error);
-          toast.error("Failed to save hierarchy template");
         });
     } else if (objectToSave) {
       // Save single object template
@@ -179,13 +174,11 @@ export function ObjectHierarchyPanel(props: { className?: string }) {
       pb.collection("templates")
         .create(templateData)
         .then(() => {
-          toast.success(`Template saved: ${templateName}`);
           showSaveAnimation();
           setShowModal(false);
         })
         .catch((error) => {
           console.error("Failed to save template:", error);
-          toast.error("Failed to save template");
         });
     }
   };

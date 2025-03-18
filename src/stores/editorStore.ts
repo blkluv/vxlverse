@@ -1,8 +1,6 @@
 import { create } from "zustand";
 import * as THREE from "three";
 import { Scene, GameObject } from "../types";
-import { toast } from "../components/UI/Toast";
-import { useParams } from "react-router-dom";
 import { pb } from "../lib/pocketbase";
 
 const DEFAULT_SCENES = [] as Scene[];
@@ -41,6 +39,13 @@ const createDefaultScene = (
   },
 });
 
+// Define a type for actions that can be undone/redone
+type HistoryAction = {
+  type: string;
+  payload: any;
+  undo: () => void;
+};
+
 export interface EditorState {
   scenes: Scene[];
   currentSceneId: string | null;
@@ -56,6 +61,16 @@ export interface EditorState {
   snapPrecision: number;
   isTransforming: boolean;
   focusOnObject: boolean;
+
+  // History tracking for undo/redo
+  history: HistoryAction[];
+  historyIndex: number;
+  isUndoRedoOperation: boolean;
+
+  // Undo/redo methods
+  undo: () => void;
+  redo: () => void;
+  addToHistory: (action: HistoryAction) => void;
 
   addScene: (scene: Scene) => void;
   removeScene: (id: string) => void;
@@ -108,7 +123,89 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
   isTransforming: false,
   focusOnObject: false,
 
+  // History tracking for undo/redo
+  history: [] as HistoryAction[],
+  historyIndex: -1,
+  isUndoRedoOperation: false,
+
+  // Add to history method
+  addToHistory: (action) => {
+    if (get().isUndoRedoOperation) return;
+
+    const currentIndex = get().historyIndex;
+    const newHistory = [...get().history.slice(0, currentIndex + 1), action];
+
+    set({
+      history: newHistory,
+      historyIndex: currentIndex + 1,
+    });
+  },
+
+  // Undo method
+  undo: () => {
+    const { historyIndex, history } = get();
+
+    if (historyIndex >= 0) {
+      const action = history[historyIndex];
+
+      set({ isUndoRedoOperation: true });
+      action.undo();
+      set({
+        historyIndex: Math.max(0, historyIndex - 1),
+        isUndoRedoOperation: false,
+      });
+    } else {
+    }
+  },
+
+  // Redo method
+  redo: () => {
+    const { historyIndex, history } = get();
+
+    if (historyIndex < history.length - 1) {
+      const nextAction = history[historyIndex + 1];
+
+      set({ isUndoRedoOperation: true });
+      // For redo, we need to re-apply the action
+      if (nextAction.type === "ADD_SCENE") {
+        get().addScene(nextAction.payload);
+      } else if (nextAction.type === "REMOVE_SCENE") {
+        get().removeScene(nextAction.payload);
+      } else if (nextAction.type === "UPDATE_SCENE") {
+        get().updateScene(nextAction.payload.id, nextAction.payload.updates);
+      } else if (nextAction.type === "ADD_OBJECT") {
+        get().addObject(nextAction.payload.sceneId, nextAction.payload.object);
+      } else if (nextAction.type === "UPDATE_OBJECT") {
+        get().updateObject(
+          nextAction.payload.sceneId,
+          nextAction.payload.objectId,
+          nextAction.payload.updates
+        );
+      } else if (nextAction.type === "REMOVE_OBJECT") {
+        get().removeObject(
+          nextAction.payload.sceneId,
+          nextAction.payload.objectId
+        );
+      } else if (nextAction.type === "DUPLICATE_OBJECT") {
+        get().duplicateObject(
+          nextAction.payload.sceneId,
+          nextAction.payload.objectId
+        );
+      } else if (nextAction.type === "CHANGE_SCENE") {
+        get().setCurrentScene(nextAction.payload.id);
+      }
+
+      set({
+        historyIndex: historyIndex + 1,
+        isUndoRedoOperation: false,
+      });
+    } else {
+    }
+  },
+
   addScene: (scene) => {
+    const prevScenes = [...get().scenes];
+
     set((state) => {
       const exists = state.scenes.some((s) => s.id === scene.id);
       if (!exists) {
@@ -121,10 +218,31 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
       }
       return state;
     });
-    toast.success(`Scene added: ${scene.name}`);
+
+    // Add to history if not an undo/redo operation
+    if (!get().isUndoRedoOperation) {
+      get().addToHistory({
+        type: "ADD_SCENE",
+        payload: scene,
+        undo: () => {
+          set({
+            scenes: prevScenes,
+            currentSceneId:
+              prevScenes.length > 0
+                ? prevScenes[prevScenes.length - 1].id
+                : null,
+          });
+        },
+      });
+    }
   },
   setBrushActive: (active: boolean) => set(() => ({ brushActive: active })),
-  removeScene: (id) =>
+  removeScene: (id) => {
+    const prevScenes = [...get().scenes];
+    const sceneToRemove = prevScenes.find((s) => s.id === id);
+    const prevCurrentSceneId = get().currentSceneId;
+    const prevSelectedObjectId = get().selectedObjectId;
+
     set((state) => {
       const newScenes = state.scenes.filter((s) => s.id !== id);
 
@@ -135,15 +253,66 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
         currentSceneId: null,
         selectedObjectId: null,
       };
-    }),
-  updateScene: (id, updates) =>
+    });
+
+    // Add to history if not an undo/redo operation
+    if (!get().isUndoRedoOperation && sceneToRemove) {
+      get().addToHistory({
+        type: "REMOVE_SCENE",
+        payload: id,
+        undo: () => {
+          set({
+            scenes: prevScenes,
+            currentSceneId: prevCurrentSceneId,
+            selectedObjectId: prevSelectedObjectId,
+          });
+        },
+      });
+    }
+  },
+  updateScene: (id, updates) => {
+    const prevScenes = [...get().scenes];
+    const sceneToUpdate = prevScenes.find((s) => s.id === id);
+
     set((state) => ({
       scenes: state.scenes.map((scene) =>
         scene.id === id ? { ...scene, ...updates } : scene
       ),
-    })),
-  setCurrentScene: (id) => set({ currentSceneId: id }),
-  addObject: (sceneId, object) =>
+    }));
+
+    // Add to history if not an undo/redo operation
+    if (!get().isUndoRedoOperation && sceneToUpdate) {
+      get().addToHistory({
+        type: "UPDATE_SCENE",
+        payload: { id, updates },
+        undo: () => {
+          set({
+            scenes: prevScenes,
+          });
+        },
+      });
+    }
+  },
+  setCurrentScene: (id) => {
+    const prevSceneId = get().currentSceneId;
+
+    set({ currentSceneId: id });
+
+    // Add to history if not an undo/redo operation
+    if (!get().isUndoRedoOperation) {
+      get().addToHistory({
+        type: "CHANGE_SCENE",
+        payload: { id, prevId: prevSceneId },
+        undo: () => {
+          set({ currentSceneId: prevSceneId });
+        },
+      });
+    }
+  },
+  addObject: (sceneId, object) => {
+    const prevScenes = [...get().scenes];
+    const prevSelectedObjectId = get().selectedObjectId;
+
     set((state) => ({
       scenes: state.scenes.map((scene) =>
         scene.id === sceneId
@@ -151,8 +320,25 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
           : scene
       ),
       selectedObjectId: object.id,
-    })),
-  updateObject: (sceneId, objectId, updates) =>
+    }));
+
+    // Add to history if not an undo/redo operation
+    if (!get().isUndoRedoOperation) {
+      get().addToHistory({
+        type: "ADD_OBJECT",
+        payload: { sceneId, object },
+        undo: () => {
+          set({
+            scenes: prevScenes,
+            selectedObjectId: prevSelectedObjectId,
+          });
+        },
+      });
+    }
+  },
+  updateObject: (sceneId, objectId, updates) => {
+    const prevScenes = [...get().scenes];
+
     set((state) => ({
       scenes: state.scenes.map((scene) =>
         scene.id === sceneId
@@ -164,8 +350,27 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
             }
           : scene
       ),
-    })),
-  removeObject: (sceneId, objectId) =>
+    }));
+
+    // Add to history if not an undo/redo operation
+    if (!get().isUndoRedoOperation) {
+      get().addToHistory({
+        type: "UPDATE_OBJECT",
+        payload: { sceneId, objectId, updates },
+        undo: () => {
+          set({
+            scenes: prevScenes,
+          });
+        },
+      });
+    }
+  },
+  removeObject: (sceneId, objectId) => {
+    const prevScenes = [...get().scenes];
+    const prevSelectedObjectId = get().selectedObjectId;
+    const scene = prevScenes.find((s) => s.id === sceneId);
+    const objectToRemove = scene?.objects.find((o) => o.id === objectId);
+
     set((state) => ({
       brushActive: false,
       brushTemplate: null,
@@ -179,8 +384,26 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
       ),
       selectedObjectId:
         state.selectedObjectId === objectId ? null : state.selectedObjectId,
-    })),
-  duplicateObject: (sceneId, objectId) =>
+    }));
+
+    // Add to history if not an undo/redo operation
+    if (!get().isUndoRedoOperation && objectToRemove) {
+      get().addToHistory({
+        type: "REMOVE_OBJECT",
+        payload: { sceneId, objectId },
+        undo: () => {
+          set({
+            scenes: prevScenes,
+            selectedObjectId: prevSelectedObjectId,
+          });
+        },
+      });
+    }
+  },
+  duplicateObject: (sceneId, objectId) => {
+    const prevScenes = [...get().scenes];
+    const prevSelectedObjectId = get().selectedObjectId;
+
     set((state) => {
       const scene = state.scenes.find((s) => s.id === sceneId);
       if (!scene) return state;
@@ -208,11 +431,26 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
         ),
         selectedObjectId: newObject.id,
       };
-    }),
+    });
+
+    // Add to history if not an undo/redo operation
+    if (!get().isUndoRedoOperation) {
+      get().addToHistory({
+        type: "DUPLICATE_OBJECT",
+        payload: { sceneId, objectId },
+        undo: () => {
+          set({
+            scenes: prevScenes,
+            selectedObjectId: prevSelectedObjectId,
+          });
+        },
+      });
+    }
+  },
   setSelectedObject: (id) =>
-    set({
+    set(() => ({
       selectedObjectId: id,
-    }),
+    })),
   setShowModelSelector: (show) => set({ showModelSelector: show }),
   setEditingSceneName: (id) => set({ editingSceneName: id }),
   updateSceneName: (id, name) =>
@@ -227,16 +465,16 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
     const currentObject = get()
       .scenes.find((s) => s.id === selectedId)
       ?.objects.find((o) => o.id === selectedId);
-    set((state) => ({
+    set(() => ({
       brushActive: active,
       // When turning off brush mode, clear the brush template
       brushTemplate: active ? currentObject : null,
     }));
   },
   setBrushTemplate: (object) => {
-    set({
+    set(() => ({
       brushTemplate: object,
-    });
+    }));
   },
   setBrushSize: (size) =>
     set(() => ({
@@ -271,27 +509,23 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
   toggleGridSnap: () => {
     const newState = !get().gridSnap;
     set({ gridSnap: newState });
-    toast.info(`Grid snap ${newState ? "enabled" : "disabled"}`);
   },
   setGridSnap: (enabled) => set({ gridSnap: enabled }),
   toggleGrid: () => {
     const newState = !get().showGrid;
     set({ showGrid: newState });
-    toast.info(`Grid ${newState ? "visible" : "hidden"}`);
   },
   setShowGrid: (show) => set({ showGrid: show }),
   setGridSize: (size) => {
     const currentSceneId = get().currentSceneId;
     if (currentSceneId) {
       get().updateScene(currentSceneId, { gridSize: size });
-      toast.info(`Grid size set to ${size}`);
     }
   },
   setSnapPrecision: (precision) => {
     const currentSceneId = get().currentSceneId;
     if (currentSceneId) {
       get().updateScene(currentSceneId, { snapPrecision: precision });
-      toast.info(`Snap precision set to ${precision}`);
     }
   },
   createNewScene: (name, objects) => {

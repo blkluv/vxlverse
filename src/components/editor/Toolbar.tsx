@@ -13,11 +13,13 @@ import {
   Eye,
   Gauge,
   Expand,
+  Undo,
+  Redo,
 } from "lucide-react";
 import { Tooltip } from "../UI/Tooltip";
 import { useEditorStore } from "../../stores/editorStore";
 import { useKeyboardControls } from "@react-three/drei";
-import toast from "react-hot-toast";
+import { cn } from "../UI";
 
 type ToolbarProps = {
   setShowMetrics: (show: boolean | ((s: boolean) => boolean)) => void;
@@ -37,6 +39,10 @@ export const Toolbar: React.FC<ToolbarProps> = ({
     gridSnap,
     toggleGridSnap,
     showGrid,
+    undo,
+    redo,
+    historyIndex,
+    history,
     currentSceneId,
     toggleGrid,
     setSelectedObject,
@@ -199,7 +205,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({
         if (pressed && selectedObjectId && currentSceneId) {
           console.debug("Delete action triggered");
           removeObject(currentSceneId, selectedObjectId);
-          toast("Object deleted");
         }
       }
     );
@@ -395,7 +400,32 @@ export const Toolbar: React.FC<ToolbarProps> = ({
           <Eye className="w-4 h-4" />
         </button>
       </Tooltip>
-
+      <Tooltip position="right" content="Undo (Z)">
+        <button
+          disabled={historyIndex < 0}
+          onClick={undo}
+          className={cn(
+            `w-10  h-10 flex items-center justify-center transition-all duration-200 text-slate-400 hover:bg-slate-700/40 hover:text-white`,
+            historyIndex < 0 &&
+              "opacity-30 hover:bg-transparent hover:text-slate-400"
+          )}
+        >
+          <Undo className="w-4 h-4" />
+        </button>
+      </Tooltip>
+      <Tooltip position="right" content="Redo (Y)">
+        <button
+          disabled={historyIndex === history.length - 1}
+          onClick={redo}
+          className={cn(
+            `w-10 h-10 flex items-center justify-center transition-all duration-200 text-slate-400 hover:bg-slate-700/40 hover:text-white`,
+            historyIndex === history.length - 1 &&
+              "opacity-30 hover:bg-transparent hover:text-slate-400"
+          )}
+        >
+          <Redo className="w-4 h-4" />
+        </button>
+      </Tooltip>
       <Tooltip position="right" content="Metrics">
         <button
           onClick={() => setShowMetrics(!showMetrics)}

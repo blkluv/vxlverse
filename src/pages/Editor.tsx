@@ -55,7 +55,7 @@ export function Editor() {
 }
 
 export function _Editor() {
-  const { scenes, currentSceneId, gridSnap, showGrid, createNewScene } =
+  const { scenes, currentSceneId, gridSnap, showGrid, createNewScene, undo, redo } =
     useEditorStore();
   const [showMetrics, setShowMetrics] = useState(false);
   const [forceUpdate, setForceUpdate] = useState(0);
@@ -73,6 +73,34 @@ export function _Editor() {
       window.removeEventListener("resize", handleResize);
     };
   }, [scenes]);
+  
+  // Handle keyboard shortcuts for undo/redo
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Check if the key is pressed with the command/ctrl key
+      const isCommandOrCtrl = e.metaKey || e.ctrlKey;
+      
+      if (isCommandOrCtrl && e.key === 'z') {
+        e.preventDefault();
+        if (e.shiftKey) {
+          // Command/Ctrl + Shift + Z = Redo
+          redo();
+        } else {
+          // Command/Ctrl + Z = Undo
+          undo();
+        }
+      } else if (isCommandOrCtrl && e.key === 'y') {
+        // Command/Ctrl + Y = Redo (alternative)
+        e.preventDefault();
+        redo();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [undo, redo]);
 
   // Create a default scene if none exists
   useEffect(() => {

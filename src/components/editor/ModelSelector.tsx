@@ -16,7 +16,9 @@ import {
 } from "lucide-react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
+  Center,
   OrbitControls,
+  OrbitControlsChangeEvent,
   Stage,
   useAnimations,
   useGLTF,
@@ -394,6 +396,7 @@ export function ModelSelector() {
     useEditorStore.getState().addObject(currentSceneId, newObject);
     setShowModelSelector(false);
   };
+  const orbitControlsRef = useRef<typeof OrbitControls>(null);
   if (!showModelSelector) return null;
   return (
     <Portal>
@@ -583,24 +586,35 @@ export function ModelSelector() {
             </button>
             {selectedModel ? (
               <>
-                <Canvas shadows camera={{ position: [0, 0, 4], fov: 50 }}>
+                <Canvas
+                  key={selectedModel.id}
+                  shadows
+                  camera={{ position: [0, 0, 4], fov: 50 }}
+                >
                   <axesHelper position={[0, -1, 0]} />
                   <gridHelper position={[0, -1, 0]} />
+                  <ambientLight />
                   <Stage environment="city" intensity={0.6}>
-                    <Suspense fallback={null}>
-                      {selectedModel?.animated ? (
-                        <AnimatedModel
-                          url={selectedModel.glb}
-                          isPlaying={isAnimationPlaying}
-                          selectedAnimation={selectedAnimation}
-                          onAnimationsLoad={setAvailableAnimations}
-                        />
-                      ) : (
-                        <Model url={selectedModel.glb} />
-                      )}
-                    </Suspense>
+                    <Center>
+                      <Suspense fallback={null}>
+                        {selectedModel?.animated ? (
+                          <AnimatedModel
+                            url={selectedModel.glb}
+                            isPlaying={isAnimationPlaying}
+                            selectedAnimation={selectedAnimation}
+                            onAnimationsLoad={setAvailableAnimations}
+                          />
+                        ) : (
+                          <Model url={selectedModel.glb} />
+                        )}
+                      </Suspense>
+                    </Center>
                   </Stage>
-                  <OrbitControls />
+                  <OrbitControls
+                    minDistance={0.5}
+                    maxDistance={1000}
+                    ref={orbitControlsRef}
+                  />
                 </Canvas>
 
                 <div className="col-span-2 absolute top-2 left-2 flex items-start justify-between bg-slate-800/30 p-3 ">
