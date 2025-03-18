@@ -1,13 +1,6 @@
 import { useState } from "react";
 import { Scene } from "../../types";
-import {
-  Edit3,
-  Settings,
-  Skull,
-  Minimize,
-  Maximize,
-  Check,
-} from "lucide-react";
+import { Edit3, Settings, Skull, Minimize, Maximize, Check } from "lucide-react";
 import { Input } from "../UI/input";
 import { ObjectHierarchyPanel } from "./ObjectHierarchyPanel";
 import { SoundPanel } from "./properties/sounds";
@@ -17,10 +10,7 @@ interface SceneSettingsPanelProps {
   onChange: (updates: Partial<Scene>) => void;
 }
 
-export function SceneSettingsPanel({
-  scene,
-  onChange,
-}: SceneSettingsPanelProps) {
+export function SceneSettingsPanel({ scene, onChange }: SceneSettingsPanelProps) {
   const [expanded, setExpanded] = useState(true);
   const [showSaveIndicator, setShowSaveIndicator] = useState(false);
 
@@ -97,9 +87,7 @@ export function SceneSettingsPanel({
               </div>
               <div className="flex-grow">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-medium text-slate-300">
-                    Farm Zone
-                  </label>
+                  <label className="text-xs font-medium text-slate-300">Farm Zone</label>
                   <div className="relative inline-block w-7 mr-0.5 align-middle select-none">
                     <input
                       type="checkbox"

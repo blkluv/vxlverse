@@ -1,13 +1,5 @@
 import { useRef, useState, useEffect, useMemo } from "react";
-import {
-  useGLTF,
-  useAnimations,
-  Ring,
-  Html,
-  Sphere,
-  Cylinder,
-} from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useGLTF, useAnimations, Ring, Html, Cylinder } from "@react-three/drei";
 import { Enemy as EnemyType } from "../../types";
 import { useGameStore } from "../../stores/gameStore";
 import { useEnemyStore } from "../../stores/enemyStore";
@@ -92,21 +84,15 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
 
     // Find animations
     const idleAnim = Object.keys(actions).find(
-      (name) =>
-        name.toLowerCase().includes("idle") ||
-        name.toLowerCase().includes("breathing")
+      (name) => name.toLowerCase().includes("idle") || name.toLowerCase().includes("breathing")
     );
 
     const deathAnim = Object.keys(actions).find(
-      (name) =>
-        name.toLowerCase().includes("death") ||
-        name.toLowerCase().includes("dying")
+      (name) => name.toLowerCase().includes("death") || name.toLowerCase().includes("dying")
     );
 
     const hitAnim = Object.keys(actions).find(
-      (name) =>
-        name.toLowerCase().includes("hit") ||
-        name.toLowerCase().includes("impact")
+      (name) => name.toLowerCase().includes("hit") || name.toLowerCase().includes("impact")
     );
 
     // Stop all animations
@@ -158,10 +144,7 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
                   className="h-full transition-all duration-300"
                   style={{
                     width: `${(enemy.health / enemy.maxHealth) * 100}%`,
-                    backgroundColor: getHealthBarColor(
-                      enemy.health,
-                      enemy.maxHealth
-                    ),
+                    backgroundColor: getHealthBarColor(enemy.health, enemy.maxHealth),
                   }}
                 ></div>
               </div>
@@ -186,17 +169,8 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
           {active && (
             <group>
               {/* Glowing ring on the ground */}
-              <Ring
-                args={[2.5, 3, 64]}
-                position={[0, 0.05, 0]}
-                rotation={[-Math.PI / 2, 0, 0]}
-              >
-                <meshBasicMaterial
-                  color={"#ffcc00"}
-                  transparent
-                  opacity={0.7}
-                  toneMapped={false}
-                />
+              <Ring args={[2.5, 3, 64]} position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+                <meshBasicMaterial color={"#ffcc00"} transparent opacity={0.7} toneMapped={false} />
               </Ring>
 
               {/* Pulsing inner ring */}
@@ -227,11 +201,7 @@ export function Enemy({ enemy }: { enemy: EnemyType }) {
           {/* Damage number */}
           {showDamage && (
             <Html
-              position={[
-                (Math.random() - 0.5) * 1.5,
-                enemy.scale * 2 + Math.random() * 1,
-                0,
-              ]}
+              position={[(Math.random() - 0.5) * 1.5, enemy.scale * 2 + Math.random() * 1, 0]}
               center
               sprite
             >

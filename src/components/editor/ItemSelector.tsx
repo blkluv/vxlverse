@@ -1,7 +1,7 @@
 import { GAME_ITEMS, Item } from "../../types";
 import { Check, ChevronDown, Filter, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 
 interface ItemSelectorProps {
@@ -21,17 +21,13 @@ export function ItemSelector({
 }: ItemSelectorProps) {
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState<Item["type"] | "all">("all");
-  const [selectedItems, setSelectedItems] =
-    useState<Item[]>(initialSelectedItems);
+  const [selectedItems, setSelectedItems] = useState<Item[]>(initialSelectedItems);
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState<"name" | "value" | "type">("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   // Extract all unique types from items
-  const types = [
-    "all",
-    ...Array.from(new Set(GAME_ITEMS.map((item) => item.type))),
-  ];
+  const types = ["all", ...Array.from(new Set(GAME_ITEMS.map((item) => item.type)))];
 
   // Filter and sort items
   const filteredItems = GAME_ITEMS.filter((item) => {
@@ -42,15 +38,11 @@ export function ItemSelector({
     return matchesSearch && matchesType;
   }).sort((a, b) => {
     if (sortBy === "name") {
-      return sortOrder === "asc"
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name);
+      return sortOrder === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
     } else if (sortBy === "value") {
       return sortOrder === "asc" ? a.value - b.value : b.value - a.value;
     } else {
-      return sortOrder === "asc"
-        ? a.type.localeCompare(b.type)
-        : b.type.localeCompare(a.type);
+      return sortOrder === "asc" ? a.type.localeCompare(b.type) : b.type.localeCompare(a.type);
     }
   });
 
@@ -135,10 +127,7 @@ export function ItemSelector({
           <div className="mt-3 flex items-center">
             <div className="flex-1 flex flex-wrap gap-1.5">
               {types
-                .slice(
-                  0,
-                  showFilters ? types.length : Math.min(4, types.length)
-                )
+                .slice(0, showFilters ? types.length : Math.min(4, types.length))
                 .map((type, index) => (
                   <button
                     key={type}
@@ -193,9 +182,7 @@ export function ItemSelector({
                           key={option}
                           onClick={() => {
                             if (sortBy === option) {
-                              setSortOrder((prev) =>
-                                prev === "asc" ? "desc" : "asc"
-                              );
+                              setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
                             } else {
                               setSortBy(option);
                               setSortOrder("asc");
@@ -244,8 +231,7 @@ export function ItemSelector({
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {filteredItems.map((item) => {
                 const isSelected = isItemSelected(item.id);
-                const isDisabled =
-                  !isSelected && selectedItems.length >= maxSelections;
+                const isDisabled = !isSelected && selectedItems.length >= maxSelections;
 
                 return (
                   <button
@@ -255,8 +241,8 @@ export function ItemSelector({
                       isSelected
                         ? "bg-blue-500/20 border border-blue-500/30"
                         : isDisabled
-                        ? "bg-slate-700/20 border border-slate-700/30 opacity-50 cursor-not-allowed"
-                        : "bg-slate-700/30 border border-slate-700/50 hover:bg-slate-700/50 hover:border-slate-600"
+                          ? "bg-slate-700/20 border border-slate-700/30 opacity-50 cursor-not-allowed"
+                          : "bg-slate-700/30 border border-slate-700/50 hover:bg-slate-700/50 hover:border-slate-600"
                     } text-left sm`}
                   >
                     <AnimatePresence>
@@ -270,13 +256,9 @@ export function ItemSelector({
                       {item.emoji}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium text-slate-200 truncate">
-                        {item.name}
-                      </div>
+                      <div className="text-sm font-medium text-slate-200 truncate">{item.name}</div>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-slate-400">
-                          {item.value} coins
-                        </span>
+                        <span className="text-xs text-slate-400">{item.value} coins</span>
                         <span className="text-[10px] bg-slate-800/70 px-1.5 py-0.5 sm text-slate-400 capitalize">
                           {item.type}
                         </span>
@@ -294,10 +276,7 @@ export function ItemSelector({
           <div className="text-xs text-slate-400">
             {selectedItems.length > 0 ? (
               <span key={selectedItems.length}>
-                Selected:{" "}
-                <span className="text-blue-300 font-medium">
-                  {selectedItems.length}
-                </span>
+                Selected: <span className="text-blue-300 font-medium">{selectedItems.length}</span>
                 {maxSelections < Infinity && <span> / {maxSelections}</span>}
               </span>
             ) : (
@@ -320,9 +299,7 @@ export function ItemSelector({
                   : "bg-blue-500/30 text-blue-300/50 cursor-not-allowed"
               }`}
             >
-              <span key={selectedItems.length}>
-                Confirm ({selectedItems.length})
-              </span>
+              <span key={selectedItems.length}>Confirm ({selectedItems.length})</span>
             </button>
           </div>
         </div>

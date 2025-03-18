@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import { subscribeWithSelector } from "zustand/middleware";
-import { persist } from "zustand/middleware";
+import { subscribeWithSelector, persist } from "zustand/middleware";
 import { Dialogue, Quest } from "../types";
 import { Vector3 } from "three";
 
@@ -130,22 +129,17 @@ export const useGameStore = create<GameState>()(
           // Update stats with validation
           if (updates.level !== undefined) newStats.level = updates.level;
           if (updates.xp !== undefined) newStats.xp = updates.xp;
-          if (updates.money !== undefined)
-            newStats.money = Math.max(0, updates.money);
+          if (updates.money !== undefined) newStats.money = Math.max(0, updates.money);
           if (updates.energy !== undefined) {
             const newEnergy = Number(updates.energy);
             if (!isNaN(newEnergy)) {
-              newStats.energy = Math.max(
-                0,
-                Math.min(newEnergy, newStats.maxEnergy)
-              );
+              newStats.energy = Math.max(0, Math.min(newEnergy, newStats.maxEnergy));
             }
           }
           if (updates.damage !== undefined) newStats.damage = updates.damage;
 
           // Calculate XP needed for next level
-          const xpForNextLevel = (level: number) =>
-            level * 100 + level * level * 25;
+          const xpForNextLevel = (level: number) => level * 100 + level * level * 25;
           newStats.xpNeeded = xpForNextLevel(newStats.level);
 
           // Level up logic
@@ -165,8 +159,7 @@ export const useGameStore = create<GameState>()(
 
       advanceTime: (minutes) =>
         set((state) => {
-          const totalMinutes =
-            state.gameTime.hours * 60 + state.gameTime.minutes + minutes;
+          const totalMinutes = state.gameTime.hours * 60 + state.gameTime.minutes + minutes;
           const newHours = Math.floor(totalMinutes / 60) % 24;
           const newMinutes = totalMinutes % 60;
           const addedDays = Math.floor(totalMinutes / (24 * 60));
@@ -220,36 +213,21 @@ export const useGameStore = create<GameState>()(
           if (quest.rewards.xp) newStats.xp += quest.rewards.xp;
           if (quest.rewards.money) newStats.money += quest.rewards.money;
           if (quest.rewards.health !== undefined) {
-            newStats.health = Math.min(
-              newStats.maxHealth,
-              newStats.health + quest.rewards.health
-            );
+            newStats.health = Math.min(newStats.maxHealth, newStats.health + quest.rewards.health);
           }
           if (quest.rewards.energy !== undefined) {
-            newStats.energy = Math.min(
-              newStats.maxEnergy,
-              newStats.energy + quest.rewards.energy
-            );
+            newStats.energy = Math.min(newStats.maxEnergy, newStats.energy + quest.rewards.energy);
           }
 
           // Remove requirements
           if (quest.requirements?.health) {
-            newStats.health = Math.max(
-              0,
-              newStats.health - quest.requirements.health
-            );
+            newStats.health = Math.max(0, newStats.health - quest.requirements.health);
           }
           if (quest.requirements?.money) {
-            newStats.money = Math.max(
-              0,
-              newStats.money - quest.requirements.money
-            );
+            newStats.money = Math.max(0, newStats.money - quest.requirements.money);
           }
           if (quest.requirements?.energy) {
-            newStats.energy = Math.max(
-              0,
-              newStats.energy - quest.requirements.energy
-            );
+            newStats.energy = Math.max(0, newStats.energy - quest.requirements.energy);
           }
 
           // Add reward items
@@ -293,10 +271,7 @@ export const useGameStore = create<GameState>()(
             questLog: {
               ...state.questLog,
               active: state.questLog.active.filter((q) => q.id !== questId),
-              completed: [
-                ...state.questLog.completed,
-                { ...quest, completed: true },
-              ],
+              completed: [...state.questLog.completed, { ...quest, completed: true }],
             },
           };
         }),
@@ -337,11 +312,7 @@ export const useGameStore = create<GameState>()(
 
         set((state) => ({
           inventory: state.inventory
-            .map((item) =>
-              item.id === itemId
-                ? { ...item, amount: item.amount - amount }
-                : item
-            )
+            .map((item) => (item.id === itemId ? { ...item, amount: item.amount - amount } : item))
             .filter((item) => item.amount > 0),
         }));
 

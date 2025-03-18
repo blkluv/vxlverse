@@ -3,12 +3,7 @@ import { X, Search, FileSymlink } from "lucide-react";
 import { useEditorStore } from "../../stores/editorStore";
 import { ModalPortal } from "../UI/ModalPortal";
 import { Canvas } from "@react-three/fiber";
-import {
-  OrbitControls,
-  Grid,
-  PerspectiveCamera,
-  Environment,
-} from "@react-three/drei";
+import { OrbitControls, Grid, PerspectiveCamera, Environment } from "@react-three/drei";
 import { useTemplates } from "../../hooks/useTemplates";
 import { EditorGameObject } from "./EditorGameObject";
 import { Object3D } from "three";
@@ -46,22 +41,15 @@ export function NewSceneModal({ onClose }: NewSceneModalProps) {
     onClose();
   };
 
-  const selectTemplate = templates?.find(
-    (template) => template.id === selectedTemplate
-  );
+  const selectTemplate = templates?.find((template) => template.id === selectedTemplate);
 
   return (
     <ModalPortal>
       <div className="bg-slate-800 border  h-full border-slate-700  shadow-xl w-[80vw] max-w-[95vw] max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-slate-700">
-          <h3 className="text-sm font-medium text-slate-200">
-            Create New Scene
-          </h3>
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-slate-200"
-          >
+          <h3 className="text-sm font-medium text-slate-200">Create New Scene</h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-200">
             <X size={18} />
           </button>
         </div>
@@ -72,9 +60,7 @@ export function NewSceneModal({ onClose }: NewSceneModalProps) {
           <div className="w-full border-r border-slate-700 p-4 flex flex-col">
             {/* Scene name input */}
             <div className="mb-4">
-              <label className="block text-xs font-medium text-slate-300 mb-1">
-                Scene Name
-              </label>
+              <label className="block text-xs font-medium text-slate-300 mb-1">Scene Name</label>
               <input
                 type="text"
                 value={sceneName}
@@ -158,17 +144,11 @@ export function NewSceneModal({ onClose }: NewSceneModalProps) {
             {/* Template list */}
             <div className="flex-1 overflow-y-auto custom-scrollbar">
               {isLoading ? (
-                <div className="text-center py-4 text-slate-400 text-sm">
-                  Loading templates...
-                </div>
+                <div className="text-center py-4 text-slate-400 text-sm">Loading templates...</div>
               ) : error ? (
-                <div className="text-center py-4 text-red-400 text-sm">
-                  Error loading templates
-                </div>
+                <div className="text-center py-4 text-red-400 text-sm">Error loading templates</div>
               ) : templates?.length === 0 ? (
-                <div className="text-center py-4 text-slate-400 text-sm">
-                  No templates found
-                </div>
+                <div className="text-center py-4 text-slate-400 text-sm">No templates found</div>
               ) : (
                 <div className="space-y-2">
                   {templates?.map((template: any) => (
@@ -236,11 +216,7 @@ export function NewSceneModal({ onClose }: NewSceneModalProps) {
                 {/* Environment */}
                 <Environment preset="city" background={false} />
                 <ambientLight intensity={0.5} />
-                <directionalLight
-                  position={[10, 10, 5]}
-                  intensity={1}
-                  castShadow
-                />
+                <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
 
                 {/* Grid */}
                 <Grid

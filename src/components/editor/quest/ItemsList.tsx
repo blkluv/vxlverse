@@ -54,8 +54,7 @@ export function ItemsList({
             if (!quest) return;
 
             if (activeTab === "requirements") {
-              const updatedItems =
-                quest.requirements.items?.filter((i) => i.id !== item.id) || [];
+              const updatedItems = quest.requirements.items?.filter((i) => i.id !== item.id) || [];
               updateQuest(quest.id, {
                 requirements: {
                   ...quest.requirements,
@@ -63,8 +62,7 @@ export function ItemsList({
                 },
               });
             } else if (activeTab === "rewards") {
-              const updatedItems =
-                quest.rewards.items?.filter((i) => i.id !== item.id) || [];
+              const updatedItems = quest.rewards.items?.filter((i) => i.id !== item.id) || [];
               updateQuest(quest.id, {
                 rewards: { ...quest.rewards, items: updatedItems },
               });

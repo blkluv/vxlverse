@@ -6,11 +6,7 @@ import { SkeletonUtils } from "three-stdlib";
 import type { GameObject } from "../../types";
 import { useSound } from "../../hooks/useSound";
 import { cn } from "../UI";
-import {
-  ColliderOptions,
-  RigidBody,
-  RigidBodyAutoCollider,
-} from "@react-three/rapier";
+import { RigidBody, RigidBodyAutoCollider } from "@react-three/rapier";
 
 // same url multiple GLTF instances
 function useGltfMemo(url: string) {
@@ -54,10 +50,7 @@ function PhysicsWrapper({
 }) {
   if (physics?.enabled) {
     return (
-      <RigidBody
-        type="fixed"
-        colliders={physics.colliders as RigidBodyAutoCollider}
-      >
+      <RigidBody type="fixed" colliders={physics.colliders as RigidBodyAutoCollider}>
         {children}
       </RigidBody>
     );
@@ -87,11 +80,7 @@ export function GameObject(props: GameObject) {
 
   const { position, rotation, scale } = useMemo(() => {
     return {
-      position: new THREE.Vector3(
-        props.position.x,
-        props.position.y,
-        props.position.z
-      ),
+      position: new THREE.Vector3(props.position.x, props.position.y, props.position.z),
       rotation: new THREE.Euler().copy(props.rotation),
       scale: new THREE.Vector3(props.scale.x, props.scale.y, props.scale.z),
     };
@@ -142,8 +131,7 @@ export function GameObject(props: GameObject) {
                   style={{
                     imageRendering: "pixelated",
                     transform: "scale(1)",
-                    boxShadow:
-                      "0 0 0 1px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.2)",
+                    boxShadow: "0 0 0 1px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.2)",
                   }}
                 >
                   <span

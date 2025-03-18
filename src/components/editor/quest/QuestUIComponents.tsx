@@ -12,9 +12,7 @@ export function SectionHeader({ icon, title }: SectionHeaderProps) {
       <div className="w-5 h-5 flex items-center justify-center bg-gradient-to-br from-blue-500/30 to-indigo-500/20 border border-blue-500/40 shadow-sm">
         <div className="text-blue-300">{icon}</div>
       </div>
-      <span className="text-xs font-semibold text-slate-100 tracking-wide">
-        {title}
-      </span>
+      <span className="text-xs font-semibold text-slate-100 tracking-wide">{title}</span>
     </div>
   );
 }
@@ -38,11 +36,7 @@ export function TabButton({ icon, label, isActive, onClick }: TabButtonProps) {
       }`}
     >
       <div className="flex items-center gap-1.5">
-        <div
-          className={`transition-colors duration-200 ${
-            isActive ? "text-blue-300" : ""
-          }`}
-        >
+        <div className={`transition-colors duration-200 ${isActive ? "text-blue-300" : ""}`}>
           {icon}
         </div>
         {label}

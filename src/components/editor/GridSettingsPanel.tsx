@@ -1,5 +1,4 @@
 import { Grid3X3, Magnet } from "lucide-react";
-import { motion } from "framer-motion";
 import { Scene } from "../../types";
 
 interface GridSettingsPanelProps {
@@ -30,9 +29,7 @@ export function GridSettingsPanel({
       <div className="flex items-center justify-between bg-slate-800/50 p-2 ">
         <div className="flex items-center gap-2">
           <Grid3X3 className="w-3.5 h-3.5 text-blue-400" />
-          <label className="text-xs font-medium text-slate-300">
-            Show Grid
-          </label>
+          <label className="text-xs font-medium text-slate-300">Show Grid</label>
         </div>
         <button
           onClick={onToggleGrid}
@@ -52,9 +49,7 @@ export function GridSettingsPanel({
       <div className="flex items-center justify-between bg-slate-800/50 p-2 ">
         <div className="flex items-center gap-2">
           <Magnet className="w-3.5 h-3.5 text-blue-400" />
-          <label className="text-xs font-medium text-slate-300">
-            Snap to Grid
-          </label>
+          <label className="text-xs font-medium text-slate-300">Snap to Grid</label>
         </div>
         <button
           onClick={onToggleGridSnap}
@@ -75,9 +70,7 @@ export function GridSettingsPanel({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Grid3X3 className="w-3.5 h-3.5 text-blue-400" />
-            <label className="text-xs font-medium text-slate-300">
-              Grid Size
-            </label>
+            <label className="text-xs font-medium text-slate-300">Grid Size</label>
           </div>
           <span className="text-xs text-slate-400">{scene.gridSize}</span>
         </div>
@@ -107,9 +100,7 @@ export function GridSettingsPanel({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Magnet className="w-3.5 h-3.5 text-blue-400" />
-            <label className="text-xs font-medium text-slate-300">
-              Snap Precision
-            </label>
+            <label className="text-xs font-medium text-slate-300">Snap Precision</label>
           </div>
           <span className="text-xs text-slate-400">{scene.snapPrecision}</span>
         </div>

@@ -28,8 +28,7 @@ export function Rewards() {
   }, [playSound, rewards, clearRewards]);
 
   // Find item details or use fallback
-  const item =
-    GAME_ITEMS.find((i) => i.id === rewards?.itemId) || GAME_ITEMS[0];
+  const item = GAME_ITEMS.find((i) => i.id === rewards?.itemId) || GAME_ITEMS[0];
 
   // Generate random sparkle positions for enhanced effect
   const sparklePositions = useMemo(() => {
@@ -149,9 +148,7 @@ export function Rewards() {
               >
                 ⭐
               </motion.span>
-              <span className="font-bold tracking-wide">
-                +{rewards?.xp || 100} XP
-              </span>
+              <span className="font-bold tracking-wide">+{rewards?.xp || 100} XP</span>
             </motion.div>
 
             {/* Item Notification */}
@@ -211,9 +208,7 @@ export function Rewards() {
               >
                 💰
               </motion.span>
-              <span className="font-bold tracking-wide">
-                +{rewards?.amount || 25} Gold
-              </span>
+              <span className="font-bold tracking-wide">+{rewards?.amount || 25} Gold</span>
             </motion.div>
           </motion.div>
         )}

@@ -69,15 +69,12 @@ export function Inventory() {
     money: state.playerStats.money,
     updatePlayerStats: state.updatePlayerStats,
   }));
-  const removeFromInventory = useGameStore(
-    (state) => state.removeFromInventory
-  );
+  const removeFromInventory = useGameStore((state) => state.removeFromInventory);
 
   // Track recently sold items for animation
   const [recentlySold, setRecentlySold] = useState<string[]>([]);
 
-  const getItemDetails = (itemId: string) =>
-    GAME_ITEMS.find((item) => item.id === itemId);
+  const getItemDetails = (itemId: string) => GAME_ITEMS.find((item) => item.id === itemId);
 
   const handleSellItem = (itemId: string) => {
     const item = getItemDetails(itemId);
@@ -123,15 +120,12 @@ export function Inventory() {
     const matchesSearch =
       details.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       details.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "all" || details.type === selectedCategory;
+    const matchesCategory = selectedCategory === "all" || details.type === selectedCategory;
 
     return matchesSearch && matchesCategory;
   });
 
-  const selectedItemDetails = selectedItem
-    ? getItemDetails(selectedItem)
-    : null;
+  const selectedItemDetails = selectedItem ? getItemDetails(selectedItem) : null;
 
   if (!isOpen) return null;
 
@@ -152,9 +146,8 @@ export function Inventory() {
                 const itemCount =
                   category.id === "all"
                     ? inventory.length
-                    : inventory.filter(
-                        (item) => getItemDetails(item.id)?.type === category.id
-                      ).length;
+                    : inventory.filter((item) => getItemDetails(item.id)?.type === category.id)
+                        .length;
 
                 return (
                   <button
@@ -171,9 +164,7 @@ export function Inventory() {
                   >
                     <div className="flex items-center gap-1.5">
                       <span className="text-lg">{category.emoji}</span>
-                      <span className="text-xs whitespace-nowrap">
-                        {category.label}
-                      </span>
+                      <span className="text-xs whitespace-nowrap">{category.label}</span>
                       <span
                         className={`text-xs px-1.5 py-0.5 border sm ${
                           selectedCategory === category.id
@@ -201,10 +192,8 @@ export function Inventory() {
                   const itemCount =
                     category.id === "all"
                       ? inventory.length
-                      : inventory.filter(
-                          (item) =>
-                            getItemDetails(item.id)?.type === category.id
-                        ).length;
+                      : inventory.filter((item) => getItemDetails(item.id)?.type === category.id)
+                          .length;
 
                   return (
                     <button
@@ -246,12 +235,8 @@ export function Inventory() {
               <div className="flex items-center gap-2 md:gap-3">
                 <div className="text-xl md:text-2xl">🎒</div>
                 <div>
-                  <h2 className="text-base md:text-lg font-bold text-[#7FE4FF]">
-                    Inventory
-                  </h2>
-                  <div className="text-xs md:text-sm text-[#4A4A4A]">
-                    {inventory.length} items
-                  </div>
+                  <h2 className="text-base md:text-lg font-bold text-[#7FE4FF]">Inventory</h2>
+                  <div className="text-xs md:text-sm text-[#4A4A4A]">{inventory.length} items</div>
                 </div>
               </div>
               <button
@@ -286,9 +271,7 @@ export function Inventory() {
               ) : (
                 <div
                   className={`grid ${
-                    selectedItemDetails
-                      ? "grid-cols-1"
-                      : "grid-cols-1 md:grid-cols-2"
+                    selectedItemDetails ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
                   } gap-2 md:gap-3`}
                 >
                   {filteredItems.map((item) => {
@@ -311,16 +294,12 @@ export function Inventory() {
                         }`}
                       >
                         <div className="flex items-center gap-3 md:gap-4">
-                          <div className="text-2xl md:text-3xl">
-                            {details.emoji}
-                          </div>
+                          <div className="text-2xl md:text-3xl">{details.emoji}</div>
                           <div className="flex-1 min-w-0">
                             <div className="text-sm font-medium text-[#7FE4FF] truncate">
                               {details.name}
                             </div>
-                            <div className="text-xs text-[#4A4A4A]">
-                              Quantity: {item.amount}
-                            </div>
+                            <div className="text-xs text-[#4A4A4A]">Quantity: {item.amount}</div>
                             <div className="flex items-center gap-1 mt-1.5 md:mt-2 text-xs text-[#FFD700]">
                               <span className="text-base md:text-lg">💰</span>
                               {details.value}
@@ -357,12 +336,8 @@ export function Inventory() {
                       <Info className="w-5 h-5 md:w-6 md:h-6 text-[#7FE4FF]" />
                     </div>
                     <div>
-                      <h2 className="text-lg md:text-xl font-bold text-[#7FE4FF]">
-                        Details
-                      </h2>
-                      <div className="text-xs md:text-sm text-[#4A4A4A]">
-                        Item Information
-                      </div>
+                      <h2 className="text-lg md:text-xl font-bold text-[#7FE4FF]">Details</h2>
+                      <div className="text-xs md:text-sm text-[#4A4A4A]">Item Information</div>
                     </div>
                   </div>
                   <button
@@ -379,9 +354,7 @@ export function Inventory() {
                 <div className="space-y-6">
                   {/* Item Preview */}
                   <div className="flex items-center gap-4">
-                    <div className="text-4xl md:text-5xl">
-                      {selectedItemDetails.emoji}
-                    </div>
+                    <div className="text-4xl md:text-5xl">{selectedItemDetails.emoji}</div>
                     <div>
                       <h3 className="text-lg md:text-xl font-bold text-white">
                         {selectedItemDetails.name}
@@ -411,9 +384,7 @@ export function Inventory() {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between text-sm bg-[#3A3A3A] p-2 border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black">
                         <span className="text-[#7FE4FF]">Value</span>
-                        <span className="text-[#FFD700]">
-                          {selectedItemDetails.value} coins
-                        </span>
+                        <span className="text-[#FFD700]">{selectedItemDetails.value} coins</span>
                       </div>
                       <div className="flex items-center justify-between text-sm bg-[#3A3A3A] p-2 border-2 border-[#4A4A4A] sm shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black">
                         <span className="text-[#7FE4FF]">Sell Price</span>

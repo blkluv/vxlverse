@@ -1,14 +1,5 @@
-import { useState, useEffect } from "react";
-import {
-  Settings,
-  Minimize,
-  Maximize,
-  Edit3,
-  Check,
-  Tag,
-  MessageSquare,
-} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { Settings, Minimize, Maximize, Edit3, Check, Tag, MessageSquare } from "lucide-react";
 import { useEditorStore } from "../../../stores/editorStore";
 import { Input } from "../../UI/input";
 import { Select } from "../../UI/select";
@@ -26,9 +17,7 @@ export function ObjectSettingsPanel() {
 
   // Find the current scene and selected object
   const currentScene = scenes.find((scene) => scene.id === currentSceneId);
-  const selectedObject = currentScene?.objects.find(
-    (obj) => obj.id === selectedObjectId
-  );
+  const selectedObject = currentScene?.objects.find((obj) => obj.id === selectedObjectId);
 
   // Handle changes to object properties
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,9 +34,7 @@ export function ObjectSettingsPanel() {
     }
   };
 
-  const handleDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (currentSceneId && selectedObjectId) {
       updateObject(currentSceneId, selectedObjectId, {
         description: e.target.value,

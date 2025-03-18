@@ -66,9 +66,7 @@ export function Games() {
               <h1 className="text-3xl font-bold bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">
                 Games
               </h1>
-              <p className="text-gray-400 mt-1">
-                Discover and play amazing VXL games
-              </p>
+              <p className="text-gray-400 mt-1">Discover and play amazing VXL games</p>
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -132,10 +130,7 @@ export function Games() {
         {/* Filters */}
         {isFiltersOpen && (
           <div className="mb-6 p-4 bg-white/5 border border-white/10  backdrop-blur-sm">
-            <GameFilters
-              selectedTags={selectedTags}
-              onTagsChange={setSelectedTags}
-            />
+            <GameFilters selectedTags={selectedTags} onTagsChange={setSelectedTags} />
           </div>
         )}
 

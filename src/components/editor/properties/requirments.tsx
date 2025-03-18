@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { GAME_ITEMS } from "../../../types";
 import {
-  Key,
   Minimize,
   Maximize,
   PlusCircle,
@@ -14,7 +13,6 @@ import {
   CheckCircle,
   Info,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../../UI/Button";
 import { ItemSelector } from "../ItemSelector";
 import { useEditorStore } from "../../../stores/editorStore";
@@ -79,9 +77,7 @@ export function RequirementsPanel() {
 
   // Get the current scene and selected object
   const currentScene = scenes.find((scene) => scene.id === currentSceneId);
-  const selectedObject = currentScene?.objects.find(
-    (obj) => obj.id === selectedObjectId
-  );
+  const selectedObject = currentScene?.objects.find((obj) => obj.id === selectedObjectId);
 
   // If no scene or no selected object, don't render
   if (!currentScene || !selectedObject) return null;
@@ -94,13 +90,7 @@ export function RequirementsPanel() {
   // Reusable section component with improved animation and styling
 
   // Render item card with improved UI
-  const ItemCard = ({
-    item,
-    onRemove,
-  }: {
-    item: any;
-    onRemove: () => void;
-  }) => {
+  const ItemCard = ({ item, onRemove }: { item: any; onRemove: () => void }) => {
     const gameItem = GAME_ITEMS.find((gi) => gi.id === item.id);
     if (!gameItem) return null;
 
@@ -184,9 +174,7 @@ export function RequirementsPanel() {
                             (i) => i.id !== item.id
                           ),
                         });
-                        toast.success(
-                          `Removed ${item.name || "item"} requirement`
-                        );
+                        toast.success(`Removed ${item.name || "item"} requirement`);
                       }}
                     />
                   ))
@@ -194,8 +182,8 @@ export function RequirementsPanel() {
                   <div className="flex flex-col items-center justify-center py-4 px-3 bg-slate-800/40 border border-slate-700/30 ">
                     <AlertCircle className="w-5 h-5 text-slate-500 mb-2" />
                     <div className="text-xs text-slate-400 text-center">
-                      No required items. Add items that the player needs to
-                      interact with this object.
+                      No required items. Add items that the player needs to interact with this
+                      object.
                     </div>
                   </div>
                 )}
@@ -221,10 +209,7 @@ export function RequirementsPanel() {
                   <div className="flex items-center bg-slate-900/60 border border-slate-700/80 p-0.5 ">
                     <button
                       onClick={() => {
-                        if (
-                          currentSceneId &&
-                          (selectedObject.requiredLvl || 0) > 0
-                        ) {
+                        if (currentSceneId && (selectedObject.requiredLvl || 0) > 0) {
                           updateObject(currentSceneId, selectedObject.id, {
                             requiredLvl: (selectedObject.requiredLvl || 0) - 1,
                           });
@@ -247,10 +232,7 @@ export function RequirementsPanel() {
                     </div>
                     <button
                       onClick={() => {
-                        if (
-                          currentSceneId &&
-                          (selectedObject.requiredLvl || 0) < 50
-                        ) {
+                        if (currentSceneId && (selectedObject.requiredLvl || 0) < 50) {
                           updateObject(currentSceneId, selectedObject.id, {
                             requiredLvl: (selectedObject.requiredLvl || 0) + 1,
                           });
@@ -297,8 +279,8 @@ export function RequirementsPanel() {
                 <div className="mt-3 flex items-start text-[10px] text-slate-400 bg-slate-900/40 p-2  border border-slate-700/40">
                   <Info className="w-3.5 h-3.5 text-blue-400 mr-1.5 mt-0.5 flex-shrink-0" />
                   <span>
-                    Players below this level will not be able to interact with
-                    this object. Set to 0 to allow all players to interact.
+                    Players below this level will not be able to interact with this object. Set to 0
+                    to allow all players to interact.
                   </span>
                 </div>
               </div>

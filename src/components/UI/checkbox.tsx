@@ -2,8 +2,7 @@ import React, { forwardRef, useId } from "react";
 import { cn } from "../../lib/utils";
 import { Check } from "lucide-react";
 
-export interface CheckboxProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   description?: string;
   error?: string;
@@ -11,23 +10,10 @@ export interface CheckboxProps
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-  (
-    {
-      className = "",
-      label,
-      description,
-      error,
-      id,
-      containerClassName,
-      ...props
-    },
-    ref
-  ) => {
+  ({ className = "", label, description, error, id, containerClassName, ...props }, ref) => {
     const generatedId = useId();
     const checkboxId = id || `checkbox-${generatedId}`;
-    const descriptionId = description
-      ? `description-${generatedId}`
-      : undefined;
+    const descriptionId = description ? `description-${generatedId}` : undefined;
 
     return (
       <div className={cn("flex items-start", containerClassName)}>
@@ -42,8 +28,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                 "h-4 w-4  border-slate-700/80 bg-slate-800/80 text-blue-500",
                 "focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/40",
                 "transition-colors",
-                error &&
-                  "border-red-500 focus:ring-red-500 focus:border-red-500",
+                error && "border-red-500 focus:ring-red-500 focus:border-red-500",
                 "appearance-none",
                 className
               )}
@@ -51,20 +36,14 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
               {...props}
             />
             {props.checked && (
-              <Check
-                size={12}
-                className="absolute text-blue-500 pointer-events-none"
-              />
+              <Check size={12} className="absolute text-blue-500 pointer-events-none" />
             )}
           </div>
         </div>
 
         <div className="ml-2">
           {label && (
-            <label
-              htmlFor={checkboxId}
-              className="text-sm font-medium text-slate-300"
-            >
+            <label htmlFor={checkboxId} className="text-sm font-medium text-slate-300">
               {label}
             </label>
           )}
@@ -75,9 +54,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             </p>
           )}
 
-          {error && (
-            <p className="mt-1 text-xs text-red-500 font-medium">{error}</p>
-          )}
+          {error && <p className="mt-1 text-xs text-red-500 font-medium">{error}</p>}
         </div>
       </div>
     );

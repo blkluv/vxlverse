@@ -199,12 +199,7 @@ export interface Quest {
     actions: QuestAction[];
   };
   tracking?: {
-    type:
-      | "manual"
-      | "item_collection"
-      | "location"
-      | "npc_talk"
-      | "enemy_defeat";
+    type: "manual" | "item_collection" | "location" | "npc_talk" | "enemy_defeat";
     quantity?: number;
     targetId?: string;
     targetName?: string;

@@ -1,14 +1,4 @@
-import { motion } from "framer-motion";
-import {
-  Layers,
-  Wand2,
-  Share2,
-  Zap,
-  Box,
-  Gamepad2,
-  Globe,
-  Users,
-} from "lucide-react";
+import { Layers, Wand2, Share2, Zap, Box, Gamepad2, Globe, Users } from "lucide-react";
 
 const FEATURES = [
   {
@@ -49,22 +39,19 @@ const FEATURES = [
   {
     icon: Zap,
     title: "Real-time Collaboration",
-    description:
-      "Work together with friends in real-time to build amazing game experiences.",
+    description: "Work together with friends in real-time to build amazing game experiences.",
     color: "yellow",
   },
   {
     icon: Globe,
     title: "Cross-Platform",
-    description:
-      "Your games work seamlessly across desktop, tablet, and mobile devices.",
+    description: "Your games work seamlessly across desktop, tablet, and mobile devices.",
     color: "orange",
   },
   {
     icon: Users,
     title: "Growing Community",
-    description:
-      "Join a thriving community of creators sharing assets, tips, and inspiration.",
+    description: "Join a thriving community of creators sharing assets, tips, and inspiration.",
     color: "red",
   },
 ];

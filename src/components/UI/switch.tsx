@@ -1,6 +1,3 @@
-import React from "react";
-import { motion } from "framer-motion";
-
 interface SwitchProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
@@ -94,17 +91,13 @@ export function Switch({
       aria-checked={checked}
       onClick={handleClick}
       disabled={disabled}
-      className={`relative inline-flex ${
-        selectedSize.track
-      } flex-shrink-0 items-center -full ${
+      className={`relative inline-flex ${selectedSize.track} flex-shrink-0 items-center -full ${
         selectedSize.padding
       } transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
         checked
           ? `${selectedColor.active} ${selectedColor.border} border`
           : "bg-slate-700/80 border border-slate-600/50"
-      } ${
-        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-      } ${className}`}
+      } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} ${className}`}
     >
       <span
         className={`${selectedSize.dot} -full shadow-md ${
@@ -124,11 +117,7 @@ export function Switch({
         labelPosition === "left" ? "flex-row-reverse" : "flex-row"
       }`}
     >
-      <span
-        className={`${selectedSize.text} text-slate-300 ${
-          disabled ? "opacity-50" : ""
-        }`}
-      >
+      <span className={`${selectedSize.text} text-slate-300 ${disabled ? "opacity-50" : ""}`}>
         {label}
       </span>
       {renderSwitch()}

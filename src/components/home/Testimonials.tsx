@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Quote, Star, MessageSquare } from "lucide-react";
 import { useState } from "react";
 
@@ -58,9 +57,7 @@ export function Testimonials() {
   };
 
   const prevTestimonial = () => {
-    setActiveIndex(
-      (prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length
-    );
+    setActiveIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
   };
 
   return (
@@ -141,12 +138,8 @@ export function Testimonials() {
                   </p>
 
                   <div>
-                    <div className="font-bold text-white">
-                      {TESTIMONIALS[activeIndex].name}
-                    </div>
-                    <div className="text-blue-400 text-sm">
-                      {TESTIMONIALS[activeIndex].role}
-                    </div>
+                    <div className="font-bold text-white">{TESTIMONIALS[activeIndex].name}</div>
+                    <div className="text-blue-400 text-sm">{TESTIMONIALS[activeIndex].role}</div>
                   </div>
                 </div>
               </div>
@@ -179,9 +172,7 @@ export function Testimonials() {
                       key={index}
                       onClick={() => setActiveIndex(index)}
                       className={`w-3 h-3  transition-all ${
-                        index === activeIndex
-                          ? "bg-blue-500"
-                          : "bg-gray-700 hover:bg-gray-600"
+                        index === activeIndex ? "bg-blue-500" : "bg-gray-700 hover:bg-gray-600"
                       }`}
                       aria-label={`Go to testimonial ${index + 1}`}
                     />

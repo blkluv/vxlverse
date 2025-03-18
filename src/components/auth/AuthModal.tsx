@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import { pb } from "../../lib/pocketbase";
 import { Portal } from "../Portal";
@@ -23,9 +22,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       }
     } catch (err: any) {
       console.error("Google auth error:", err);
-      setError(
-        err.message || "Failed to sign in with Google. Please try again."
-      );
+      setError(err.message || "Failed to sign in with Google. Please try again.");
     }
   };
 
@@ -57,12 +54,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-3 text-white">
-              Welcome Back!
-            </h2>
-            <p className="text-gray-400">
-              Sign in to continue your creative journey
-            </p>
+            <h2 className="text-3xl font-bold mb-3 text-white">Welcome Back!</h2>
+            <p className="text-gray-400">Sign in to continue your creative journey</p>
           </div>
 
           {/* Error Message */}
@@ -76,11 +69,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             onClick={handleGoogleLogin}
             className="w-full bg-white hover:bg-gray-100 text-gray-900 font-medium py-3.5 px-4  transition-colors flex items-center justify-center gap-3 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
           >
-            <img
-              src="https://www.google.com/favicon.ico"
-              className="w-6 h-6"
-              alt="Google"
-            />
+            <img src="https://www.google.com/favicon.ico" className="w-6 h-6" alt="Google" />
             Continue with Google
           </button>
         </div>

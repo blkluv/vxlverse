@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useGameStore } from "../../stores/gameStore";
 import { Plus, Trash2, Edit3, MessageSquare } from "lucide-react";
-import { motion } from "framer-motion";
 
 export function QuestEditor() {
   const currentSceneId = useGameStore((state) => state.currentSceneId);
@@ -42,11 +41,7 @@ export function QuestEditor() {
   };
 
   if (!currentScene) {
-    return (
-      <div className="text-center py-8 text-gray-400">
-        Select a scene to manage quests
-      </div>
-    );
+    return <div className="text-center py-8 text-gray-400">Select a scene to manage quests</div>;
   }
 
   return (
@@ -59,10 +54,7 @@ export function QuestEditor() {
               <span>{quest.title}</span>
             </div>
             <div className="flex gap-2">
-              <button
-                onClick={() => setEditingQuest(quest)}
-                className="p-1 hover:text-blue-400"
-              >
+              <button onClick={() => setEditingQuest(quest)} className="p-1 hover:text-blue-400">
                 <Edit3 className="w-4 h-4" />
               </button>
               <button className="p-1 hover:text-red-400">

@@ -406,8 +406,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
           onClick={undo}
           className={cn(
             `w-10  h-10 flex items-center justify-center transition-all duration-200 text-slate-400 hover:bg-slate-700/40 hover:text-white`,
-            historyIndex < 0 &&
-              "opacity-30 hover:bg-transparent hover:text-slate-400"
+            historyIndex < 0 && "opacity-30 hover:bg-transparent hover:text-slate-400"
           )}
         >
           <Undo className="w-4 h-4" />

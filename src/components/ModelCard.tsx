@@ -1,6 +1,5 @@
 import { forwardRef } from "react";
 import { Model3D } from "../types";
-import { motion } from "framer-motion";
 
 interface ModelCardProps {
   model: Model3D;
@@ -15,9 +14,7 @@ export const ModelCard = forwardRef<HTMLButtonElement, ModelCardProps>(
         ref={ref}
         onClick={() => onSelect(model)}
         className={`w-full p-4  transition-all ${
-          isSelected
-            ? "bg-blue-500 ring-2 ring-blue-400"
-            : "bg-gray-800 hover:bg-gray-700"
+          isSelected ? "bg-blue-500 ring-2 ring-blue-400" : "bg-gray-800 hover:bg-gray-700"
         }`}
       >
         <div className="flex items-center gap-4">

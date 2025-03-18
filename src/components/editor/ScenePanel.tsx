@@ -2,16 +2,11 @@ import { useState } from "react";
 import { useEditorStore } from "../../stores/editorStore";
 import {
   Plus,
-  Trash2,
   Box,
   Search,
-  Eye,
-  EyeOff,
   Package,
   User,
   FileCode,
-  Copy,
-  ScrollText,
   Skull,
   ArrowUpRight,
   Target,
@@ -22,7 +17,6 @@ import { pb } from "../../lib/pocketbase";
 import { Input } from "../UI/input";
 import { Tooltip } from "../UI/Tooltip";
 import * as THREE from "three";
-import { ModelLibrary } from "./ModelLibrary";
 import { ObjectHierarchyPanel } from "./ObjectHierarchyPanel";
 
 // Function to get the appropriate icon based on object type
@@ -32,53 +26,21 @@ const getObjectTypeIcon = (type: string | undefined, isSelected: boolean) => {
 
   switch (type) {
     case "npc":
-      return (
-        <User
-          className={`${baseClass} ${
-            isSelected ? "text-teal-400" : defaultColor
-          }`}
-        />
-      );
+      return <User className={`${baseClass} ${isSelected ? "text-teal-400" : defaultColor}`} />;
     case "enemy":
-      return (
-        <Skull
-          className={`${baseClass} ${
-            isSelected ? "text-rose-400" : defaultColor
-          }`}
-        />
-      );
+      return <Skull className={`${baseClass} ${isSelected ? "text-rose-400" : defaultColor}`} />;
     case "item":
       return (
-        <Package
-          className={`${baseClass} ${
-            isSelected ? "text-yellow-400" : defaultColor
-          }`}
-        />
+        <Package className={`${baseClass} ${isSelected ? "text-yellow-400" : defaultColor}`} />
       );
     case "portal":
       return (
-        <ArrowUpRight
-          className={`${baseClass} ${
-            isSelected ? "text-indigo-400" : defaultColor
-          }`}
-        />
+        <ArrowUpRight className={`${baseClass} ${isSelected ? "text-indigo-400" : defaultColor}`} />
       );
     case "trigger":
-      return (
-        <Target
-          className={`${baseClass} ${
-            isSelected ? "text-sky-400" : defaultColor
-          }`}
-        />
-      );
+      return <Target className={`${baseClass} ${isSelected ? "text-sky-400" : defaultColor}`} />;
     default: // prop
-      return (
-        <Box
-          className={`${baseClass} ${
-            isSelected ? "text-blue-400" : defaultColor
-          }`}
-        />
-      );
+      return <Box className={`${baseClass} ${isSelected ? "text-blue-400" : defaultColor}`} />;
   }
 };
 
@@ -194,9 +156,7 @@ export function ScenePanel() {
                 <Package className="w-8 h-8 mb-3 opacity-30" />
                 <p className="text-sm">No models found</p>
                 {searchQuery && (
-                  <p className="text-xs mt-1 text-slate-400">
-                    Try a different search term
-                  </p>
+                  <p className="text-xs mt-1 text-slate-400">Try a different search term</p>
                 )}
               </div>
             ) : (

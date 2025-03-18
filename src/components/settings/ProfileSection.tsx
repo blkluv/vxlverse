@@ -12,11 +12,7 @@ export function ProfileSection({ user }: ProfileSectionProps) {
     <div className="flex items-center gap-6 p-6  bg-white/5 border border-white/10 backdrop-blur-sm">
       {user.avatar && (
         <div className="relative">
-          <img
-            src={user.avatar}
-            alt={user.name}
-            className="w-20 h-20  object-cover"
-          />
+          <img src={user.avatar} alt={user.name} className="w-20 h-20  object-cover" />
           <div className="absolute inset-0  ring-1 ring-inset ring-white/10" />
         </div>
       )}

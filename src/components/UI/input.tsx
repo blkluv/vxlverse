@@ -1,8 +1,7 @@
-import React, { forwardRef, useId, useState } from "react";
+import React, { forwardRef, useId } from "react";
 import { cn } from "../../lib/utils";
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   label?: string;
   description?: string;
@@ -29,17 +28,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const generatedId = useId();
     const inputId = id || `input-${generatedId}`;
-    const descriptionId = description
-      ? `description-${generatedId}`
-      : undefined;
+    const descriptionId = description ? `description-${generatedId}` : undefined;
 
     return (
       <div className={cn("w-full space-y-1.5", containerClassName)}>
         {label && (
-          <label
-            htmlFor={inputId}
-            className="block text-xs font-medium text-slate-300"
-          >
+          <label htmlFor={inputId} className="block text-xs font-medium text-slate-300">
             {label}
           </label>
         )}
@@ -52,9 +46,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
         <div className="relative">
           {icon && (
-            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400">
-              {icon}
-            </div>
+            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400">{icon}</div>
           )}
 
           <input
@@ -99,9 +91,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
 
-        {error && (
-          <p className="mt-1 text-xs text-red-500 font-medium">{error}</p>
-        )}
+        {error && <p className="mt-1 text-xs text-red-500 font-medium">{error}</p>}
       </div>
     );
   }

@@ -16,20 +16,23 @@ export interface NumberInputProps extends Omit<InputProps, "type" | "onChange"> 
 }
 
 export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
-  ({
-    value,
-    defaultValue,
-    min,
-    max,
-    step = 1,
-    onChange,
-    allowNegative = false,
-    precision = 0,
-    showControls = false,
-    className,
-    containerClassName,
-    ...props
-  }, ref) => {
+  (
+    {
+      value,
+      defaultValue,
+      min,
+      max,
+      step = 1,
+      onChange,
+      allowNegative = false,
+      precision = 0,
+      showControls = false,
+      className,
+      containerClassName,
+      ...props
+    },
+    ref
+  ) => {
     const [internalValue, setInternalValue] = useState<number | undefined>(() => {
       if (value !== undefined) return value;
       if (defaultValue !== undefined) return defaultValue;
@@ -38,23 +41,23 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 
     // Format value for display
     const formatValue = (val: number | undefined): string => {
-      if (val === undefined) return '';
+      if (val === undefined) return "";
       return precision > 0 ? val.toFixed(precision) : val.toString();
     };
 
     // Parse input value
     const parseValue = (val: string): number | undefined => {
-      if (val === '') return undefined;
-      
+      if (val === "") return undefined;
+
       let parsedValue = precision > 0 ? parseFloat(val) : parseInt(val, 10);
-      
+
       if (isNaN(parsedValue)) return internalValue;
-      
+
       // Apply constraints
       if (!allowNegative && parsedValue < 0) parsedValue = 0;
       if (min !== undefined && parsedValue < min) parsedValue = min;
       if (max !== undefined && parsedValue > max) parsedValue = max;
-      
+
       return parsedValue;
     };
 
@@ -85,15 +88,12 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
             type="text"
             value={formatValue(value !== undefined ? value : internalValue)}
             onChange={handleChange}
-            className={cn(
-              showControls && "pr-8",
-              className
-            )}
+            className={cn(showControls && "pr-8", className)}
             containerClassName=""
             ref={ref}
             {...props}
           />
-          
+
           {showControls && (
             <div className="absolute right-1 top-0 h-full flex flex-col">
               <button

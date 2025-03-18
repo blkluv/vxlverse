@@ -1,11 +1,11 @@
-import { atom } from 'jotai';
-import { Model3D } from '../types';
-import * as THREE from 'three';
+import { atom } from "jotai";
+import { Model3D } from "../types";
+import * as THREE from "three";
 
 export const modelsAtom = atom<Model3D[]>([]);
 export const selectedModelAtom = atom<Model3D | null>(null);
-export const searchQueryAtom = atom('');
-export const selectedCategoryAtom = atom('All');
+export const searchQueryAtom = atom("");
+export const selectedCategoryAtom = atom("All");
 export const showModelSelectorAtom = atom(false);
 
 export interface SceneObject {

@@ -1,6 +1,5 @@
 import { Model3D } from "../types";
 import { ModelCard } from "./ModelCard";
-import { AnimatePresence, motion } from "framer-motion";
 import { LoadingSpinner } from "./LoadingSpinner";
 
 interface ModelListProps {
@@ -10,12 +9,7 @@ interface ModelListProps {
   loading: boolean;
 }
 
-export function ModelList({
-  models,
-  selectedModel,
-  onSelectModel,
-  loading,
-}: ModelListProps) {
+export function ModelList({ models, selectedModel, onSelectModel, loading }: ModelListProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-40">

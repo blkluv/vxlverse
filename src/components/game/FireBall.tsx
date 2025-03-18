@@ -1,8 +1,4 @@
-import {
-  MeshWobbleMaterial,
-  Sphere,
-  Trail /*, MeshWobbleMaterial */,
-} from "@react-three/drei";
+import { MeshWobbleMaterial, Sphere, Trail /*, MeshWobbleMaterial */ } from "@react-three/drei";
 import { useGameStore } from "../../stores/gameStore";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
@@ -22,13 +18,7 @@ interface FireballData {
 }
 
 // Single Fireball component that handles one fireball
-function SingleFireball({
-  data,
-  onHit,
-}: {
-  data: FireballData;
-  onHit: () => void;
-}) {
+function SingleFireball({ data, onHit }: { data: FireballData; onHit: () => void }) {
   const fireBallRef = useRef<RapierRigidBody>(null);
   const sphereRef = useRef<THREE.Mesh>(null);
   const speed = 50; // Speed of the fireball
@@ -88,10 +78,7 @@ function SingleFireball({
           joystick.releaseAllButtons();
           playSound("hurt");
           if (gameStore.currentEnemy) {
-            enemyStore.damageEnemy(
-              gameStore.currentEnemy,
-              gameStore.playerStats?.damage ?? 1
-            );
+            enemyStore.damageEnemy(gameStore.currentEnemy, gameStore.playerStats?.damage ?? 1);
           }
           onHit(); // Call the onHit callback to remove this fireball
         }}
@@ -137,9 +124,7 @@ export function Fireball() {
   // Remove a fireball when it hits something
   const handleFireballHit = (id: string) => {
     setFireballs((prev) =>
-      prev.map((fireball) =>
-        fireball.id === id ? { ...fireball, active: false } : fireball
-      )
+      prev.map((fireball) => (fireball.id === id ? { ...fireball, active: false } : fireball))
     );
 
     // Clean up inactive fireballs after a delay

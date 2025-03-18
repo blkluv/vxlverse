@@ -66,9 +66,7 @@ export function AnimationsPanel() {
 
   // Get the current scene and selected object
   const currentScene = scenes.find((scene) => scene.id === currentSceneId);
-  const selectedObject = currentScene?.objects.find(
-    (obj) => obj.id === selectedObjectId
-  );
+  const selectedObject = currentScene?.objects.find((obj) => obj.id === selectedObjectId);
 
   // If no scene or no selected object, don't render
   if (!currentScene || !selectedObject) return null;
@@ -90,9 +88,7 @@ export function AnimationsPanel() {
   const extractAnimationNames = (gltf: GLTF) => {
     if (!gltf?.animations?.length) return [];
 
-    return gltf.animations
-      .map((animation) => animation.name)
-      .filter((name) => name); // Filter out empty names
+    return gltf.animations.map((animation) => animation.name).filter((name) => name); // Filter out empty names
   };
 
   const loadModelAnimations = async (url: string) => {
@@ -138,10 +134,7 @@ export function AnimationsPanel() {
   };
 
   // Handle selecting an animation for a specific state
-  const handleAnimationSelect = (
-    animationName: string,
-    state: AnimationState
-  ) => {
+  const handleAnimationSelect = (animationName: string, state: AnimationState) => {
     if (currentScene.id) {
       // Create updated animations object
       const updatedAnimations = {
@@ -173,10 +166,7 @@ export function AnimationsPanel() {
 
   // Get state configuration by id
   const getStateConfig = (stateId: AnimationState) => {
-    return (
-      ANIMATION_STATES.find((state) => state.id === stateId) ||
-      ANIMATION_STATES[0]
-    );
+    return ANIMATION_STATES.find((state) => state.id === stateId) || ANIMATION_STATES[0];
   };
 
   return (
@@ -259,9 +249,7 @@ export function AnimationsPanel() {
                   {isLoadingAnimations ? (
                     <div className="flex items-center justify-center py-4 bg-slate-800/40  border border-slate-700/30">
                       <Loader2 className="w-5 h-5 text-purple-400 animate-spin mr-2" />
-                      <span className="text-[11px] text-slate-300">
-                        Loading animations...
-                      </span>
+                      <span className="text-[11px] text-slate-300">Loading animations...</span>
                     </div>
                   ) : modelAnimations.length > 0 ? (
                     <div className="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar pr-1 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800/30">
@@ -275,10 +263,7 @@ export function AnimationsPanel() {
                             key={anim}
                             className={`flex items-center justify-between p-2  ${
                               isCurrentStateAnimation
-                                ? `${stateConfig.color
-                                    .split(" ")
-                                    .slice(0, 2)
-                                    .join(" ")} border`
+                                ? `${stateConfig.color.split(" ").slice(0, 2).join(" ")} border`
                                 : "bg-slate-800/40 border border-slate-700/30 hover:bg-slate-800/60"
                             }`}
                           >
@@ -302,9 +287,7 @@ export function AnimationsPanel() {
                                 <Play className="w-3 h-3" />
                               </button>
                               <button
-                                onClick={() =>
-                                  handleAnimationSelect(anim, selectedState)
-                                }
+                                onClick={() => handleAnimationSelect(anim, selectedState)}
                                 className={`h-6 w-6 flex items-center justify-center  transition-colors ${
                                   isCurrentStateAnimation
                                     ? `${stateConfig.color
@@ -315,9 +298,7 @@ export function AnimationsPanel() {
                                         stateConfig.color.split(" ")[2]
                                       } hover:text-white`
                                 }`}
-                                title={`Set as ${
-                                  getStateConfig(selectedState).label
-                                } Animation`}
+                                title={`Set as ${getStateConfig(selectedState).label} Animation`}
                               >
                                 {isCurrentStateAnimation ? (
                                   <Check className="w-3 h-3" />
@@ -333,8 +314,7 @@ export function AnimationsPanel() {
                   ) : (
                     <div className="text-[11px] text-slate-400 text-center py-4 px-3 bg-slate-800/40  border border-slate-700/30 flex items-center justify-center">
                       <Info className="w-4 h-4 mr-2 text-slate-500" />
-                      No animations found in this model. Try a different model
-                      with animations.
+                      No animations found in this model. Try a different model with animations.
                     </div>
                   )}
                 </div>
@@ -342,9 +322,7 @@ export function AnimationsPanel() {
 
               {/* Animation States Summary */}
               <div className="pt-2 border-t border-slate-700/20">
-                <div className="text-[10px] font-medium text-slate-400 mb-2">
-                  Animation States
-                </div>
+                <div className="text-[10px] font-medium text-slate-400 mb-2">Animation States</div>
                 <div className="space-y-2">
                   {ANIMATION_STATES.map((state) => {
                     const currentAnim = getCurrentStateAnimation(state.id);
@@ -353,10 +331,7 @@ export function AnimationsPanel() {
                         key={state.id}
                         className={`flex items-center justify-between p-1.5  ${
                           currentAnim
-                            ? `${state.color
-                                .split(" ")
-                                .slice(0, 2)
-                                .join(" ")} border`
+                            ? `${state.color.split(" ").slice(0, 2).join(" ")} border`
                             : "bg-slate-800/40 border border-slate-700/30"
                         }`}
                       >
@@ -369,11 +344,7 @@ export function AnimationsPanel() {
                             {state.icon}
                           </div>
                           <div>
-                            <div
-                              className={`text-[10px] font-medium ${
-                                state.color.split(" ")[2]
-                              }`}
-                            >
+                            <div className={`text-[10px] font-medium ${state.color.split(" ")[2]}`}>
                               {state.label}
                             </div>
                             {currentAnim ? (
@@ -381,9 +352,7 @@ export function AnimationsPanel() {
                                 {currentAnim}
                               </div>
                             ) : (
-                              <div className="text-[9px] text-slate-500">
-                                Not set
-                              </div>
+                              <div className="text-[9px] text-slate-500">Not set</div>
                             )}
                           </div>
                         </div>
@@ -412,8 +381,7 @@ export function AnimationsPanel() {
                 <Play className="w-5 h-5 text-slate-500" />
               </div>
               <div className="text-[11px] text-slate-400 max-w-[200px]">
-                Select a 3D model object with animations to configure animation
-                states.
+                Select a 3D model object with animations to configure animation states.
               </div>
             </div>
           )}

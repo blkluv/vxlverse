@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useGameStore } from "../../stores/gameStore";
-import { Quest } from "../../stores/gameStore";
+import { useGameStore, Quest } from "../../stores/gameStore";
 import { MessageSquare, XCircle } from "lucide-react";
 
 interface QuestDialogProps {
@@ -26,12 +24,9 @@ export function QuestDialog({ quest, onClose }: QuestDialogProps) {
   };
 
   const canComplete =
-    (!quest.requirements.level ||
-      playerStats.level >= quest.requirements.level) &&
-    (!quest.requirements.energy ||
-      playerStats.energy >= quest.requirements.energy) &&
-    (!quest.requirements.money ||
-      playerStats.money >= quest.requirements.money);
+    (!quest.requirements.level || playerStats.level >= quest.requirements.level) &&
+    (!quest.requirements.energy || playerStats.energy >= quest.requirements.energy) &&
+    (!quest.requirements.money || playerStats.money >= quest.requirements.money);
 
   return (
     <div
@@ -41,10 +36,7 @@ export function QuestDialog({ quest, onClose }: QuestDialogProps) {
       className="fixed inset-0 flex items-center justify-center p-4 bg-black/50"
     >
       <div className="bg-gray-800  max-w-2xl w-full p-6 relative">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white"
-        >
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white">
           <XCircle className="w-6 h-6" />
         </button>
 
@@ -60,9 +52,7 @@ export function QuestDialog({ quest, onClose }: QuestDialogProps) {
               <p className="text-sm text-blue-400 mb-1">
                 {quest.dialogues[currentDialogue].speaker}
               </p>
-              <p className="text-white">
-                {quest.dialogues[currentDialogue].text}
-              </p>
+              <p className="text-white">{quest.dialogues[currentDialogue].text}</p>
             </div>
           </div>
 
@@ -90,9 +80,7 @@ export function QuestDialog({ quest, onClose }: QuestDialogProps) {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <h3 className="text-sm font-medium text-gray-400 mb-2">
-              Requirements
-            </h3>
+            <h3 className="text-sm font-medium text-gray-400 mb-2">Requirements</h3>
             <ul className="space-y-1">
               {quest.requirements.level && (
                 <li className="text-sm">Level {quest.requirements.level}</li>
@@ -109,15 +97,9 @@ export function QuestDialog({ quest, onClose }: QuestDialogProps) {
           <div>
             <h3 className="text-sm font-medium text-gray-400 mb-2">Rewards</h3>
             <ul className="space-y-1">
-              {quest.rewards.xp && (
-                <li className="text-sm">XP +{quest.rewards.xp}</li>
-              )}
-              {quest.rewards.money && (
-                <li className="text-sm">Money +{quest.rewards.money}</li>
-              )}
-              {quest.rewards.energy && (
-                <li className="text-sm">Energy +{quest.rewards.energy}</li>
-              )}
+              {quest.rewards.xp && <li className="text-sm">XP +{quest.rewards.xp}</li>}
+              {quest.rewards.money && <li className="text-sm">Money +{quest.rewards.money}</li>}
+              {quest.rewards.energy && <li className="text-sm">Energy +{quest.rewards.energy}</li>}
             </ul>
           </div>
         </div>
@@ -127,9 +109,7 @@ export function QuestDialog({ quest, onClose }: QuestDialogProps) {
             onClick={handleComplete}
             disabled={!canComplete}
             className={`px-4 py-2  ${
-              canComplete
-                ? "bg-blue-500 hover:bg-blue-600"
-                : "bg-gray-600 cursor-not-allowed"
+              canComplete ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-600 cursor-not-allowed"
             }`}
           >
             Complete Quest

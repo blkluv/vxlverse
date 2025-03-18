@@ -45,14 +45,9 @@ export function Map({ onClose }: MapProps) {
               <div className="p-1.5 md:p-2  bg-emerald-500/10">
                 <Compass className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" />
               </div>
-              <h2 className="text-base md:text-lg font-bold text-white">
-                World Map
-              </h2>
+              <h2 className="text-base md:text-lg font-bold text-white">World Map</h2>
             </div>
-            <button
-              onClick={onClose}
-              className="p-1.5 md:p-2 hover:bg-gray-800  transition-colors"
-            >
+            <button onClick={onClose} className="p-1.5 md:p-2 hover:bg-gray-800  transition-colors">
               <X className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
             </button>
           </div>
@@ -98,9 +93,7 @@ export function Map({ onClose }: MapProps) {
                         Current Location
                       </div>
                     ) : (
-                      <div className="text-xs md:text-sm text-gray-400">
-                        Click to travel
-                      </div>
+                      <div className="text-xs md:text-sm text-gray-400">Click to travel</div>
                     )}
                   </div>
 

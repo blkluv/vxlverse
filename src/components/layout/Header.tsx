@@ -28,9 +28,7 @@ export function Header() {
               <Link
                 to="/"
                 className={`text-sm ${
-                  location.pathname === "/"
-                    ? "text-blue-400"
-                    : "text-gray-400 hover:text-white"
+                  location.pathname === "/" ? "text-blue-400" : "text-gray-400 hover:text-white"
                 }`}
               >
                 Home

@@ -1,5 +1,5 @@
-import { Plus, Trash2 } from "lucide-react";
-import { GAME_ITEMS, Item } from "../../../types";
+import { Trash2 } from "lucide-react";
+import { GAME_ITEMS } from "../../../types";
 import { motion } from "framer-motion";
 
 export interface QuestItem {

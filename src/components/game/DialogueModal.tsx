@@ -3,119 +3,105 @@ import { useGameStore } from "../../stores/gameStore";
 import { useSound } from "../../hooks/useSound";
 import { useEffect, useState, useRef, useCallback, memo } from "react";
 import { useEditorStore } from "../../stores/editorStore";
-import {
-  X,
-  Send,
-  RefreshCw,
-  Loader2,
-  MessageSquare,
-  Shield,
-  Sword,
-} from "lucide-react";
+import { X, Send, RefreshCw, Loader2, MessageSquare, Shield, Sword } from "lucide-react";
 import { Dialogue } from "../../types";
 import { Input } from "../UI";
 import { pb } from "../../lib/pocketbase";
 import { useParams } from "react-router-dom";
 
-const MessageItem = memo(
-  ({ message, npcName }: { message: Dialogue; npcName: string }) => {
-    const isPlayer = message.role === "user";
-    const { playSound } = useSound();
+const MessageItem = memo(({ message, npcName }: { message: Dialogue; npcName: string }) => {
+  const isPlayer = message.role === "user";
+  const { playSound } = useSound();
 
-    // Play sound effect when component mounts
-    useEffect(() => {
-      if (isPlayer) {
-        playSound("click");
-      } else {
-        playSound("click");
-      }
-    }, []);
+  // Play sound effect when component mounts
+  useEffect(() => {
+    if (isPlayer) {
+      playSound("click");
+    } else {
+      playSound("click");
+    }
+  }, []);
 
-    return (
-      <div className="mb-4 animate-fadeIn [image-rendering:pixelated] hover:scale-[1.01] transition-all duration-200">
-        <div
-          className={`relative ${
-            isPlayer ? "ml-[30px] mr-[2px]" : "ml-[2px] mr-[30px]"
-          }`}
-        >
-          {/* NPC Name tag with enhanced glowing effect */}
-          {!isPlayer && (
-            <div className="relative z-20 flex items-center gap-1 mb-[2px] ml-[2px]">
-              <div className="h-[4px] w-[4px] bg-[#7FE4FF] animate-pulse shadow-[0_0_8px_rgba(127,228,255,0.8)]" />
-              <h3 className="text-[11px] font-bold text-[#7FE4FF] uppercase tracking-[0.05em] drop-shadow-[0_0_3px_rgba(127,228,255,0.7)]">
-                {npcName}
-              </h3>
+  return (
+    <div className="mb-4 animate-fadeIn [image-rendering:pixelated] hover:scale-[1.01] transition-all duration-200">
+      <div className={`relative ${isPlayer ? "ml-[30px] mr-[2px]" : "ml-[2px] mr-[30px]"}`}>
+        {/* NPC Name tag with enhanced glowing effect */}
+        {!isPlayer && (
+          <div className="relative z-20 flex items-center gap-1 mb-[2px] ml-[2px]">
+            <div className="h-[4px] w-[4px] bg-[#7FE4FF] animate-pulse shadow-[0_0_8px_rgba(127,228,255,0.8)]" />
+            <h3 className="text-[11px] font-bold text-[#7FE4FF] uppercase tracking-[0.05em] drop-shadow-[0_0_3px_rgba(127,228,255,0.7)]">
+              {npcName}
+            </h3>
+          </div>
+        )}
+
+        <div className="relative">
+          {/* Message bubble background with enhanced gradient */}
+          <div
+            className={`absolute inset-0 border-2 border-[#4A4A4A] shadow-[2px_2px_0px_0px_#000000] outline outline-[1px] outline-black [image-rendering:pixelated] ${
+              isPlayer
+                ? "bg-gradient-to-br from-[#3A3A3A] via-[#323232] to-[#2A2A2A]"
+                : "bg-gradient-to-br from-[#2A2A2A] via-[#222222] to-[#1A1A1A]"
+            }`}
+          ></div>
+
+          {/* Decorative corner pixels with pulse animation */}
+          <div className="absolute top-0 left-0 w-[2px] h-[2px] bg-[#7FE4FF] animate-pulse opacity-70"></div>
+          <div className="absolute bottom-0 right-0 w-[2px] h-[2px] bg-[#7FE4FF] animate-pulse opacity-70"></div>
+
+          {/* Character icon with animated glow */}
+          {isPlayer ? (
+            <div className="absolute -left-[26px] top-1/2 -translate-y-1/2 w-[20px] h-[20px] bg-[#3A3A3A] border-2 border-[#4A4A4A] flex items-center justify-center shadow-[1px_1px_0px_0px_#000000] outline outline-[1px] outline-black overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A]"></div>
+              <Sword
+                size={12}
+                className="relative z-10 text-[#FF7F7F] drop-shadow-[0_0_5px_rgba(255,127,127,0.7)]"
+              />
+            </div>
+          ) : (
+            <div className="absolute -right-[26px] top-1/2 -translate-y-1/2 w-[20px] h-[20px] bg-[#2A2A2A] border-2 border-[#4A4A4A] flex items-center justify-center shadow-[1px_1px_0px_0px_#000000] outline outline-[1px] outline-black overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A]"></div>
+              <Shield
+                size={12}
+                className="relative z-10 text-[#7FE4FF] drop-shadow-[0_0_5px_rgba(127,228,255,0.7)]"
+              />
             </div>
           )}
 
-          <div className="relative">
-            {/* Message bubble background with enhanced gradient */}
-            <div
-              className={`absolute inset-0 border-2 border-[#4A4A4A] shadow-[2px_2px_0px_0px_#000000] outline outline-[1px] outline-black [image-rendering:pixelated] ${
-                isPlayer
-                  ? "bg-gradient-to-br from-[#3A3A3A] via-[#323232] to-[#2A2A2A]"
-                  : "bg-gradient-to-br from-[#2A2A2A] via-[#222222] to-[#1A1A1A]"
-              }`}
-            ></div>
-
-            {/* Decorative corner pixels with pulse animation */}
-            <div className="absolute top-0 left-0 w-[2px] h-[2px] bg-[#7FE4FF] animate-pulse opacity-70"></div>
-            <div className="absolute bottom-0 right-0 w-[2px] h-[2px] bg-[#7FE4FF] animate-pulse opacity-70"></div>
-
-            {/* Character icon with animated glow */}
-            {isPlayer ? (
-              <div className="absolute -left-[26px] top-1/2 -translate-y-1/2 w-[20px] h-[20px] bg-[#3A3A3A] border-2 border-[#4A4A4A] flex items-center justify-center shadow-[1px_1px_0px_0px_#000000] outline outline-[1px] outline-black overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A]"></div>
-                <Sword
-                  size={12}
-                  className="relative z-10 text-[#FF7F7F] drop-shadow-[0_0_5px_rgba(255,127,127,0.7)]"
-                />
-              </div>
-            ) : (
-              <div className="absolute -right-[26px] top-1/2 -translate-y-1/2 w-[20px] h-[20px] bg-[#2A2A2A] border-2 border-[#4A4A4A] flex items-center justify-center shadow-[1px_1px_0px_0px_#000000] outline outline-[1px] outline-black overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A]"></div>
-                <Shield
-                  size={12}
-                  className="relative z-10 text-[#7FE4FF] drop-shadow-[0_0_5px_rgba(127,228,255,0.7)]"
-                />
-              </div>
-            )}
-
-            {/* Message text with enhanced styling and effects */}
-            <div className={`relative z-10 p-3 ${isPlayer ? "pl-4" : "pr-4"}`}>
-              {message.content.includes("*") ? (
-                <>
-                  {/* Action/emote text with enhanced glow effect */}
-                  <p className="italic text-md mb-2 text-[#7FE4FF] font-semibold drop-shadow-[0_0_5px_rgba(127,228,255,0.8)] tracking-wide animate-pulse">
-                    {message.content.split("\n")[0]}
-                  </p>
-                  {/* Regular message text with improved styling */}
-                  <div className="relative group">
-                    <p className="text-md text-white leading-relaxed tracking-wide transition-all duration-300 group-hover:text-[#f0f0f0]">
-                      {message.content.split("\n").slice(1).join("\n")}
-                    </p>
-                    {/* Enhanced highlight effect with animation */}
-                    <div className="absolute -inset-1 bg-[#7FE4FF] opacity-5 blur-sm lg group-hover:opacity-10 transition-opacity duration-300"></div>
-                  </div>
-                </>
-              ) : (
+          {/* Message text with enhanced styling and effects */}
+          <div className={`relative z-10 p-3 ${isPlayer ? "pl-4" : "pr-4"}`}>
+            {message.content.includes("*") ? (
+              <>
+                {/* Action/emote text with enhanced glow effect */}
+                <p className="italic text-md mb-2 text-[#7FE4FF] font-semibold drop-shadow-[0_0_5px_rgba(127,228,255,0.8)] tracking-wide animate-pulse">
+                  {message.content.split("\n")[0]}
+                </p>
+                {/* Regular message text with improved styling */}
                 <div className="relative group">
-                  {/* Text with custom letter spacing and line height for better readability */}
                   <p className="text-md text-white leading-relaxed tracking-wide transition-all duration-300 group-hover:text-[#f0f0f0]">
-                    {/* Highlight keywords in the text */}
-                    {highlightKeywords(message.content, isPlayer)}
+                    {message.content.split("\n").slice(1).join("\n")}
                   </p>
-                  {/* Enhanced text highlight effect with hover animation */}
+                  {/* Enhanced highlight effect with animation */}
                   <div className="absolute -inset-1 bg-[#7FE4FF] opacity-5 blur-sm lg group-hover:opacity-10 transition-opacity duration-300"></div>
                 </div>
-              )}
-            </div>
+              </>
+            ) : (
+              <div className="relative group">
+                {/* Text with custom letter spacing and line height for better readability */}
+                <p className="text-md text-white leading-relaxed tracking-wide transition-all duration-300 group-hover:text-[#f0f0f0]">
+                  {/* Highlight keywords in the text */}
+                  {highlightKeywords(message.content, isPlayer)}
+                </p>
+                {/* Enhanced text highlight effect with hover animation */}
+                <div className="absolute -inset-1 bg-[#7FE4FF] opacity-5 blur-sm lg group-hover:opacity-10 transition-opacity duration-300"></div>
+              </div>
+            )}
           </div>
         </div>
       </div>
-    );
-  }
-);
+    </div>
+  );
+});
 MessageItem.displayName = "MessageItem";
 
 // Helper function to highlight keywords in the message content
@@ -204,14 +190,10 @@ export function DialogueModal() {
     setIsGeneratingAI(false);
     setIsModelLoading(false);
 
-    const currentScene = scenes.find((scene) =>
-      scene.objects.some((obj) => obj.id === activeNpc)
-    );
+    const currentScene = scenes.find((scene) => scene.objects.some((obj) => obj.id === activeNpc));
 
     if (currentScene) {
-      const npcObject = currentScene.objects.find(
-        (obj) => obj.id === activeNpc
-      );
+      const npcObject = currentScene.objects.find((obj) => obj.id === activeNpc);
       if (npcObject) {
         setNpcName(npcObject.name || "NPC");
         generateInitialGreeting(npcObject.name || "NPC");
@@ -256,9 +238,7 @@ export function DialogueModal() {
       const currentScene = scenes.find((scene) =>
         scene.objects.some((obj) => obj.id === activeNpc)
       );
-      const npcObject = currentScene?.objects.find(
-        (obj) => obj.id === activeNpc
-      );
+      const npcObject = currentScene?.objects.find((obj) => obj.id === activeNpc);
 
       // Get the current game ID if available
 
@@ -288,8 +268,7 @@ export function DialogueModal() {
         ...updatedMessages,
         {
           role: "assistant",
-          content:
-            "Sorry, I'm having trouble connecting. Please try again later.",
+          content: "Sorry, I'm having trouble connecting. Please try again later.",
         },
       ]);
     } finally {
@@ -314,29 +293,21 @@ export function DialogueModal() {
 
   useEffect(() => {
     if (messagesContainerRef.current && messages.length > 0) {
-      messagesContainerRef.current.scrollTop =
-        messagesContainerRef.current.scrollHeight;
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
   // Helper function to detect if we're on a mobile device
   const isMobileDevice = () => {
     return (
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      ) || window.innerWidth <= 768
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+      window.innerWidth <= 768
     );
   };
 
   useEffect(() => {
     // Only auto-focus on desktop devices
-    if (
-      activeNpc &&
-      inputRef.current &&
-      !isGeneratingAI &&
-      !isModelLoading &&
-      !isMobileDevice()
-    ) {
+    if (activeNpc && inputRef.current && !isGeneratingAI && !isModelLoading && !isMobileDevice()) {
       inputRef.current.focus();
     }
   }, [activeNpc, isGeneratingAI, isModelLoading]);
@@ -389,9 +360,7 @@ export function DialogueModal() {
           <div className="flex justify-between items-center bg-gradient-to-r from-[#1A1A1A] to-[#2A2A2A] border-b-2 border-[#4A4A4A] py-2 px-3 relative z-10">
             <h2 className="text-[#7FE4FF] text-[12px] font-bold uppercase tracking-[0.05em] flex items-center gap-2">
               <MessageSquare size={14} className="text-[#7FE4FF]" />
-              <span className="drop-shadow-[0_0_3px_rgba(127,228,255,0.7)]">
-                {npcName}
-              </span>
+              <span className="drop-shadow-[0_0_3px_rgba(127,228,255,0.7)]">{npcName}</span>
             </h2>
             <div className="flex gap-2">
               <button
@@ -443,9 +412,7 @@ export function DialogueModal() {
             <button
               onClick={() => setMessageAnimation(!messageAnimation)}
               className="absolute top-2 right-2 z-20 p-1 bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A] border border-[#4A4A4A] sm opacity-50 hover:opacity-100 transition-opacity duration-200"
-              title={
-                messageAnimation ? "Disable animations" : "Enable animations"
-              }
+              title={messageAnimation ? "Disable animations" : "Enable animations"}
             >
               <div className="w-3 h-3 bg-[#7FE4FF] opacity-70"></div>
             </button>
@@ -456,9 +423,7 @@ export function DialogueModal() {
                 className={`transition-all duration-300 ${
                   messageAnimation ? "animate-fadeIn" : ""
                 }`}
-                style={
-                  messageAnimation ? { animationDelay: `${index * 80}ms` } : {}
-                }
+                style={messageAnimation ? { animationDelay: `${index * 80}ms` } : {}}
               >
                 <MessageItem message={message} npcName={npcName} />
               </div>
@@ -541,14 +506,10 @@ export function DialogueModal() {
                   className={`w-full bg-[#1A1A1A] border-2 ${
                     inputFocused ? "border-[#7FE4FF]" : "border-[#4A4A4A]"
                   } py-2 px-[8px] text-white text-[11px] outline-none [image-rendering:pixelated] transition-all duration-200 ${
-                    isGeneratingAI || isModelLoading
-                      ? "opacity-50"
-                      : "opacity-100"
+                    isGeneratingAI || isModelLoading ? "opacity-50" : "opacity-100"
                   }`}
                   style={{
-                    boxShadow: inputFocused
-                      ? "0 0 8px rgba(127,228,255,0.4)"
-                      : "none",
+                    boxShadow: inputFocused ? "0 0 8px rgba(127,228,255,0.4)" : "none",
                   }}
                   disabled={isGeneratingAI || isModelLoading}
                 />
@@ -559,11 +520,9 @@ export function DialogueModal() {
                     userInput.length > 100
                       ? "text-[#FF7F7F]"
                       : inputFocused
-                      ? "text-[#9FEFFF]"
-                      : "text-[#7FE4FF]"
-                  } ${
-                    inputFocused ? "opacity-100" : "opacity-70"
-                  } transition-all duration-200`}
+                        ? "text-[#9FEFFF]"
+                        : "text-[#7FE4FF]"
+                  } ${inputFocused ? "opacity-100" : "opacity-70"} transition-all duration-200`}
                 >
                   {userInput.length}/150
                 </div>

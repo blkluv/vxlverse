@@ -34,19 +34,14 @@ export function EditorScene({
 }: EditorSceneProps = {}) {
   const { camera } = useThree();
   const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
-  const setSelectedObjectId = useEditorStore(
-    (state) => state.setSelectedObject
-  );
+  const setSelectedObjectId = useEditorStore((state) => state.setSelectedObject);
   const updateObject = useEditorStore((state) => state.updateObject);
   const currentSceneId = useEditorStore((state) => state.currentSceneId);
   const scenes = useEditorStore((state) => state.scenes);
-  const currentScene =
-    sceneData || scenes.find((scene) => scene.id === currentSceneId);
+  const currentScene = sceneData || scenes.find((scene) => scene.id === currentSceneId);
   const brushActive = useEditorStore((state) => state.brushActive);
   const setBrushActive = useEditorStore((state) => state.setBrushActive);
-  const placeObjectWithBrush = useEditorStore(
-    (state) => state.placeObjectWithBrush
-  );
+  const placeObjectWithBrush = useEditorStore((state) => state.placeObjectWithBrush);
 
   // Ref to track if we've focused on the selected object
   const hasFocusedRef = useRef(false);
@@ -65,9 +60,7 @@ export function EditorScene({
       orbitControlsRef?.current &&
       currentScene
     ) {
-      const selectedObject = currentScene.objects.find(
-        (obj) => obj.id === selectedObjectId
-      );
+      const selectedObject = currentScene.objects.find((obj) => obj.id === selectedObjectId);
       if (selectedObject) {
         // Focus the camera on the selected object
         const target = new THREE.Vector3(
@@ -88,13 +81,7 @@ export function EditorScene({
         hasFocusedRef.current = true;
       }
     }
-  }, [
-    selectedObjectId,
-    focusOnObject,
-    orbitControlsRef,
-    currentScene,
-    camera.position,
-  ]);
+  }, [selectedObjectId, focusOnObject, orbitControlsRef, currentScene, camera.position]);
 
   // Handle background click to deselect objects
   const handleBackgroundClick = (e: THREE.Event) => {
@@ -148,9 +135,7 @@ export function EditorScene({
       });
     }
   };
-  const selectedObject = currentScene?.objects.find(
-    (obj) => obj.id === selectedObjectId
-  );
+  const selectedObject = currentScene?.objects.find((obj) => obj.id === selectedObjectId);
   if (!currentScene) return null;
 
   return (
@@ -165,12 +150,7 @@ export function EditorScene({
 
       {/* Sky */}
       {currentScene.background === "sky" && (
-        <Sky
-          distance={450000}
-          sunPosition={[0, 1, 0]}
-          inclination={0}
-          azimuth={0.25}
-        />
+        <Sky distance={450000} sunPosition={[0, 1, 0]} inclination={0} azimuth={0.25} />
       )}
 
       {/* Ambient Light */}
@@ -206,9 +186,7 @@ export function EditorScene({
       <mesh
         onPointerMove={(v) => {
           if (targetRef.current) {
-            targetRef.current.position
-              .copy(v.point)
-              .add(new THREE.Vector3(0, 0.01, 0));
+            targetRef.current.position.copy(v.point).add(new THREE.Vector3(0, 0.01, 0));
           }
         }}
         rotation={[-Math.PI / 2, 0, 0]}
@@ -217,12 +195,7 @@ export function EditorScene({
         receiveShadow
       >
         <planeGeometry args={[1000, 1000]} />
-        <meshStandardMaterial
-          color="#f0f0f0"
-          transparent
-          opacity={0.0}
-          side={THREE.DoubleSide}
-        />
+        <meshStandardMaterial color="#f0f0f0" transparent opacity={0.0} side={THREE.DoubleSide} />
       </mesh>
 
       {/* Scene Objects */}
@@ -241,9 +214,7 @@ export function EditorScene({
             onTransform={(position, rotation, scale) =>
               handleObjectTransform(object.id, position, rotation, scale)
             }
-            thumbnail={object.modelUrl
-              .replace("scene_", "thumbnail_")
-              .replace(".glb", ".webp")}
+            thumbnail={object.modelUrl.replace("scene_", "thumbnail_").replace(".glb", ".webp")}
           />
         </Suspense>
       ))}
@@ -251,22 +222,20 @@ export function EditorScene({
       {/* Clouds */}
       {currentScene.clouds?.enabled && (
         <>
-          {Array.from({ length: currentScene.clouds.count || 10 }).map(
-            (_, i) => (
-              <Cloud
-                key={i}
-                position={[
-                  (Math.random() - 0.5) * 50,
-                  10 + Math.random() * 10,
-                  (Math.random() - 0.5) * 50,
-                ]}
-                opacity={currentScene.clouds.opacity || 0.5}
-                speed={currentScene.clouds.speed || 0.4}
-                width={10 + Math.random() * 10}
-                depth={1.5}
-              />
-            )
-          )}
+          {Array.from({ length: currentScene.clouds.count || 10 }).map((_, i) => (
+            <Cloud
+              key={i}
+              position={[
+                (Math.random() - 0.5) * 50,
+                10 + Math.random() * 10,
+                (Math.random() - 0.5) * 50,
+              ]}
+              opacity={currentScene.clouds.opacity || 0.5}
+              speed={currentScene.clouds.speed || 0.4}
+              width={10 + Math.random() * 10}
+              depth={1.5}
+            />
+          ))}
         </>
       )}
 
@@ -274,10 +243,7 @@ export function EditorScene({
         alignment="top-right" // widget alignment within scene
         margin={[100, 100]}
       >
-        <GizmoViewport
-          axisColors={["#f48", "#00e676", "#00b0ff"]}
-          labelColor="black"
-        />
+        <GizmoViewport axisColors={["#f48", "#00e676", "#00b0ff"]} labelColor="black" />
       </GizmoHelper>
       {/* Stars */}
       {currentScene.stars?.enabled && (

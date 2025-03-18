@@ -21,9 +21,7 @@ interface TransformPanelProps {
 }
 
 export function TransformPanel({ object, onChange }: TransformPanelProps) {
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(
-    new Set(["position"])
-  );
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["position"]));
   const [lockScale, setLockScale] = useState<boolean>(true);
 
   const toggleSection = (section: string) => {
@@ -68,11 +66,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
 
     if (lockScale) {
       // If scale is locked, update all axes with the same value
-      newScale.set(
-        Math.max(0.01, numValue),
-        Math.max(0.01, numValue),
-        Math.max(0.01, numValue)
-      );
+      newScale.set(Math.max(0.01, numValue), Math.max(0.01, numValue), Math.max(0.01, numValue));
     } else {
       // Otherwise just update the specified axis
       newScale[axis] = Math.max(0.01, numValue);
@@ -133,14 +127,9 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
                     </label>
                     <input
                       type="number"
-                      value={formatValue(
-                        object.position[axis as "x" | "y" | "z"]
-                      )}
+                      value={formatValue(object.position[axis as "x" | "y" | "z"])}
                       onChange={(e) =>
-                        handlePositionChange(
-                          axis as "x" | "y" | "z",
-                          e.target.value
-                        )
+                        handlePositionChange(axis as "x" | "y" | "z", e.target.value)
                       }
                       className="w-full px-1.5 py-1 text-xs bg-slate-800/50 border border-slate-600/50  
                                focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 text-right
@@ -194,14 +183,10 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
                     <input
                       type="number"
                       value={formatValue(
-                        (object.rotation[axis as "x" | "y" | "z"] * 180) /
-                          Math.PI
+                        (object.rotation[axis as "x" | "y" | "z"] * 180) / Math.PI
                       )}
                       onChange={(e) =>
-                        handleRotationChange(
-                          axis as "x" | "y" | "z",
-                          e.target.value
-                        )
+                        handleRotationChange(axis as "x" | "y" | "z", e.target.value)
                       }
                       className="w-full px-1.5 py-1 text-xs bg-slate-800/50 border border-slate-600/50  
                                focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 text-right
@@ -250,9 +235,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
                 onClick={() => setLockScale(!lockScale)}
                 className="flex items-center gap-1 text-xs text-purple-300 hover:text-purple-200 transition-colors"
                 title={
-                  lockScale
-                    ? "Unlock axes (scale independently)"
-                    : "Lock axes (uniform scaling)"
+                  lockScale ? "Unlock axes (scale independently)" : "Lock axes (uniform scaling)"
                 }
               >
                 {lockScale ? (
@@ -281,12 +264,7 @@ export function TransformPanel({ object, onChange }: TransformPanelProps) {
                     <input
                       type="number"
                       value={formatValue(object.scale[axis as "x" | "y" | "z"])}
-                      onChange={(e) =>
-                        handleScaleChange(
-                          axis as "x" | "y" | "z",
-                          e.target.value
-                        )
-                      }
+                      onChange={(e) => handleScaleChange(axis as "x" | "y" | "z", e.target.value)}
                       className="w-full px-1.5 py-1 text-xs bg-slate-800/50 border border-slate-600/50  
                                focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 text-right
                                transition-all"

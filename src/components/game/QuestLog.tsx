@@ -1,17 +1,5 @@
 import { useGameStore } from "../../stores/gameStore";
-import {
-  Book,
-  X,
-  Trophy,
-  Coins,
-  Heart,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
-  Star,
-  Package,
-} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Book, X, Trophy, Coins, CheckCircle2, AlertCircle, Star, Package } from "lucide-react";
 import { Portal } from "../Portal";
 import { GAME_ITEMS } from "../../types";
 
@@ -23,8 +11,7 @@ export function QuestLog() {
   const setActiveDialogue = useGameStore((state) => state.setActiveDialogue);
   const playerStats = useGameStore((state) => state.playerStats);
 
-  const getItemDetails = (itemId: string) =>
-    GAME_ITEMS.find((item) => item.id === itemId);
+  const getItemDetails = (itemId: string) => GAME_ITEMS.find((item) => item.id === itemId);
 
   if (!isOpen) return null;
 
@@ -49,9 +36,7 @@ export function QuestLog() {
                 <Book className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-lg md:text-xl font-bold text-white">
-                  Quest Log
-                </h2>
+                <h2 className="text-lg md:text-xl font-bold text-white">Quest Log</h2>
                 <div className="flex items-center gap-2 md:gap-3 mt-1">
                   <span className="text-xs md:text-sm px-1.5 md:px-2 py-0.5  bg-amber-500/20 text-amber-300 border border-amber-500/20">
                     {questLog.active.length} Active
@@ -98,9 +83,7 @@ export function QuestLog() {
                         </h4>
                         <div className="flex items-center gap-1 md:gap-2 text-amber-400">
                           <Star className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                          <span className="text-xs md:text-sm">
-                            +{quest.rewards.xp} XP
-                          </span>
+                          <span className="text-xs md:text-sm">+{quest.rewards.xp} XP</span>
                         </div>
                       </div>
                       <p className="text-xs md:text-sm text-gray-400 line-clamp-2 mb-3">

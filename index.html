@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,9 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>
-      VXLverse - 3D Voxel Game Creation Platform | No-Code Game Editor
-    </title>
+    <title>VXLverse - 3D Voxel Game Creation Platform | No-Code Game Editor</title>
     <meta
       name="description"
       content="Create and play immersive 3D voxel games with VXLverse. Design worlds, implement combat, add AI-powered NPCs, and share your creations - all without coding. Try our browser-based game engine today!"
@@ -24,16 +22,10 @@
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#121212" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-    />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="VXLverse" />
     <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-8D51L7ND00"
-    ></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8D51L7ND00"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
@@ -106,10 +98,7 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://vxlverse.com/" />
-    <meta
-      property="og:title"
-      content="VXLverse - Create & Play 3D Voxel Games in Your Browser"
-    />
+    <meta property="og:title" content="VXLverse - Create & Play 3D Voxel Games in Your Browser" />
     <meta
       property="og:description"
       content="Build beautiful 3D voxel games without coding. Design worlds, implement combat systems, create AI-powered NPCs, and share your creations with the VXLverse community."
@@ -121,10 +110,7 @@
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://vxlverse.com/" />
-    <meta
-      name="twitter:title"
-      content="VXLverse - 3D Voxel Game Creation & Playing Platform"
-    />
+    <meta name="twitter:title" content="VXLverse - 3D Voxel Game Creation & Playing Platform" />
     <meta
       name="twitter:description"
       content="Design, build and play immersive 3D voxel games directly in your browser with VXLverse's intuitive editor. Features AI-powered NPCs, dynamic combat, and quest systems."
@@ -134,7 +120,7 @@
     <meta name="twitter:creator" content="@vxlverse" />
     <!-- Canonical URL -->
     <link rel="canonical" href="https://vxlverse.com/" />
-    
+
     <!-- Structured Data - Application -->
     <script type="application/ld+json">
       {
@@ -150,7 +136,13 @@
         },
         "description": "A browser-based 3D voxel game creation platform with AI-powered NPCs, dynamic combat systems, and intuitive editor.",
         "screenshot": "https://vxlverse.com/demo-images/Editor.png",
-        "featureList": ["No-code game creation", "AI-powered NPCs", "Dynamic combat system", "Quest & progression system", "3D voxel editor"]
+        "featureList": [
+          "No-code game creation",
+          "AI-powered NPCs",
+          "Dynamic combat system",
+          "Quest & progression system",
+          "3D voxel editor"
+        ]
       }
     </script>
   </head>
@@ -167,8 +159,7 @@
         window.addEventListener("load", async () => {
           // In development: unregister all service workers to prevent caching issues
           if (isDevelopment) {
-            const registrations =
-              await navigator.serviceWorker.getRegistrations();
+            const registrations = await navigator.serviceWorker.getRegistrations();
             for (let registration of registrations) {
               registration.unregister();
               console.log("Service Worker unregistered for development");
@@ -177,9 +168,7 @@
             // Clear all caches to ensure fresh content
             if (window.caches) {
               const cacheNames = await window.caches.keys();
-              await Promise.all(
-                cacheNames.map((cacheName) => window.caches.delete(cacheName))
-              );
+              await Promise.all(cacheNames.map((cacheName) => window.caches.delete(cacheName)));
               console.log("All caches cleared for development");
             }
           }
@@ -188,10 +177,7 @@
             navigator.serviceWorker
               .register("/sw.js")
               .then((registration) => {
-                console.log(
-                  "Service Worker registered with scope:",
-                  registration.scope
-                );
+                console.log("Service Worker registered with scope:", registration.scope);
               })
               .catch((error) => {
                 console.error("Service Worker registration failed:", error);

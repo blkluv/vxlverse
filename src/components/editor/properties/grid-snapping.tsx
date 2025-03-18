@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Grid, Minimize, Maximize, Magnet } from "lucide-react";
-import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { useEditorStore } from "../../../stores/editorStore";
 import { ToggleSwitch } from "../../UI/ToggleSwitch";
@@ -75,15 +74,9 @@ export function GridSnappingPanel() {
                     : "bg-gradient-to-br from-slate-500/20 to-slate-600/20 border border-slate-500/30"
                 } mr-1.5`}
               >
-                <Grid
-                  className={`w-3 h-3 ${
-                    showGrid ? "text-blue-400" : "text-slate-400"
-                  }`}
-                />
+                <Grid className={`w-3 h-3 ${showGrid ? "text-blue-400" : "text-slate-400"}`} />
               </div>
-              <span className="text-[10px] font-medium text-slate-300/90">
-                Show Grid
-              </span>
+              <span className="text-[10px] font-medium text-slate-300/90">Show Grid</span>
             </div>
             <ToggleSwitch
               isOn={showGrid}
@@ -102,15 +95,9 @@ export function GridSnappingPanel() {
                     : "bg-gradient-to-br from-slate-500/20 to-slate-600/20 border border-slate-500/30"
                 } mr-1.5`}
               >
-                <Magnet
-                  className={`w-3 h-3 ${
-                    gridSnap ? "text-blue-400" : "text-slate-400"
-                  }`}
-                />
+                <Magnet className={`w-3 h-3 ${gridSnap ? "text-blue-400" : "text-slate-400"}`} />
               </div>
-              <span className="text-[10px] font-medium text-slate-300/90">
-                Grid Snapping
-              </span>
+              <span className="text-[10px] font-medium text-slate-300/90">Grid Snapping</span>
             </div>
             <ToggleSwitch
               isOn={gridSnap}
@@ -122,9 +109,7 @@ export function GridSnappingPanel() {
           {/* Grid Size Slider */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-medium text-slate-300/90">
-                Grid Size
-              </span>
+              <span className="text-[10px] font-medium text-slate-300/90">Grid Size</span>
               <span className="text-[10px] text-slate-400">{gridSize}</span>
             </div>
             <Slider
@@ -140,12 +125,8 @@ export function GridSnappingPanel() {
           {/* Snap Precision Slider */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-medium text-slate-300/90">
-                Snap Precision
-              </span>
-              <span className="text-[10px] text-slate-400">
-                {snapPrecision}
-              </span>
+              <span className="text-[10px] font-medium text-slate-300/90">Snap Precision</span>
+              <span className="text-[10px] text-slate-400">{snapPrecision}</span>
             </div>
             <Slider
               value={[snapPrecision]}
@@ -159,8 +140,7 @@ export function GridSnappingPanel() {
 
           {/* Helper Text */}
           <div className="text-[9px] text-slate-400 italic">
-            Grid snapping helps align objects to the grid for precise
-            positioning.
+            Grid snapping helps align objects to the grid for precise positioning.
           </div>
         </div>
       )}

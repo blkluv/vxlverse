@@ -10,10 +10,10 @@ export function ModalPortal({ children }: ModalPortalProps) {
 
   useEffect(() => {
     setMounted(true);
-    
+
     // Prevent scrolling on the body when modal is open
     document.body.style.overflow = "hidden";
-    
+
     return () => {
       // Re-enable scrolling when modal is closed
       document.body.style.overflow = "auto";

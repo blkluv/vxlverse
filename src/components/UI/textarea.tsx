@@ -1,8 +1,7 @@
 import React, { forwardRef, useId, useState } from "react";
 import { cn } from "../../lib/utils";
 
-export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: string;
   label?: string;
   description?: string;
@@ -33,9 +32,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ) => {
     const generatedId = useId();
     const textareaId = id || `textarea-${generatedId}`;
-    const descriptionId = description
-      ? `description-${generatedId}`
-      : undefined;
+    const descriptionId = description ? `description-${generatedId}` : undefined;
 
     // Track character count if showCharCount is enabled
     const [charCount, setCharCount] = useState(() => {
@@ -56,20 +53,14 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         {(label || (showCharCount && maxLength)) && (
           <div className="flex justify-between items-center">
             {label && (
-              <label
-                htmlFor={textareaId}
-                className="block text-xs font-medium text-slate-300"
-              >
+              <label htmlFor={textareaId} className="block text-xs font-medium text-slate-300">
                 {label}
               </label>
             )}
 
             {showCharCount && maxLength && (
               <span
-                className={cn(
-                  "text-xs",
-                  charCount > maxLength ? "text-red-400" : "text-slate-400"
-                )}
+                className={cn("text-xs", charCount > maxLength ? "text-red-400" : "text-slate-400")}
               >
                 {charCount}/{maxLength}
               </span>
@@ -85,9 +76,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
         <div className="relative">
           {icon && (
-            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400">
-              {icon}
-            </div>
+            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400">{icon}</div>
           )}
 
           <textarea
@@ -128,9 +117,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           />
         </div>
 
-        {error && (
-          <p className="mt-1 text-xs text-red-500 font-medium">{error}</p>
-        )}
+        {error && <p className="mt-1 text-xs text-red-500 font-medium">{error}</p>}
       </div>
     );
   }

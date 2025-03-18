@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Header } from "../components/layout/Header";
 import { useAuthStore } from "../stores/authStore";
 import { GameCard } from "../components/game/GameCard";

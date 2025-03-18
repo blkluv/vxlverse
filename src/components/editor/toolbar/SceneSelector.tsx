@@ -63,8 +63,7 @@ export function SceneSelector() {
             size={12}
             className="ml-2  min-w-6 text-slate-500 hover:text-red-500"
             onClick={(e) => {
-              confirm("Are you sure you want to delete this scene?") &&
-                removeScene(scene.id);
+              confirm("Are you sure you want to delete this scene?") && removeScene(scene.id);
             }}
           />
         </button>
@@ -78,9 +77,7 @@ export function SceneSelector() {
       </button>
 
       {/* New Scene Modal */}
-      {showNewSceneModal && (
-        <NewSceneModal onClose={() => setShowNewSceneModal(false)} />
-      )}
+      {showNewSceneModal && <NewSceneModal onClose={() => setShowNewSceneModal(false)} />}
     </div>
   );
 }

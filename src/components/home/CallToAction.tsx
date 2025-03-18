@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { ArrowRight, Gamepad2 } from "lucide-react";
 
 export function CallToAction() {
@@ -48,8 +47,8 @@ export function CallToAction() {
             viewport={{ once: true, margin: "-100px" }}
             className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto"
           >
-            Join thousands of creators who are building amazing games with our
-            powerful 3D engine. No coding required. Start your journey today!
+            Join thousands of creators who are building amazing games with our powerful 3D engine.
+            No coding required. Start your journey today!
           </p>
 
           <div

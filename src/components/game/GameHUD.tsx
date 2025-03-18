@@ -5,14 +5,8 @@ import { Link } from "react-router-dom";
 
 export function GameHUD() {
   const { playSound } = useSound();
-  const {
-    gameTime,
-    timeOfDay,
-    playerStats,
-    setQuestLogOpen,
-    setMapOpen,
-    setInventoryOpen,
-  } = useGameStore();
+  const { gameTime, timeOfDay, playerStats, setQuestLogOpen, setMapOpen, setInventoryOpen } =
+    useGameStore();
 
   const formatTime = () => {
     const hours = String(gameTime.hours).padStart(2, "0");
@@ -28,9 +22,7 @@ export function GameHUD() {
           <span className="text-[#7FE4FF] border-r-2 pr-2 border-[#4A4A4A] uppercase font-bold tracking-wide">
             {timeOfDay}
           </span>
-          <span className="text-[#7FE4FF] font-bold tracking-wide">
-            {formatTime()}
-          </span>
+          <span className="text-[#7FE4FF] font-bold tracking-wide">{formatTime()}</span>
         </div>
         <div className="bg-[#2A2A2A] px-2.5 py-1 border-2 border-[#4A4A4A] sm flex items-center gap-2 shadow-[2px_2px_0px_0px_#000000] outline outline-1 outline-black">
           <Coins size={15} className="text-[#FFD700]" />

@@ -1,5 +1,4 @@
 import { Model3D } from "../types";
-import { motion } from "framer-motion";
 import { Calendar, User, Tag, FileKey, Info } from "lucide-react";
 
 interface ModelDetailsProps {

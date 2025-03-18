@@ -113,8 +113,7 @@ export const useEnemyStore = create<EnemyState>()(
 
       // Calculate dropped loot
       const droppedLoot: { itemId: string; amount: number }[] = [];
-      const randomLoot =
-        enemy.loot[Math.floor(Math.random() * enemy.loot.length)];
+      const randomLoot = enemy.loot[Math.floor(Math.random() * enemy.loot.length)];
 
       if (Math.random() <= randomLoot.chance) {
         const itemId = randomLoot.itemId;

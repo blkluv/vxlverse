@@ -1,5 +1,5 @@
-import useSWR from 'swr';
-import { pb } from '../lib/pocketbase';
+import useSWR from "swr";
+import { pb } from "../lib/pocketbase";
 
 export interface Game {
   id: string;
@@ -20,7 +20,7 @@ const fetcher = async () => {
 };
 
 export function useGames() {
-  const { data, error, isLoading, mutate } = useSWR('games', fetcher);
+  const { data, error, isLoading, mutate } = useSWR("games", fetcher);
 
   return {
     games: data || [],

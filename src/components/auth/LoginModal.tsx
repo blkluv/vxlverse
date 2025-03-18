@@ -26,8 +26,7 @@ export function LoginModal({
             </div>
 
             <div className="text-sm text-gray-500 mt-4">
-              By signing in, you agree to our Terms of Service and Privacy
-              Policy
+              By signing in, you agree to our Terms of Service and Privacy Policy
             </div>
           </div>
         </div>

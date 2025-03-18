@@ -11,12 +11,7 @@ interface QuestRewardsProps {
   onRemoveItem: (itemId: string) => void;
 }
 
-export function QuestRewards({
-  quest,
-  updateQuest,
-  onAddItem,
-  onRemoveItem,
-}: QuestRewardsProps) {
+export function QuestRewards({ quest, updateQuest, onAddItem, onRemoveItem }: QuestRewardsProps) {
   return (
     <div className="mt-5 border-t border-slate-700/40 pt-4">
       <h3 className="text-xs font-semibold text-slate-200 mb-3 flex items-center gap-1.5">
@@ -140,11 +135,7 @@ export function QuestRewards({
               <div className="grid grid-cols-1 gap-1.5">
                 <AnimatePresence>
                   {quest.rewards.items.map((item) => (
-                    <ItemCard
-                      key={item.id}
-                      item={item}
-                      onRemove={() => onRemoveItem(item.id)}
-                    />
+                    <ItemCard key={item.id} item={item} onRemove={() => onRemoveItem(item.id)} />
                   ))}
                 </AnimatePresence>
               </div>

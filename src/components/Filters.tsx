@@ -1,6 +1,4 @@
 import { Search } from "lucide-react";
-import { Model3D } from "../types";
-import { motion } from "framer-motion";
 import { Input } from "./UI/input";
 
 interface FiltersProps {

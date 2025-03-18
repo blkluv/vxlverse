@@ -6,11 +6,7 @@ import { pb } from "../lib/pocketbase";
 const DEFAULT_SCENES = [] as Scene[];
 
 // Helper function to create a new scene with default values
-const createDefaultScene = (
-  name: string,
-  id: string,
-  objects: GameObject[] = []
-): Scene => ({
+const createDefaultScene = (name: string, id: string, objects: GameObject[] = []): Scene => ({
   id,
   name,
   showGrid: true,
@@ -77,11 +73,7 @@ export interface EditorState {
   updateScene: (id: string, updates: Partial<Scene>) => void;
   setCurrentScene: (id: string) => void;
   addObject: (sceneId: string, object: GameObject) => void;
-  updateObject: (
-    sceneId: string,
-    objectId: string,
-    updates: Partial<GameObject>
-  ) => void;
+  updateObject: (sceneId: string, objectId: string, updates: Partial<GameObject>) => void;
   setBrushActive: (active: boolean) => void;
   removeObject: (sceneId: string, objectId: string) => void;
   duplicateObject: (sceneId: string, objectId: string) => void;
@@ -182,15 +174,9 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
           nextAction.payload.updates
         );
       } else if (nextAction.type === "REMOVE_OBJECT") {
-        get().removeObject(
-          nextAction.payload.sceneId,
-          nextAction.payload.objectId
-        );
+        get().removeObject(nextAction.payload.sceneId, nextAction.payload.objectId);
       } else if (nextAction.type === "DUPLICATE_OBJECT") {
-        get().duplicateObject(
-          nextAction.payload.sceneId,
-          nextAction.payload.objectId
-        );
+        get().duplicateObject(nextAction.payload.sceneId, nextAction.payload.objectId);
       } else if (nextAction.type === "CHANGE_SCENE") {
         get().setCurrentScene(nextAction.payload.id);
       }
@@ -227,10 +213,7 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
         undo: () => {
           set({
             scenes: prevScenes,
-            currentSceneId:
-              prevScenes.length > 0
-                ? prevScenes[prevScenes.length - 1].id
-                : null,
+            currentSceneId: prevScenes.length > 0 ? prevScenes[prevScenes.length - 1].id : null,
           });
         },
       });
@@ -275,9 +258,7 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
     const sceneToUpdate = prevScenes.find((s) => s.id === id);
 
     set((state) => ({
-      scenes: state.scenes.map((scene) =>
-        scene.id === id ? { ...scene, ...updates } : scene
-      ),
+      scenes: state.scenes.map((scene) => (scene.id === id ? { ...scene, ...updates } : scene)),
     }));
 
     // Add to history if not an undo/redo operation
@@ -315,9 +296,7 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
 
     set((state) => ({
       scenes: state.scenes.map((scene) =>
-        scene.id === sceneId
-          ? { ...scene, objects: [...scene.objects, object] }
-          : scene
+        scene.id === sceneId ? { ...scene, objects: [...scene.objects, object] } : scene
       ),
       selectedObjectId: object.id,
     }));
@@ -382,8 +361,7 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
             }
           : scene
       ),
-      selectedObjectId:
-        state.selectedObjectId === objectId ? null : state.selectedObjectId,
+      selectedObjectId: state.selectedObjectId === objectId ? null : state.selectedObjectId,
     }));
 
     // Add to history if not an undo/redo operation
@@ -455,9 +433,7 @@ export const useEditorStore = create<EditorState>()((set, get) => ({
   setEditingSceneName: (id) => set({ editingSceneName: id }),
   updateSceneName: (id, name) =>
     set((state) => ({
-      scenes: state.scenes.map((scene) =>
-        scene.id === id ? { ...scene, name } : scene
-      ),
+      scenes: state.scenes.map((scene) => (scene.id === id ? { ...scene, name } : scene)),
       editingSceneName: null,
     })),
   toggleBrushMode: (active) => {

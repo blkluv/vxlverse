@@ -59,9 +59,7 @@ export function _Editor() {
     useEditorStore();
   const [showMetrics, setShowMetrics] = useState(false);
   const [forceUpdate, setForceUpdate] = useState(0);
-  const [transformMode, setTransformMode] = useState<
-    "translate" | "rotate" | "scale"
-  >("translate");
+  const [transformMode, setTransformMode] = useState<"translate" | "rotate" | "scale">("translate");
   const orbitControlsRef = useRef();
   const focusOnObject = useEditorStore((state) => state.focusOnObject);
   const handleResize = debounce(() => {
@@ -73,14 +71,14 @@ export function _Editor() {
       window.removeEventListener("resize", handleResize);
     };
   }, [scenes]);
-  
+
   // Handle keyboard shortcuts for undo/redo
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Check if the key is pressed with the command/ctrl key
       const isCommandOrCtrl = e.metaKey || e.ctrlKey;
-      
-      if (isCommandOrCtrl && e.key === 'z') {
+
+      if (isCommandOrCtrl && e.key === "z") {
         e.preventDefault();
         if (e.shiftKey) {
           // Command/Ctrl + Shift + Z = Redo
@@ -89,16 +87,16 @@ export function _Editor() {
           // Command/Ctrl + Z = Undo
           undo();
         }
-      } else if (isCommandOrCtrl && e.key === 'y') {
+      } else if (isCommandOrCtrl && e.key === "y") {
         // Command/Ctrl + Y = Redo (alternative)
         e.preventDefault();
         redo();
       }
     };
-    
-    window.addEventListener('keydown', handleKeyDown);
+
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [undo, redo]);
 
@@ -139,9 +137,7 @@ export function _Editor() {
               camera={{ position: [5, 5, 5], fov: 50 }}
               className="w-full relative h-full"
             >
-              {showMetrics && (
-                <Perf className="absolute z-10 w-80 top-0 left-0" />
-              )}
+              {showMetrics && <Perf className="absolute z-10 w-80 top-0 left-0" />}
 
               <group position={[0, 0.3, 0]} rotation={[1.2, 0, 0]}>
                 <Hero />

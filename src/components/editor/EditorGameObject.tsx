@@ -43,11 +43,7 @@ interface EditorGameObjectProps {
   thumbnail?: string;
   onClick?: (e: THREE.Event) => void;
   transformMode?: "translate" | "rotate" | "scale";
-  onTransform?: (
-    position: THREE.Vector3,
-    rotation: THREE.Euler,
-    scale: THREE.Vector3
-  ) => void;
+  onTransform?: (position: THREE.Vector3, rotation: THREE.Euler, scale: THREE.Vector3) => void;
 }
 
 /**
@@ -85,20 +81,13 @@ export function EditorGameObject({
   const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
   const scenes = useEditorStore((state) => state.scenes);
   const brushActive = useEditorStore((state) => state.brushActive);
-  const placeObjectWithBrush = useEditorStore(
-    (state) => state.placeObjectWithBrush
-  );
+  const placeObjectWithBrush = useEditorStore((state) => state.placeObjectWithBrush);
 
   const currentScene = scenes.find((scene) => scene.id === currentSceneId);
-  const selectedObject = currentScene?.objects.find(
-    (obj) => obj.id === selectedObjectId
-  );
+  const selectedObject = currentScene?.objects.find((obj) => obj.id === selectedObjectId);
 
   // Setup animations only if they exist
-  const { actions, mixer } = useAnimations(
-    animations.length > 0 ? animations : [],
-    scene
-  );
+  const { actions, mixer } = useAnimations(animations.length > 0 ? animations : [], scene);
 
   // Update the object's transform when props change.
   useEffect(() => {
@@ -178,23 +167,17 @@ export function EditorGameObject({
     // Apply grid snapping if enabled
     if (gridSnap) {
       // Snap position to grid (0.5 unit grid to match EditorScene)
-      objectRef.current.position.x =
-        Math.round(objectRef.current.position.x * 2) / 2;
-      objectRef.current.position.y =
-        Math.round(objectRef.current.position.y * 2) / 2;
-      objectRef.current.position.z =
-        Math.round(objectRef.current.position.z * 2) / 2;
+      objectRef.current.position.x = Math.round(objectRef.current.position.x * 2) / 2;
+      objectRef.current.position.y = Math.round(objectRef.current.position.y * 2) / 2;
+      objectRef.current.position.z = Math.round(objectRef.current.position.z * 2) / 2;
 
       // Snap rotation to 45-degree increments
       objectRef.current.rotation.x =
-        Math.round(objectRef.current.rotation.x / (Math.PI / 4)) *
-        (Math.PI / 4);
+        Math.round(objectRef.current.rotation.x / (Math.PI / 4)) * (Math.PI / 4);
       objectRef.current.rotation.y =
-        Math.round(objectRef.current.rotation.y / (Math.PI / 4)) *
-        (Math.PI / 4);
+        Math.round(objectRef.current.rotation.y / (Math.PI / 4)) * (Math.PI / 4);
       objectRef.current.rotation.z =
-        Math.round(objectRef.current.rotation.z / (Math.PI / 4)) *
-        (Math.PI / 4);
+        Math.round(objectRef.current.rotation.z / (Math.PI / 4)) * (Math.PI / 4);
 
       // Snap scale to 0.25 increments
       objectRef.current.scale.x = Math.round(objectRef.current.scale.x * 4) / 4;

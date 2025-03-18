@@ -12,10 +12,10 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   if (!isAuthenticated) {
     // Redirect to login page with the intended destination
     return (
-      <Navigate 
-        to="/login" 
+      <Navigate
+        to="/login"
         state={{ from: location }} // Pass the location they were trying to access
-        replace 
+        replace
       />
     );
   }

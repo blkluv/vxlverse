@@ -13,8 +13,7 @@ const availableQuests = [
   {
     id: "q2",
     title: "Defeat the Bandits",
-    description:
-      "Clear the road of bandits that have been troubling travelers.",
+    description: "Clear the road of bandits that have been troubling travelers.",
     requirements: { level: 3 },
     rewards: { money: 75, xp: 150 },
   },
@@ -71,9 +70,7 @@ export function Quests() {
                     textAlign: "left",
                     padding: "6px 8px",
                     borderBottom: "2px solid #4A4A4A",
-                    backgroundColor: meetsRequirement
-                      ? "transparent"
-                      : "rgba(0,0,0,0.3)",
+                    backgroundColor: meetsRequirement ? "transparent" : "rgba(0,0,0,0.3)",
                     opacity: meetsRequirement ? 1 : 0.7,
                     cursor: meetsRequirement ? "pointer" : "not-allowed",
                     transition: "background-color 0.2s",
@@ -129,9 +126,7 @@ export function Quests() {
                         color: "white",
                         fontWeight: "bold",
                         whiteSpace: "nowrap",
-                        backgroundColor: meetsRequirement
-                          ? "#d97706"
-                          : "#b91c1c",
+                        backgroundColor: meetsRequirement ? "#d97706" : "#b91c1c",
                         textShadow: "1px 1px 0 #000",
                       }}
                     >

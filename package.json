@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier --write 'src/**/*.{ts,tsx,css,json}'",
+    "format:check": "prettier --check 'src/**/*.{ts,tsx,css,json}'",
+    "prepare": "husky"
   },
   "dependencies": {
     "@mlc-ai/web-llm": "^0.2.78",
@@ -33,6 +36,12 @@
     "three-mesh-bvh": "^0.8.3",
     "zustand": "^4.5.6"
   },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "npm run format"
+    ],
+    "*.{json,css}": "prettier --write"
+  },
   "devDependencies": {
     "@types/howler": "^2.2.12",
     "@types/react": "^18.3.18",
@@ -40,7 +49,11 @@
     "@types/three": "^0.170.0",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.17",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
     "postcss": "^8.5.3",
+    "prettier": "^3.4.2",
+    "prettier-plugin-unused-imports-configurable": "^1.14.2",
     "r3f-perf": "^7.2.3",
     "tailwindcss": "^3.4.17",
     "terser": "^5.39.0",

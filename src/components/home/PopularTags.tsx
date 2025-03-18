@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Tag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -38,9 +37,7 @@ export function PopularTags() {
               <div className="text-lg font-medium text-purple-300 group-hover:text-purple-200">
                 {tag.name}
               </div>
-              <div className="text-sm text-purple-400/60">
-                {tag.count.toLocaleString()} games
-              </div>
+              <div className="text-sm text-purple-400/60">{tag.count.toLocaleString()} games</div>
             </button>
           ))}
         </div>

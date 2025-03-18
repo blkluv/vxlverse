@@ -1,18 +1,8 @@
 import { EcctrlJoystick, useJoystickControls } from "ecctrl";
-import {
-  MeshStandardMaterial,
-  SphereGeometry,
-  BoxGeometry,
-  TorusGeometry,
-  IcosahedronGeometry,
-  OctahedronGeometry,
-  Color,
-  MeshPhongMaterial,
-  MeshBasicMaterial,
-} from "three";
+import { MeshStandardMaterial, SphereGeometry, OctahedronGeometry } from "three";
 import { useGameStore } from "../../stores/gameStore";
 import { cn } from "../UI";
-import { useRef } from "react";
+
 export function Joystick() {
   const { activeNpc } = useGameStore();
   const joystick = useJoystickControls();

@@ -19,10 +19,7 @@ export function useModels(searchQuery: string, selectedCategory: string) {
         const data = await response.json();
         if (mounted) setModels(data);
       } catch (err) {
-        if (mounted)
-          setError(
-            err instanceof Error ? err.message : "Failed to load models"
-          );
+        if (mounted) setError(err instanceof Error ? err.message : "Failed to load models");
       } finally {
         if (mounted) setLoading(false);
       }
@@ -41,8 +38,7 @@ export function useModels(searchQuery: string, selectedCategory: string) {
 
   const filteredModels = useMemo(() => {
     return models.filter((model) => {
-      const matchesCategory =
-        selectedCategory === "All" || model.category === selectedCategory;
+      const matchesCategory = selectedCategory === "All" || model.category === selectedCategory;
       const searchLower = searchQuery.toLowerCase();
       const matchesSearch =
         !searchQuery ||

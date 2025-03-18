@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useEditorStore } from "../../stores/editorStore";
 import { Model3D } from "../../types";
 import {
@@ -15,15 +15,7 @@ import {
   FileCode,
 } from "lucide-react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import {
-  Center,
-  OrbitControls,
-  OrbitControlsChangeEvent,
-  Stage,
-  useAnimations,
-  useGLTF,
-} from "@react-three/drei";
-import { Suspense } from "react";
+import { Center, OrbitControls, Stage, useAnimations, useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { Model } from "../Model";
 import { Portal } from "../Portal";
@@ -129,9 +121,7 @@ const getLicenseUrl = (license: string): string => {
   }
 
   // Default to a search
-  return `https://search.creativecommons.org/search?q=${encodeURIComponent(
-    license
-  )}`;
+  return `https://search.creativecommons.org/search?q=${encodeURIComponent(license)}`;
 };
 
 // Custom hook for fetching models with PocketBase
@@ -146,15 +136,11 @@ const useModels = (
     `models-${searchTerm}-${category}-${onlyAnimated}-${page}-${perPage}`,
     async () => {
       // Build filter based on search term, category, and animation flag
-      let filter = searchTerm
-        ? `(name ~ "${searchTerm}" || tags ~ "${searchTerm}")`
-        : "";
+      let filter = searchTerm ? `(name ~ "${searchTerm}" || tags ~ "${searchTerm}")` : "";
 
       // Add category filter if not "All"
       if (category && category !== "All") {
-        filter = filter
-          ? `${filter} && (category = "${category}")`
-          : `category = "${category}"`;
+        filter = filter ? `${filter} && (category = "${category}")` : `category = "${category}"`;
       }
 
       // Add animated filter if requested
@@ -162,12 +148,10 @@ const useModels = (
         filter = filter ? `${filter} && (animated = true)` : `animated = true`;
       }
 
-      const res = await pb
-        .collection("3d_models")
-        .getList<Model3D>(page, perPage, {
-          sort: "-created", // Sort by newest first
-          filter: filter,
-        });
+      const res = await pb.collection("3d_models").getList<Model3D>(page, perPage, {
+        sort: "-created", // Sort by newest first
+        filter: filter,
+      });
 
       return {
         items: res.items?.map((obj) => ({
@@ -212,8 +196,7 @@ export function ModelSelector() {
     ITEMS_PER_PAGE
   );
 
-  const { currentSceneId, setShowModelSelector, showModelSelector } =
-    useEditorStore();
+  const { currentSceneId, setShowModelSelector, showModelSelector } = useEditorStore();
 
   // Reset page when filters change
   useEffect(() => {
@@ -332,9 +315,7 @@ export function ModelSelector() {
 
           {/* Next page button */}
           <button
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-            }
+            onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
             disabled={currentPage === totalPages}
             className="p-1.5  bg-slate-800/50 text-slate-400 disabled:opacity-50 hover:bg-slate-700/50"
             title="Next page"
@@ -419,9 +400,7 @@ export function ModelSelector() {
                       <Package className="w-5 h-5 text-blue-400" />
                     </div>
                     <div>
-                      <h2 className="text-xl font-bold text-slate-100">
-                        Add Object
-                      </h2>
+                      <h2 className="text-xl font-bold text-slate-100">Add Object</h2>
                     </div>
                   </div>
                   <button
@@ -433,10 +412,7 @@ export function ModelSelector() {
                     } hover:bg-slate-800 transition-colors `}
                     title="Show only animated models"
                   >
-                    <Play
-                      className="w-3.5 h-3.5"
-                      fill={onlyAnimated ? "currentColor" : "none"}
-                    />
+                    <Play className="w-3.5 h-3.5" fill={onlyAnimated ? "currentColor" : "none"} />
                     <span className="text-xs font-medium">Animated</span>
                     <span className="ml-1 px-1.5 py-0.5 text-[10px] full bg-slate-700/50 text-slate-300">
                       {onlyAnimated ? "ON" : "OFF"}
@@ -493,9 +469,7 @@ export function ModelSelector() {
                     <Package className="w-12 h-12 text-slate-500 mx-auto mb-4" />
                     <p className="text-slate-400">No models found</p>
                     {searchQuery && (
-                      <p className="text-xs mt-1 text-slate-400">
-                        Try a different search term
-                      </p>
+                      <p className="text-xs mt-1 text-slate-400">Try a different search term</p>
                     )}
                     {onlyAnimated && (
                       <p className="text-xs mt-1 text-slate-400">
@@ -524,17 +498,12 @@ export function ModelSelector() {
                           />
                           {model?.animated && (
                             <div className="absolute bottom-1 right-1 bg-purple-900/70 p-0.5 full">
-                              <Play
-                                className="w-3 h-3 text-purple-300"
-                                fill="currentColor"
-                              />
+                              <Play className="w-3 h-3 text-purple-300" fill="currentColor" />
                             </div>
                           )}
                         </div>
                         <div className="flex-1 min-w-0 text-left">
-                          <h3 className="font-medium text-slate-100 truncate">
-                            {model.name}
-                          </h3>
+                          <h3 className="font-medium text-slate-100 truncate">{model.name}</h3>
                           <div className="flex items-center gap-1 mt-1">
                             {model.attribution_url ? (
                               <>
@@ -562,9 +531,7 @@ export function ModelSelector() {
                         </div>
                         <ChevronRight
                           className={`w-5 h-5 transition-colors flex-shrink-0 ${
-                            selectedModel?.id === model.id
-                              ? "text-blue-400"
-                              : "text-slate-500"
+                            selectedModel?.id === model.id ? "text-blue-400" : "text-slate-500"
                           }`}
                         />
                       </div>
@@ -586,11 +553,7 @@ export function ModelSelector() {
             </button>
             {selectedModel ? (
               <>
-                <Canvas
-                  key={selectedModel.id}
-                  shadows
-                  camera={{ position: [0, 0, 4], fov: 50 }}
-                >
+                <Canvas key={selectedModel.id} shadows camera={{ position: [0, 0, 4], fov: 50 }}>
                   <axesHelper position={[0, -1, 0]} />
                   <gridHelper position={[0, -1, 0]} />
                   <ambientLight />
@@ -610,28 +573,20 @@ export function ModelSelector() {
                       </Suspense>
                     </Center>
                   </Stage>
-                  <OrbitControls
-                    minDistance={0.5}
-                    maxDistance={1000}
-                    ref={orbitControlsRef}
-                  />
+                  <OrbitControls minDistance={0.5} maxDistance={1000} ref={orbitControlsRef} />
                 </Canvas>
 
                 <div className="col-span-2 absolute top-2 left-2 flex items-start justify-between bg-slate-800/30 p-3 ">
                   <div className="flex items-center gap-3">
                     <div>
-                      <h3 className="text-lg font-medium text-white">
-                        {selectedModel.name}
-                      </h3>
+                      <h3 className="text-lg font-medium text-white">{selectedModel.name}</h3>
                       <div className="flex items-center gap-2 mt-1">
                         <span className="text-xs px-2 py-0.5 bg-slate-700/50 text-slate-300 ">
                           {selectedModel.category || "Uncategorized"}
                         </span>
                         {selectedModel?.animated && (
                           <span className="text-xs px-2 py-0.5 bg-purple-900/40 text-purple-300  border border-purple-700/50">
-                            {isAnimationPlaying
-                              ? "Animation Playing"
-                              : "Animated Model"}
+                            {isAnimationPlaying ? "Animation Playing" : "Animated Model"}
                           </span>
                         )}
                       </div>
@@ -643,17 +598,14 @@ export function ModelSelector() {
                 {selectedModel?.animated && availableAnimations.length > 0 && (
                   <div className="absolute top-2 right-12 bg-slate-800/30 p-3 ">
                     <div className="flex flex-col gap-2">
-                      <h4 className="text-xs font-medium text-slate-300">
-                        Animations
-                      </h4>
+                      <h4 className="text-xs font-medium text-slate-300">Animations</h4>
                       <div className="flex flex-col gap-1 max-h-40 overflow-y-auto custom-scrollbar">
                         {availableAnimations.map((anim, index) => (
                           <button
                             key={index}
                             onClick={() => setSelectedAnimation(anim)}
                             className={`text-xs px-3 py-1.5 text-left ${
-                              selectedAnimation === anim ||
-                              (index === 0 && !selectedAnimation)
+                              selectedAnimation === anim || (index === 0 && !selectedAnimation)
                                 ? "bg-purple-500/20 text-purple-300 ring-1 ring-purple-500/30"
                                 : "bg-slate-800/50 text-slate-300 hover:bg-slate-700/50"
                             }`}
@@ -682,9 +634,7 @@ export function ModelSelector() {
                             className="text-sm text-blue-400 hover:underline flex items-center gap-1"
                           >
                             By {selectedModel.creator}
-                            {selectedModel.attribution_url && (
-                              <ExternalLink className="w-3 h-3" />
-                            )}
+                            {selectedModel.attribution_url && <ExternalLink className="w-3 h-3" />}
                           </a>
                         ) : (
                           <div className="text-sm text-slate-400">Unknown</div>
@@ -707,9 +657,7 @@ export function ModelSelector() {
                             <ExternalLink className="w-3 h-3" />
                           </a>
                         ) : (
-                          <div className="text-sm text-slate-400">
-                            No license information
-                          </div>
+                          <div className="text-sm text-slate-400">No license information</div>
                         )}
                       </div>
                     </div>
@@ -735,8 +683,8 @@ export function ModelSelector() {
                 <Package className="w-16 h-16 mb-4 text-slate-500" />
                 <p className="text-lg font-medium mb-2">No Model Selected</p>
                 <p className="text-sm text-center max-w-md">
-                  Select a model from the list to preview it here. You can
-                  rotate and zoom the preview using your mouse.
+                  Select a model from the list to preview it here. You can rotate and zoom the
+                  preview using your mouse.
                 </p>
               </div>
             )}

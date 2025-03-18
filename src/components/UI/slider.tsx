@@ -82,9 +82,7 @@ export function Slider({
   const thumbPosition = ((currentValue - min) / (max - min)) * 100;
 
   return (
-    <div
-      className={`relative flex w-full touch-none select-none items-center ${className}`}
-    >
+    <div className={`relative flex w-full touch-none select-none items-center ${className}`}>
       <div
         ref={trackRef}
         className="relative h-1.5 w-full grow overflow-hidden -full bg-slate-800/80 border border-slate-700/50 cursor-pointer"

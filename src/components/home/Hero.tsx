@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { Gamepad2, Sparkles, Play, ChevronRight, Plus } from "lucide-react";
+import { Gamepad2, Sparkles, Play, Plus } from "lucide-react";
 import { useAuthStore } from "../../stores/authStore";
 import { useState } from "react";
 import { LoginModal } from "../auth/LoginModal";
@@ -43,8 +42,8 @@ export function Hero() {
             </h1>
 
             <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
-              Join thousands of creators building amazing games with our
-              powerful 3D engine. No coding required. Start your journey today.
+              Join thousands of creators building amazing games with our powerful 3D engine. No
+              coding required. Start your journey today.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -61,9 +60,7 @@ export function Hero() {
                 onClick={() => {
                   if (isAuthenticated) {
                     // If authenticated, show the create game modal
-                    window.dispatchEvent(
-                      new CustomEvent("open-create-game-modal")
-                    );
+                    window.dispatchEvent(new CustomEvent("open-create-game-modal"));
                   } else {
                     // If not authenticated, show login modal
                     setShowLoginModal(true);

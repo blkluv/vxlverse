@@ -140,11 +140,7 @@ export function QuestRequirements({
               <div className="grid grid-cols-1 gap-1.5">
                 <AnimatePresence>
                   {quest.requirements.items.map((item) => (
-                    <ItemCard
-                      key={item.id}
-                      item={item}
-                      onRemove={() => onRemoveItem(item.id)}
-                    />
+                    <ItemCard key={item.id} item={item} onRemove={() => onRemoveItem(item.id)} />
                   ))}
                 </AnimatePresence>
               </div>

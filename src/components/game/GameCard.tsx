@@ -2,15 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
 import { pb } from "../../lib/pocketbase";
-import {
-  Star,
-  Users,
-  Clock,
-  Trash2,
-  Edit3,
-  PlayCircle,
-  Heart,
-} from "lucide-react";
+import { Star, Users, Clock, Trash2, Edit3, PlayCircle, Heart } from "lucide-react";
 import { useState } from "react";
 
 interface Game {
@@ -143,17 +135,13 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
             <div className="p-1  bg-yellow-500/10 backdrop-blur-sm">
               <Star className="w-3 h-3 text-yellow-500" />
             </div>
-            <span className="text-yellow-500 font-medium">
-              {game.rating?.toFixed(1) || "4.5"}
-            </span>
+            <span className="text-yellow-500 font-medium">{game.rating?.toFixed(1) || "4.5"}</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="p-1  bg-blue-500/10 backdrop-blur-sm">
               <Users className="w-3 h-3 text-blue-400" />
             </div>
-            <span className="text-blue-400 font-medium">
-              {game.players || "128"}
-            </span>
+            <span className="text-blue-400 font-medium">{game.players || "128"}</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="p-1  bg-purple-500/10 backdrop-blur-sm">

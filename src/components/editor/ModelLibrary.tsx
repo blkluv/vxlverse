@@ -32,14 +32,10 @@ export function ModelLibrary() {
       });
   }, []);
 
-  const categories = [
-    "All",
-    ...Array.from(new Set(models.map((m) => m.category))),
-  ].sort();
+  const categories = ["All", ...Array.from(new Set(models.map((m) => m.category)))].sort();
 
   const filteredModels = models.filter((model) => {
-    const matchesCategory =
-      selectedCategory === "All" || model.category === selectedCategory;
+    const matchesCategory = selectedCategory === "All" || model.category === selectedCategory;
     const matchesSearch =
       model.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       model.tags.toLowerCase().includes(searchQuery.toLowerCase());
@@ -151,14 +147,10 @@ export function ModelLibrary() {
                   />
                 </div>
                 <div className="text-left">
-                  <h3 className="text-xs font-medium text-slate-100 truncate">
-                    {model.name}
-                  </h3>
+                  <h3 className="text-xs font-medium text-slate-100 truncate">{model.name}</h3>
                   <div className="flex items-center gap-1 mt-1">
                     <Tag className="w-3 h-3 text-slate-400" />
-                    <p className="text-[10px] text-slate-400 truncate">
-                      {model.tags}
-                    </p>
+                    <p className="text-[10px] text-slate-400 truncate">{model.tags}</p>
                   </div>
                 </div>
               </button>
@@ -175,12 +167,7 @@ export function ModelLibrary() {
               <Stage environment="city" intensity={0.5}>
                 <Model url={selectedModel.glb} />
               </Stage>
-              <OrbitControls
-                autoRotate
-                autoRotateSpeed={4}
-                enableZoom={false}
-                enablePan={false}
-              />
+              <OrbitControls autoRotate autoRotateSpeed={4} enableZoom={false} enablePan={false} />
             </Canvas>
           </div>
           <div className="p-3 flex gap-2">

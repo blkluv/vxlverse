@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ChevronLeft, Play, Settings, Share2 } from "lucide-react";
+import { Play, Settings } from "lucide-react";
 import { Tooltip } from "../UI/Tooltip";
 import { Link, useParams } from "react-router-dom";
 import { useEditorStore } from "../../stores/editorStore";
@@ -10,10 +10,7 @@ type EditorHeaderProps = {
   setShowMetrics: (show: boolean) => void;
   showMetrics: boolean;
 };
-export const EditorHeader: React.FC<EditorHeaderProps> = ({
-  setShowMetrics,
-  showMetrics,
-}) => {
+export const EditorHeader: React.FC<EditorHeaderProps> = ({ setShowMetrics, showMetrics }) => {
   const { id } = useParams<{ id: string }>();
   const [showSettings, setShowSettings] = useState(false);
   const { setGridSnap, gridSnap } = useEditorStore();

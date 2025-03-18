@@ -1,12 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import {
-  Move,
-  Minimize,
-  Maximize,
-  RotateCcw,
-  Link,
-  Unlink,
-} from "lucide-react";
+import { Move, Minimize, Maximize, RotateCcw, Link, Unlink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "../../UI/input";
 import { useEditorStore } from "../../../stores/editorStore";
@@ -23,9 +16,7 @@ export function TransformPanel() {
 
   // Get the current scene and selected object
   const currentScene = scenes.find((scene) => scene.id === currentSceneId);
-  const selectedObject = currentScene?.objects.find(
-    (obj) => obj.id === selectedObjectId
-  );
+  const selectedObject = currentScene?.objects.find((obj) => obj.id === selectedObjectId);
 
   if (!currentScene || !selectedObject) return null;
 
@@ -141,9 +132,7 @@ export function TransformPanel() {
         <div
           className={`w-5 h-5 flex-shrink-0 flex items-center justify-center ${colors.bg} ${colors.border} border mr-1.5`}
         >
-          <span className={`text-[10px] font-bold ${colors.text}`}>
-            {axis.toUpperCase()}
-          </span>
+          <span className={`text-[10px] font-bold ${colors.text}`}>{axis.toUpperCase()}</span>
         </div>
         <div className="flex-grow relative">
           <Input
@@ -187,9 +176,7 @@ export function TransformPanel() {
     <div className="mb-4 last:mb-0">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center">
-          <span className="text-[11px] font-medium text-blue-300/90">
-            {title}
-          </span>
+          <span className="text-[11px] font-medium text-blue-300/90">{title}</span>
           {extraControls && <div className="ml-2">{extraControls}</div>}
         </div>
         <button
@@ -304,9 +291,7 @@ export function TransformPanel() {
                       toggleScaleLink();
                     }}
                     className="p-1  hover:bg-slate-700/50 transition-colors"
-                    title={
-                      scaleLinked ? "Unlink scale values" : "Link scale values"
-                    }
+                    title={scaleLinked ? "Unlink scale values" : "Link scale values"}
                   >
                     {scaleLinked ? (
                       <Link className="w-3 h-3 text-blue-400" />

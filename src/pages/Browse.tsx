@@ -1,14 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import {
-  Search,
-  Filter,
-  Tag as TagIcon,
-  Star,
-  Users,
-  Clock,
-  ArrowUpRight,
-} from "lucide-react";
+import { Search, Tag as TagIcon, Star, Users, Clock, ArrowUpRight } from "lucide-react";
 
 const GAMES = [
   {
@@ -26,16 +17,7 @@ const GAMES = [
 ];
 
 const FILTERS = {
-  categories: [
-    "All",
-    "RPG",
-    "Action",
-    "Adventure",
-    "Strategy",
-    "Puzzle",
-    "Racing",
-    "Sports",
-  ],
+  categories: ["All", "RPG", "Action", "Adventure", "Strategy", "Puzzle", "Racing", "Sports"],
   sortBy: ["Most Popular", "Newest", "Top Rated", "Most Played"],
   timeRange: ["All Time", "This Week", "This Month", "This Year"],
 };
@@ -53,9 +35,7 @@ export function Browse() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
           <div>
             <h1 className="text-4xl font-bold mb-2">Browse Games</h1>
-            <p className="text-gray-400">
-              Discover amazing games created by our community
-            </p>
+            <p className="text-gray-400">Discover amazing games created by our community</p>
           </div>
 
           {/* Search */}
@@ -153,9 +133,7 @@ export function Browse() {
                 <h3 className="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors">
                   {game.title}
                 </h3>
-                <p className="text-gray-400 mb-4 line-clamp-2">
-                  {game.description}
-                </p>
+                <p className="text-gray-400 mb-4 line-clamp-2">{game.description}</p>
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-4">

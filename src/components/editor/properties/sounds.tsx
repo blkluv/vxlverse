@@ -1,23 +1,12 @@
 import { useState } from "react";
-import {
-  Volume2,
-  Minimize,
-  Maximize,
-  Play,
-  Pause,
-  VolumeX,
-} from "lucide-react";
+import { Volume2, Minimize, Maximize, Play, Pause, VolumeX } from "lucide-react";
 import { Input } from "../../UI/input";
 import { Slider } from "../../UI/slider";
-import toast from "react-hot-toast";
-import { useEditorStore } from "../../../stores/editorStore";
 
 export function SoundPanel() {
   const [expanded, setExpanded] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(
-    null
-  );
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
 
   return (
     <div className="bg-slate-800/30 border border-slate-700/30 overflow-hidden">
@@ -78,20 +67,10 @@ export function SoundPanel() {
           {/* Volume Slider */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-medium text-slate-300/90">
-                Volume
-              </span>
-              <span className="text-[10px] text-slate-400">
-                {Math.round(100)}%
-              </span>
+              <span className="text-[10px] font-medium text-slate-300/90">Volume</span>
+              <span className="text-[10px] text-slate-400">{Math.round(100)}%</span>
             </div>
-            <Slider
-              value={[0.5]}
-              min={0}
-              max={1}
-              step={0.01}
-              className="mt-1"
-            />
+            <Slider value={[0.5]} min={0} max={1} step={0.01} className="mt-1" />
           </div>
 
           {/* Helper Text */}

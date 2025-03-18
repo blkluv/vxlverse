@@ -44,9 +44,7 @@ export function PhysicsPanel() {
 
   // Get the current scene and selected object
   const currentScene = scenes.find((scene) => scene.id === currentSceneId);
-  const selectedObject = currentScene?.objects.find(
-    (obj) => obj.id === selectedObjectId
-  );
+  const selectedObject = currentScene?.objects.find((obj) => obj.id === selectedObjectId);
 
   // If no scene or no selected object, don't render
   if (!currentScene || !selectedObject) return null;
@@ -103,9 +101,7 @@ export function PhysicsPanel() {
   }) => (
     <div className="mb-3">
       <div className="flex items-center justify-between mb-1.5">
-        <label className="block text-[11px] font-medium text-blue-300/90">
-          {label}
-        </label>
+        <label className="block text-[11px] font-medium text-blue-300/90">{label}</label>
         {tooltip && (
           <Tooltip content={tooltip}>
             <HelpCircle className="w-3 h-3 text-slate-400 cursor-help" />
@@ -134,9 +130,7 @@ export function PhysicsPanel() {
         ))}
       </div>
 
-      {description && (
-        <p className="text-[10px] text-slate-500 mt-1">{description}</p>
-      )}
+      {description && <p className="text-[10px] text-slate-500 mt-1">{description}</p>}
     </div>
   );
 
@@ -160,9 +154,7 @@ export function PhysicsPanel() {
   }) => (
     <div className="mb-3">
       <div className="flex items-center justify-between mb-1.5">
-        <label className="block text-[11px] font-medium text-blue-300/90">
-          {label}
-        </label>
+        <label className="block text-[11px] font-medium text-blue-300/90">{label}</label>
         {tooltip && (
           <Tooltip content={tooltip}>
             <HelpCircle className="w-3 h-3 text-slate-400 cursor-help" />
@@ -187,14 +179,12 @@ export function PhysicsPanel() {
       case "cuboid":
         return {
           description: "Simple box collider",
-          tooltip:
-            "Box-shaped collision volume that follows the object's dimensions",
+          tooltip: "Box-shaped collision volume that follows the object's dimensions",
         };
       case "ball":
         return {
           description: "Perfect sphere collider",
-          tooltip:
-            "Spherical collision volume, good for round objects and performance",
+          tooltip: "Spherical collision volume, good for round objects and performance",
         };
       case "capsule":
         return {
@@ -249,9 +239,9 @@ export function PhysicsPanel() {
           {showHelp && (
             <div className="p-3 pt-2 border-t border-slate-700/30 bg-blue-900/10">
               <p className="text-[11px] text-blue-200/80 leading-relaxed">
-                Physics allows objects to interact with each other in a
-                realistic way. Currently, only static colliders are supported,
-                which means objects won't move but can be collided with.
+                Physics allows objects to interact with each other in a realistic way. Currently,
+                only static colliders are supported, which means objects won't move but can be
+                collided with.
               </p>
             </div>
           )}
@@ -265,9 +255,7 @@ export function PhysicsPanel() {
                   checked={physics.enabled}
                   onChange={handleTogglePhysics}
                 />
-                <span className="text-[11px] font-medium text-blue-300/90">
-                  Enable Physics
-                </span>
+                <span className="text-[11px] font-medium text-blue-300/90">Enable Physics</span>
               </div>
             </div>
 
@@ -278,12 +266,8 @@ export function PhysicsPanel() {
                   value={physics.colliders || "cuboid"}
                   onChange={(value) => handlePhysicsChange("colliders", value)}
                   options={colliderTypes}
-                  description={
-                    getColliderInfo(physics.colliders || "cuboid").description
-                  }
-                  tooltip={
-                    getColliderInfo(physics.colliders || "cuboid").tooltip
-                  }
+                  description={getColliderInfo(physics.colliders || "cuboid").description}
+                  tooltip={getColliderInfo(physics.colliders || "cuboid").tooltip}
                 />
 
                 <div className="mt-2 pt-2 border-t border-slate-700/20">
@@ -291,9 +275,7 @@ export function PhysicsPanel() {
                     <Info className="w-3 h-3 text-blue-400 mr-1" />
                     Selected:{" "}
                     {
-                      colliderTypes.find(
-                        (c) => c.value === (physics.colliders || "cuboid")
-                      )?.label
+                      colliderTypes.find((c) => c.value === (physics.colliders || "cuboid"))?.label
                     }{" "}
                     Collider
                   </p>

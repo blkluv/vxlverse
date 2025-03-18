@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Modal } from "../UI/Modal";
 import { pb } from "../../lib/pocketbase";
 import { useAuthStore } from "../../stores/authStore";
-import { motion } from "framer-motion";
-import { Image, Upload, X, Loader2 } from "lucide-react";
+import { Image, X, Loader2 } from "lucide-react";
 import { Input } from "../UI/input";
 import { useNavigate } from "react-router-dom";
 
@@ -26,11 +25,7 @@ const GAME_TAGS = [
   "Horror",
 ];
 
-export function CreateGameModal({
-  isOpen,
-  onClose,
-  onSuccess,
-}: CreateGameModalProps) {
+export function CreateGameModal({ isOpen, onClose, onSuccess }: CreateGameModalProps) {
   const { user } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
@@ -101,9 +96,7 @@ export function CreateGameModal({
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Thumbnail Upload */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300">
-            Thumbnail
-          </label>
+          <label className="block text-sm font-medium text-gray-300">Thumbnail</label>
           <div className="relative aspect-video  overflow-hidden bg-gradient-to-br from-gray-900/80 to-gray-800/80 border-2 border-dashed border-white/10 hover:border-blue-400/50 transition-all duration-300 group">
             {thumbnailPreview ? (
               <div className="relative h-full">
@@ -132,9 +125,7 @@ export function CreateGameModal({
                 <span className="text-sm text-gray-500 group-hover:text-blue-400 mt-4 transition-colors duration-300">
                   Click to upload thumbnail
                 </span>
-                <span className="text-xs text-gray-600 mt-1">
-                  Recommended: 1920x1080px
-                </span>
+                <span className="text-xs text-gray-600 mt-1">Recommended: 1920x1080px</span>
                 <Input
                   type="file"
                   accept="image/*"
@@ -148,15 +139,11 @@ export function CreateGameModal({
 
         {/* Title */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300">
-            Title
-          </label>
+          <label className="block text-sm font-medium text-gray-300">Title</label>
           <Input
             type="text"
             value={formData.title}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, title: e.target.value }))
-            }
+            onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
             className="w-full px-4 py-3 bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-white/10  text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
             placeholder="Enter game title"
             required
@@ -165,14 +152,10 @@ export function CreateGameModal({
 
         {/* Description */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300">
-            Description
-          </label>
+          <label className="block text-sm font-medium text-gray-300">Description</label>
           <textarea
             value={formData.description}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, description: e.target.value }))
-            }
+            onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             className="w-full px-4 py-3 bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-white/10  text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 resize-none"
             placeholder="Enter game description"
             rows={4}
@@ -182,9 +165,7 @@ export function CreateGameModal({
 
         {/* Tags */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300">
-            Tags
-          </label>
+          <label className="block text-sm font-medium text-gray-300">Tags</label>
           <div className="flex flex-wrap gap-2">
             {GAME_TAGS.map((tag) => (
               <button
@@ -205,16 +186,12 @@ export function CreateGameModal({
 
         {/* Visibility */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300">
-            Visibility
-          </label>
+          <label className="block text-sm font-medium text-gray-300">Visibility</label>
           <div className="flex items-center gap-2">
             <Input
               type="checkbox"
               checked={formData.isPublic}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, isPublic: e.target.checked }))
-              }
+              onChange={(e) => setFormData((prev) => ({ ...prev, isPublic: e.target.checked }))}
               className="w-4 h-4  border-white/10 bg-gradient-to-br from-gray-900/80 to-gray-800/80 text-blue-500 focus:ring-blue-500/50"
             />
             <span className="text-sm text-gray-400">Make this game public</span>

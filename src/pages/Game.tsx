@@ -5,17 +5,15 @@ import { QuestLog } from "../components/game/QuestLog";
 import { Inventory } from "../components/game/Inventory";
 import { DialogueModal } from "../components/game/DialogueModal";
 import { Canvas } from "@react-three/fiber";
-import { Sky, StatsGl } from "@react-three/drei";
-import { Suspense, useState, useEffect } from "react";
-import { AnimatePresence } from "framer-motion";
+import { Sky } from "@react-three/drei";
+import { useState, useEffect } from "react";
 import { useEnemyStore } from "../stores/enemyStore";
-import { LevelUp, LevelUpModal } from "../components/game/LevelUp";
+import { LevelUp } from "../components/game/LevelUp";
 import { Link, useParams } from "react-router-dom";
 import { GameScene } from "../components/game/Scene";
 import { Joystick } from "../components/game/Joystick";
 import { useGame } from "../hooks/useGame";
-import { Quests } from "../components/game/Quests";
-import { FloatingReward, Rewards } from "../components/game/Rewards";
+import { Rewards } from "../components/game/Rewards";
 
 export function Game() {
   const { id } = useParams<{ id: string }>();
@@ -33,8 +31,7 @@ export function Game() {
   }));
   // Editor state for scene data
   const scenes = useEditorStore((state) => state.scenes);
-  const currentScene =
-    scenes.find((scene) => scene.id === gameState.currentSceneId) ?? scenes[0];
+  const currentScene = scenes.find((scene) => scene.id === gameState.currentSceneId) ?? scenes[0];
 
   // Enemy rewards state
   const { rewards, clearRewards } = useEnemyStore((state) => ({
@@ -101,9 +98,9 @@ export function Game() {
           <Sky sunPosition={getSunPosition() as [number, number, number]} />
         </Canvas>
       </div>
-      {!gameState.inventoryOpen &&
-        !gameState.questLogOpen &&
-        !gameState.showLevelUp && <Joystick />}
+      {!gameState.inventoryOpen && !gameState.questLogOpen && !gameState.showLevelUp && (
+        <Joystick />
+      )}
       {gameState.inventoryOpen && <Inventory />}
       {gameState.questLogOpen && <QuestLog />}
       <GameHUD />

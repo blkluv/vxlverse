@@ -2,7 +2,7 @@
 
 # VXLverse
 
-### *Create, Play, Share: The Ultimate 3D Voxel Game Creation Platform*
+### _Create, Play, Share: The Ultimate 3D Voxel Game Creation Platform_
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Built with: React](https://img.shields.io/badge/Built%20with-React-61DAFB.svg)](https://reactjs.org/)
@@ -19,7 +19,7 @@ VXLverse is a revolutionary browser-based platform that empowers creators to bui
 <div align="center">
 
 ![VXLverse Editor Interface](/public/demo-images/Editor.png)
-*The powerful VXLverse editor with real-time 3D rendering, scene hierarchy, and properties panel*
+_The powerful VXLverse editor with real-time 3D rendering, scene hierarchy, and properties panel_
 
 </div>
 
@@ -30,7 +30,7 @@ VXLverse is a revolutionary browser-based platform that empowers creators to bui
 <div align="center">
 
 ![Combat Mechanics](/public/demo-images/fight_mechanics.png)
-*Engaging combat with projectiles, health systems, and dynamic interactions*
+_Engaging combat with projectiles, health systems, and dynamic interactions_
 
 </div>
 
@@ -46,7 +46,7 @@ Create thrilling action gameplay with minimal setup:
 <div align="center">
 
 ![Quest System](/public/demo-images/Quests.png)
-*Comprehensive quest system with objectives, rewards, and progression tracking*
+_Comprehensive quest system with objectives, rewards, and progression tracking_
 
 </div>
 
@@ -62,7 +62,7 @@ Build engaging gameplay loops with our flexible quest system:
 <div align="center">
 
 ![AI NPC Dialogue System](/public/demo-images/Npc_Dialogue.png)
-*Create dynamic NPCs with unique personalities using our Mistral AI integration*
+_Create dynamic NPCs with unique personalities using our Mistral AI integration_
 
 </div>
 

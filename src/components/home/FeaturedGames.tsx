@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Star, Users, Clock } from "lucide-react";
 
 const FEATURED_GAMES = [

@@ -21,11 +21,7 @@ interface GameFiltersProps {
   selectedTags: string[];
 }
 
-export function GameFilters({
-  onSearchChange,
-  onTagsChange,
-  selectedTags,
-}: GameFiltersProps) {
+export function GameFilters({ onSearchChange, onTagsChange, selectedTags }: GameFiltersProps) {
   const [search, setSearch] = useState("");
 
   const handleSearch = (value: string) => {
@@ -65,9 +61,7 @@ export function GameFilters({
 
       {/* Tags */}
       <div>
-        <h3 className="text-sm font-medium text-gray-300 mb-3">
-          Filter by Tags
-        </h3>
+        <h3 className="text-sm font-medium text-gray-300 mb-3">Filter by Tags</h3>
         <div className="flex flex-wrap gap-2">
           {TAGS.map((tag) => (
             <button

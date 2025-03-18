@@ -1,11 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Ecctrl, { EcctrlAnimation } from "ecctrl";
 import { KeyboardControls } from "@react-three/drei";
 import { Hero } from "./Hero";
 import { RapierRigidBody } from "@react-three/rapier";
-import { useEnemyStore } from "../../stores/enemyStore";
-import { useGameStore } from "../../stores/gameStore";
-
 const animationSet = {
   idle: "Idle",
   walk: "Walk",

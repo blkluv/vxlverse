@@ -1,11 +1,4 @@
-import { motion } from "framer-motion";
-import {
-  Lightbulb,
-  PenTool,
-  PlayCircle,
-  Share2,
-  ArrowRight,
-} from "lucide-react";
+import { Lightbulb, PenTool, PlayCircle, Share2, ArrowRight } from "lucide-react";
 
 const STEPS = [
   {
@@ -25,15 +18,13 @@ const STEPS = [
   {
     icon: PlayCircle,
     title: "Play",
-    description:
-      "Test your game instantly in the browser and refine the gameplay experience.",
+    description: "Test your game instantly in the browser and refine the gameplay experience.",
     color: "green",
   },
   {
     icon: Share2,
     title: "Share",
-    description:
-      "Publish your creation and share it with players around the world.",
+    description: "Publish your creation and share it with players around the world.",
     color: "purple",
   },
 ];
@@ -88,9 +79,7 @@ export function HowItWorks() {
                     >
                       <step.icon className={`w-5 h-5 text-${step.color}-400`} />
                     </div>
-                    <div className="text-2xl font-bold text-white">
-                      {step.title}
-                    </div>
+                    <div className="text-2xl font-bold text-white">{step.title}</div>
                   </div>
                   <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
                     {step.description}

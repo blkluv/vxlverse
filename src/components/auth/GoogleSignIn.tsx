@@ -64,11 +64,7 @@ export function GoogleSignIn({
         "Signing in..."
       ) : (
         <>
-          <img
-            src="https://www.google.com/favicon.ico"
-            alt="Google"
-            className="w-4 h-4"
-          />
+          <img src="https://www.google.com/favicon.ico" alt="Google" className="w-4 h-4" />
           Sign in
         </>
       )}

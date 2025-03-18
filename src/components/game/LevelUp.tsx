@@ -143,9 +143,7 @@ export function LevelUp() {
               >
                 🏆
               </motion.span>
-              <span className="font-bold tracking-wide">
-                Level Up! Now Level {level}
-              </span>
+              <span className="font-bold tracking-wide">Level Up! Now Level {level}</span>
             </motion.div>
 
             {/* Stats Notification */}
@@ -174,9 +172,7 @@ export function LevelUp() {
               >
                 ⚔️
               </motion.span>
-              <span className="font-bold tracking-wide">
-                +5 Attack, +10 Health
-              </span>
+              <span className="font-bold tracking-wide">+5 Attack, +10 Health</span>
             </motion.div>
           </motion.div>
         )}

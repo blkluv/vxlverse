@@ -7,8 +7,7 @@ interface BeforeInstallPromptEvent extends Event {
 
 export function InstallPWA() {
   const [supportsPWA, setSupportsPWA] = useState(false);
-  const [promptInstall, setPromptInstall] =
-    useState<BeforeInstallPromptEvent | null>(null);
+  const [promptInstall, setPromptInstall] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
 
   useEffect(() => {
@@ -80,23 +79,13 @@ export function InstallPWA() {
     <div className="fixed bottom-4 left-4 right-4 bg-gray-800 text-white p-4 lg shadow-lg z-50 flex flex-col md:max-w-md md:mx-auto">
       <div className="flex items-start justify-between">
         <div className="flex items-center">
-          <img
-            src="/icons/ios/144.png"
-            alt="VXLverse"
-            className="w-12 h-12 mr-3"
-          />
+          <img src="/icons/ios/144.png" alt="VXLverse" className="w-12 h-12 mr-3" />
           <div>
             <h3 className="font-bold text-lg">Install VXLverse</h3>
-            <p className="text-sm text-gray-300">
-              Install our app for a better experience!
-            </p>
+            <p className="text-sm text-gray-300">Install our app for a better experience!</p>
           </div>
         </div>
-        <button
-          onClick={onDismiss}
-          className="text-gray-400 hover:text-white"
-          aria-label="Close"
-        >
+        <button onClick={onDismiss} className="text-gray-400 hover:text-white" aria-label="Close">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"

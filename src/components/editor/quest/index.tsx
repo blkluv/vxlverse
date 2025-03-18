@@ -1,10 +1,8 @@
 import { useState, useCallback } from "react";
-import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
-import { Quest, Item } from "../../../types";
+import { Quest } from "../../../types";
 import { QuestItem } from "./QuestItem";
 import { QuestEditor } from "./QuestEditor";
-import { QuestItem as QuestItemType } from "./ItemCard";
 
 interface QuestPanelProps {
   object: {
@@ -68,10 +66,7 @@ export function QuestPanel({ object, onChange }: QuestPanelProps) {
   const updateQuest = useCallback(
     (questId: string, updates: Partial<Quest>) => {
       onChange({
-        quests:
-          object.quests?.map((q) =>
-            q.id === questId ? { ...q, ...updates } : q
-          ) || [],
+        quests: object.quests?.map((q) => (q.id === questId ? { ...q, ...updates } : q)) || [],
       });
       if (editingQuest?.id === questId) {
         setEditingQuest((prev) => (prev ? { ...prev, ...updates } : null));

@@ -14,8 +14,9 @@ import { useKeyboardControls } from "@react-three/drei";
 type TabType = "properties" | "quest" | "scene";
 
 export function PropertiesPanel() {
-  const { setSelectedObject, selectedObjectId, currentSceneId, scenes } =
-    useEditorStore((state) => state);
+  const { setSelectedObject, selectedObjectId, currentSceneId, scenes } = useEditorStore(
+    (state) => state
+  );
   const currentScene = scenes.find((scene) => scene.id === currentSceneId);
 
   const updateObject = useEditorStore((state) => state.updateObject);
@@ -31,8 +32,7 @@ export function PropertiesPanel() {
 
       // Find the index of the currently selected object
       const currentIndex =
-        currentScene.objects.findIndex((obj) => obj.id === selectedObjectId) ??
-        0;
+        currentScene.objects.findIndex((obj) => obj.id === selectedObjectId) ?? 0;
 
       // Calculate the new index based on the direction
       let newIndex = dir === "next" ? currentIndex + 1 : currentIndex - 1;
@@ -109,8 +109,7 @@ export function PropertiesPanel() {
     clsx(
       "flex-1 border-r  last:border-r-0 py-1.5 border-white/10 text-xs font-medium transition-colors",
       {
-        "disabled:cursor-not-allowed disabled:text-slate-600":
-          !hasSelectedObject,
+        "disabled:cursor-not-allowed disabled:text-slate-600": !hasSelectedObject,
         "text-blue-200 bg-blue-900/90": activeTab === tab,
         "text-slate-400 hover:text-slate-300": activeTab !== tab,
       }
@@ -179,12 +178,9 @@ export function PropertiesPanel() {
                         <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 p-4  mb-4 mx-auto w-16 h-16 flex items-center justify-center border border-blue-500/20">
                           <Box className="w-8 h-8 text-blue-400/80" />
                         </div>
-                        <h3 className="text-blue-300 font-medium mb-2">
-                          No Object Selected
-                        </h3>
+                        <h3 className="text-blue-300 font-medium mb-2">No Object Selected</h3>
                         <p className="text-slate-400 text-sm mb-4">
-                          Select an object in the scene to view and edit its
-                          properties.
+                          Select an object in the scene to view and edit its properties.
                         </p>
                         <div className="text-xs text-slate-500 bg-slate-800/60 p-2  border border-slate-700/40">
                           Tip: Use the toolbar to add new objects to your scene
@@ -202,11 +198,7 @@ export function PropertiesPanel() {
                       object={selectedObjectId}
                       onChange={(updates) => {
                         if (currentSceneId) {
-                          updateObject(
-                            currentSceneId,
-                            selectedObjectId,
-                            updates
-                          );
+                          updateObject(currentSceneId, selectedObjectId, updates);
                           toast.success("Quest settings updated");
                         }
                       }}
@@ -217,16 +209,12 @@ export function PropertiesPanel() {
                         <div className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 p-4  mb-4 mx-auto w-16 h-16 flex items-center justify-center border border-indigo-500/20">
                           <FileCode className="w-8 h-8 text-indigo-400/80" />
                         </div>
-                        <h3 className="text-indigo-300 font-medium mb-2">
-                          No Object Selected
-                        </h3>
+                        <h3 className="text-indigo-300 font-medium mb-2">No Object Selected</h3>
                         <p className="text-slate-400 text-sm mb-4">
-                          Select an object in the scene to create and manage
-                          quests.
+                          Select an object in the scene to create and manage quests.
                         </p>
                         <div className="text-xs text-slate-500 bg-slate-800/60 p-2  border border-slate-700/40">
-                          Tip: Quests allow players to interact with objects and
-                          complete tasks
+                          Tip: Quests allow players to interact with objects and complete tasks
                         </div>
                       </div>
                     </div>

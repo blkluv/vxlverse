@@ -1,5 +1,5 @@
-import { useGLTF } from '@react-three/drei';
-import { useEffect } from 'react';
+import { useGLTF } from "@react-three/drei";
+import { useEffect } from "react";
 
 interface ModelProps {
   url: string;
@@ -7,7 +7,7 @@ interface ModelProps {
 
 export function Model({ url }: ModelProps) {
   const { scene } = useGLTF(url);
-  
+
   useEffect(() => {
     return () => {
       useGLTF.preload(url);

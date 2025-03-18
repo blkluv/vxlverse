@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Edit3, Scroll, Trash2, X } from "lucide-react";
 import { Quest } from "../../../types";
 
@@ -10,13 +9,7 @@ interface QuestItemProps {
   children?: React.ReactNode;
 }
 
-export function QuestItem({
-  quest,
-  isEditing,
-  onToggleEdit,
-  onRemove,
-  children,
-}: QuestItemProps) {
+export function QuestItem({ quest, isEditing, onToggleEdit, onRemove, children }: QuestItemProps) {
   return (
     <div
       key={quest.id}
@@ -50,11 +43,7 @@ export function QuestItem({
             <Scroll className="w-3.5 h-3.5" />
           </div>
           <div>
-            <h3
-              className={`text-sm font-medium ${
-                isEditing ? "text-blue-50" : "text-slate-100"
-              }`}
-            >
+            <h3 className={`text-sm font-medium ${isEditing ? "text-blue-50" : "text-slate-100"}`}>
               {quest.title || "Untitled Quest"}
             </h3>
             {quest.status && (
@@ -64,13 +53,11 @@ export function QuestItem({
                     quest.status === "active"
                       ? "bg-green-400 shadow-sm shadow-green-400/30"
                       : quest.status === "completed"
-                      ? "bg-blue-400 shadow-sm shadow-blue-400/30"
-                      : "bg-amber-400 shadow-sm shadow-amber-400/30"
+                        ? "bg-blue-400 shadow-sm shadow-blue-400/30"
+                        : "bg-amber-400 shadow-sm shadow-amber-400/30"
                   }`}
                 />
-                <span className="text-slate-400 capitalize">
-                  {quest.status}
-                </span>
+                <span className="text-slate-400 capitalize">{quest.status}</span>
               </div>
             )}
           </div>
@@ -89,11 +76,7 @@ export function QuestItem({
             title={isEditing ? "Close" : "Edit"}
             aria-label={isEditing ? "Close quest editor" : "Edit quest"}
           >
-            {isEditing ? (
-              <X className="w-3.5 h-3.5" />
-            ) : (
-              <Edit3 className="w-3.5 h-3.5" />
-            )}
+            {isEditing ? <X className="w-3.5 h-3.5" /> : <Edit3 className="w-3.5 h-3.5" />}
           </button>
           <button
             onClick={(e) => {

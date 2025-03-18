@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Header } from "../components/layout/Header";
 import { useAuthStore } from "../stores/authStore";
 import { GameCard } from "../components/game/GameCard";
@@ -9,13 +8,9 @@ export function Profile() {
   const { user } = useAuthStore();
   const { games } = useGames();
   const myGames = games.filter((game) => game.creator === user?.id);
-  const totalPlayers = myGames.reduce(
-    (acc, game) => acc + (game.players || 0),
-    0
-  );
+  const totalPlayers = myGames.reduce((acc, game) => acc + (game.players || 0), 0);
   const averageRating =
-    myGames.reduce((acc, game) => acc + (game.rating || 0), 0) /
-      myGames.length || 0;
+    myGames.reduce((acc, game) => acc + (game.rating || 0), 0) / myGames.length || 0;
 
   const stats = [
     { icon: Award, label: "Games Created", value: myGames.length },
@@ -53,9 +48,7 @@ export function Profile() {
 
               {/* User Info */}
               <div className="flex-1 text-center md:text-left">
-                <h1 className="text-3xl font-bold text-white mb-2">
-                  {user?.name}
-                </h1>
+                <h1 className="text-3xl font-bold text-white mb-2">{user?.name}</h1>
                 <div className="space-y-2">
                   <div className="flex items-center justify-center md:justify-start gap-2 text-gray-400">
                     <User className="w-4 h-4" />
@@ -67,10 +60,7 @@ export function Profile() {
                   </div>
                   <div className="flex items-center justify-center md:justify-start gap-2 text-gray-400">
                     <Calendar className="w-4 h-4" />
-                    <span>
-                      Joined{" "}
-                      {new Date(user?.created || "").toLocaleDateString()}
-                    </span>
+                    <span>Joined {new Date(user?.created || "").toLocaleDateString()}</span>
                   </div>
                 </div>
               </div>
@@ -83,9 +73,7 @@ export function Profile() {
                     className="flex flex-col items-center p-4  bg-gray-800/50 backdrop-blur-sm border border-gray-700/50"
                   >
                     <stat.icon className="w-6 h-6 text-blue-400 mb-2" />
-                    <div className="text-2xl font-bold text-white">
-                      {stat.value}
-                    </div>
+                    <div className="text-2xl font-bold text-white">{stat.value}</div>
                     <div className="text-sm text-gray-400">{stat.label}</div>
                   </div>
                 ))}
