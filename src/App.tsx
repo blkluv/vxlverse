@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Editor } from "./pages/Editor";
 import { Game } from "./pages/Game";
 import { Home } from "./pages/Home";
@@ -7,6 +7,7 @@ import { Profile } from "./pages/Profile";
 import { Favorites } from "./pages/Favorites";
 import { Settings } from "./pages/Settings";
 import { Login } from "./pages/Login";
+import { NotFound } from "./pages/NotFound";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 
 export default function App() {
@@ -57,8 +58,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        {/* Catch-all route to redirect to home page */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* 404 Not Found page - must be last */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
