@@ -1,4 +1,4 @@
-import { Gamepad2, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { pb } from "../../lib/pocketbase";
 import { useAuthStore } from "../../stores/authStore";
@@ -16,11 +16,11 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-gray-900 border-b border-gray-800">
-      <div className="container mx-auto px-4">
+      <div className=" mx-auto px-4">
         <div className="flex items-center justify-between h-14">
           <Link to="/" className="flex items-center gap-2">
-            <Gamepad2 className="w-6 h-6 text-blue-500" />
-            <span className="text-xl font-bold text-white">VXLverse</span>
+            <img src="/icons/large-logo.png" alt="VXLverse" className="w-10" />
+            <span className="text-xl md:block hidden font-bold text-white">VXLverse</span>
           </Link>
 
           <div className="flex items-center gap-6">
