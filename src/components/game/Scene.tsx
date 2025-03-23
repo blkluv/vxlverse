@@ -16,19 +16,6 @@ interface SceneProps {
   isPreview?: boolean;
 }
 
-function Floor() {
-  return (
-    <group>
-      <RigidBody type="fixed" colliders="trimesh">
-        <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-          <planeGeometry args={[100, 100]} />
-          <meshStandardMaterial color="#1a1a1a" />
-        </mesh>
-      </RigidBody>
-    </group>
-  );
-}
-
 export function GameScene({ sceneData }: SceneProps) {
   const { scene } = useThree();
   const { playSound, stopSound } = useSound();
@@ -57,17 +44,19 @@ export function GameScene({ sceneData }: SceneProps) {
           background={sceneData.background === "environment"}
         />
       )}
-      <gridHelper args={[100, 100]} position={[0, 0.1, 0]}>
-        <meshBasicMaterial color="#1a1a1a" side={2} attach="material" />
-      </gridHelper>
 
       <ambientLight intensity={sceneData.ambientLight || 0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
       <Stars />
-      <Physics debug={true}>
-        <Floor />
+      <Physics>
+        <RigidBody
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, -5, 0]}
+          args={[100, 100]}
+          type="fixed"
+          colliders="trimesh"
+        ></RigidBody>
         <Fireball />
-
         <Player />
         {/* Spawn Enemies */}
         <Suspense fallback={null}>

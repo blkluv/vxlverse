@@ -5,6 +5,7 @@ import { Hero } from "../components/home/Hero";
 import { Features } from "../components/home/Features";
 import { HowItWorks } from "../components/home/HowItWorks";
 import { Header } from "../components/layout/Header";
+import { Footer } from "../components/layout/Footer";
 import { Gamepad2, ArrowRight } from "lucide-react";
 import "../styles/animations.css";
 import { useGames } from "../hooks/useGames";
@@ -56,7 +57,7 @@ export function Home() {
             <div className="flex items-center justify-between mb-12">
               <div>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-blue-500/10 border border-blue-500/20 backdrop-blur-sm rounded-full">
+                  <div className="p-2 bg-blue-500/10 border border-blue-500/20 backdrop-blur-sm full">
                     <Gamepad2 className="w-5 h-5 text-blue-400" />
                   </div>
                   <h2 className="text-3xl font-bold text-white">Featured Games</h2>
@@ -69,7 +70,7 @@ export function Home() {
 
               <a
                 href="/games"
-                className="hidden md:flex items-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg transition-all duration-300"
+                className="hidden md:flex items-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 lg transition-all duration-300"
               >
                 View All Games
                 <ArrowRight className="w-4 h-4" />
@@ -85,7 +86,7 @@ export function Home() {
             <div className="mt-8 text-center md:hidden">
               <a
                 href="/games"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg transition-all duration-300"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 lg transition-all duration-300"
               >
                 View All Games
                 <ArrowRight className="w-4 h-4" />
@@ -94,6 +95,9 @@ export function Home() {
           </div>
         </section>
       </main>
+
+      {/* Footer */}
+      <Footer />
 
       {/* Modals */}
       <CreateGameModal
