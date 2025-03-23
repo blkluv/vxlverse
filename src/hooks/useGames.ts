@@ -13,10 +13,10 @@ export interface Game {
 }
 
 const fetcher = async () => {
-  const records = await pb.collection("games").getFullList({
+  const records = await pb.collection("games").getFullList<Game>({
     sort: "-created",
   });
-  return records as Game[];
+  return records;
 };
 
 export function useGames() {

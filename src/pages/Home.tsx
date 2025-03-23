@@ -4,49 +4,16 @@ import { useAuthStore } from "../stores/authStore";
 import { Hero } from "../components/home/Hero";
 import { Features } from "../components/home/Features";
 import { HowItWorks } from "../components/home/HowItWorks";
-import { Testimonials } from "../components/home/Testimonials";
-import { CallToAction } from "../components/home/CallToAction";
-import { PopularTags } from "../components/home/PopularTags";
 import { Header } from "../components/layout/Header";
+import { Gamepad2, ArrowRight } from "lucide-react";
+import "../styles/animations.css";
+import { useGames } from "../hooks/useGames";
 import { GameCard } from "../components/game/GameCard";
-
-const FEATURED_GAMES = [
-  {
-    id: "1",
-    title: "Dragon's Quest",
-    description: "Embark on an epic journey through mystical lands",
-    thumbnail: "https://images.unsplash.com/photo-1642479755125-d073df16ce7e",
-    creator: "system",
-    rating: 4.8,
-    players: 12500,
-    lastUpdated: "2 days ago",
-  },
-  {
-    id: "2",
-    title: "Space Odyssey",
-    description: "Explore the vast universe in this sci-fi adventure",
-    thumbnail: "https://images.unsplash.com/photo-1614728263952-84ea256f9679",
-    creator: "system",
-    rating: 4.6,
-    players: 8300,
-    lastUpdated: "5 days ago",
-  },
-  {
-    id: "3",
-    title: "Medieval Legends",
-    description: "Build your kingdom and conquer new territories",
-    thumbnail: "https://images.unsplash.com/photo-1615672968435-75de2c710c1b",
-    creator: "system",
-    rating: 4.9,
-    players: 15200,
-    lastUpdated: "1 day ago",
-  },
-];
 
 export function Home() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const { isAuthenticated } = useAuthStore();
-
+  const { games } = useGames();
   useEffect(() => {
     // Event listener for opening the create game modal from other components
     const handleOpenCreateModal = () => {
@@ -64,34 +31,68 @@ export function Home() {
   }, [isAuthenticated]);
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black overflow-hidden">
+      {/* Background effects */}
+      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,rgba(79,70,229,0.15),transparent_50%)] pointer-events-none z-0" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(236,72,153,0.1),transparent_70%)] pointer-events-none z-0" />
+      <div className="fixed inset-0 bg-[url('/grid.svg')] opacity-[0.03] pointer-events-none z-0" />
+
       <Header />
 
       {/* Main Content */}
-      <main>
+      <main className="relative z-10">
         <Hero />
-
-        <Features />
 
         <HowItWorks />
 
+        <Features />
+
         {/* Featured Games */}
-        <section className="py-16 bg-gradient-to-b from-gray-950 to-gray-900">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-white mb-8">Featured Games</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {FEATURED_GAMES.map((game, index) => (
-                <GameCard key={game.id} game={game} index={index} />
+        <section className="py-20 bg-gradient-to-b from-gray-900 to-black relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent" />
+
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-blue-500/10 border border-blue-500/20 backdrop-blur-sm rounded-full">
+                    <Gamepad2 className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-white">Featured Games</h2>
+                </div>
+                <p className="text-gray-400 max-w-2xl">
+                  Explore the most popular games created with VXLVerse's powerful game creation
+                  platform
+                </p>
+              </div>
+
+              <a
+                href="/games"
+                className="hidden md:flex items-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg transition-all duration-300"
+              >
+                View All Games
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {games.map((game) => (
+                <GameCard key={game.id} game={game} />
               ))}
+            </div>
+
+            <div className="mt-8 text-center md:hidden">
+              <a
+                href="/games"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg transition-all duration-300"
+              >
+                View All Games
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
           </div>
         </section>
-
-        <Testimonials />
-
-        <PopularTags />
-
-        <CallToAction />
       </main>
 
       {/* Modals */}

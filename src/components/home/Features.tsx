@@ -67,13 +67,7 @@ export function Features() {
       </div>
 
       <div className="container mx-auto px-4 relative">
-        <div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <div className="inline-block p-2 bg-blue-500/10 border border-blue-500/20 backdrop-blur-sm mb-4">
             <Layers className="w-6 h-6 text-blue-400" />
           </div>
@@ -91,10 +85,6 @@ export function Features() {
           {FEATURES.map((feature, index) => (
             <div
               key={feature.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true, margin: "-100px" }}
               className="p-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/30 backdrop-blur-sm group hover:border-blue-500/30 transition-all duration-300"
             >
               <div

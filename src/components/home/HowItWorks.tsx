@@ -39,13 +39,7 @@ export function HowItWorks() {
       </div>
 
       <div className="container mx-auto px-4 relative">
-        <div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <div className="inline-block p-2 bg-purple-500/10 border border-purple-500/20 backdrop-blur-sm mb-4">
             <Lightbulb className="w-6 h-6 text-purple-400" />
           </div>
@@ -66,13 +60,7 @@ export function HowItWorks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {STEPS.map((step, index) => (
               <div key={step.title} className="relative">
-                <div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  className="p-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/30 backdrop-blur-sm group hover:border-blue-500/30 transition-all duration-300 h-full flex flex-col"
-                >
+                <div className="p-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/30 backdrop-blur-sm group hover:border-blue-500/30 transition-all duration-300 h-full flex flex-col">
                   <div className="flex items-center gap-4 mb-4">
                     <div
                       className={`relative z-10 flex items-center justify-center w-12 h-12  bg-${step.color}-500/20 border border-${step.color}-500/30`}
@@ -88,10 +76,7 @@ export function HowItWorks() {
                   {/* Arrow for all but last item */}
                   {index < STEPS.length - 1 && (
                     <div className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10">
-                      <div
-                        animate={{ x: [0, 5, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                      >
+                      <div>
                         <ArrowRight className="w-6 h-6 text-blue-400" />
                       </div>
                     </div>
@@ -100,16 +85,6 @@ export function HowItWorks() {
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="mt-16 text-center">
-          <a
-            href="/editor"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-medium hover:from-purple-600 hover:to-blue-600 transition-all shadow-lg shadow-purple-500/25"
-          >
-            Start Creating Now
-            <ArrowRight className="w-5 h-5" />
-          </a>
         </div>
       </div>
     </section>
