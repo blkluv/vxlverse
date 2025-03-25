@@ -3,6 +3,7 @@ import { Move, Minimize, Maximize, RotateCcw, Link, Unlink } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "../../UI/input";
 import { useEditorStore } from "../../../stores/editorStore";
+import { Euler, MathUtils, Vector3 } from "three";
 
 export function TransformPanel() {
   const [expanded, setExpanded] = useState(true);
@@ -20,27 +21,48 @@ export function TransformPanel() {
 
   if (!currentScene || !selectedObject) return null;
 
+  // Access the transform properties directly - they should be THREE objects
+  // that already have x, y, z properties
+
   const handlePositionChange = (axis: "x" | "y" | "z", value: number) => {
-    const position = { ...(selectedObject.position || { x: 0, y: 0, z: 0 }) };
+    // Create a new Vector3 with the current values
+    const position = new Vector3(
+      selectedObject.position.x,
+      selectedObject.position.y,
+      selectedObject.position.z
+    );
+    // Update the specified axis
     position[axis] = value;
     updateObject(currentScene.id, selectedObject.id, { position });
   };
 
   const handleRotationChange = (axis: "x" | "y" | "z", value: number) => {
-    const rotation = { ...(selectedObject.rotation || { x: 0, y: 0, z: 0 }) };
-    rotation[axis] = value;
+    // Create a new Vector3 with the current values
+    const rotation = new Euler(
+      selectedObject.rotation.x,
+      selectedObject.rotation.y,
+      selectedObject.rotation.z,
+      "XYZ"
+    );
+    // Update the specified axis
+    rotation[axis] = MathUtils.degToRad(value);
+
+    // Update the object with the new rotation
     updateObject(currentScene.id, selectedObject.id, { rotation });
   };
 
   const handleScaleChange = (axis: "x" | "y" | "z", value: number) => {
     if (scaleLinked) {
       // If linked, update all axes to the new value.
-      updateObject(currentScene.id, selectedObject.id, {
-        scale: { x: value, y: value, z: value },
-      });
+      const scale = new Vector3(value, value, value);
+      updateObject(currentScene.id, selectedObject.id, { scale });
     } else {
       // Otherwise update only the specified axis.
-      const scale = { ...(selectedObject.scale || { x: 1, y: 1, z: 1 }) };
+      const scale = new Vector3(
+        selectedObject.scale.x,
+        selectedObject.scale.y,
+        selectedObject.scale.z
+      );
       scale[axis] = value;
       updateObject(currentScene.id, selectedObject.id, { scale });
     }
@@ -104,12 +126,11 @@ export function TransformPanel() {
     const [localValue, setLocalValue] = useState(value);
     const [inputValue, setInputValue] = useState(value.toString());
     const inputRef = useRef<HTMLInputElement>(null);
-
     // Only update local state when input isn't focused.
     useEffect(() => {
       if (document.activeElement !== inputRef.current) {
         setLocalValue(value);
-        setInputValue(value.toString());
+        setInputValue(value?.toString());
       }
     }, [value]);
 
@@ -191,7 +212,6 @@ export function TransformPanel() {
       <div className="grid grid-cols-3 gap-2">{children}</div>
     </div>
   );
-
   return (
     <div className="bg-slate-800/30 border border-slate-700/30 overflow-hidden">
       <div
@@ -229,19 +249,19 @@ export function TransformPanel() {
               >
                 <TransformInput
                   axis="x"
-                  value={selectedObject.position?.x || 0}
+                  value={selectedObject.position.x}
                   onChange={(value) => handlePositionChange("x", value)}
                   color="red"
                 />
                 <TransformInput
                   axis="y"
-                  value={selectedObject.position?.y || 0}
+                  value={selectedObject.position.y}
                   onChange={(value) => handlePositionChange("y", value)}
                   color="green"
                 />
                 <TransformInput
                   axis="z"
-                  value={selectedObject.position?.z || 0}
+                  value={selectedObject.position.z}
                   onChange={(value) => handlePositionChange("z", value)}
                   color="blue"
                 />
@@ -250,29 +270,32 @@ export function TransformPanel() {
               {/* Rotation */}
               <TransformSection
                 title="Rotation"
-                onReset={() =>
-                  updateObject(currentScene.id, selectedObject.id, {
-                    rotation: { x: 0, y: 0, z: 0 },
-                  })
-                }
+                onReset={() => {
+                  // Create a proper Euler object with zeros and XYZ order
+                  const rotation = new Euler(0, 0, 0, "XYZ");
+                  updateObject(currentScene.id, selectedObject.id, { rotation });
+                }}
               >
                 <TransformInput
                   axis="x"
-                  value={selectedObject.rotation?.x || 0}
+                  value={MathUtils.radToDeg(selectedObject.rotation._x)}
                   onChange={(value) => handleRotationChange("x", value)}
                   color="red"
+                  step={1}
                 />
                 <TransformInput
                   axis="y"
-                  value={selectedObject.rotation?.y || 0}
+                  value={MathUtils.radToDeg(selectedObject.rotation._y)}
                   onChange={(value) => handleRotationChange("y", value)}
                   color="green"
+                  step={1}
                 />
                 <TransformInput
                   axis="z"
-                  value={selectedObject.rotation?.z || 0}
+                  value={MathUtils.radToDeg(selectedObject.rotation._z)}
                   onChange={(value) => handleRotationChange("z", value)}
                   color="blue"
+                  step={1}
                 />
               </TransformSection>
 
@@ -303,14 +326,14 @@ export function TransformPanel() {
               >
                 <TransformInput
                   axis="x"
-                  value={selectedObject.scale?.x || 1}
+                  value={selectedObject.scale.x}
                   onChange={(value) => handleScaleChange("x", value)}
                   color="red"
                   step={0.1}
                 />
                 <TransformInput
                   axis="y"
-                  value={selectedObject.scale?.y || 1}
+                  value={selectedObject.scale.y}
                   onChange={(value) => handleScaleChange("y", value)}
                   color="green"
                   step={0.1}
@@ -318,7 +341,7 @@ export function TransformPanel() {
                 />
                 <TransformInput
                   axis="z"
-                  value={selectedObject.scale?.z || 1}
+                  value={selectedObject.scale.z}
                   onChange={(value) => handleScaleChange("z", value)}
                   color="blue"
                   step={0.1}
