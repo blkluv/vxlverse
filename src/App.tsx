@@ -8,6 +8,8 @@ import { Favorites } from "./pages/Favorites";
 import { Settings } from "./pages/Settings";
 import { Login } from "./pages/Login";
 import { NotFound } from "./pages/NotFound";
+import { ArtGallery } from "./pages/ArtGallery";
+import { Galleries } from "./pages/Galleries";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 
 export default function App() {
@@ -17,7 +19,11 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/games" element={<Games />} />
         <Route path="/play/:id" element={<Game />} />
+        <Route path="/galleries" element={<Galleries />} />
+        <Route path="/gallery/:id" element={<ArtGallery />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/editor/demo" element={<Editor />} />
+
         <Route
           path="/editor/:id"
           element={

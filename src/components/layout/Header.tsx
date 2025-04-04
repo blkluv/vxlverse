@@ -43,6 +43,16 @@ export function Header() {
               >
                 Games
               </Link>
+              <Link
+                to="/galleries"
+                className={`text-sm ${
+                  location.pathname === "/galleries"
+                    ? "text-blue-400"
+                    : "text-gray-400 hover:text-white"
+                }`}
+              >
+                Galleries
+              </Link>
             </nav>
 
             <div className="flex items-center">

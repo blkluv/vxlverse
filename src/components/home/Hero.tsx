@@ -56,6 +56,15 @@ export function Hero() {
                 Play Demo
               </a>
 
+              <a
+                href="/editor/demo"
+                className="group px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium 
+                         hover:from-blue-600 hover:to-blue-700 transition-all flex items-center gap-2 shadow-lg shadow-blue-500/25"
+              >
+                <Play className="w-5 h-5" />
+                Try Editor Demo
+              </a>
+
               <button
                 onClick={() => {
                   if (isAuthenticated) {
