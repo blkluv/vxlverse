@@ -1,4 +1,4 @@
-import { Gamepad2, Sparkles, Play, Plus, Paintbrush, Palette } from "lucide-react";
+import { Gamepad2, Sparkles, Paintbrush, Palette } from "lucide-react";
 import { useAuthStore } from "../../stores/authStore";
 import { useState } from "react";
 import { LoginModal } from "../auth/LoginModal";
@@ -64,52 +64,6 @@ export function Hero() {
                 <Palette className="w-5 h-5 text-pink-400" />
                 <span className="text-pink-300">No Coding Required</span>
               </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <a
-                href="/play/6b2v99o3632rad6"
-                className="group px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium 
-                         hover:from-blue-600 hover:to-blue-700 transition-all flex items-center gap-2 shadow-lg shadow-blue-500/25"
-              >
-                <Play className="w-5 h-5" />
-                Play Demo
-              </a>
-
-              <a
-                href="/editor/demo"
-                className="group px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium 
-                         hover:from-blue-600 hover:to-blue-700 transition-all flex items-center gap-2 shadow-lg shadow-blue-500/25"
-              >
-                <Gamepad2 className="w-5 h-5" />
-                Try Game Editor
-              </a>
-
-              <a
-                href="/gallery/demo"
-                className="group px-8 py-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-medium 
-                         hover:from-purple-600 hover:to-purple-700 transition-all flex items-center gap-2 shadow-lg shadow-purple-500/25"
-              >
-                <Paintbrush className="w-5 h-5" />
-                Try Gallery Editor
-              </a>
-
-              <button
-                onClick={() => {
-                  if (isAuthenticated) {
-                    // If authenticated, show the create game modal
-                    window.dispatchEvent(new CustomEvent("open-create-game-modal"));
-                  } else {
-                    // If not authenticated, show login modal
-                    setShowLoginModal(true);
-                  }
-                }}
-                className="group px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-600 text-white font-medium 
-                         hover:from-purple-600 hover:to-pink-700 transition-all flex items-center gap-2 shadow-lg shadow-purple-500/25"
-              >
-                <Plus className="w-5 h-5" />
-                Create Game
-              </button>
             </div>
           </div>
 
