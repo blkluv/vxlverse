@@ -7,14 +7,14 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>VXLverse - 3D Voxel Game Creation Platform | No-Code Game Editor</title>
+    <title>VXLverse - 3D Game Creation & Virtual Art Gallery Platform</title>
     <meta
       name="description"
-      content="Create and play immersive 3D voxel games with VXLverse. Design worlds, implement combat, add AI-powered NPCs, and share your creations - all without coding. Try our browser-based game engine today!"
+      content="Create immersive 3D games and stunning virtual art galleries with VXLverse. Design interactive worlds, showcase artwork in 3D spaces, and share your creations - all without coding. Multiple pricing plans available."
     />
     <meta
       name="keywords"
-      content="voxel game, 3D game editor, game creation platform, browser game maker, voxel editor, 3D modeling, game development, no-code game creator, AI NPCs, quest system, game engine"
+      content="voxel game, 3D game editor, game creation platform, browser game maker, virtual art gallery, online exhibition, digital art showcase, 3D art space, virtual museum, art curation, no-code creator, AI NPCs, quest system, game engine"
     />
     <meta name="author" content="VXLverse" />
     <meta name="robots" content="index, follow" />
@@ -98,25 +98,25 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://vxlverse.com/" />
-    <meta property="og:title" content="VXLverse - Create & Play 3D Voxel Games in Your Browser" />
+    <meta property="og:title" content="VXLverse - Create 3D Games & Virtual Art Galleries" />
     <meta
       property="og:description"
-      content="Build beautiful 3D voxel games without coding. Design worlds, implement combat systems, create AI-powered NPCs, and share your creations with the VXLverse community."
+      content="Build immersive 3D games and stunning virtual art galleries without coding. Design interactive worlds, showcase artwork in 3D spaces, and share your creations with the VXLverse community."
     />
     <meta property="og:image" content="https://vxlverse.com/demo-images/Editor.png" />
-    <meta property="og:image:alt" content="VXLverse 3D game editor interface" />
+    <meta property="og:image:alt" content="VXLverse 3D creation platform interface" />
     <meta property="og:site_name" content="VXLverse" />
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://vxlverse.com/" />
-    <meta name="twitter:title" content="VXLverse - 3D Voxel Game Creation & Playing Platform" />
+    <meta name="twitter:title" content="VXLverse - 3D Game & Art Gallery Creation Platform" />
     <meta
       name="twitter:description"
-      content="Design, build and play immersive 3D voxel games directly in your browser with VXLverse's intuitive editor. Features AI-powered NPCs, dynamic combat, and quest systems."
+      content="Design immersive 3D games and create stunning virtual art galleries with VXLverse's intuitive platform. Features content moderation, flexible pricing plans, and no coding required."
     />
     <meta name="twitter:image" content="https://vxlverse.com/demo-images/Editor.png" />
-    <meta name="twitter:image:alt" content="VXLverse 3D game editor interface" />
+    <meta name="twitter:image:alt" content="VXLverse 3D creation platform interface" />
     <meta name="twitter:creator" content="@vxlverse" />
     <!-- Canonical URL -->
     <link rel="canonical" href="https://vxlverse.com/" />
@@ -127,21 +127,70 @@
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
         "name": "VXLverse",
-        "applicationCategory": "GameApplication",
+        "applicationCategory": "GameApplication, DesignApplication",
         "operatingSystem": "Web",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "A browser-based 3D voxel game creation platform with AI-powered NPCs, dynamic combat systems, and intuitive editor.",
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "Free Tier",
+            "price": "0",
+            "priceCurrency": "USD",
+            "description": "Basic access with 1 gallery and up to 10 paintings"
+          },
+          {
+            "@type": "Offer",
+            "name": "Pro Plan",
+            "price": "9.99",
+            "priceCurrency": "USD",
+            "description": "5 galleries with up to 50 paintings each"
+          },
+          {
+            "@type": "Offer",
+            "name": "Enterprise",
+            "price": "29.99",
+            "priceCurrency": "USD",
+            "description": "Unlimited galleries and paintings with advanced features"
+          }
+        ],
+        "description": "A browser-based platform for creating 3D games and virtual art galleries with AI-powered features, content moderation, and intuitive editing tools.",
         "screenshot": "https://vxlverse.com/demo-images/Editor.png",
         "featureList": [
           "No-code game creation",
+          "Virtual art gallery builder",
           "AI-powered NPCs",
+          "Content moderation",
           "Dynamic combat system",
           "Quest & progression system",
-          "3D voxel editor"
+          "3D editor",
+          "Multiple pricing plans"
+        ]
+      }
+    </script>
+    
+    <!-- Structured Data - Art Gallery -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "VXLverse Art Gallery",
+        "applicationCategory": "DesignApplication",
+        "operatingSystem": "Web",
+        "offers": {
+          "@type": "AggregateOffer",
+          "lowPrice": "0",
+          "highPrice": "29.99",
+          "priceCurrency": "USD",
+          "offerCount": 3
+        },
+        "description": "Create stunning virtual art galleries to showcase your artwork in immersive 3D environments. Features include content moderation, custom lighting, and virtual tours.",
+        "screenshot": "https://vxlverse.com/demo-images/Gallery.png",
+        "featureList": [
+          "Virtual exhibition space",
+          "Image upload & management",
+          "Content moderation",
+          "Custom lighting effects",
+          "Virtual tours",
+          "Visitor analytics"
         ]
       }
     </script>

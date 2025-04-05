@@ -44,7 +44,7 @@ export function Header() {
                 Games
               </Link>
               <Link
-                to="/galleries"
+                to="/gallery"
                 className={`text-sm ${
                   location.pathname === "/galleries"
                     ? "text-blue-400"
