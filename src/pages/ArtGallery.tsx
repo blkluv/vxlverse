@@ -81,8 +81,6 @@ export function _ArtGallery() {
 
   // Handle keyboard events directly
   const handleKeyDown = (event: KeyboardEvent) => {
-    console.log("Key pressed:", event.key); // Debug log
-
     // Focus on selected object (F key)
     if (event.key === "f" || event.key === "F") {
       if (selectedPaintingId && orbitControlsRef.current) {

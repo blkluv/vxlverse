@@ -62,7 +62,7 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
     const unsubscribeTranslate = subscribeKeys(
       (state: any) => state.translate,
       (pressed: boolean) => {
-        if (pressed && selectedPaintingId) {
+        if (pressed) {
           setActiveTool("move");
           setTransformMode("translate");
         }
@@ -73,7 +73,7 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
     const unsubscribeRotate = subscribeKeys(
       (state: any) => state.rotate,
       (pressed: boolean) => {
-        if (pressed && selectedPaintingId) {
+        if (pressed) {
           setActiveTool("rotate");
           setTransformMode("rotate");
         }
@@ -84,7 +84,7 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
     const unsubscribeScale = subscribeKeys(
       (state: any) => state.scale,
       (pressed: boolean) => {
-        if (pressed && selectedPaintingId) {
+        if (pressed) {
           setActiveTool("scale");
           setTransformMode("scale");
         }
@@ -95,8 +95,8 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
     const unsubscribeDelete = subscribeKeys(
       (state) => state.delete,
       (pressed) => {
-        if (pressed && selectedPaintingId) {
-          removePainting(selectedPaintingId);
+        if (pressed) {
+          removePainting(selectedPaintingId || "");
         }
       }
     );
@@ -134,7 +134,7 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
     const unsubscribeEscape = subscribeKeys(
       (state: any) => state.escape,
       (pressed: boolean) => {
-        if (pressed && selectedPaintingId) {
+        if (pressed) {
           updatePainting("", {}); // Deselect by setting empty ID
         }
       }
