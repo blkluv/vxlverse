@@ -6,15 +6,17 @@ import { Features } from "../components/home/Features";
 import { HowItWorks } from "../components/home/HowItWorks";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
-import { Gamepad2, ArrowRight } from "lucide-react";
+import { Gamepad2, ArrowRight, Image, Paintbrush } from "lucide-react";
 import "../styles/animations.css";
 import { useGames } from "../hooks/useGames";
 import { GameCard } from "../components/game/GameCard";
+import { useGalleries } from "../hooks/useGalleries";
 
 export function Home() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const { isAuthenticated } = useAuthStore();
   const { games } = useGames();
+  const { galleries } = useGalleries();
   useEffect(() => {
     // Event listener for opening the create game modal from other components
     const handleOpenCreateModal = () => {
@@ -43,6 +45,83 @@ export function Home() {
       {/* Main Content */}
       <main className="relative z-10">
         <Hero />
+
+        {/* Create Section */}
+        <section className="py-20 relative overflow-hidden">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Create Your Vision</h2>
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                VXLVerse gives you the power to build incredible interactive experiences without
+                coding. Choose your creative path and start building today.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              {/* 3D Games Card */}
+              <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-blue-500/20 rounded-xl overflow-hidden group hover:border-blue-500/40 transition-all shadow-lg hover:shadow-blue-500/10">
+                <div className="h-48 bg-gradient-to-br from-blue-900/30 to-blue-700/20 flex items-center justify-center">
+                  <Gamepad2 className="w-24 h-24 text-blue-400 opacity-75 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <div className="p-8">
+                  <h3 className="text-2xl font-bold text-white mb-4">3D Game Creation</h3>
+                  <p className="text-gray-300 mb-6">
+                    Design immersive 3D games with intuitive tools. Place objects, create
+                    interactions, and share your game with the world.
+                  </p>
+                  <div className="flex flex-wrap gap-3 mb-6">
+                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
+                      Interactive Objects
+                    </span>
+                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
+                      Physics
+                    </span>
+                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
+                      Multiplayer
+                    </span>
+                  </div>
+                  <a
+                    href="/editor/demo"
+                    className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium group-hover:translate-x-1 transition-transform"
+                  >
+                    Try Game Editor <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Art Gallery Card */}
+              <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-purple-500/20 rounded-xl overflow-hidden group hover:border-purple-500/40 transition-all shadow-lg hover:shadow-purple-500/10">
+                <div className="h-48 bg-gradient-to-br from-purple-900/30 to-purple-700/20 flex items-center justify-center">
+                  <Paintbrush className="w-24 h-24 text-purple-400 opacity-75 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <div className="p-8">
+                  <h3 className="text-2xl font-bold text-white mb-4">3D Art Gallery</h3>
+                  <p className="text-gray-300 mb-6">
+                    Create stunning virtual art galleries to showcase your artwork in an immersive
+                    3D environment that visitors can explore.
+                  </p>
+                  <div className="flex flex-wrap gap-3 mb-6">
+                    <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
+                      Custom Layouts
+                    </span>
+                    <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
+                      Image Upload
+                    </span>
+                    <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
+                      Virtual Tours
+                    </span>
+                  </div>
+                  <a
+                    href="/gallery/demo"
+                    className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 font-medium group-hover:translate-x-1 transition-transform"
+                  >
+                    Try Gallery Editor <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <HowItWorks />
 
@@ -89,6 +168,102 @@ export function Home() {
                 className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 lg transition-all duration-300"
               >
                 View All Games
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Art Galleries */}
+        <section className="py-20 bg-gradient-to-b from-black to-gray-900 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
+
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-purple-500/10 border border-purple-500/20 backdrop-blur-sm full">
+                    <Paintbrush className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-white">Art Galleries</h2>
+                </div>
+                <p className="text-gray-400 max-w-2xl">
+                  Explore stunning 3D art galleries created by our community. View, create, and
+                  share your own virtual exhibitions.
+                </p>
+              </div>
+
+              <a
+                href="/gallery"
+                className="hidden md:flex items-center gap-2 px-4 py-2 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-400 lg transition-all duration-300"
+              >
+                View All Galleries
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {galleries && galleries.length > 0 ? (
+                galleries.slice(0, 3).map((gallery) => (
+                  <div
+                    key={gallery.id}
+                    className="group relative overflow-hidden rounded-lg border border-gray-800 bg-gray-900 shadow-md transition-all hover:shadow-lg hover:shadow-purple-500/10"
+                  >
+                    <div className="aspect-video w-full overflow-hidden">
+                      <img
+                        src={gallery.thumbnailUrl || "/placeholder-gallery.jpg"}
+                        alt={gallery.title || "Gallery"}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-xl font-semibold text-white mb-2">
+                        {gallery.title || "Art Gallery"}
+                      </h3>
+                      <p className="text-gray-400 text-sm mb-3 line-clamp-2">
+                        {gallery.description || "A beautiful virtual art gallery"}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Image className="w-4 h-4 text-purple-400" />
+                          <span className="text-sm text-gray-400">
+                            {gallery.paintingCount || 0} paintings
+                          </span>
+                        </div>
+                        <a
+                          href={`/gallery/${gallery.id}`}
+                          className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
+                        >
+                          Visit Gallery
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-3 p-8 text-center border border-dashed border-gray-700 rounded-lg">
+                  <Paintbrush className="w-10 h-10 text-purple-400 mx-auto mb-4 opacity-50" />
+                  <h3 className="text-xl font-medium text-white mb-2">No Galleries Yet</h3>
+                  <p className="text-gray-400 mb-4">
+                    Be the first to create a stunning 3D art gallery!
+                  </p>
+                  <a
+                    href="/editor/demo"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white font-medium rounded-md transition-colors"
+                  >
+                    Try Gallery Editor
+                  </a>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-8 text-center md:hidden">
+              <a
+                href="/gallery"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-400 lg transition-all duration-300"
+              >
+                View All Galleries
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>

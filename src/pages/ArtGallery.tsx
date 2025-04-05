@@ -6,7 +6,6 @@ import { Perf } from "r3f-perf";
 import { useParams } from "react-router-dom";
 import { EditorHeader } from "../components/editor/EditorHeader";
 // import { Hero } from "../components/game/Hero";
-import { Toolbar } from "../components/editor/Toolbar";
 import { GalleryPropertiesPanel } from "../components/gallery/GalleryPropertiesPanel";
 import { ArtEditor } from "../components/gallery/Editor";
 import { PaintingToolbar } from "../components/gallery/PaintingToolbar";
@@ -71,34 +70,6 @@ export function _ArtGallery() {
     };
   }, [scenes]);
 
-  // Handle keyboard shortcuts for undo/redo
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Check if the key is pressed with the command/ctrl key
-      const isCommandOrCtrl = e.metaKey || e.ctrlKey;
-
-      if (isCommandOrCtrl && e.key === "z") {
-        e.preventDefault();
-        if (e.shiftKey) {
-          // Command/Ctrl + Shift + Z = Redo
-          redo();
-        } else {
-          // Command/Ctrl + Z = Undo
-          undo();
-        }
-      } else if (isCommandOrCtrl && e.key === "y") {
-        // Command/Ctrl + Y = Redo (alternative)
-        e.preventDefault();
-        redo();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [undo, redo]);
-
   // Create a default scene if none exists
   useEffect(() => {
     if (scenes.length === 0) {
@@ -125,44 +96,30 @@ export function _ArtGallery() {
       <div className="editorLayout">
         <div className="toolbar flex">
           {/* Show PaintingToolbar when a painting is selected, otherwise show regular Toolbar */}
-          {selectedPaintingId ? (
-            <PaintingToolbar
-              setTransformMode={setTransformMode}
-              setShowMetrics={setShowMetrics}
-              showMetrics={showMetrics}
-              showGrid={showGrid}
-              toggleGrid={toggleGrid}
-              gridSnap={gridSnap}
-              toggleGridSnap={toggleGridSnap}
-            />
-          ) : (
-            <Toolbar
-              setTransformMode={setTransformMode}
-              setShowMetrics={setShowMetrics}
-              showMetrics={showMetrics}
-            />
-          )}
+          <PaintingToolbar
+            setTransformMode={setTransformMode}
+            setShowMetrics={setShowMetrics}
+            showMetrics={showMetrics}
+            showGrid={showGrid}
+            toggleGrid={toggleGrid}
+            gridSnap={gridSnap}
+            toggleGridSnap={toggleGridSnap}
+          />
         </div>
 
         <div className="editor-canvas">
-          {currentSceneId ? (
-            <Canvas
-              key={currentSceneId + forceUpdate}
-              shadows
-              gl={{ preserveDrawingBuffer: true }}
-              camera={{ position: [5, 5, 5], fov: 50 }}
-              className="w-full relative h-full"
-            >
-              {showMetrics && <Perf className="absolute z-10 w-80 top-0 left-0" />}
+          <Canvas
+            key={forceUpdate}
+            shadows
+            gl={{ preserveDrawingBuffer: true }}
+            camera={{ position: [5, 5, 5], fov: 50 }}
+            className="w-full relative h-full"
+          >
+            {showMetrics && <Perf className="absolute z-10 w-80 top-0 left-0" />}
 
-              <ArtEditor transformMode={transformMode} showGrid={showGrid} gridSnap={gridSnap} />
-              <OrbitControls ref={orbitControlsRef} makeDefault />
-            </Canvas>
-          ) : (
-            <div className="z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              No scene selected
-            </div>
-          )}
+            <ArtEditor transformMode={transformMode} showGrid={showGrid} gridSnap={gridSnap} />
+            <OrbitControls ref={orbitControlsRef} makeDefault />
+          </Canvas>
         </div>
         <GalleryPropertiesPanel />
       </div>

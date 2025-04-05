@@ -19,8 +19,9 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/games" element={<Games />} />
         <Route path="/play/:id" element={<Game />} />
-        <Route path="/galleries" element={<Galleries />} />
+        <Route path="/gallery" element={<Galleries />} />
         <Route path="/gallery/:id" element={<ArtGallery />} />
+        <Route path="/gallery/:id/edit" element={<ArtGallery />} />
         <Route path="/login" element={<Login />} />
         <Route path="/editor/demo" element={<Editor />} />
 

@@ -1,4 +1,4 @@
-import { Gamepad2, Sparkles, Play, Plus } from "lucide-react";
+import { Gamepad2, Sparkles, Play, Plus, Paintbrush, Palette } from "lucide-react";
 import { useAuthStore } from "../../stores/authStore";
 import { useState } from "react";
 import { LoginModal } from "../auth/LoginModal";
@@ -25,11 +25,15 @@ export function Hero() {
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-3 mb-8">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500  blur-xl opacity-50" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 blur-xl opacity-50" />
                 <Gamepad2 className="w-16 h-16 text-white relative" />
               </div>
               <div>
                 <Sparkles className="w-10 h-10 text-yellow-400" />
+              </div>
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 blur-xl opacity-50" />
+                <Paintbrush className="w-16 h-16 text-white relative" />
               </div>
             </div>
 
@@ -38,13 +42,29 @@ export function Hero() {
                 Create Incredible
               </span>
               <br />
-              <span className="text-white">3D Games</span>
+              <span className="text-white">3D Experiences</span>
             </h1>
 
-            <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
-              Join thousands of creators building amazing games with our powerful 3D engine. No
-              coding required. Start your journey today.
+            <p className="text-xl text-gray-300 mb-6 max-w-3xl mx-auto">
+              Join thousands of creators building amazing 3D games and stunning virtual art
+              galleries with our powerful platform. No coding required. Start your creative journey
+              today.
             </p>
+
+            <div className="flex flex-wrap justify-center gap-6 mb-12">
+              <div className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 rounded-full border border-blue-500/30">
+                <Gamepad2 className="w-5 h-5 text-blue-400" />
+                <span className="text-blue-300">3D Game Creation</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 rounded-full border border-purple-500/30">
+                <Paintbrush className="w-5 h-5 text-purple-400" />
+                <span className="text-purple-300">Virtual Art Galleries</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-pink-500/20 rounded-full border border-pink-500/30">
+                <Palette className="w-5 h-5 text-pink-400" />
+                <span className="text-pink-300">No Coding Required</span>
+              </div>
+            </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <a
@@ -61,8 +81,17 @@ export function Hero() {
                 className="group px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium 
                          hover:from-blue-600 hover:to-blue-700 transition-all flex items-center gap-2 shadow-lg shadow-blue-500/25"
               >
-                <Play className="w-5 h-5" />
-                Try Editor Demo
+                <Gamepad2 className="w-5 h-5" />
+                Try Game Editor
+              </a>
+
+              <a
+                href="/gallery/demo"
+                className="group px-8 py-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-medium 
+                         hover:from-purple-600 hover:to-purple-700 transition-all flex items-center gap-2 shadow-lg shadow-purple-500/25"
+              >
+                <Paintbrush className="w-5 h-5" />
+                Try Gallery Editor
               </a>
 
               <button
@@ -91,7 +120,7 @@ export function Hero() {
               { label: "Games Created", value: "10K+" },
               { label: "Countries", value: "150+" },
               { label: "Reviews", value: "4.9/5" },
-            ].map((stat, index) => (
+            ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
                   {stat.value}
