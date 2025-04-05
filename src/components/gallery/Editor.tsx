@@ -8,10 +8,11 @@ import {
 import { ArtGalleryModel } from "./ArtGalleryModel";
 import { usePaintingsStore } from "../../stores/paintingsStore";
 import { Painting } from "./Painting";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import * as THREE from "three";
 import { PhysicsArea } from "./PhysicsArea";
 import { useEditorStore } from "../../stores/editorStore";
+import { useThree } from "@react-three/fiber";
 
 interface EditorSceneProps {
   showGrid?: boolean;
@@ -22,18 +23,21 @@ interface EditorSceneProps {
 export function ArtEditor({
   showGrid = true,
   gridSnap = false,
-  transformMode,
+  transformMode = "translate",
 }: EditorSceneProps = {}) {
   // Get paintings from store
   const { paintings, selectedPaintingId, selectPainting, updatePainting, placeWithBrush } =
     usePaintingsStore();
   const { brushActive } = useEditorStore();
+  const { camera } = useThree();
 
-  // Get Three.js camera and raycaster
+  // State for tracking transform operations
+  const [, setIsDragging] = useState(false);
 
   // References
   const selectedPaintingRef = useRef<THREE.Group | null>(null);
   const galleryModelRef = useRef<THREE.Group | null>(null);
+
   // Get the selected painting
   const selectedPainting = paintings.find((p) => p.id === selectedPaintingId);
   return (
@@ -96,6 +100,14 @@ export function ArtEditor({
         <TransformControls
           object={selectedPaintingRef.current}
           mode={transformMode}
+          size={0.7}
+          showX
+          showY
+          showZ
+          camera={camera}
+          onMouseDown={() => {
+            setIsDragging(true);
+          }}
           onMouseUp={() => {
             if (selectedPaintingRef.current && selectedPaintingId) {
               const position = selectedPaintingRef.current.position.toArray() as [
@@ -111,6 +123,37 @@ export function ArtEditor({
               const scale = selectedPaintingRef.current.scale.toArray() as [number, number, number];
 
               updatePainting(selectedPaintingId, { position, rotation, scale });
+              setIsDragging(false);
+            }
+          }}
+          onObjectChange={() => {
+            if (!selectedPaintingRef.current || !gridSnap) return;
+
+            // Apply grid snapping if enabled
+            if (gridSnap) {
+              // Snap position to grid (0.5 unit grid)
+              selectedPaintingRef.current.position.x =
+                Math.round(selectedPaintingRef.current.position.x * 2) / 2;
+              selectedPaintingRef.current.position.y =
+                Math.round(selectedPaintingRef.current.position.y * 2) / 2;
+              selectedPaintingRef.current.position.z =
+                Math.round(selectedPaintingRef.current.position.z * 2) / 2;
+
+              // Snap rotation to 45-degree increments
+              selectedPaintingRef.current.rotation.x =
+                Math.round(selectedPaintingRef.current.rotation.x / (Math.PI / 4)) * (Math.PI / 4);
+              selectedPaintingRef.current.rotation.y =
+                Math.round(selectedPaintingRef.current.rotation.y / (Math.PI / 4)) * (Math.PI / 4);
+              selectedPaintingRef.current.rotation.z =
+                Math.round(selectedPaintingRef.current.rotation.z / (Math.PI / 4)) * (Math.PI / 4);
+
+              // Snap scale to 0.25 increments
+              selectedPaintingRef.current.scale.x =
+                Math.round(selectedPaintingRef.current.scale.x * 4) / 4;
+              selectedPaintingRef.current.scale.y =
+                Math.round(selectedPaintingRef.current.scale.y * 4) / 4;
+              selectedPaintingRef.current.scale.z =
+                Math.round(selectedPaintingRef.current.scale.z * 4) / 4;
             }
           }}
         />

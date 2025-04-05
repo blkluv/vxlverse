@@ -15,7 +15,7 @@ import { EditorHeader } from "../components/editor/EditorHeader";
 // import { pb } from "../lib/pocketbase";
 
 // Updated keyboard mapping for tools
-const KEYBOARD_MAP = [
+export const KEYBOARD_MAP = [
   { name: "translate", keys: ["KeyW"] },
   { name: "rotate", keys: ["KeyE"] },
   { name: "scale", keys: ["KeyR"] },

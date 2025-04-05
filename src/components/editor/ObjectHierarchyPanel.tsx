@@ -14,6 +14,7 @@ import {
   Check,
   Save,
   X,
+  Image,
 } from "lucide-react";
 import { useEditorStore } from "../../stores/editorStore";
 import { Tooltip } from "../UI/Tooltip";
@@ -42,6 +43,8 @@ const getObjectTypeIcon = (type: string | undefined, isSelected: boolean) => {
       return (
         <ArrowUpRight className={`${baseClass} ${isSelected ? "text-indigo-400" : defaultColor}`} />
       );
+    case "painting":
+      return <Image className={`${baseClass} ${isSelected ? "text-green-400" : defaultColor}`} />;
     case "trigger":
       return <Target className={`${baseClass} ${isSelected ? "text-sky-400" : defaultColor}`} />;
     default: // prop

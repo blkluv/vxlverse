@@ -46,12 +46,32 @@ export function Header() {
               <Link
                 to="/gallery"
                 className={`text-sm ${
-                  location.pathname === "/galleries"
+                  location.pathname === "/gallery"
                     ? "text-blue-400"
                     : "text-gray-400 hover:text-white"
                 }`}
               >
                 Galleries
+              </Link>
+              <Link
+                to="/pricing"
+                className={`text-sm ${
+                  location.pathname === "/pricing"
+                    ? "text-blue-400"
+                    : "text-gray-400 hover:text-white"
+                }`}
+              >
+                Pricing
+              </Link>
+              <Link
+                to="/how-it-works"
+                className={`text-sm ${
+                  location.pathname === "/how-it-works"
+                    ? "text-blue-400"
+                    : "text-gray-400 hover:text-white"
+                }`}
+              >
+                How It Works
               </Link>
             </nav>
 

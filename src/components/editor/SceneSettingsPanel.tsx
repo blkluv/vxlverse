@@ -3,7 +3,6 @@ import { Scene } from "../../types";
 import { Edit3, Settings, Skull, Minimize, Maximize, Check } from "lucide-react";
 import { Input } from "../UI/input";
 import { ObjectHierarchyPanel } from "./ObjectHierarchyPanel";
-import { SoundPanel } from "./properties/sounds";
 
 interface SceneSettingsPanelProps {
   scene: Scene;
@@ -127,8 +126,6 @@ export function SceneSettingsPanel({ scene, onChange }: SceneSettingsPanelProps)
       </div>
 
       <ObjectHierarchyPanel className="bg-opacity-70" />
-
-      <SoundPanel />
     </div>
   );
 }
