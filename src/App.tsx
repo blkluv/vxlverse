@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import { Editor } from "./pages/Editor";
 import { Game } from "./pages/Game";
 import { Home } from "./pages/Home";
@@ -14,60 +15,62 @@ import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/games" element={<Games />} />
-        <Route path="/play/:id" element={<Game />} />
-        <Route path="/gallery" element={<Galleries />} />
-        <Route path="/gallery/:id" element={<ArtGallery />} />
-        <Route path="/gallery/:id/edit" element={<ArtGallery />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/editor/demo" element={<Editor />} />
+    <HelmetProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/games" element={<Games />} />
+          <Route path="/play/:id" element={<Game />} />
+          <Route path="/gallery" element={<Galleries />} />
+          <Route path="/gallery/:id" element={<ArtGallery />} />
+          <Route path="/gallery/:id/edit" element={<ArtGallery />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/editor/demo" element={<Editor />} />
 
-        <Route
-          path="/editor/:id"
-          element={
-            <ProtectedRoute>
-              <Editor />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/edit/:id"
-          element={
-            <ProtectedRoute>
-              <Editor />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/favorites"
-          element={
-            <ProtectedRoute>
-              <Favorites />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <ProtectedRoute>
-              <Settings />
-            </ProtectedRoute>
-          }
-        />
-        {/* 404 Not Found page - must be last */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Router>
+          <Route
+            path="/editor/:id"
+            element={
+              <ProtectedRoute>
+                <Editor />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit/:id"
+            element={
+              <ProtectedRoute>
+                <Editor />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/favorites"
+            element={
+              <ProtectedRoute>
+                <Favorites />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            }
+          />
+          {/* 404 Not Found page - must be last */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
+    </HelmetProvider>
   );
 }

@@ -11,6 +11,7 @@ import "../styles/animations.css";
 import { useGames } from "../hooks/useGames";
 import { GameCard } from "../components/game/GameCard";
 import { useGalleries } from "../hooks/useGalleries";
+import { SEO } from "../components/shared/SEO";
 
 export function Home() {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -35,6 +36,12 @@ export function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black overflow-hidden">
+      <SEO
+        title="VXLVerse - Create 3D Games & Art Galleries"
+        description="Build incredible 3D games and stunning virtual art galleries with VXLVerse. No coding required, multiple pricing options available. Start your creative journey today."
+        keywords="3D games, art gallery, virtual gallery, game creation, 3D modeling, no-code, game engine, virtual exhibition, online gallery, 3D art"
+        ogImage="/vxlverse-social-preview.jpg"
+      />
       {/* Background effects */}
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,rgba(79,70,229,0.15),transparent_50%)] pointer-events-none z-0" />
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(236,72,153,0.1),transparent_70%)] pointer-events-none z-0" />

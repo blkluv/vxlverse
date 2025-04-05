@@ -2,7 +2,7 @@
 
 # VXLverse
 
-### _Create, Play, Share: The Ultimate 3D Voxel Game Creation Platform_
+### _Create, Play, Share: The Ultimate 3D Game & Art Gallery Platform_
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Built with: React](https://img.shields.io/badge/Built%20with-React-61DAFB.svg)](https://reactjs.org/)
@@ -14,7 +14,7 @@
 
 ## 🌟 Welcome to VXLverse
 
-VXLverse is a revolutionary browser-based platform that empowers creators to build, customize, and share immersive 3D voxel games—**no coding required**. Combining intuitive design tools with powerful AI capabilities, VXLverse makes game development accessible to everyone while offering advanced features for experienced developers.
+VXLverse is a revolutionary browser-based platform that empowers creators to build, customize, and share immersive 3D voxel games and stunning virtual art galleries—**no coding required**. Combining intuitive design tools with powerful AI capabilities, VXLverse makes both game development and virtual art exhibition accessible to everyone while offering advanced features for experienced creators.
 
 <div align="center">
 
@@ -24,6 +24,8 @@ _The powerful VXLverse editor with real-time 3D rendering, scene hierarchy, and 
 </div>
 
 ## 🎮 Complete Game Creation Suite
+
+Create immersive 3D games with our intuitive tools and powerful features:
 
 ### ⚔️ Dynamic Combat System
 
@@ -206,8 +208,35 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Framer Motion](https://www.framer.com/motion/) - Animation library
 - [PocketBase](https://pocketbase.io/) - Open source backend
 - [Mistral AI](https://mistral.ai/) - Advanced language model for NPC conversations
+- [NSFWJS](https://github.com/infinitered/nsfwjs) - Client-side content moderation
+- [TensorFlow.js](https://www.tensorflow.org/js) - Machine learning framework
 - [Zustand](https://github.com/pmndrs/zustand) - State management
 - [Vite](https://vitejs.dev/) - Next generation frontend tooling
+
+## 🖼️ Virtual Art Gallery Platform
+
+VXLverse now offers a powerful virtual art gallery creation system, allowing artists and curators to showcase their work in immersive 3D environments:
+
+### 🎨 Gallery Creation Features
+
+<div align="center">
+
+![Art Gallery](/public/demo-images/Gallery.png)
+_Create stunning virtual art galleries with customizable layouts and lighting_
+
+</div>
+
+- **Intuitive Gallery Builder** - Design beautiful 3D spaces to showcase artwork
+- **Image Upload & Management** - Easily upload and organize your artwork collection
+- **Content Moderation** - Built-in image moderation ensures appropriate content
+- **Custom Lighting** - Set the perfect ambiance with adjustable lighting options
+- **Virtual Tours** - Create guided paths through your gallery for visitors
+
+### 💰 Flexible Pricing Options
+
+- **Free Tier** - Perfect for hobbyists with 1 gallery and up to 10 paintings
+- **Pro Plan** - For artists and small galleries with 5 galleries and up to 50 paintings each
+- **Enterprise** - For professional artists and museums with unlimited galleries and paintings
 
 ## ✨ Why Choose VXLverse?
 
@@ -219,27 +248,36 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **AI-Powered NPCs** - Create lifelike characters with minimal effort
 - **Real-Time Collaboration** - Work together with friends simultaneously
 
-### For Players
+### For Artists & Curators
 
-- **Immersive Experiences** - Enjoy authentic pixel-art RPG interfaces with modern gameplay
+- **Professional Exhibition Space** - Showcase your artwork in beautiful 3D environments
+- **Easy Content Management** - Upload, arrange, and manage your artwork collection
+- **Visitor Analytics** - Track engagement and visitor interactions with your gallery
+- **Content Protection** - Secure image storage and content moderation features
+- **Customizable Experience** - Design the perfect virtual space for your artistic vision
+
+### For Players & Gallery Visitors
+
+- **Immersive Experiences** - Enjoy authentic pixel-art RPG interfaces and stunning art galleries
 - **Dynamic Characters** - Have meaningful conversations with AI-powered NPCs
 - **Engaging Combat** - Master projectile-based combat with strategic depth
 - **Rewarding Progression** - Complete quests for experience and rewards
-- **Cross-Platform Play** - Access games on web, mobile, and desktop as PWAs
+- **Cross-Platform Access** - Access games and galleries on web, mobile, and desktop as PWAs
 
 ## 🌐 Community & Resources
 
-- [Discord Community](https://discord.gg/vxlverse) - Join thousands of creators
+- [Discord Community](https://discord.gg/vxlverse) - Join thousands of creators and artists
 - [Documentation](https://docs.vxlverse.com) - Comprehensive guides and API references
 - [Tutorials](https://vxlverse.com/learn) - Step-by-step learning resources
-- [Showcase](https://vxlverse.com/showcase) - Explore games created with VXLverse
+- [Game Showcase](https://vxlverse.com/showcase) - Explore games created with VXLverse
+- [Gallery Exhibition](https://vxlverse.com/galleries) - Browse virtual art galleries
 - [Feature Requests](https://github.com/mpoapostolis/vxlverse-v3/issues) - Share your ideas
 
 ---
 
 <div align="center">
 
-**VXLverse** combines voxel design, AI-powered conversations, combat mechanics, and quest systems to create the ultimate game creation platform.
+**VXLverse** combines voxel design, AI-powered conversations, combat mechanics, quest systems, and virtual art galleries to create the ultimate creative platform.
 
 Created with ❤️ by [Apostolis Bostanis](https://github.com/mpoapostolis)
 
@@ -247,4 +285,4 @@ Created with ❤️ by [Apostolis Bostanis](https://github.com/mpoapostolis)
 
 </div>
 
-<!-- Keywords: voxel editor, 3D game creation, browser game maker, no-code game development, three.js game engine, voxel modeling, interactive 3D, web-based game editor, game design platform, 3D world builder, pixel-art UI, retro RPG interface, game HUD design, AI-powered NPCs, LLM integration, dynamic conversations, character backstories, combat mechanics, projectile combat, experience rewards, quest system, PWA -->
+<!-- Keywords: voxel editor, 3D game creation, browser game maker, no-code game development, three.js game engine, voxel modeling, interactive 3D, web-based game editor, game design platform, 3D world builder, pixel-art UI, retro RPG interface, game HUD design, AI-powered NPCs, LLM integration, dynamic conversations, character backstories, combat mechanics, projectile combat, experience rewards, quest system, PWA, virtual art gallery, 3D art exhibition, online gallery, art showcase, digital art platform, virtual museum, art curation, gallery builder -->
