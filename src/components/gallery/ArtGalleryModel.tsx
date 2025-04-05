@@ -1,21 +1,9 @@
-import { useGLTF, useTexture } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { usePaintingsStore } from "../../stores/paintingsStore";
 import { ThreeEvent } from "@react-three/fiber";
 import { useEditorStore } from "../../stores/editorStore";
-
-function Paint({ imageUrl }: { imageUrl: string }) {
-  const texture = useTexture(imageUrl);
-  return (
-    <group>
-      <mesh>
-        <boxGeometry args={[10, 10, 0.5]} />
-        <meshStandardMaterial map={texture} />
-      </mesh>
-    </group>
-  );
-}
 
 export function ArtGalleryModel() {
   const { scene } = useGLTF("/models/artgallery.glb", true);
@@ -78,12 +66,6 @@ export function ArtGalleryModel() {
 
   return (
     <>
-      {selectedPainting && (
-        <group ref={paintingRef}>
-          <Paint imageUrl={selectedPainting.imageUrl} />
-        </group>
-      )}
-
       <group ref={galleryRef} onPointerMove={handlePointerMove} dispose={null}>
         <primitive object={clonedScene} />
       </group>

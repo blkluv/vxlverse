@@ -4,20 +4,18 @@ import {
   RotateCcw,
   Maximize2,
   Trash,
-  Link,
-  Unlink,
   Grid3X3,
   Magnet,
   Gauge,
-  AlignCenter,
-  Circle,
   Image as ImageIcon,
+  Brush,
 } from "lucide-react";
 import { Tooltip } from "../../components/UI/Tooltip";
 import { usePaintingsStore } from "../../stores/paintingsStore";
 import { useKeyboardControls } from "@react-three/drei";
 import { TermsOfService } from "../legal/TermsOfService";
 import { detectNudityContent } from "../../utils/imageModeration";
+import { useEditorStore } from "../../stores/editorStore";
 // import { cn } from "../../components/UI";
 
 type PaintingToolbarProps = {
@@ -48,8 +46,8 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
   const [pendingUpload, setPendingUpload] = useState<(() => void) | null>(null);
 
   // Get paintings store state and actions
-  const { paintings, selectedPaintingId, removePainting, updatePainting, arrangePaintings } =
-    usePaintingsStore();
+  const { toggleBrushMode, brushActive } = useEditorStore();
+  const { paintings, selectedPaintingId, removePainting, updatePainting } = usePaintingsStore();
 
   // Get selected painting
   const selectedPainting = paintings.find((p) => p.id === selectedPaintingId);
@@ -62,7 +60,7 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
     const unsubscribeTranslate = subscribeKeys(
       (state: any) => state.translate,
       (pressed: boolean) => {
-        if (pressed) {
+        if (pressed && selectedPaintingId) {
           setActiveTool("move");
           setTransformMode("translate");
         }
@@ -73,9 +71,21 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
     const unsubscribeRotate = subscribeKeys(
       (state: any) => state.rotate,
       (pressed: boolean) => {
-        if (pressed) {
+        if (pressed && selectedPaintingId) {
           setActiveTool("rotate");
           setTransformMode("rotate");
+        }
+      }
+    );
+
+    // Brush tool
+    const unsubscribeBrush = subscribeKeys(
+      (state) => state.brush,
+      (pressed) => {
+        if (pressed && selectedPaintingId) {
+          setActiveTool("brush");
+          console.log("Brush mode: ", pressed);
+          toggleBrushMode(pressed);
         }
       }
     );
@@ -84,7 +94,7 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
     const unsubscribeScale = subscribeKeys(
       (state: any) => state.scale,
       (pressed: boolean) => {
-        if (pressed) {
+        if (pressed && selectedPaintingId) {
           setActiveTool("scale");
           setTransformMode("scale");
         }
@@ -95,8 +105,8 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
     const unsubscribeDelete = subscribeKeys(
       (state) => state.delete,
       (pressed) => {
-        if (pressed) {
-          removePainting(selectedPaintingId || "");
+        if (pressed && selectedPaintingId) {
+          removePainting(selectedPaintingId);
         }
       }
     );
@@ -134,7 +144,8 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
     const unsubscribeEscape = subscribeKeys(
       (state: any) => state.escape,
       (pressed: boolean) => {
-        if (pressed) {
+        if (pressed && selectedPaintingId) {
+          toggleBrushMode(false);
           updatePainting("", {}); // Deselect by setting empty ID
         }
       }
@@ -148,6 +159,7 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
       unsubscribeNextObject();
       unsubscribePrevObject();
       unsubscribeEscape();
+      unsubscribeBrush();
     };
   }, [
     selectedPaintingId,
@@ -156,20 +168,8 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
     removePainting,
     updatePainting,
     subscribeKeys,
+    toggleBrushMode,
   ]);
-
-  // Handle scale linking/unlinking
-  const toggleScaleLinking = () => {
-    setScaleLinked(!scaleLinked);
-
-    // If a painting is selected and we're linking scales, make all scale values equal to the X scale
-    if (selectedPaintingId && selectedPainting && !scaleLinked) {
-      const uniformScale = selectedPainting.scale[0];
-      updatePainting(selectedPaintingId, {
-        scale: [uniformScale, uniformScale, uniformScale],
-      });
-    }
-  };
 
   // Reset painting transform
   const resetTransform = () => {
@@ -179,6 +179,17 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
         rotation: [0, 0, 0],
         scale: [1, 1, 1],
       });
+    }
+  };
+
+  // Handle brush toggle
+  const handleBrushToggle = () => {
+    if (selectedPaintingId && activeTool === "brush") {
+      setActiveTool("move");
+      toggleBrushMode(false);
+    } else {
+      setActiveTool("brush");
+      toggleBrushMode(true);
     }
   };
 
@@ -290,20 +301,6 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
         </button>
       </Tooltip>
 
-      {/* Scale Linking */}
-      <Tooltip position="right" content={scaleLinked ? "Unlink Scale Axes" : "Link Scale Axes"}>
-        <button
-          onClick={toggleScaleLinking}
-          className={`w-10 h-10 flex items-center justify-center transition-all duration-200 ${
-            scaleLinked
-              ? "bg-gradient-to-b from-green-600/30 to-green-500/20 text-green-300 border-l-2 border-green-400 shadow-[0_2px_4px_rgba(74,222,128,0.2)]"
-              : "text-slate-400 hover:bg-slate-700/40 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-400"
-          }`}
-        >
-          {scaleLinked ? <Link className="w-4 h-4" /> : <Unlink className="w-4 h-4" />}
-        </button>
-      </Tooltip>
-
       {/* Reset Transform */}
       <Tooltip position="right" content="Reset Transform">
         <button
@@ -326,24 +323,17 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
         </button>
       </Tooltip>
 
-      {/* Arrangement Tools */}
-      <Tooltip position="right" content="Arrange in Line">
+      <Tooltip position="right" content="Brush Tool (B)">
         <button
-          onClick={() => arrangePaintings("wall")}
-          className="w-10 h-10 flex items-center justify-center transition-all duration-200 text-slate-400 hover:bg-slate-700/40 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-400"
-          disabled={paintings.length === 0}
+          disabled={!selectedPaintingId}
+          onClick={handleBrushToggle}
+          className={`w-10 h-10 flex items-center justify-center transition-all duration-200 ${
+            brushActive
+              ? "bg-gradient-to-b from-blue-600/30 to-blue-500/20 text-blue-300 border-l-2 border-blue-400 shadow-[0_2px_4px_rgba(59,130,246,0.2)]"
+              : "text-slate-400 hover:bg-slate-700/40 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-400"
+          }`}
         >
-          <AlignCenter className="w-4 h-4" />
-        </button>
-      </Tooltip>
-
-      <Tooltip position="right" content="Arrange in Circle">
-        <button
-          onClick={() => arrangePaintings("circle")}
-          className="w-10 h-10 flex items-center justify-center transition-all duration-200 text-slate-400 hover:bg-slate-700/40 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-400"
-          disabled={paintings.length === 0}
-        >
-          <Circle className="w-4 h-4" />
+          <Brush className="w-4 h-4" />
         </button>
       </Tooltip>
 
