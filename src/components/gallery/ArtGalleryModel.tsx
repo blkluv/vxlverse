@@ -1,17 +1,10 @@
 import { useGLTF } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { usePaintingsStore } from "../../stores/paintingsStore";
-import { ThreeEvent } from "@react-three/fiber";
-import { useEditorStore } from "../../stores/editorStore";
 
 export function ArtGalleryModel() {
   const { scene } = useGLTF("/models/artgallery.glb", true);
   const galleryRef = useRef<THREE.Group>(null);
-  const paintingRef = useRef<THREE.Group>(null);
-
-  const { selectedPaintingId, paintings } = usePaintingsStore();
-  const { gridSnap } = useEditorStore();
 
   const clonedScene = useMemo(() => scene.clone(), [scene]);
 
@@ -32,41 +25,9 @@ export function ArtGalleryModel() {
     }
   }, [clonedScene]);
 
-  const handlePointerMove = (event: ThreeEvent<PointerEvent>) => {
-    if (!paintingRef.current) return;
-    const [first] = event.intersections;
-    if (!first) return;
-    const normal = first.face?.normal;
-    const position = first.point;
-    if (!normal || !position) return;
-
-    position.add(normal);
-
-    if (gridSnap) {
-      position.set(Math.round(position.x), Math.round(position.y), Math.round(position.z));
-    }
-
-    paintingRef.current.position.copy(position);
-
-    if (Math.abs(normal.y) > 0.9) {
-      paintingRef.current.rotation.set(0, 0, 0);
-    } else {
-      const lookAtPos = position.clone().sub(normal);
-      lookAtPos.y = position.y;
-      paintingRef.current.lookAt(lookAtPos);
-      paintingRef.current.rotation.x = 0;
-      paintingRef.current.rotation.z = 0;
-    }
-  };
-
-  const selectedPainting = useMemo(
-    () => paintings.find((p) => p.id === selectedPaintingId),
-    [paintings, selectedPaintingId]
-  );
-
   return (
     <>
-      <group ref={galleryRef} onPointerMove={handlePointerMove} dispose={null}>
+      <group ref={galleryRef} dispose={null}>
         <primitive object={clonedScene} />
       </group>
     </>
