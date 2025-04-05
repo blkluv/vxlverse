@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import clsx from "clsx";
-import { Image, List, Box, Upload, Plus, X } from "lucide-react";
+import { List, Box } from "lucide-react";
 import { useEditorStore } from "../../stores/editorStore";
 import { useKeyboardControls } from "@react-three/drei";
 import { ObjectHierarchyPanel } from "../editor/ObjectHierarchyPanel";
@@ -9,6 +9,10 @@ import { TransformPanel } from "../editor/properties/transform";
 import { NoSelected } from "../no-selected";
 import { GalleryUploadModal } from "./GalleryUploadModal";
 import { usePaintingsStore } from "../../stores/paintingsStore";
+import { useGallery } from "../../hooks/useGallery";
+import { pb } from "../../lib/pocketbase";
+import { ConfirmationModal } from "../shared/ConfirmationModal";
+import { GalleryViewer } from "./GalleryViewer";
 type TabType = "transform" | "library" | "scene" | "brush" | "settings";
 
 export function GalleryPropertiesPanel() {
@@ -23,27 +27,19 @@ export function GalleryPropertiesPanel() {
 
   // Gallery state
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const [galleryImages, setGalleryImages] = useState<{ id: string; name: string; url: string }[]>([
-    {
-      id: "1",
-      name: "Abstract Art",
-      url: "https://api.vxlverse.com/api/files/ynhvwvg2jyy6mdv/6b2v99o3632rad6/6115451_md5b6bessb.jpeg?thumb=300x300",
-    },
-    {
-      id: "2",
-      name: "Landscape",
-      url: "https://api.vxlverse.com/api/files/ynhvwvg2jyy6mdv/6b2v99o3632rad6/6115451_md5b6bessb.jpeg?thumb=300x300",
-    },
-  ]);
+  const { images: galleryImages, isLoading, isError, mutate } = useGallery();
+  const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
+  const [imageToDelete, setImageToDelete] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   // Track recently added objects to the scene
   const [recentlyAdded, setRecentlyAdded] = useState<any[]>([]);
 
   // Function to add an image to the scene
   const addImageToScene = useCallback(
-    (image: { id: string; name: string; url: string }) => {
+    (image: { id: string; imageUrl: string }) => {
       // Add the painting using the paintingsStore
-      const paintingId = addPainting(image.url, image.name);
+      const paintingId = addPainting(image.imageUrl, image.id);
 
       // Select the newly added painting
       selectPainting(paintingId);
@@ -52,8 +48,8 @@ export function GalleryPropertiesPanel() {
       setRecentlyAdded((prev) => [
         {
           id: paintingId,
-          name: image.name,
-          modelUrl: image.url,
+          name: image.id,
+          modelUrl: image.imageUrl,
         },
         ...prev.slice(0, 7),
       ]);
@@ -61,10 +57,37 @@ export function GalleryPropertiesPanel() {
     [addPainting, selectPainting]
   );
 
-  // Function to remove an image from the gallery
-  const removeGalleryImage = useCallback((id: string) => {
-    setGalleryImages((prev) => prev.filter((img) => img.id !== id));
+  // Function to show delete confirmation
+  const confirmDelete = useCallback((id: string) => {
+    setImageToDelete(id);
   }, []);
+
+  // Function to remove an image from the gallery
+  const removeGalleryImage = useCallback(async () => {
+    if (!imageToDelete) return;
+
+    try {
+      setDeleteLoading(imageToDelete);
+      await pb.collection("gallery").delete(imageToDelete);
+      // Refresh the gallery data
+      mutate();
+    } catch (error) {
+      console.error("Error deleting image:", error);
+    } finally {
+      setDeleteLoading(null);
+      setImageToDelete(null);
+    }
+  }, [imageToDelete, mutate]);
+
+  // Function to refresh gallery images
+  const refreshGallery = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await mutate();
+    } finally {
+      setTimeout(() => setRefreshing(false), 500); // Add a small delay for better UX
+    }
+  }, [mutate]);
 
   const selectObject = useCallback(
     (dir: "next" | "prev") => {
@@ -166,7 +189,7 @@ export function GalleryPropertiesPanel() {
       {/* Tab Navigation */}
       <div
         className={clsx(
-          "grid mb-2 border-t md:border-t-0 border-white/10 h-8 grid-cols-2 border-b sticky top-0 z-20 bg-slate-900"
+          "grid mb-2 border-t md:border-t-0 border-white/10 h-8 grid-cols-3 border-b sticky top-0 z-20 bg-slate-900"
         )}
       >
         <button
@@ -191,6 +214,17 @@ export function GalleryPropertiesPanel() {
             Transform
           </div>
         </button>
+        <button
+          type="button"
+          className={getTabButtonClasses("library")}
+          onClick={() => setActiveTab("library")}
+          aria-selected={activeTab === "library"}
+        >
+          <div className="flex items-center justify-center">
+            <List className="w-3.5 h-3.5 mr-1.5" />
+            Library
+          </div>
+        </button>
       </div>
 
       {/* Panel Content */}
@@ -201,125 +235,6 @@ export function GalleryPropertiesPanel() {
               {activeTab === "scene" && (
                 <>
                   {/* Image Library Section - Now First */}
-                  <div className="bg-slate-800/80 border border-slate-700/50 p-3 rounded-sm mb-4">
-                    <div className="flex justify-between items-center mb-3">
-                      <div className="flex items-center">
-                        <Image className="w-4 h-4 mr-2 text-blue-400" />
-                        <h3 className="text-sm font-medium bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
-                          Image Library
-                        </h3>
-                      </div>
-                      <div className="flex space-x-1">
-                        <button
-                          onClick={() => setShowUploadModal(true)}
-                          className="px-2 py-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 rounded-sm text-xs flex items-center shadow-sm"
-                        >
-                          <Upload className="w-3 h-3 mr-1" />
-                          <span>Upload</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    {galleryImages.length === 0 ? (
-                      <div className="py-8 flex flex-col items-center justify-center text-center border-2 border-dashed border-slate-700/30 rounded-lg bg-slate-800/30">
-                        <Image className="w-10 h-10 text-slate-600 mb-2" />
-                        <p className="text-slate-400 text-sm mb-1">No images in your library</p>
-                        <p className="text-slate-500 text-xs mb-3">
-                          Upload images to add to your gallery
-                        </p>
-                        <button
-                          onClick={() => setShowUploadModal(true)}
-                          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-sm text-xs flex items-center"
-                        >
-                          <Upload className="w-3 h-3 mr-1.5" />
-                          <span>Upload Images</span>
-                        </button>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="grid grid-cols-2 gap-2 mb-3">
-                          {galleryImages.slice(0, 4).map((image) => (
-                            <div
-                              key={image.id}
-                              className="relative group cursor-pointer"
-                              onClick={() => addImageToScene(image)}
-                            >
-                              <div className="aspect-square overflow-hidden rounded-sm border border-slate-700/50 bg-slate-900/50">
-                                <img
-                                  src={image.url}
-                                  alt={image.name}
-                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                                />
-                              </div>
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-1.5">
-                                <p className="text-xs text-white truncate">{image.name}</p>
-                              </div>
-                              <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1">
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    removeGalleryImage(image.id);
-                                  }}
-                                  className="p-1 bg-red-500/80 hover:bg-red-600 rounded-full"
-                                  title="Delete"
-                                >
-                                  <X className="h-2.5 w-2.5" />
-                                </button>
-                              </div>
-                              <div className="absolute bottom-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button
-                                  className="p-1 bg-blue-500/80 hover:bg-blue-600 rounded-full"
-                                  title="Add to scene"
-                                >
-                                  <Plus className="h-2.5 w-2.5" />
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-
-                        <div className="border-t border-slate-700/30 pt-3">
-                          <div className="flex justify-between items-center mb-2">
-                            <h4 className="text-xs font-medium text-slate-400">All Images</h4>
-                            <p className="text-xs text-slate-500">{galleryImages.length} items</p>
-                          </div>
-                          <div className="space-y-1 max-h-32 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800/50">
-                            {galleryImages.map((image) => (
-                              <div
-                                key={image.id}
-                                className="flex items-center p-1.5 rounded-sm hover:bg-slate-700/30 group"
-                              >
-                                <div className="w-6 h-6 mr-2 overflow-hidden rounded-sm border border-slate-700/50 bg-slate-900/50 flex-shrink-0">
-                                  <img
-                                    src={image.url}
-                                    alt={image.name}
-                                    className="w-full h-full object-cover"
-                                  />
-                                </div>
-                                <span className="text-xs truncate flex-1">{image.name}</span>
-                                <div className="flex space-x-1">
-                                  <button
-                                    onClick={() => addImageToScene(image)}
-                                    className="p-1 bg-blue-500/80 hover:bg-blue-600 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                                    title="Add to scene"
-                                  >
-                                    <Plus className="h-2.5 w-2.5" />
-                                  </button>
-                                  <button
-                                    onClick={() => removeGalleryImage(image.id)}
-                                    className="p-1 bg-red-500/80 hover:bg-red-600 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                                    title="Delete"
-                                  >
-                                    <X className="h-2.5 w-2.5" />
-                                  </button>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
 
                   {/* Scene Hierarchy */}
                   <div className="bg-slate-800/80 border border-slate-700/50 rounded-sm overflow-hidden">
@@ -344,13 +259,55 @@ export function GalleryPropertiesPanel() {
                 ) : (
                   <NoSelected />
                 ))}
+              {activeTab === "library" && (
+                <div className="bg-slate-900 border relative border-slate-700/50 rounded-sm mb-4 ">
+                  <div className="p-3 flex sticky top-0 z-50 bg-slate-900 justify-between pb-2 border-b border-slate-700/30">
+                    <div className="flex items-center">
+                      <Box className="w-4 h-4 mr-2 text-blue-400" />
+                      <h3 className="text-sm font-medium bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
+                        Image Gallery
+                      </h3>
+                    </div>
+                    <div className=" flex justify-end">
+                      <button
+                        onClick={() => setShowUploadModal(true)}
+                        className="px-4 w-full py-1.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 rounded-sm text-xs flex items-center shadow-sm"
+                      >
+                        <span>Upload Images</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="overflow-auto custom-scrollbar">
+                    <GalleryViewer />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </>
       </div>
 
       {/* Gallery Upload Modal */}
-      <GalleryUploadModal isOpen={showUploadModal} onClose={() => setShowUploadModal(false)} />
+      <GalleryUploadModal
+        isOpen={showUploadModal}
+        onClose={() => {
+          setShowUploadModal(false);
+          // Refresh gallery images when modal closes
+          mutate();
+        }}
+      />
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={imageToDelete !== null}
+        onClose={() => setImageToDelete(null)}
+        onConfirm={removeGalleryImage}
+        title="Delete Image"
+        message="Are you sure you want to delete this image? This action cannot be undone."
+        confirmText="Delete"
+        type="danger"
+      />
     </div>
   );
 }
