@@ -13,9 +13,14 @@ export interface Painting {
   createdAt: string;
 }
 
+type BrushMode = "single" | "continuous";
+type ArrangementType = "wall" | "circle";
+
 interface PaintingsState {
   paintings: Painting[];
   selectedPaintingId: string | null;
+  brushMode: BrushMode;
+  rotationLock: boolean;
 
   // Actions
   addPainting: (imageUrl: string, name: string) => void;
@@ -23,6 +28,9 @@ interface PaintingsState {
   selectPainting: (id: string | null) => void;
   updatePainting: (id: string, updates: Partial<Omit<Painting, "id">>) => void;
   placeWithBrush: (point: [number, number, number], rotation?: [number, number, number]) => void;
+  setBrushMode: (mode: BrushMode) => void;
+  toggleRotationLock: () => void;
+  arrangePaintings: (arrangement: ArrangementType) => void;
 }
 
 // Find a suitable position for a new painting
@@ -42,6 +50,8 @@ const findNewPosition = (paintings: Painting[]): [number, number, number] => {
 export const usePaintingsStore = create<PaintingsState>((set, get) => ({
   paintings: [],
   selectedPaintingId: null,
+  brushMode: "single",
+  rotationLock: false,
 
   addPainting: (imageUrl, name) => {
     const { paintings } = get();
@@ -86,7 +96,7 @@ export const usePaintingsStore = create<PaintingsState>((set, get) => ({
 
   // Place a painting using a brush-like system at the specified point with optional rotation
   placeWithBrush: (point, rotation) => {
-    const { paintings, selectedPaintingId } = get();
+    const { paintings, selectedPaintingId, rotationLock } = get();
 
     if (!selectedPaintingId) return;
 
@@ -99,13 +109,62 @@ export const usePaintingsStore = create<PaintingsState>((set, get) => ({
     updatedPaintings[paintingIndex] = {
       ...updatedPaintings[paintingIndex],
       position: point,
-      // Use provided rotation or keep existing rotation or default to facing forward
-      rotation: rotation || updatedPaintings[paintingIndex].rotation || [0, 0, 0],
+      // Use provided rotation if not locked, otherwise keep existing rotation
+      rotation: (!rotationLock && rotation) ||
+        updatedPaintings[paintingIndex].rotation || [0, 0, 0],
     };
 
     set({ paintings: updatedPaintings });
     console.log(
       `Placed painting at point: [${point}]${rotation ? ` with rotation: [${rotation}]` : ""}`
     );
+  },
+
+  // Set the brush mode (single or continuous)
+  setBrushMode: (mode) => {
+    set({ brushMode: mode });
+  },
+
+  // Toggle rotation lock for paintings
+  toggleRotationLock: () => {
+    set((state) => ({ rotationLock: !state.rotationLock }));
+  },
+
+  // Arrange paintings in different patterns
+  arrangePaintings: (arrangement) => {
+    const { paintings } = get();
+    if (paintings.length === 0) return;
+
+    const updatedPaintings = [...paintings];
+
+    if (arrangement === "wall") {
+      // Arrange in a line along the wall
+      const wallX = 8; // Wall width
+      const spacing = 1.5; // Space between paintings
+      const startX = -wallX / 2;
+
+      updatedPaintings.forEach((painting, index) => {
+        painting.position = [startX + index * spacing, 1.5, -5];
+        painting.rotation = [0, 0, 0];
+      });
+    } else if (arrangement === "circle") {
+      // Arrange in a circle
+      const radius = 5;
+      const centerX = 0;
+      const centerZ = 0;
+
+      updatedPaintings.forEach((painting, index) => {
+        const angle = (index / paintings.length) * Math.PI * 2;
+        const x = centerX + radius * Math.cos(angle);
+        const z = centerZ + radius * Math.sin(angle);
+
+        painting.position = [x, 1.5, z];
+        // Make paintings face the center
+        const rotationY = Math.atan2(x - centerX, z - centerZ) + Math.PI;
+        painting.rotation = [0, rotationY, 0];
+      });
+    }
+
+    set({ paintings: updatedPaintings });
   },
 }));

@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect } from "react";
 import clsx from "clsx";
-import { Image, List, Box } from "lucide-react";
+import { Image, List, Box, Paintbrush } from "lucide-react";
 import { useEditorStore } from "../../stores/editorStore";
 import { useKeyboardControls } from "@react-three/drei";
 import { usePaintingsStore } from "../../stores/paintingsStore";
 import { PaintingTransformControls } from "./PaintingTransformControls";
 
-type TabType = "transform" | "library" | "hierarchy";
+type TabType = "transform" | "library" | "hierarchy" | "brush";
 
 export function GalleryPropertiesPanel() {
   const { setSelectedObject, selectedObjectId, currentSceneId, scenes } = useEditorStore(
@@ -163,7 +163,7 @@ export function GalleryPropertiesPanel() {
       {/* Tab Navigation */}
       <div
         className={clsx(
-          "grid mb-2 border-t md:border-t-0 border-white/10 h-8 grid-cols-3 border-b sticky top-0 z-20 bg-slate-900"
+          "grid mb-2 border-t md:border-t-0 border-white/10 h-8 grid-cols-4 border-b sticky top-0 z-20 bg-slate-900"
         )}
       >
         <button
@@ -197,6 +197,17 @@ export function GalleryPropertiesPanel() {
           <div className="flex items-center justify-center">
             <List className="w-3.5 h-3.5 mr-1.5" />
             Hierarchy
+          </div>
+        </button>
+        <button
+          type="button"
+          className={getTabButtonClasses("brush")}
+          onClick={() => setActiveTab("brush")}
+          aria-selected={activeTab === "brush"}
+        >
+          <div className="flex items-center justify-center">
+            <Paintbrush className="w-3.5 h-3.5 mr-1.5" />
+            Brush
           </div>
         </button>
       </div>
@@ -330,6 +341,115 @@ export function GalleryPropertiesPanel() {
                         </div>
                       ))
                     )}
+                  </div>
+                </div>
+              )}
+
+              {/* Brush Tab */}
+              {activeTab === "brush" && (
+                <div className="bg-slate-800/80 border border-slate-700/50 p-3 rounded-sm">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-sm font-medium text-blue-300">Painting Brush</h3>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-xs text-slate-300 block">Brush Mode</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          className={clsx(
+                            "px-3 py-2 text-xs rounded-sm flex items-center justify-center",
+                            usePaintingsStore.getState().brushMode === "single"
+                              ? "bg-blue-600 text-white"
+                              : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                          )}
+                          onClick={() => usePaintingsStore.getState().setBrushMode("single")}
+                        >
+                          <Box className="w-3 h-3 mr-1.5" />
+                          Single
+                        </button>
+                        <button
+                          className={clsx(
+                            "px-3 py-2 text-xs rounded-sm flex items-center justify-center",
+                            usePaintingsStore.getState().brushMode === "continuous"
+                              ? "bg-blue-600 text-white"
+                              : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                          )}
+                          onClick={() => usePaintingsStore.getState().setBrushMode("continuous")}
+                        >
+                          <Paintbrush className="w-3 h-3 mr-1.5" />
+                          Continuous
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs text-slate-300 block">Selected Painting</label>
+                      <div className="p-2 bg-slate-900/50 rounded-sm border border-slate-700/30">
+                        {selectedPainting ? (
+                          <div className="flex items-center">
+                            <div className="w-10 h-10 mr-2 overflow-hidden rounded-sm border border-slate-700/50">
+                              <img
+                                src={selectedPainting.imageUrl}
+                                alt={selectedPainting.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-xs text-slate-300 truncate">
+                                {selectedPainting.name}
+                              </p>
+                              <p className="text-xs text-slate-500">Click on walls to place</p>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="text-xs text-slate-400 text-center py-2">
+                            Select a painting from the Library tab first
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs text-slate-300 block">Brush Settings</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1">
+                          <label className="text-xs text-slate-400">Grid Snap</label>
+                          <button
+                            className={clsx(
+                              "px-3 py-2 text-xs rounded-sm w-full",
+                              useEditorStore.getState().gridSnap
+                                ? "bg-blue-600 text-white"
+                                : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                            )}
+                            onClick={() => useEditorStore.getState().toggleGridSnap()}
+                          >
+                            {useEditorStore.getState().gridSnap ? "On" : "Off"}
+                          </button>
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-xs text-slate-400">Rotation Lock</label>
+                          <button
+                            className={clsx(
+                              "px-3 py-2 text-xs rounded-sm w-full",
+                              usePaintingsStore.getState().rotationLock
+                                ? "bg-blue-600 text-white"
+                                : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                            )}
+                            onClick={() => usePaintingsStore.getState().toggleRotationLock()}
+                          >
+                            {usePaintingsStore.getState().rotationLock ? "On" : "Off"}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-700/30">
+                      <p className="text-xs text-slate-500 italic">
+                        Tip: Use the brush tool to quickly place paintings on walls. Select a
+                        painting from the Library tab first, then click on walls to place it.
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}

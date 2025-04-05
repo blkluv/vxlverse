@@ -45,31 +45,36 @@ export function ArtGalleryModel() {
   }, [clonedScene]);
 
   const handlePointerMove = (event: ThreeEvent<PointerEvent>) => {
-    if (paintingRef.current && event.face) {
-      const normal = event.face.normal.clone();
-      const position = event.point.clone();
+    if (!paintingRef.current) return;
+    const [first] = event.intersections;
+    if (!first) return;
+    const normal = first.face?.normal;
+    const position = first.point;
+    if (!normal || !position) return;
 
-      position.add(normal.multiplyScalar(0.1));
+    position.add(normal);
 
-      if (gridSnap) {
-        position.set(Math.round(position.x), Math.round(position.y), Math.round(position.z));
-      }
+    if (gridSnap) {
+      position.set(Math.round(position.x), Math.round(position.y), Math.round(position.z));
+    }
 
-      paintingRef.current.position.copy(position);
+    paintingRef.current.position.copy(position);
 
-      if (Math.abs(normal.y) > 0.9) {
-        paintingRef.current.rotation.set(0, 0, 0);
-      } else {
-        const lookAtPos = position.clone().sub(normal);
-        lookAtPos.y = position.y;
-        paintingRef.current.lookAt(lookAtPos);
-        paintingRef.current.rotation.x = 0;
-        paintingRef.current.rotation.z = 0;
-      }
+    if (Math.abs(normal.y) > 0.9) {
+      paintingRef.current.rotation.set(0, 0, 0);
+    } else {
+      const lookAtPos = position.clone().sub(normal);
+      lookAtPos.y = position.y;
+      paintingRef.current.lookAt(lookAtPos);
+      paintingRef.current.rotation.x = 0;
+      paintingRef.current.rotation.z = 0;
     }
   };
 
-  const selectedPainting = paintings.find((p) => p.id === selectedPaintingId);
+  const selectedPainting = useMemo(
+    () => paintings.find((p) => p.id === selectedPaintingId),
+    [paintings, selectedPaintingId]
+  );
 
   return (
     <>
