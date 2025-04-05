@@ -3,15 +3,14 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { usePaintingsStore } from "../../stores/paintingsStore";
 import { ThreeEvent } from "@react-three/fiber";
+import { useEditorStore } from "../../stores/editorStore";
 
-function Paint() {
-  const { selectedPaintingId, paintings } = usePaintingsStore();
-  const selectedPainting = paintings.find((p) => p.id === selectedPaintingId);
-  const texture = useTexture(selectedPainting?.imageUrl || "");
+function Paint({ imageUrl }: { imageUrl: string }) {
+  const texture = useTexture(imageUrl);
   return (
     <group>
       <mesh>
-        <boxGeometry args={[10, 10, 0.1]} />
+        <boxGeometry args={[10, 10, 0.5]} />
         <meshStandardMaterial map={texture} />
       </mesh>
     </group>
@@ -23,7 +22,8 @@ export function ArtGalleryModel() {
   const galleryRef = useRef<THREE.Group>(null);
   const paintingRef = useRef<THREE.Group>(null);
 
-  const { selectedPaintingId } = usePaintingsStore();
+  const { selectedPaintingId, paintings } = usePaintingsStore();
+  const { gridSnap } = useEditorStore();
 
   const clonedScene = useMemo(() => scene.clone(), [scene]);
 
@@ -49,16 +49,17 @@ export function ArtGalleryModel() {
       const normal = event.face.normal.clone();
       const position = event.point.clone();
 
-      // Offset painting slightly from surface to prevent z-fighting
-      position.add(normal.multiplyScalar(0.01));
+      position.add(normal.multiplyScalar(0.1));
+
+      if (gridSnap) {
+        position.set(Math.round(position.x), Math.round(position.y), Math.round(position.z));
+      }
 
       paintingRef.current.position.copy(position);
 
       if (Math.abs(normal.y) > 0.9) {
-        // On the floor or ceiling: keep painting upright facing default direction
         paintingRef.current.rotation.set(0, 0, 0);
       } else {
-        // On walls: align flat to wall, vertically upright
         const lookAtPos = position.clone().sub(normal);
         lookAtPos.y = position.y;
         paintingRef.current.lookAt(lookAtPos);
@@ -68,43 +69,18 @@ export function ArtGalleryModel() {
     }
   };
 
-  const selectedPainting = usePaintingsStore
-    .getState()
-    .paintings.find((p) => p.id === selectedPaintingId);
+  const selectedPainting = paintings.find((p) => p.id === selectedPaintingId);
 
   return (
     <>
       {selectedPainting && (
         <group ref={paintingRef}>
-          <Paint />
+          <Paint imageUrl={selectedPainting.imageUrl} />
         </group>
       )}
 
       <group ref={galleryRef} onPointerMove={handlePointerMove} dispose={null}>
         <primitive object={clonedScene} />
-
-        {/* Invisible walls for painting placement */}
-        <group>
-          <mesh position={[0, 2, -5]}>
-            <boxGeometry args={[10, 4, 0.1]} />
-            <meshStandardMaterial transparent opacity={0} />
-          </mesh>
-
-          <mesh position={[-5, 2, 0]} rotation={[0, Math.PI / 2, 0]}>
-            <boxGeometry args={[10, 4, 0.1]} />
-            <meshStandardMaterial transparent opacity={0} />
-          </mesh>
-
-          <mesh position={[5, 2, 0]} rotation={[0, -Math.PI / 2, 0]}>
-            <boxGeometry args={[10, 4, 0.1]} />
-            <meshStandardMaterial transparent opacity={0} />
-          </mesh>
-
-          <mesh position={[0, 2, 5]} rotation={[0, Math.PI, 0]}>
-            <boxGeometry args={[10, 4, 0.1]} />
-            <meshStandardMaterial transparent opacity={0} />
-          </mesh>
-        </group>
       </group>
     </>
   );

@@ -63,7 +63,7 @@ export function ArtEditor({
 
       {/* Gallery Model */}
       <group ref={galleryModelRef}>
-        <ArtGalleryModel position={[0, 0, 0]} />
+        <ArtGalleryModel />
       </group>
 
       {/* Render all paintings from the store */}
