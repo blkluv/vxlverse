@@ -22,7 +22,7 @@ interface PaintingsState {
   removePainting: (id: string) => void;
   selectPainting: (id: string | null) => void;
   updatePainting: (id: string, updates: Partial<Omit<Painting, "id">>) => void;
-  arrangePaintings: (arrangement: "wall" | "circle" | "custom") => void;
+  placeWithBrush: (point: [number, number, number], rotation?: [number, number, number]) => void;
 }
 
 // Find a suitable position for a new painting
@@ -84,53 +84,28 @@ export const usePaintingsStore = create<PaintingsState>((set, get) => ({
     }));
   },
 
-  arrangePaintings: (arrangement) => {
-    const { paintings } = get();
-    let updatedPaintings: Painting[] = [];
+  // Place a painting using a brush-like system at the specified point with optional rotation
+  placeWithBrush: (point, rotation) => {
+    const { paintings, selectedPaintingId } = get();
 
-    switch (arrangement) {
-      case "wall": {
-        // Arrange paintings along a wall
-        const wallWidth = 10;
-        const spacing = wallWidth / (paintings.length + 1);
+    if (!selectedPaintingId) return;
 
-        updatedPaintings = paintings.map((painting, index) => {
-          const x = -wallWidth / 2 + spacing * (index + 1);
-          return {
-            ...painting,
-            position: [x, 1.5, -5],
-            rotation: [0, 0, 0],
-          };
-        });
-        break;
-      }
+    // Find the selected painting
+    const paintingIndex = paintings.findIndex((p) => p.id === selectedPaintingId);
+    if (paintingIndex === -1) return;
 
-      case "circle": {
-        // Arrange paintings in a circle
-        const radius = 5;
-        const angleStep = (2 * Math.PI) / paintings.length;
-
-        updatedPaintings = paintings.map((painting, index) => {
-          const angle = index * angleStep;
-          const x = radius * Math.sin(angle);
-          const z = radius * Math.cos(angle);
-
-          return {
-            ...painting,
-            position: [x, 1.5, z],
-            rotation: [0, -angle + Math.PI, 0], // Face toward center
-          };
-        });
-        break;
-      }
-
-      case "custom":
-      default:
-        // Keep current positions
-        updatedPaintings = [...paintings];
-        break;
-    }
+    // Update the painting position and rotation if provided
+    const updatedPaintings = [...paintings];
+    updatedPaintings[paintingIndex] = {
+      ...updatedPaintings[paintingIndex],
+      position: point,
+      // Use provided rotation or keep existing rotation or default to facing forward
+      rotation: rotation || updatedPaintings[paintingIndex].rotation || [0, 0, 0],
+    };
 
     set({ paintings: updatedPaintings });
+    console.log(
+      `Placed painting at point: [${point}]${rotation ? ` with rotation: [${rotation}]` : ""}`
+    );
   },
 }));

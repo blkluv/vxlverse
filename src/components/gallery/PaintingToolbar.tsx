@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Move,
   RotateCcw,
@@ -17,6 +17,7 @@ import { Tooltip } from "../../components/UI/Tooltip";
 import { usePaintingsStore } from "../../stores/paintingsStore";
 import { useKeyboardControls } from "@react-three/drei";
 import { TermsOfService } from "../legal/TermsOfService";
+import { detectNudityContent } from "../../utils/imageModeration";
 // import { cn } from "../../components/UI";
 
 type PaintingToolbarProps = {
@@ -27,6 +28,7 @@ type PaintingToolbarProps = {
   toggleGrid: () => void;
   gridSnap: boolean;
   toggleGridSnap: () => void;
+  onModerationAlert?: (message: string) => void;
 };
 
 export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
@@ -37,6 +39,7 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
   toggleGrid,
   gridSnap,
   toggleGridSnap,
+  onModerationAlert,
 }) => {
   // Local state
   const [activeTool, setActiveTool] = useState<string>("move");
@@ -194,12 +197,35 @@ export const PaintingToolbar: React.FC<PaintingToolbarProps> = ({
                 const input = document.createElement("input");
                 input.type = "file";
                 input.accept = "image/*";
-                input.onchange = (e) => {
+                input.onchange = async (e) => {
                   const file = (e.target as HTMLInputElement).files?.[0];
                   if (file) {
-                    const imageUrl = URL.createObjectURL(file);
-                    const name = file.name.split(".")[0];
-                    updatePainting(selectedPaintingId || "", { imageUrl, name });
+                    // Run content moderation check
+                    try {
+                      const moderationResult = await detectNudityContent(file);
+
+                      if (moderationResult.isNSFW) {
+                        // Show moderation alert if content is inappropriate
+                        if (onModerationAlert) {
+                          onModerationAlert(moderationResult.message);
+                        } else {
+                          alert(moderationResult.message);
+                        }
+                        return;
+                      }
+
+                      // If content is appropriate, proceed with upload
+                      const imageUrl = URL.createObjectURL(file);
+                      const name = file.name.split(".")[0];
+                      updatePainting(selectedPaintingId || "", { imageUrl, name });
+                    } catch (error) {
+                      console.error("Error during content moderation:", error);
+                      if (onModerationAlert) {
+                        onModerationAlert(
+                          "An error occurred during content moderation. Please try again."
+                        );
+                      }
+                    }
                   }
                 };
                 input.click();

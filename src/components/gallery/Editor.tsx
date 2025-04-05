@@ -23,10 +23,14 @@ export function ArtEditor({
   transformMode,
 }: EditorSceneProps = {}) {
   // Get paintings from store
-  const { paintings, selectedPaintingId, selectPainting, updatePainting } = usePaintingsStore();
+  const { paintings, selectedPaintingId, selectPainting, updatePainting, placeWithBrush } =
+    usePaintingsStore();
 
-  // Reference to the selected painting object
+  // Get Three.js camera and raycaster
+
+  // References
   const selectedPaintingRef = useRef<THREE.Group | null>(null);
+  const galleryModelRef = useRef<THREE.Group | null>(null);
 
   // Get the selected painting
   const selectedPainting = paintings.find((p) => p.id === selectedPaintingId);
@@ -57,7 +61,10 @@ export function ArtEditor({
         />
       )}
 
-      <ArtGalleryModel position={[0, 0, 0]} />
+      {/* Gallery Model */}
+      <group ref={galleryModelRef}>
+        <ArtGalleryModel position={[0, 0, 0]} />
+      </group>
 
       {/* Render all paintings from the store */}
       {paintings.map((painting) => (

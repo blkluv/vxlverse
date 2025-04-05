@@ -103,9 +103,6 @@ export function Browse() {
           {GAMES.map((game, index) => (
             <div
               key={game.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
               className="group relative bg-gray-800  overflow-hidden border border-gray-700/50 hover:border-blue-500/50 transition-colors"
             >
               {/* Game Image */}
