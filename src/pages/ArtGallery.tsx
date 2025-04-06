@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { KeyboardControls, OrbitControls, Environment } from "@react-three/drei";
-import { useState, useRef, Suspense, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Perf } from "r3f-perf";
 import { EditorHeader } from "../components/editor/EditorHeader";
 import { GalleryPropertiesPanel } from "../components/gallery/GalleryPropertiesPanel";
@@ -60,7 +60,11 @@ export function _ArtGallery() {
 
       {/* Main toolbar */}
       <EditorHeader setShowMetrics={setShowMetrics} showMetrics={showMetrics} />
-
+      <img
+        className="absolute hidden md:block bottom-4 left-12 w-20 z-40"
+        src="/icons/large-logo.png"
+        alt="VXLverse"
+      />
       <div className="editorLayout">
         <div className="toolbar flex">
           {/* Show PaintingToolbar when a painting is selected, otherwise show regular Toolbar */}
@@ -73,7 +77,6 @@ export function _ArtGallery() {
 
         <div className="editor-canvas">
           <Canvas
-            key={forceUpdate}
             shadows
             gl={{ preserveDrawingBuffer: true, antialias: true }}
             camera={{ position: [5, 5, 5], fov: 50 }}
@@ -81,16 +84,14 @@ export function _ArtGallery() {
           >
             {showMetrics && <Perf className="absolute z-10 w-80 top-0 left-0" />}
 
-            <Suspense fallback={null}>
-              <ArtEditor transformMode={transformMode} showGrid={showGrid} gridSnap={gridSnap} />
-              <Environment preset="apartment" background={false} />
-              <OrbitControls
-                ref={orbitControlsRef}
-                makeDefault
-                minPolarAngle={0}
-                maxPolarAngle={Math.PI / 1.75}
-              />
-            </Suspense>
+            <ArtEditor transformMode={transformMode} showGrid={showGrid} gridSnap={gridSnap} />
+            <Environment preset="apartment" background={false} />
+            <OrbitControls
+              ref={orbitControlsRef}
+              makeDefault
+              minPolarAngle={0}
+              maxPolarAngle={Math.PI / 1.75}
+            />
           </Canvas>
         </div>
         <GalleryPropertiesPanel />

@@ -30,6 +30,7 @@ export const Painting = forwardRef<THREE.Group, PaintingProps>(
     // Load the texture
     const texture = useTexture(imageUrl);
     const [hovered, setHovered] = useState(false);
+    const aspectRatio = texture.image.width / texture.image.height;
 
     // Set texture properties
     useEffect(() => {
@@ -42,7 +43,6 @@ export const Painting = forwardRef<THREE.Group, PaintingProps>(
     // Calculate frame dimensions (slightly larger than the painting)
     const frameWidth = width + 0.1;
     const frameHeight = height + 0.1;
-    const frameDepth = 0.05;
 
     return (
       <group
@@ -57,19 +57,9 @@ export const Painting = forwardRef<THREE.Group, PaintingProps>(
         onPointerOut={() => setHovered(false)}
         ref={ref}
       >
-        {/* Frame */}
-        <mesh position={[0, 0, -0.02]}>
-          <boxGeometry args={[frameWidth, frameHeight, frameDepth]} />
-          <meshStandardMaterial
-            color={isSelected ? "#3b82f6" : hovered ? "#64748b" : "#1e293b"}
-            metalness={0.3}
-            roughness={0.7}
-          />
-        </mesh>
-
         {/* Canvas/Painting */}
         <mesh position={[0, 0, 0.01]}>
-          <planeGeometry args={[10, 10]} />
+          <boxGeometry args={[10 * aspectRatio, 10, 0.1]} />
           <meshStandardMaterial
             map={texture}
             emissive="#ffffff"
@@ -81,7 +71,7 @@ export const Painting = forwardRef<THREE.Group, PaintingProps>(
         {/* Selection indicator */}
         {isSelected && (
           <mesh position={[0, 0, 0.05]}>
-            <boxGeometry args={[width + 0.05, height + 0.05, 0.01]} />
+            <boxGeometry args={[frameWidth + 0.05, frameHeight + 0.05, 0.01]} />
             <meshBasicMaterial color="#3b82f6" transparent opacity={0.3} />
           </mesh>
         )}

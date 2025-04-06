@@ -68,9 +68,7 @@ export function ArtEditor({
 
       <PhysicsArea />
       {/* Gallery Model */}
-      <group ref={galleryModelRef}>
-        <ArtGalleryModel />
-      </group>
+      <ArtGalleryModel />
 
       {/* Render all paintings from the store */}
       {objects?.map((painting) =>

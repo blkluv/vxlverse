@@ -7,10 +7,20 @@ import { GameObject } from "../../types";
 
 function Paint({ imageUrl }: { imageUrl: string }) {
   const texture = useTexture(imageUrl);
+
+  // Wait until the texture's image is loaded
+  if (!texture.image) {
+    return null;
+  }
+
+  // Compute the aspect ratio (width / height)
+  const aspectRatio = texture.image.width / texture.image.height;
+
   return (
     <group>
       <mesh>
-        <boxGeometry args={[10, 10, 0.5]} />
+        {/* Optionally, use the aspect ratio to adjust geometry */}
+        <boxGeometry args={[10 * aspectRatio, 10, 0.1]} />
         <meshStandardMaterial map={texture} />
       </mesh>
     </group>
@@ -78,7 +88,8 @@ export function PhysicsArea() {
     return currObj;
   }, [scenes, selectedObjectId, currentSceneId]);
 
-  const addPainting = () => {
+  const addPainting = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation();
     if (!selectedObjectId) return;
     const currObj = scenes
       ?.find((s) => s.id === currentSceneId)
@@ -90,7 +101,7 @@ export function PhysicsArea() {
       position: paintingRef.current?.position,
       rotation: paintingRef.current?.rotation,
       scale: paintingRef.current?.scale,
-      name: `Painting ${id.slice(-6)}`,
+      name: `${currObj.name} ${id.slice(-6)}`,
       imageUrl: currObj.imageUrl ?? "",
     } as GameObject;
     if (!currentSceneId) return;
