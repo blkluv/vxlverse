@@ -71,26 +71,24 @@ export function ArtEditor({
       <ArtGalleryModel />
 
       {/* Render all paintings from the store */}
-      {objects?.map((painting) =>
-        painting.id === selectedObjectId && brushActive ? null : (
-          <Painting
-            key={painting.id}
-            imageUrl={painting.imageUrl ?? ""}
-            position={painting.position}
-            rotation={painting.rotation}
-            scale={painting.scale}
-            width={1}
-            height={1}
-            isSelected={painting.id === selectedObjectId}
-            onClick={() => setSelectedObject(painting.id)}
-            ref={
-              painting.id === selectedObjectId
-                ? (selectedPaintingRef as React.RefObject<THREE.Group>)
-                : undefined
-            }
-          />
-        )
-      )}
+      {objects?.map((painting) => (
+        <Painting
+          key={painting.id}
+          imageUrl={painting.imageUrl ?? ""}
+          position={painting.position}
+          rotation={painting.rotation}
+          scale={painting.scale}
+          width={1}
+          height={1}
+          isSelected={painting.id === selectedObjectId}
+          onClick={() => setSelectedObject(painting.id)}
+          ref={
+            painting.id === selectedObjectId
+              ? (selectedPaintingRef as React.RefObject<THREE.Group>)
+              : undefined
+          }
+        />
+      ))}
 
       {/* Transform Controls */}
       {!brushActive && selectedObjectId && selectedPaintingRef.current && (
