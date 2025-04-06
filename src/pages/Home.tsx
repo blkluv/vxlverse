@@ -168,304 +168,126 @@ export function Home() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {/* Free Tier */}
-              <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl overflow-hidden group hover:border-purple-500/40 transition-all shadow-lg hover:shadow-purple-500/10">
-                <div className="p-8 border-b border-gray-700">
-                  <h3 className="text-2xl font-bold text-white mb-2">Free</h3>
-                  <div className="flex items-end gap-1 mb-4">
-                    <span className="text-4xl font-bold text-white">$0</span>
-                    <span className="text-gray-400 mb-1">/month</span>
-                  </div>
-                  <p className="text-gray-300">Perfect for hobbyists and beginners</p>
-                </div>
-                <div className="p-8">
-                  <ul className="space-y-4">
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">1 Gallery</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">Up to 10 paintings</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">Basic gallery templates</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">Community support</span>
-                    </li>
-                  </ul>
-                  <div className="mt-8">
-                    <a
-                      href="/gallery/demo"
-                      className="block w-full py-3 px-4 bg-gray-700 hover:bg-gray-600 text-white font-medium text-center rounded-lg transition-colors"
-                    >
-                      Start Free
-                    </a>
-                  </div>
-                </div>
-              </div>
+              {/* Reusable SVG Check Icon Component */}
+              {(() => {
+                const CheckIcon = () => (
+                  <svg
+                    className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                );
 
-              {/* Pro Tier */}
-              <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-purple-500/50 rounded-xl overflow-hidden group hover:border-purple-500/80 transition-all shadow-lg hover:shadow-purple-500/20 relative transform scale-105 z-10">
-                <div className="absolute top-0 left-0 right-0 bg-purple-500 text-white text-center py-1 text-sm font-medium">
-                  Most Popular
-                </div>
-                <div className="p-8 border-b border-gray-700 mt-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
-                  <div className="flex items-end gap-1 mb-4">
-                    <span className="text-4xl font-bold text-white">$9.99</span>
-                    <span className="text-gray-400 mb-1">/month</span>
-                  </div>
-                  <p className="text-gray-300">For artists and small galleries</p>
-                </div>
-                <div className="p-8">
-                  <ul className="space-y-4">
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">5 Galleries</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">Up to 50 paintings per gallery</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">Premium gallery templates</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">Custom lighting effects</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">Priority support</span>
-                    </li>
-                  </ul>
-                  <div className="mt-8">
-                    <a
-                      href="/pricing/pro"
-                      className="block w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium text-center rounded-lg transition-colors"
-                    >
-                      Get Pro
-                    </a>
-                  </div>
-                </div>
-              </div>
+                // Feature Item Component
+                const FeatureItem = ({ text }: { text: string }) => (
+                  <li className="flex items-start gap-3">
+                    <CheckIcon />
+                    <span className="text-gray-300">{text}</span>
+                  </li>
+                );
 
-              {/* Enterprise Tier */}
-              <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl overflow-hidden group hover:border-purple-500/40 transition-all shadow-lg hover:shadow-purple-500/10">
-                <div className="p-8 border-b border-gray-700">
-                  <h3 className="text-2xl font-bold text-white mb-2">Enterprise</h3>
-                  <div className="flex items-end gap-1 mb-4">
-                    <span className="text-4xl font-bold text-white">$29.99</span>
-                    <span className="text-gray-400 mb-1">/month</span>
-                  </div>
-                  <p className="text-gray-300">For professional artists and museums</p>
-                </div>
-                <div className="p-8">
-                  <ul className="space-y-4">
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">Unlimited galleries</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">Unlimited paintings</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">Custom gallery builder</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">Advanced analytics</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">Dedicated support</span>
-                    </li>
-                  </ul>
-                  <div className="mt-8">
-                    <a
-                      href="/pricing/enterprise"
-                      className="block w-full py-3 px-4 bg-gray-700 hover:bg-gray-600 text-white font-medium text-center rounded-lg transition-colors"
-                    >
-                      Contact Sales
-                    </a>
-                  </div>
-                </div>
-              </div>
+                return (
+                  <>
+                    {/* Free Tier */}
+                    <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl overflow-hidden group hover:border-purple-500/40 transition-all shadow-lg hover:shadow-purple-500/10 flex flex-col">
+                      <div className="p-8 border-b border-gray-700">
+                        <h3 className="text-2xl font-bold text-white mb-2">Free Access</h3>
+                        <div className="flex items-end gap-1 mb-4">
+                          <span className="text-4xl font-bold text-white">€0</span>
+                          <span className="text-gray-400 mb-1">Freemium</span>
+                        </div>
+                        <p className="text-gray-300">Perfect for beginner artists</p>
+                      </div>
+                      <div className="p-8 flex-grow flex flex-col justify-between">
+                        <ul className="space-y-4">
+                          <FeatureItem text="3 free artworks" />
+                          <FeatureItem text="Basic gallery without custom domain" />
+                          <FeatureItem text="Low resolution images only" />
+                          <FeatureItem text="Community support" />
+                          <div className="h-12"></div> {/* Spacer for alignment */}
+                        </ul>
+                        <div className="mt-8">
+                          <a
+                            href="/gallery/demo"
+                            className="block w-full py-3 px-4 bg-gray-700 hover:bg-gray-600 text-white font-medium text-center rounded-lg transition-colors"
+                          >
+                            Start Free
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Pay Per Image Tier */}
+                    <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-purple-500/50 rounded-xl overflow-hidden group hover:border-purple-500/80 transition-all shadow-lg hover:shadow-purple-500/20 relative z-10 flex flex-col">
+                      <div className="absolute top-0 left-0 right-0 bg-purple-500 text-white text-center py-1 text-sm font-medium">
+                        Most Popular
+                      </div>
+                      <div className="p-8 border-b border-gray-700 mt-6">
+                        <h3 className="text-2xl font-bold text-white mb-2">Pay Per Image</h3>
+                        <div className="flex items-end gap-1 mb-4">
+                          <span className="text-4xl font-bold text-white">€5-15</span>
+                          <span className="text-gray-400 mb-1">one-time</span>
+                        </div>
+                        <p className="text-gray-300">For independent artists</p>
+                      </div>
+                      <div className="p-8 flex-grow flex flex-col justify-between">
+                        <ul className="space-y-4">
+                          <FeatureItem text="+5 artworks → €5 one-time" />
+                          <FeatureItem text="+20 artworks → €15 one-time" />
+                          <FeatureItem text="Pay only for what you need" />
+                          <FeatureItem text="No monthly subscription" />
+                          <FeatureItem text="Perfect for small collections" />
+                        </ul>
+                        <div className="mt-8">
+                          <a
+                            href="/pricing/pay-per-image"
+                            className="block w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium text-center rounded-lg transition-colors"
+                          >
+                            Choose Package
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Subscription Tier */}
+                    <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl overflow-hidden group hover:border-purple-500/40 transition-all shadow-lg hover:shadow-purple-500/10 flex flex-col">
+                      <div className="p-8 border-b border-gray-700">
+                        <h3 className="text-2xl font-bold text-white mb-2">Subscription</h3>
+                        <div className="flex items-end gap-1 mb-4">
+                          <span className="text-4xl font-bold text-white">€9-19</span>
+                          <span className="text-gray-400 mb-1">/month</span>
+                        </div>
+                        <p className="text-gray-300">For professional artists</p>
+                      </div>
+                      <div className="p-8 flex-grow flex flex-col justify-between">
+                        <ul className="space-y-4">
+                          <FeatureItem text="PRO Plan - €9/month" />
+                          <FeatureItem text="Unlimited uploads" />
+                          <FeatureItem text="BUSINESS Plan - €19/month" />
+                          <FeatureItem text="Online shop integration" />
+                          <FeatureItem text="Custom 3D Galleries - €99 setup" />
+                        </ul>
+                        <div className="mt-8">
+                          <a
+                            href="/pricing/subscription"
+                            className="block w-full py-3 px-4 bg-gray-700 hover:bg-gray-600 text-white font-medium text-center rounded-lg transition-colors"
+                          >
+                            View Plans
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
 
             <div className="text-center mt-12">
