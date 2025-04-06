@@ -10,12 +10,15 @@
     "format": "prettier --write 'src/**/*.{ts,tsx,css,json}'",
     "format:check": "prettier --check 'src/**/*.{ts,tsx,css,json}'",
     "prepare": "husky",
-    "ncu": "ncu -u && npm install"
+    "ncu": "ncu -u && npm install",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@mlc-ai/web-llm": "^0.2.78",
-    "@react-three/drei": "^10.0.6",
-    "@react-three/fiber": "^9.1.2",
+    "@react-spring/core": "^9.7.5",
+    "@react-spring/three": "^9.7.5",
+    "@react-three/drei": "^9.88.7",
+    "@react-three/fiber": "^8.14.0",
     "@react-three/rapier": "^2.1.0",
     "@tailwindcss/vite": "^4.1.3",
     "@tanstack/react-virtual": "^3.13.6",
@@ -28,9 +31,10 @@
     "howler": "^2.2.4",
     "jotai": "^2.12.2",
     "lucide-react": "^0.487.0",
+    "patch-package": "^6.5.1",
     "pocketbase": "^0.25.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.5",
     "react-hot-toast": "^2.5.2",
     "react-router-dom": "^7.5.0",
@@ -42,17 +46,11 @@
     "uuid": "^11.1.0",
     "zustand": "^5.0.3"
   },
-  "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "npm run format"
-    ],
-    "*.{json,css}": "prettier --write"
-  },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.3",
     "@types/howler": "^2.2.12",
-    "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.1",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "@types/three": "^0.175.0",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.21",
@@ -68,5 +66,20 @@
     "typescript": "^5.8.3",
     "vite": "^6.2.5",
     "vite-plugin-pwa": "^1.0.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "npm run format"
+    ],
+    "*.{json,css}": "prettier --write"
+  },
+  "resolutions": {
+    "@react-spring/core": "9.7.5",
+    "@react-spring/animated": "9.7.5",
+    "@react-spring/shared": "9.7.5",
+    "@react-spring/three": "9.7.5",
+    "@react-three/fiber": "8.14.0",
+    "@react-three/drei": "9.88.7",
+    "three": "0.175.0"
   }
 }
