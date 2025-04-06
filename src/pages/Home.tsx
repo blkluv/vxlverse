@@ -84,7 +84,7 @@ export function Home() {
 
             <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               {/* 3D Games Card */}
-              <Link to="/games/demo">
+              <Link to="/editor/demo">
                 <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-blue-500/20 rounded-xl overflow-hidden group hover:border-blue-500/40 transition-all shadow-lg hover:shadow-blue-500/10">
                   <div className="h-48 bg-gradient-to-br from-blue-900/30 to-blue-700/20 flex items-center justify-center">
                     <Gamepad2 className="w-24 h-24 text-blue-400 opacity-75 group-hover:scale-110 transition-transform duration-300" />
