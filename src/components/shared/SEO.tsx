@@ -13,7 +13,7 @@ interface SEOProps {
 export function SEO({
   title = "VXLVerse - Create 3D Games & Art Galleries",
   description = "Build incredible 3D games and stunning virtual art galleries with VXLVerse. No coding required. Start your creative journey today.",
-  keywords = "3D games, art gallery, virtual gallery, game creation, 3D modeling, no-code, game engine",
+  keywords = "3D games, art gallery, virtual gallery, game creation, 3D modeling, no-code, game engine, virtual exhibition, online gallery, 3D art",
   ogImage = "/og-image.jpg",
   ogUrl = "https://vxlverse.com",
   ogType = "website",
@@ -27,6 +27,9 @@ export function SEO({
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
+
+      {/* Viewport Meta Tag - Fixed for accessibility */}
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
 
       {/* Open Graph Meta Tags */}
       <meta property="og:title" content={fullTitle} />
@@ -43,6 +46,14 @@ export function SEO({
 
       {/* Canonical URL */}
       <link rel="canonical" href={ogUrl} />
+
+      {/* Preconnect to important domains */}
+      <link rel="preconnect" href="https://api.vxlverse.com" />
+      <link rel="preconnect" href="https://images.unsplash.com" />
+      <link rel="preconnect" href="https://www.gstatic.com" />
+
+      {/* Preload critical assets */}
+      <link rel="preload" href="/icons/large-logo.png" as="image" />
     </Helmet>
   );
 }
