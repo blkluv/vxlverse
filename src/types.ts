@@ -258,7 +258,7 @@ export interface GameObject {
   id: string;
   name: string;
   modelUrl: string;
-  type?: "prop" | "npc" | "enemy" | "item" | "portal" | "trigger";
+  type?: "prop" | "npc" | "enemy" | "item" | "portal" | "trigger" | "boxCollider" | "painting";
   requiredLvl?: number;
   requiredItems?: Item[];
   description?: string;

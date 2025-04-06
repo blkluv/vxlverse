@@ -109,7 +109,11 @@ export function GameObject(props: GameObject) {
 
       {/* Quest indicator */}
       {hasQuests && gltf.height && (
-        <group scale={scale} rotation={rotation} position={position}>
+        <group
+          scale={[scale.x, scale.y, scale.z]}
+          rotation={[rotation.x, rotation.y, rotation.z]}
+          position={[position.x, position.y, position.z]}
+        >
           <Html
             distanceFactor={15}
             center

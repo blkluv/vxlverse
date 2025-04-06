@@ -2,6 +2,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 import tailwindcss from "@tailwindcss/vite";
+import compression from "vite-plugin-compression";
+import { splitVendorChunkPlugin } from "vite";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -12,6 +14,18 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       tailwindcss(),
+      // Add code splitting plugin
+      splitVendorChunkPlugin(),
+      // Add compression plugin for gzip
+      compression({
+        algorithm: "gzip",
+        ext: ".gz",
+      }),
+      // Add compression plugin for brotli
+      compression({
+        algorithm: "brotliCompress",
+        ext: ".br",
+      }),
       VitePWA({
         // Disable service worker in development mode
         disable: isDev,
@@ -114,6 +128,15 @@ export default defineConfig(({ mode }) => {
       }),
     ],
     optimizeDeps: {
+      include: [
+        "react",
+        "react-dom",
+        "react-router-dom",
+        "three",
+        "@react-three/fiber",
+        "@react-three/drei",
+        "@react-three/rapier",
+      ],
       exclude: ["lucide-react"],
     },
     worker: {
@@ -126,17 +149,40 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
         },
       },
+      // Compression will be handled by the compression plugin
     },
     build: {
       target: "esnext",
       minify: "terser",
       terserOptions: {
         compress: {
-          // Disable console.log stripping in production for now
-          // to help with debugging
-          drop_console: false,
+          drop_console: true,
+          drop_debugger: true,
         },
       },
+      // Enable chunking for better caching and loading
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            "react-vendor": ["react", "react-dom", "react-router-dom"],
+            "three-vendor": [
+              "three",
+              "@react-three/fiber",
+              "@react-three/drei",
+              "@react-three/rapier",
+            ],
+            "ui-vendor": ["lucide-react", "framer-motion"],
+          },
+          // Limit chunk size
+          chunkFileNames: "assets/[name]-[hash].js",
+          entryFileNames: "assets/[name]-[hash].js",
+          assetFileNames: "assets/[name]-[hash].[ext]",
+        },
+      },
+      // Enable source maps for production debugging if needed
+      sourcemap: true,
+      // Reduce chunk size
+      chunkSizeWarningLimit: 1000,
     },
   };
 });

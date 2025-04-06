@@ -4,6 +4,7 @@ import { useState } from "react";
 import { LoginModal } from "../auth/LoginModal";
 
 export function Hero() {
+  // We'll use isAuthenticated to conditionally show login modal when needed
   const { isAuthenticated } = useAuthStore();
   const [showLoginModal, setShowLoginModal] = useState(false);
   return (
@@ -15,8 +16,8 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60" />
 
         {/* Animated Orbs */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/30  blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/30  blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/30 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/30 rounded-full blur-3xl" />
       </div>
 
       {/* Content */}
@@ -52,15 +53,15 @@ export function Hero() {
             </p>
 
             <div className="flex flex-wrap justify-center gap-6 mb-12">
-              <div className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 -full border border-blue-500/30">
+              <div className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 rounded-full border border-blue-500/30">
                 <Gamepad2 className="w-5 h-5 text-blue-400" />
                 <span className="text-blue-300">3D Game Creation</span>
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 -full border border-purple-500/30">
+              <div className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 rounded-full border border-purple-500/30">
                 <Paintbrush className="w-5 h-5 text-purple-400" />
                 <span className="text-purple-300">Virtual Art Galleries</span>
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-pink-500/20 -full border border-pink-500/30">
+              <div className="flex items-center gap-2 px-4 py-2 bg-pink-500/20 rounded-full border border-pink-500/30">
                 <Palette className="w-5 h-5 text-pink-400" />
                 <span className="text-pink-300">No Coding Required</span>
               </div>

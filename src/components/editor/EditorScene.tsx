@@ -13,6 +13,7 @@ import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { Scene as SceneType } from "../../types";
 import { EditorGameObject } from "./EditorGameObject";
+import { EditorBoxCollider } from "./EditorBoxCollider";
 
 interface EditorSceneProps {
   sceneData?: SceneType;
@@ -199,25 +200,47 @@ export function EditorScene({
       </mesh>
 
       {/* Scene Objects */}
-      {currentScene.objects.map((object) => (
-        <Suspense key={object.id} fallback={"loading"}>
-          <EditorGameObject
-            id={object.id}
-            modelUrl={object.modelUrl}
-            position={object.position}
-            rotation={object.rotation}
-            scale={object.scale}
-            type={object.type}
-            isSelected={object.id === selectedObjectId}
-            transformMode={transformMode}
-            onClick={() => handleObjectClick(object.id)}
-            onTransform={(position, rotation, scale) =>
-              handleObjectTransform(object.id, position, rotation, scale)
-            }
-            thumbnail={object.modelUrl.replace("scene_", "thumbnail_").replace(".glb", ".webp")}
-          />
-        </Suspense>
-      ))}
+      {currentScene.objects
+        ?.filter((object) => object.type !== "boxCollider")
+        ?.map((object) => (
+          <Suspense key={object.id} fallback={"loading"}>
+            <EditorGameObject
+              id={object.id}
+              modelUrl={object.modelUrl}
+              position={object.position}
+              rotation={object.rotation}
+              scale={object.scale}
+              type={object.type}
+              isSelected={object.id === selectedObjectId}
+              transformMode={transformMode}
+              onClick={() => handleObjectClick(object.id)}
+              onTransform={(position, rotation, scale) =>
+                handleObjectTransform(object.id, position, rotation, scale)
+              }
+              thumbnail={object.modelUrl.replace("scene_", "thumbnail_").replace(".glb", ".webp")}
+            />
+          </Suspense>
+        ))}
+
+      {/* Box Colliders */}
+      {currentScene.objects
+        ?.filter((object) => object.type === "boxCollider")
+        ?.map((boxCollider) => (
+          <Suspense key={boxCollider.id} fallback={"loading"}>
+            <EditorBoxCollider
+              id={boxCollider.id}
+              position={boxCollider.position}
+              rotation={boxCollider.rotation}
+              scale={boxCollider.scale}
+              isSelected={boxCollider.id === selectedObjectId}
+              transformMode={transformMode}
+              onClick={() => handleObjectClick(boxCollider.id)}
+              onTransform={(position, rotation, scale) =>
+                handleObjectTransform(boxCollider.id, position, rotation, scale)
+              }
+            />
+          </Suspense>
+        ))}
 
       {/* Clouds */}
       {currentScene.clouds?.enabled && (

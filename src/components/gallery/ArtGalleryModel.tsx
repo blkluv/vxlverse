@@ -10,7 +10,7 @@ export function ArtGalleryModel() {
 
   useEffect(() => {
     if (galleryRef.current) {
-      galleryRef.current.position.set(0, 0, 0);
+      galleryRef.current.position.set(0, -1.5, 0);
       galleryRef.current.scale.set(1, 1, 1);
 
       clonedScene.traverse((child) => {

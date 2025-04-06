@@ -96,13 +96,13 @@ export function Home() {
                       interactions, and share your game with the world.
                     </p>
                     <div className="flex flex-wrap gap-3 mb-6">
-                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm -full">
+                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
                         Interactive Objects
                       </span>
-                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm -full">
+                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
                         Physics
                       </span>
-                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm -full">
+                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
                         Multiplayer
                       </span>
                     </div>
@@ -129,13 +129,13 @@ export function Home() {
                       3D environment that visitors can explore.
                     </p>
                     <div className="flex flex-wrap gap-3 mb-6">
-                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm -full">
+                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
                         Custom Layouts
                       </span>
-                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm -full">
+                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
                         Image Upload
                       </span>
-                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm -full">
+                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
                         Virtual Tours
                       </span>
                     </div>
@@ -159,7 +159,7 @@ export function Home() {
 
           <div className="container mx-auto px-4 relative z-10">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-purple-500/20 -full border border-purple-500/30 mb-4">
+              <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-purple-500/20 rounded-full border border-purple-500/30 mb-4">
                 <Paintbrush className="w-5 h-5 text-purple-400" />
                 <span className="text-purple-300 font-medium">Gallery Pricing</span>
               </div>
@@ -222,7 +222,7 @@ export function Home() {
                         <div className="mt-8">
                           <a
                             href="/gallery/demo"
-                            className="block w-full py-3 px-4 bg-gray-700 hover:bg-gray-600 text-white font-medium text-center  transition-colors"
+                            className="block w-full py-3 px-4 bg-gray-700 hover:bg-gray-600 text-white font-medium text-center rounded transition-colors"
                           >
                             Start Free
                           </a>
@@ -254,7 +254,7 @@ export function Home() {
                         <div className="mt-8">
                           <a
                             href="/pricing/pay-per-image"
-                            className="block w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium text-center  transition-colors"
+                            className="block w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium text-center rounded transition-colors"
                           >
                             Choose Package
                           </a>
@@ -283,7 +283,7 @@ export function Home() {
                         <div className="mt-8">
                           <a
                             href="/pricing/subscription"
-                            className="block w-full py-3 px-4 bg-gray-700 hover:bg-gray-600 text-white font-medium text-center  transition-colors"
+                            className="block w-full py-3 px-4 bg-gray-700 hover:bg-gray-600 text-white font-medium text-center rounded transition-colors"
                           >
                             View Plans
                           </a>
@@ -323,7 +323,7 @@ export function Home() {
             <div className="flex items-center justify-between mb-12">
               <div>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-blue-500/10 border border-blue-500/20 backdrop-blur-sm full">
+                  <div className="p-2 bg-blue-500/10 border border-blue-500/20 backdrop-blur-sm rounded-full">
                     <Gamepad2 className="w-5 h-5 text-blue-400" />
                   </div>
                   <h2 className="text-3xl font-bold text-white">Featured Games</h2>
@@ -336,7 +336,7 @@ export function Home() {
 
               <a
                 href="/games"
-                className="hidden md:flex items-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 lg transition-all duration-300"
+                className="hidden md:flex items-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg transition-all duration-300"
               >
                 View All Games
                 <ArrowRight className="w-4 h-4" />
@@ -344,15 +344,22 @@ export function Home() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {games.map((game) => (
-                <GameCard key={game.id} game={game} />
+              {games.map((game, index) => (
+                <GameCard
+                  key={game.id}
+                  game={{
+                    ...game,
+                    owner: game.creator, // Map creator to owner for GameCard compatibility
+                  }}
+                  index={index}
+                />
               ))}
             </div>
 
             <div className="mt-8 text-center md:hidden">
               <a
                 href="/games"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 lg transition-all duration-300"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg transition-all duration-300"
               >
                 View All Games
                 <ArrowRight className="w-4 h-4" />
@@ -370,7 +377,7 @@ export function Home() {
             <div className="flex items-center justify-between mb-12">
               <div>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-purple-500/10 border border-purple-500/20 backdrop-blur-sm full">
+                  <div className="p-2 bg-purple-500/10 border border-purple-500/20 backdrop-blur-sm rounded-full">
                     <Paintbrush className="w-5 h-5 text-purple-400" />
                   </div>
                   <h2 className="text-3xl font-bold text-white">Art Galleries</h2>
@@ -383,7 +390,7 @@ export function Home() {
 
               <a
                 href="/gallery"
-                className="hidden md:flex items-center gap-2 px-4 py-2 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-400 lg transition-all duration-300"
+                className="hidden md:flex items-center gap-2 px-4 py-2 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-400 rounded-lg transition-all duration-300"
               >
                 View All Galleries
                 <ArrowRight className="w-4 h-4" />
@@ -395,7 +402,7 @@ export function Home() {
                 galleries.slice(0, 3).map((gallery) => (
                   <div
                     key={gallery.id}
-                    className="group relative overflow-hidden  border border-gray-800 bg-gray-900 shadow-md transition-all hover:shadow-lg hover:shadow-purple-500/10"
+                    className="group relative overflow-hidden rounded border border-gray-800 bg-gray-900 shadow-md transition-all hover:shadow-lg hover:shadow-purple-500/10"
                   >
                     <div className="aspect-video w-full overflow-hidden">
                       <img
@@ -429,7 +436,7 @@ export function Home() {
                   </div>
                 ))
               ) : (
-                <div className="col-span-3 p-8 text-center border border-dashed border-gray-700 ">
+                <div className="col-span-3 p-8 text-center border border-dashed border-gray-700 rounded">
                   <Paintbrush className="w-10 h-10 text-purple-400 mx-auto mb-4 opacity-50" />
                   <h3 className="text-xl font-medium text-white mb-2">No Galleries Yet</h3>
                   <p className="text-gray-400 mb-4">
@@ -437,7 +444,7 @@ export function Home() {
                   </p>
                   <a
                     href="/editor/demo"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white font-medium  transition-colors"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white font-medium rounded transition-colors"
                   >
                     Try Gallery Editor
                   </a>
@@ -448,7 +455,7 @@ export function Home() {
             <div className="mt-8 text-center md:hidden">
               <a
                 href="/gallery"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-400 lg transition-all duration-300"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-400 rounded-lg transition-all duration-300"
               >
                 View All Galleries
                 <ArrowRight className="w-4 h-4" />

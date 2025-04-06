@@ -44,6 +44,9 @@ export const Painting = forwardRef<THREE.Group, PaintingProps>(
     const frameWidth = width + 0.1;
     const frameHeight = height + 0.1;
 
+    // Border padding size (as a percentage of the painting size)
+    const borderPadding = 0.05; // 5% padding
+
     return (
       <group
         position={position}
@@ -57,6 +60,14 @@ export const Painting = forwardRef<THREE.Group, PaintingProps>(
         onPointerOut={() => setHovered(false)}
         ref={ref}
       >
+        {/* Border/frame mesh (slightly larger and positioned behind) */}
+        <mesh position={[0, 0, -0]}>
+          <boxGeometry
+            args={[10 * aspectRatio * (1 + borderPadding), 10 * (1 + borderPadding), 0.05]}
+          />
+          <meshStandardMaterial color={"#444"} roughness={0.7} />
+        </mesh>
+
         {/* Canvas/Painting */}
         <mesh position={[0, 0, 0.01]}>
           <boxGeometry args={[10 * aspectRatio, 10, 0.1]} />

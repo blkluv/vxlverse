@@ -11,6 +11,7 @@ import {
   Target,
   Skull,
   Plus,
+  PlusCircle,
   Check,
   Save,
   X,
@@ -20,6 +21,8 @@ import { useEditorStore } from "../../stores/editorStore";
 import { Tooltip } from "../UI/Tooltip";
 import { pb } from "../../lib/pocketbase";
 import { Input, cn } from "../UI";
+import { Button } from "../UI/Button";
+import { Euler, Object3D, Vector3 } from "three";
 
 interface ObjectHierarchyPanelProps {
   scene: Scene;
@@ -62,7 +65,7 @@ export function ObjectHierarchyPanel(props: { className?: string }) {
   const [objectToSave, setObjectToSave] = useState<GameObject | null>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
-  const { scenes, currentSceneId, setShowModelSelector } = useEditorStore();
+  const { scenes, currentSceneId, setShowModelSelector, addObject } = useEditorStore();
   const scene = scenes.find((scene) => scene.id === currentSceneId);
   // Get data from the editor store
   const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
@@ -339,6 +342,31 @@ export function ObjectHierarchyPanel(props: { className?: string }) {
           </div>
         </div>
       )}
+      <Button
+        className="w-full mt-2 border-t border-slate-700/50 rounded-none rounded-b-md bg-slate-800/50 text-slate-300 hover:bg-slate-700/50 hover:text-white"
+        variant="ghost"
+        size="sm"
+        icon={PlusCircle}
+        onClick={() => {
+          const id = new Object3D().uuid;
+          const object = {
+            id,
+            name: `Box Collider ${id}`,
+            position: new Vector3(0, 0, 0),
+            rotation: new Euler(0, 0, 0),
+            scale: new Vector3(1, 1, 1),
+            quests: [],
+            modelUrl: "",
+            type: "boxCollider",
+          } as GameObject;
+          setSelectedObject(id);
+          if (currentSceneId) {
+            addObject(currentSceneId, object);
+          }
+        }}
+      >
+        Add box collider
+      </Button>
     </div>
   );
 }

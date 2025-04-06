@@ -5,8 +5,8 @@ import { useEditorStore } from "../../stores/editorStore";
 import * as THREE from "three";
 import { GameObject } from "../../types";
 
-function Paint({ imageUrl }: { imageUrl: string }) {
-  const texture = useTexture(imageUrl);
+function Paint() {
+  const texture = useTexture("/textures/canvas.png");
 
   // Wait until the texture's image is loaded
   if (!texture.image) {
@@ -16,12 +16,24 @@ function Paint({ imageUrl }: { imageUrl: string }) {
   // Compute the aspect ratio (width / height)
   const aspectRatio = texture.image.width / texture.image.height;
 
+  // Border padding size (as a percentage of the painting size)
+  const borderPadding = 0.05; // 5% padding
+
   return (
     <group>
-      <mesh>
+      {/* Border/frame mesh (slightly larger and positioned behind) */}
+      <mesh position={[0, 0, 0]}>
+        <boxGeometry
+          args={[10 * aspectRatio * (1 + borderPadding), 10 * (1 + borderPadding), 0.05]}
+        />
+        <meshStandardMaterial color={"#444"} roughness={0.7} />
+      </mesh>
+
+      {/* Main painting mesh */}
+      <mesh position={[0, 0, 0]}>
         {/* Optionally, use the aspect ratio to adjust geometry */}
         <boxGeometry args={[10 * aspectRatio, 10, 0.1]} />
-        <meshStandardMaterial map={texture} />
+        <meshStandardMaterial map={texture} color={"#bbb"} emissive={"#303030"} />
       </mesh>
     </group>
   );
@@ -91,18 +103,16 @@ export function PhysicsArea() {
   const addPainting = (event: ThreeEvent<PointerEvent>) => {
     event.stopPropagation();
     if (!selectedObjectId) return;
-    const currObj = scenes
-      ?.find((s) => s.id === currentSceneId)
-      ?.objects?.find((o) => o.id === selectedObjectId);
-    if (!currObj) return;
+
     const id = new THREE.Object3D().uuid;
     const newPainting = {
       id,
+      type: "painting",
       position: paintingRef.current?.position,
       rotation: paintingRef.current?.rotation,
       scale: paintingRef.current?.scale,
-      name: `${currObj.name} ${id.slice(-6)}`,
-      imageUrl: currObj.imageUrl ?? "",
+      name: `Painting  placeholder`,
+      imageUrl: "/textures/canvas.png",
     } as GameObject;
     if (!currentSceneId) return;
     addObject(currentSceneId, newPainting);
@@ -112,7 +122,7 @@ export function PhysicsArea() {
     <>
       {selectedPainting && brushActive && (
         <group ref={paintingRef}>
-          <Paint imageUrl={selectedPainting.imageUrl ?? ""} />
+          <Paint />
         </group>
       )}
       <Box

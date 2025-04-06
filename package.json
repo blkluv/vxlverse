@@ -9,14 +9,12 @@
     "preview": "vite preview",
     "format": "prettier --write 'src/**/*.{ts,tsx,css,json}'",
     "format:check": "prettier --check 'src/**/*.{ts,tsx,css,json}'",
-    "prepare": "husky",
+    "prepare": "husky install",
     "ncu": "ncu -u && npm install",
     "postinstall": "patch-package"
   },
   "dependencies": {
     "@mlc-ai/web-llm": "^0.2.78",
-    "@react-spring/core": "^9.7.5",
-    "@react-spring/three": "^9.7.5",
     "@react-three/drei": "^9.88.7",
     "@react-three/fiber": "^8.14.0",
     "@react-three/rapier": "^2.1.0",
@@ -31,7 +29,6 @@
     "howler": "^2.2.4",
     "jotai": "^2.12.2",
     "lucide-react": "^0.487.0",
-    "patch-package": "^6.5.1",
     "pocketbase": "^0.25.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -44,7 +41,8 @@
     "three": "^0.175.0",
     "three-mesh-bvh": "^0.9.0",
     "uuid": "^11.1.0",
-    "zustand": "^5.0.3"
+    "zustand": "5.0.3",
+    "patch-package": "^6.5.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.3",

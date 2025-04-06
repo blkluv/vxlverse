@@ -12,28 +12,50 @@ import * as THREE from "three";
 import { PhysicsArea } from "./PhysicsArea";
 import { useThree } from "@react-three/fiber";
 import { useEditorStore } from "../../stores/editorStore";
+import { EditorBoxCollider } from "../editor/EditorBoxCollider";
 
 interface EditorSceneProps {
-  showGrid?: boolean;
-  gridSnap?: boolean;
   transformMode?: "translate" | "rotate" | "scale";
 }
 
-export function ArtEditor({
-  showGrid = true,
-  gridSnap = false,
-  transformMode = "translate",
-}: EditorSceneProps = {}) {
+export function ArtEditor({ transformMode = "translate" }: EditorSceneProps = {}) {
   const { camera } = useThree();
 
   // State for tracking transform operations
   const [, setIsDragging] = useState(false);
-  const { scenes, currentSceneId, updateObject, setSelectedObject, selectedObjectId, brushActive } =
-    useEditorStore();
+  const {
+    scenes,
+    currentSceneId,
+    gridSnap,
+    showGrid,
+    updateObject,
+    setSelectedObject,
+    selectedObjectId,
+    brushActive,
+  } = useEditorStore();
+  const setSelectedObjectId = useEditorStore((state) => state.setSelectedObject);
 
   // References
   const selectedPaintingRef = useRef<THREE.Group | null>(null);
-  const galleryModelRef = useRef<THREE.Group | null>(null);
+  // Handle object selection and transformation
+  const handleObjectClick = (objectId: string) => {
+    setSelectedObjectId(objectId);
+  };
+
+  const handleObjectTransform = (
+    objectId: string,
+    position: THREE.Vector3,
+    rotation: THREE.Euler,
+    scale: THREE.Vector3
+  ) => {
+    if (currentSceneId) {
+      updateObject(currentSceneId, objectId, {
+        position,
+        rotation,
+        scale,
+      });
+    }
+  };
   if (!scenes || !currentSceneId) return null;
 
   const objects = scenes.find((scene) => scene.id === currentSceneId)?.objects;
@@ -49,7 +71,7 @@ export function ArtEditor({
       <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
 
       {/* Grid */}
-      {showGrid && (
+      {(showGrid || gridSnap) && (
         <Grid
           position={[0, 0.5, 0]}
           args={[100, 100]}
@@ -71,6 +93,7 @@ export function ArtEditor({
       <ArtGalleryModel />
 
       {/* Render all paintings from the store */}
+<<<<<<< HEAD
       {objects?.map((painting) => (
         <Painting
           key={painting.id}
@@ -89,6 +112,46 @@ export function ArtEditor({
           }
         />
       ))}
+=======
+      {objects
+        ?.filter((obj) => obj.type === "painting")
+        ?.map((painting) => (
+          <Painting
+            key={painting.id}
+            imageUrl={painting.imageUrl ?? ""}
+            position={painting.position}
+            rotation={painting.rotation}
+            scale={painting.scale}
+            width={1}
+            height={1}
+            isSelected={painting.id === selectedObjectId}
+            onClick={() => setSelectedObject(painting.id)}
+            ref={
+              painting.id === selectedObjectId
+                ? (selectedPaintingRef as React.RefObject<THREE.Group>)
+                : undefined
+            }
+          />
+        ))}
+
+      {/* Box Colliders */}
+      {objects
+        ?.filter((object) => object.type === "boxCollider")
+        ?.map((boxCollider) => (
+          <EditorBoxCollider
+            id={boxCollider.id}
+            position={boxCollider.position}
+            rotation={boxCollider.rotation}
+            scale={boxCollider.scale}
+            isSelected={boxCollider.id === selectedObjectId}
+            transformMode={transformMode}
+            onClick={() => handleObjectClick(boxCollider.id)}
+            onTransform={(position, rotation, scale) =>
+              handleObjectTransform(boxCollider.id, position, rotation, scale)
+            }
+          />
+        ))}
+>>>>>>> 0d39c76eb125e2d5b9347f54a6c7c5284b4784ca
 
       {/* Transform Controls */}
       {!brushActive && selectedObjectId && selectedPaintingRef.current && (

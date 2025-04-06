@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
 import { pb } from "../../lib/pocketbase";
 import { Star, Users, Clock, Trash2, Edit3, PlayCircle, Heart } from "lucide-react";
-import { useState } from "react";
+import { useState, memo } from "react";
+import { generatePlaceholderColor } from "../../utils/imageOptimizer";
 
 interface Game {
   id: string;
@@ -24,12 +25,14 @@ interface GameCardProps {
 }
 
 const DEFAULT_THUMBNAIL =
-  "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80";
+  "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80";
 
-export function GameCard({ game, index, onDelete }: GameCardProps) {
+export const GameCard = memo(function GameCard({ game, index, onDelete }: GameCardProps) {
   const { user } = useAuthStore();
   const isOwner = user?.id === game.owner;
   const [isLiked, setIsLiked] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const placeholderColor = generatePlaceholderColor(game.title);
 
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this game?")) return;
@@ -49,7 +52,7 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
       className="group relative h-[20rem]  overflow-hidden backdrop-blur-sm bg-gradient-to-br from-gray-800/30 via-gray-900/30 to-black/30 border border-gray-700/30 hover:border-blue-500/50 shadow-xl hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 flex flex-col"
     >
       {/* Thumbnail with glass effect */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-48 overflow-hidden" style={{ backgroundColor: placeholderColor }}>
         <img
           src={
             game.thumbnail
@@ -57,7 +60,11 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
               : DEFAULT_THUMBNAIL
           }
           alt={game.title}
-          className="w-full h-full object-cover"
+          width="300"
+          height="200"
+          loading="lazy"
+          onLoad={() => setImageLoaded(true)}
+          className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
 
@@ -157,4 +164,4 @@ export function GameCard({ game, index, onDelete }: GameCardProps) {
       </div>
     </motion.div>
   );
-}
+});
