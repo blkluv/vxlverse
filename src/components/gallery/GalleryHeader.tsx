@@ -38,7 +38,7 @@ export function GalleryHeader({
       <div className="flex items-center gap-4">
         <button
           onClick={() => setShowUploader(true)}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center gap-2"
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2  flex items-center gap-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +57,7 @@ export function GalleryHeader({
 
         <button
           onClick={() => setShowMetrics(!showMetrics)}
-          className={`px-3 py-1 rounded-md ${
+          className={`px-3 py-1  ${
             showMetrics ? "bg-blue-500 text-white" : "bg-slate-700 text-gray-300"
           }`}
         >
@@ -66,7 +66,7 @@ export function GalleryHeader({
 
         {user ? (
           <Link to="/profile" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+            <div className="w-8 h-8 -full bg-blue-500 flex items-center justify-center text-white">
               {user.username.charAt(0).toUpperCase()}
             </div>
             <span className="hidden md:inline">{user.username}</span>

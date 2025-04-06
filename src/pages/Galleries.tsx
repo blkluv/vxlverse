@@ -131,7 +131,7 @@ export function Galleries() {
 
         {/* Filters */}
         {isFiltersOpen && (
-          <div className="mb-6 p-4 bg-white/5 border border-white/10 backdrop-blur-sm rounded-lg">
+          <div className="mb-6 p-4 bg-white/5 border border-white/10 backdrop-blur-sm ">
             <GalleryFilters selectedTags={selectedTags} onTagsChange={setSelectedTags} />
           </div>
         )}

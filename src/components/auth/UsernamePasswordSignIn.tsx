@@ -14,7 +14,6 @@ export function UsernamePasswordSignIn({
   isRegister?: boolean;
 }) {
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -31,14 +30,14 @@ export function UsernamePasswordSignIn({
     e.preventDefault();
     setError("");
 
-    if (!username || !password) {
-      setError("Username and password are required");
+    if (!email || !password) {
+      setError("Email and password are required");
       return;
     }
 
     setLoading(true);
     try {
-      const authData = await pb.collection("users").authWithPassword(username, password);
+      const authData = await pb.collection("users").authWithPassword(email, password);
 
       if (authData) {
         setUser(authData.record);
@@ -60,7 +59,7 @@ export function UsernamePasswordSignIn({
     e.preventDefault();
     setError("");
 
-    if (!username || !password || !email) {
+    if (!email || !password || !confirmPassword) {
       setError("All fields are required");
       return;
     }
@@ -74,7 +73,6 @@ export function UsernamePasswordSignIn({
     try {
       // Create the user
       const data = {
-        username,
         email,
         password,
         passwordConfirm: confirmPassword,
@@ -83,7 +81,7 @@ export function UsernamePasswordSignIn({
       await pb.collection("users").create(data);
 
       // After registration, log them in
-      const authData = await pb.collection("users").authWithPassword(username, password);
+      const authData = await pb.collection("users").authWithPassword(email, password);
 
       if (authData) {
         setUser(authData.record);
@@ -120,36 +118,19 @@ export function UsernamePasswordSignIn({
       )}
 
       <div>
-        <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-1">
-          Username
+        <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+          Email
         </label>
         <input
-          id="username"
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
-          placeholder="Enter your username"
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full px-3 py-2 bg-gray-800 border border-gray-700  text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+          placeholder="Enter your email"
           disabled={loading}
         />
       </div>
-
-      {isRegister && (
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
-            placeholder="Enter your email"
-            disabled={loading}
-          />
-        </div>
-      )}
 
       <div>
         <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
@@ -160,7 +141,7 @@ export function UsernamePasswordSignIn({
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full px-3 py-2 bg-gray-800 border border-gray-700  text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
           placeholder="Enter your password"
           disabled={loading}
         />
@@ -176,7 +157,7 @@ export function UsernamePasswordSignIn({
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full px-3 py-2 bg-gray-800 border border-gray-700  text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
             placeholder="Confirm your password"
             disabled={loading}
           />
@@ -186,7 +167,7 @@ export function UsernamePasswordSignIn({
       <button
         type="submit"
         disabled={loading}
-        className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:opacity-50"
+        className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium  transition-colors disabled:opacity-50"
       >
         {loading ? "Processing..." : isRegister ? "Register" : "Sign In"}
       </button>

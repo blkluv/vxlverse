@@ -74,7 +74,7 @@ export function CreateGalleryModal({ isOpen, onClose, onSuccess }: CreateGallery
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-900 border border-white/10 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-gray-900 border border-white/10  max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="p-5 border-b border-white/10 flex justify-between items-center">
           <h2 className="text-xl font-semibold text-white">Create New Gallery</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
@@ -105,7 +105,7 @@ export function CreateGalleryModal({ isOpen, onClose, onSuccess }: CreateGallery
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe your gallery"
-              className="w-full h-24 px-3 py-2 bg-white/5 border border-white/10 rounded-md text-white placeholder:text-gray-500 
+              className="w-full h-24 px-3 py-2 bg-white/5 border border-white/10  text-white placeholder:text-gray-500 
                        focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all"
             />
           </div>
@@ -115,7 +115,7 @@ export function CreateGalleryModal({ isOpen, onClose, onSuccess }: CreateGallery
               Gallery Thumbnail
             </label>
             <div
-              className="border-2 border-dashed border-white/10 rounded-md p-4 text-center cursor-pointer hover:border-blue-500/50 transition-colors"
+              className="border-2 border-dashed border-white/10  p-4 text-center cursor-pointer hover:border-blue-500/50 transition-colors"
               onClick={() => document.getElementById("thumbnail")?.click()}
             >
               {thumbnailPreview ? (
@@ -123,11 +123,11 @@ export function CreateGalleryModal({ isOpen, onClose, onSuccess }: CreateGallery
                   <img
                     src={thumbnailPreview}
                     alt="Thumbnail preview"
-                    className="max-h-48 mx-auto rounded-md"
+                    className="max-h-48 mx-auto "
                   />
                   <button
                     type="button"
-                    className="absolute top-2 right-2 bg-red-500 rounded-full p-1"
+                    className="absolute top-2 right-2 bg-red-500 -full p-1"
                     onClick={(e) => {
                       e.stopPropagation();
                       setThumbnailFile(null);
@@ -169,7 +169,7 @@ export function CreateGalleryModal({ isOpen, onClose, onSuccess }: CreateGallery
           </div>
 
           {error && (
-            <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-md text-red-300 text-sm">
+            <div className="p-3 bg-red-500/20 border border-red-500/50  text-red-300 text-sm">
               {error}
             </div>
           )}

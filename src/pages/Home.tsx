@@ -51,7 +51,7 @@ export function Home() {
       <Header />
 
       {/* Under Construction Badge */}
-      <div className="fixed top-20 right-4 z-30 bg-yellow-600 text-white px-4 py-2 rounded-lg shadow-lg transform rotate-3 border-2 border-yellow-400 flex items-center gap-2">
+      <div className="fixed top-20 right-4 z-30 bg-yellow-600 text-white px-4 py-2  shadow-lg transform rotate-3 border-2 border-yellow-400 flex items-center gap-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-5 w-5"
@@ -85,7 +85,7 @@ export function Home() {
             <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               {/* 3D Games Card */}
               <Link to="/editor/demo">
-                <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-blue-500/20 rounded-xl overflow-hidden group hover:border-blue-500/40 transition-all shadow-lg hover:shadow-blue-500/10">
+                <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-blue-500/20  overflow-hidden group hover:border-blue-500/40 transition-all shadow-lg hover:shadow-blue-500/10">
                   <div className="h-48 bg-gradient-to-br from-blue-900/30 to-blue-700/20 flex items-center justify-center">
                     <Gamepad2 className="w-24 h-24 text-blue-400 opacity-75 group-hover:scale-110 transition-transform duration-300" />
                   </div>
@@ -96,13 +96,13 @@ export function Home() {
                       interactions, and share your game with the world.
                     </p>
                     <div className="flex flex-wrap gap-3 mb-6">
-                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
+                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm -full">
                         Interactive Objects
                       </span>
-                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
+                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm -full">
                         Physics
                       </span>
-                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
+                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm -full">
                         Multiplayer
                       </span>
                     </div>
@@ -118,7 +118,7 @@ export function Home() {
 
               {/* Art Gallery Card */}
               <Link to="/gallery/demo">
-                <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-purple-500/20 rounded-xl overflow-hidden group hover:border-purple-500/40 transition-all shadow-lg hover:shadow-purple-500/10">
+                <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-purple-500/20  overflow-hidden group hover:border-purple-500/40 transition-all shadow-lg hover:shadow-purple-500/10">
                   <div className="h-48 bg-gradient-to-br from-purple-900/30 to-purple-700/20 flex items-center justify-center">
                     <Paintbrush className="w-24 h-24 text-purple-400 opacity-75 group-hover:scale-110 transition-transform duration-300" />
                   </div>
@@ -129,13 +129,13 @@ export function Home() {
                       3D environment that visitors can explore.
                     </p>
                     <div className="flex flex-wrap gap-3 mb-6">
-                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
+                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm -full">
                         Custom Layouts
                       </span>
-                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
+                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm -full">
                         Image Upload
                       </span>
-                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
+                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm -full">
                         Virtual Tours
                       </span>
                     </div>
@@ -159,7 +159,7 @@ export function Home() {
 
           <div className="container mx-auto px-4 relative z-10">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-purple-500/20 rounded-full border border-purple-500/30 mb-4">
+              <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-purple-500/20 -full border border-purple-500/30 mb-4">
                 <Paintbrush className="w-5 h-5 text-purple-400" />
                 <span className="text-purple-300 font-medium">Gallery Pricing</span>
               </div>
@@ -202,7 +202,7 @@ export function Home() {
                 return (
                   <>
                     {/* Free Tier */}
-                    <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl overflow-hidden group hover:border-purple-500/40 transition-all shadow-lg hover:shadow-purple-500/10 flex flex-col">
+                    <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700  overflow-hidden group hover:border-purple-500/40 transition-all shadow-lg hover:shadow-purple-500/10 flex flex-col">
                       <div className="p-8 border-b border-gray-700">
                         <h3 className="text-2xl font-bold text-white mb-2">Free Access</h3>
                         <div className="flex items-end gap-1 mb-4">
@@ -222,7 +222,7 @@ export function Home() {
                         <div className="mt-8">
                           <a
                             href="/gallery/demo"
-                            className="block w-full py-3 px-4 bg-gray-700 hover:bg-gray-600 text-white font-medium text-center rounded-lg transition-colors"
+                            className="block w-full py-3 px-4 bg-gray-700 hover:bg-gray-600 text-white font-medium text-center  transition-colors"
                           >
                             Start Free
                           </a>
@@ -231,7 +231,7 @@ export function Home() {
                     </div>
 
                     {/* Pay Per Image Tier */}
-                    <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-purple-500/50 rounded-xl overflow-hidden group hover:border-purple-500/80 transition-all shadow-lg hover:shadow-purple-500/20 relative z-10 flex flex-col">
+                    <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-purple-500/50  overflow-hidden group hover:border-purple-500/80 transition-all shadow-lg hover:shadow-purple-500/20 relative z-10 flex flex-col">
                       <div className="absolute top-0 left-0 right-0 bg-purple-500 text-white text-center py-1 text-sm font-medium">
                         Most Popular
                       </div>
@@ -254,7 +254,7 @@ export function Home() {
                         <div className="mt-8">
                           <a
                             href="/pricing/pay-per-image"
-                            className="block w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium text-center rounded-lg transition-colors"
+                            className="block w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium text-center  transition-colors"
                           >
                             Choose Package
                           </a>
@@ -263,7 +263,7 @@ export function Home() {
                     </div>
 
                     {/* Subscription Tier */}
-                    <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl overflow-hidden group hover:border-purple-500/40 transition-all shadow-lg hover:shadow-purple-500/10 flex flex-col">
+                    <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700  overflow-hidden group hover:border-purple-500/40 transition-all shadow-lg hover:shadow-purple-500/10 flex flex-col">
                       <div className="p-8 border-b border-gray-700">
                         <h3 className="text-2xl font-bold text-white mb-2">Subscription</h3>
                         <div className="flex items-end gap-1 mb-4">
@@ -283,7 +283,7 @@ export function Home() {
                         <div className="mt-8">
                           <a
                             href="/pricing/subscription"
-                            className="block w-full py-3 px-4 bg-gray-700 hover:bg-gray-600 text-white font-medium text-center rounded-lg transition-colors"
+                            className="block w-full py-3 px-4 bg-gray-700 hover:bg-gray-600 text-white font-medium text-center  transition-colors"
                           >
                             View Plans
                           </a>
@@ -395,7 +395,7 @@ export function Home() {
                 galleries.slice(0, 3).map((gallery) => (
                   <div
                     key={gallery.id}
-                    className="group relative overflow-hidden rounded-lg border border-gray-800 bg-gray-900 shadow-md transition-all hover:shadow-lg hover:shadow-purple-500/10"
+                    className="group relative overflow-hidden  border border-gray-800 bg-gray-900 shadow-md transition-all hover:shadow-lg hover:shadow-purple-500/10"
                   >
                     <div className="aspect-video w-full overflow-hidden">
                       <img
@@ -429,7 +429,7 @@ export function Home() {
                   </div>
                 ))
               ) : (
-                <div className="col-span-3 p-8 text-center border border-dashed border-gray-700 rounded-lg">
+                <div className="col-span-3 p-8 text-center border border-dashed border-gray-700 ">
                   <Paintbrush className="w-10 h-10 text-purple-400 mx-auto mb-4 opacity-50" />
                   <h3 className="text-xl font-medium text-white mb-2">No Galleries Yet</h3>
                   <p className="text-gray-400 mb-4">
@@ -437,7 +437,7 @@ export function Home() {
                   </p>
                   <a
                     href="/editor/demo"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white font-medium rounded-md transition-colors"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white font-medium  transition-colors"
                   >
                     Try Gallery Editor
                   </a>

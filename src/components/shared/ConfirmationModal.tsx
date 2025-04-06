@@ -91,10 +91,10 @@ export function ConfirmationModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
       <div
         ref={modalRef}
-        className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-md shadow-xl overflow-hidden"
+        className="w-full max-w-md bg-slate-900 border border-slate-800  shadow-xl overflow-hidden"
       >
         <div className={`p-4 flex items-start gap-3 ${colors.bg} ${colors.border} border-b`}>
-          <div className={`p-1 rounded-full ${colors.icon}`}>
+          <div className={`p-1 -full ${colors.icon}`}>
             <AlertTriangle size={20} />
           </div>
           <div className="flex-1">
@@ -103,7 +103,7 @@ export function ConfirmationModal({
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-full hover:bg-slate-800/50 text-slate-400 hover:text-slate-300"
+            className="p-1 -full hover:bg-slate-800/50 text-slate-400 hover:text-slate-300"
           >
             <X size={18} />
           </button>
@@ -111,13 +111,13 @@ export function ConfirmationModal({
         <div className="p-4 flex justify-end gap-3 bg-slate-900">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm rounded-sm bg-slate-700 hover:bg-slate-600 text-slate-300"
+            className="px-4 py-2 text-sm -sm bg-slate-700 hover:bg-slate-600 text-slate-300"
           >
             {cancelText}
           </button>
           <button
             onClick={onConfirm}
-            className={`px-4 py-2 text-sm rounded-sm text-white ${colors.button}`}
+            className={`px-4 py-2 text-sm -sm text-white ${colors.button}`}
           >
             {confirmText}
           </button>

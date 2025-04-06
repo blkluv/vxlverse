@@ -17,7 +17,7 @@ export function Loader({ message, size = "md", fullScreen = true }: LoaderProps)
     return (
       <div className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
         <div
-          className={`${sizeClasses[size]} border-purple-200 border-t-purple-500 rounded-full animate-spin mb-4`}
+          className={`${sizeClasses[size]} border-purple-200 border-t-purple-500 -full animate-spin mb-4`}
         ></div>
         {message && <p className="text-white text-lg font-medium">{message}</p>}
       </div>
@@ -28,7 +28,7 @@ export function Loader({ message, size = "md", fullScreen = true }: LoaderProps)
   return (
     <div className="flex flex-col items-center justify-center">
       <div
-        className={`${sizeClasses[size]} border-blue-200 border-t-blue-500 rounded-full animate-spin mb-2`}
+        className={`${sizeClasses[size]} border-blue-200 border-t-blue-500 -full animate-spin mb-2`}
       ></div>
       {message && <p className="text-slate-300 text-sm">{message}</p>}
     </div>

@@ -78,9 +78,9 @@ export function GalleryViewer() {
   const GalleryListItem = ({ image }: { image: any }) => (
     <div
       key={image.id}
-      className="flex items-center p-3 rounded-xl hover:bg-slate-800/50 border border-slate-700/30 group transition-all duration-200 hover:border-indigo-500/30 hover:shadow-md"
+      className="flex items-center p-3  hover:bg-slate-800/50 border border-slate-700/30 group transition-all duration-200 hover:border-indigo-500/30 hover:shadow-md"
     >
-      <div className="w-14 h-14 rounded-lg overflow-hidden mr-4 flex-shrink-0 border border-slate-700/50 shadow-md">
+      <div className="w-14 h-14  overflow-hidden mr-4 flex-shrink-0 border border-slate-700/50 shadow-md">
         <img
           src={image.imageUrl}
           alt=""
@@ -97,7 +97,7 @@ export function GalleryViewer() {
       <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-200">
         <button
           onClick={() => setSelectedImage(image.id)}
-          className="p-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-300 transition-all duration-200 hover:scale-105"
+          className="p-2 bg-slate-700 hover:bg-slate-600  text-slate-300 transition-all duration-200 hover:scale-105"
           title="View"
         >
           <Eye size={16} />
@@ -105,12 +105,12 @@ export function GalleryViewer() {
         {currentSceneId && (
           <button
             onClick={(e) => handleAddToScene(image.id, image.imageUrl, e)}
-            className="p-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-white transition-all duration-200 hover:scale-105"
+            className="p-2 bg-indigo-600 hover:bg-indigo-500  text-white transition-all duration-200 hover:scale-105"
             title="Add to Scene"
             disabled={addingToScene === image.id}
           >
             {addingToScene === image.id ? (
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white -full animate-spin" />
             ) : (
               <Plus size={16} />
             )}
@@ -118,12 +118,12 @@ export function GalleryViewer() {
         )}
         <button
           onClick={(e) => confirmDelete(image.id, e)}
-          className="p-2 bg-red-500/80 hover:bg-red-600 rounded-lg text-white transition-all duration-200 hover:scale-105"
+          className="p-2 bg-red-500/80 hover:bg-red-600  text-white transition-all duration-200 hover:scale-105"
           title="Delete"
           disabled={deleteLoading === image.id}
         >
           {deleteLoading === image.id ? (
-            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-white/30 border-t-white -full animate-spin" />
           ) : (
             <Trash2 size={16} />
           )}
@@ -141,13 +141,13 @@ export function GalleryViewer() {
         onClick={() => setSelectedImage(null)}
       >
         <button
-          className="absolute top-6 right-6 p-3 bg-black/30 hover:bg-black/50 backdrop-blur-md rounded-full text-white border border-white/10 shadow-xl transition-all duration-200 hover:scale-105"
+          className="absolute top-6 right-6 p-3 bg-black/30 hover:bg-black/50 backdrop-blur-md -full text-white border border-white/10 shadow-xl transition-all duration-200 hover:scale-105"
           onClick={() => setSelectedImage(null)}
         >
           <X size={24} />
         </button>
         <div className="relative max-w-full max-h-full" onClick={(e) => e.stopPropagation()}>
-          <div className="relative rounded-xl overflow-hidden shadow-2xl border border-white/10">
+          <div className="relative  overflow-hidden shadow-2xl border border-white/10">
             <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 z-0"></div>
             <img
               src={selectedImageData.imageUrl}
@@ -155,7 +155,7 @@ export function GalleryViewer() {
               className="max-w-full max-h-[85vh] object-contain bg-black/50 p-1 relative z-10"
             />
           </div>
-          <div className="mt-4 bg-black/50 backdrop-blur-md rounded-xl border border-white/10 p-4 flex justify-between items-center shadow-xl">
+          <div className="mt-4 bg-black/50 backdrop-blur-md  border border-white/10 p-4 flex justify-between items-center shadow-xl">
             <div>
               <h3 className="text-white text-lg font-medium">
                 Gallery Image {selectedImageData.id.slice(-6)}
@@ -168,11 +168,11 @@ export function GalleryViewer() {
                   onClick={(e) =>
                     handleAddToScene(selectedImageData.id, selectedImageData.imageUrl, e)
                   }
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-white flex items-center shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500  text-white flex items-center shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
                   disabled={addingToScene === selectedImageData.id}
                 >
                   {addingToScene === selectedImageData.id ? (
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white -full animate-spin mr-2" />
                   ) : (
                     <Plus size={18} className="mr-2" />
                   )}
@@ -181,11 +181,11 @@ export function GalleryViewer() {
               )}
               <button
                 onClick={(e) => confirmDelete(selectedImageData.id, e)}
-                className="px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg text-white flex items-center shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                className="px-4 py-2 bg-red-600 hover:bg-red-500  text-white flex items-center shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
                 disabled={deleteLoading === selectedImageData.id}
               >
                 {deleteLoading === selectedImageData.id ? (
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white -full animate-spin mr-2" />
                 ) : (
                   <Trash2 size={18} className="mr-2" />
                 )}
@@ -202,7 +202,7 @@ export function GalleryViewer() {
     return (
       <div className="flex flex-col items-center justify-center h-64 p-8">
         <div className="relative w-16 h-16 mb-4">
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full blur opacity-75 animate-pulse"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 -full blur opacity-75 animate-pulse"></div>
           <div className="relative flex items-center justify-center w-full h-full">
             <Loader size="lg" fullScreen={false} />
           </div>
@@ -215,12 +215,12 @@ export function GalleryViewer() {
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center h-64 p-8 text-center">
-        <div className="w-16 h-16 mb-4 rounded-full bg-red-500/20 flex items-center justify-center">
+        <div className="w-16 h-16 mb-4 -full bg-red-500/20 flex items-center justify-center">
           <X size={32} className="text-red-500" />
         </div>
         <h3 className="text-red-400 font-medium mb-2">Failed to load gallery images</h3>
         <p className="text-slate-400 text-sm mb-4">There was a problem connecting to the server</p>
-        <button className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white rounded-lg text-sm font-medium flex items-center shadow-lg transition-all duration-200 hover:scale-105 active:scale-95">
+        <button className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white  text-sm font-medium flex items-center shadow-lg transition-all duration-200 hover:scale-105 active:scale-95">
           <RefreshCw size={16} className="mr-2" />
           Try Again
         </button>
@@ -231,7 +231,7 @@ export function GalleryViewer() {
   if (images.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-64 p-8 text-center">
-        <div className="w-16 h-16 mb-4 rounded-full bg-indigo-500/20 flex items-center justify-center">
+        <div className="w-16 h-16 mb-4 -full bg-indigo-500/20 flex items-center justify-center">
           <ImageIcon size={32} className="text-indigo-400" />
         </div>
         <h3 className="text-indigo-400 font-medium mb-2">Your gallery is empty</h3>

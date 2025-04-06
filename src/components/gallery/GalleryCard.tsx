@@ -21,7 +21,7 @@ interface GalleryCardProps {
 
 export function GalleryCard({ gallery }: GalleryCardProps) {
   return (
-    <div className="group bg-white/5 border border-white/10 rounded-lg overflow-hidden transition-all hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10">
+    <div className="group bg-white/5 border border-white/10  overflow-hidden transition-all hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10">
       <Link to={`/gallery/${gallery.id}`} className="block">
         <div className="aspect-video relative overflow-hidden">
           <img

@@ -17,7 +17,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onAccept, onClos
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-700 rounded-md max-w-2xl w-full max-h-[80vh] flex flex-col">
+      <div className="bg-slate-900 border border-slate-700  max-w-2xl w-full max-h-[80vh] flex flex-col">
         <div className="flex items-center justify-between p-4 border-b border-slate-700">
           <h2 className="text-xl font-bold text-white">Terms of Service</h2>
           <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors">
@@ -105,7 +105,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onAccept, onClos
               type="checkbox"
               checked={accepted}
               onChange={(e) => setAccepted(e.target.checked)}
-              className="w-4 h-4 rounded border-slate-500 bg-slate-800 text-blue-500 focus:ring-blue-500"
+              className="w-4 h-4  border-slate-500 bg-slate-800 text-blue-500 focus:ring-blue-500"
             />
             <span className="text-sm text-slate-300">
               I have read and agree to the Terms of Service
@@ -114,7 +114,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onAccept, onClos
           <button
             onClick={handleAccept}
             disabled={!accepted}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+            className={`px-4 py-2  text-sm font-medium transition-colors ${
               accepted
                 ? "bg-blue-600 hover:bg-blue-700 text-white"
                 : "bg-slate-700 text-slate-400 cursor-not-allowed"

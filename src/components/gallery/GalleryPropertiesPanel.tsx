@@ -191,7 +191,7 @@ export function GalleryPropertiesPanel() {
                   {/* Image Library Section - Now First */}
 
                   {/* Scene Hierarchy */}
-                  <div className="bg-slate-800/80 border border-slate-700/50 rounded-sm overflow-hidden">
+                  <div className="bg-slate-800/80 border border-slate-700/50 -sm overflow-hidden">
                     <div className="p-3 pb-2 border-b border-slate-700/30 mb-1">
                       <div className="flex items-center">
                         <List className="w-4 h-4 mr-2 text-blue-400" />
@@ -214,7 +214,7 @@ export function GalleryPropertiesPanel() {
                   <NoSelected />
                 ))}
               {activeTab === "library" && (
-                <div className="bg-slate-900 border relative border-slate-700/50 rounded-sm mb-4 ">
+                <div className="bg-slate-900 border relative border-slate-700/50 -sm mb-4 ">
                   <div className="p-3 flex sticky top-0 z-50 bg-slate-900 justify-between pb-2 border-b border-slate-700/30">
                     <div className="flex items-center">
                       <Box className="w-4 h-4 mr-2 text-blue-400" />
@@ -225,7 +225,7 @@ export function GalleryPropertiesPanel() {
                     <div className=" flex justify-end">
                       <button
                         onClick={() => setShowUploadModal(true)}
-                        className="px-4 w-full py-1.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 rounded-sm text-xs flex items-center shadow-sm"
+                        className="px-4 w-full py-1.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 -sm text-xs flex items-center shadow-sm"
                       >
                         <span>Upload Images</span>
                       </button>

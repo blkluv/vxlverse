@@ -99,9 +99,9 @@ export function Header() {
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-800 transition-all"
+                    className="flex items-center gap-2 p-1 -full hover:bg-gray-800 transition-all"
                   >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center text-white font-medium text-sm overflow-hidden">
+                    <div className="w-8 h-8 -full rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center text-white font-medium text-sm overflow-hidden">
                       {user.avatar ? (
                         <img
                           src={`${pb.baseUrl}/api/files/${user.collectionId}/${user.id}/${user.avatar}`}
@@ -116,7 +116,7 @@ export function Header() {
 
                   {/* Dropdown Menu */}
                   {isDropdownOpen && (
-                    <div className="absolute z-50 right-0 mt-2 w-48 bg-gray-900 border border-gray-800 rounded-md shadow-lg py-1">
+                    <div className="absolute z-50 right-0 mt-2 w-48 bg-gray-900 border border-gray-800  shadow-lg py-1">
                       <div className="px-4 py-2 border-b border-gray-800">
                         <p className="text-sm font-medium text-white truncate">
                           {user.name || "User"}
@@ -171,7 +171,7 @@ export function Header() {
               ) : (
                 <button
                   onClick={() => setIsLoginModalOpen(true)}
-                  className="flex items-center gap-2 px-4 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-full shadow-md hover:shadow-purple-500/20 transition-all"
+                  className="flex items-center gap-2 px-4 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 -full shadow-md hover:shadow-purple-500/20 transition-all"
                 >
                   <User className="w-4 h-4" />
                   Sign In

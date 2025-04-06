@@ -49,7 +49,7 @@ export function GalleryFilters({ selectedTags, onTagsChange }: GalleryFiltersPro
           <button
             key={tag}
             onClick={() => toggleTag(tag)}
-            className={`px-3 py-1 text-xs rounded-full transition-colors ${
+            className={`px-3 py-1 text-xs -full transition-colors ${
               selectedTags.includes(tag)
                 ? "bg-blue-500 text-white"
                 : "bg-white/10 text-gray-300 hover:bg-white/20"

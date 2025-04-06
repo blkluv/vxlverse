@@ -258,7 +258,7 @@ export function GalleryUploadModal({ isOpen, onClose }: GalleryUploadModalProps)
       <div className="p-6 space-y-4">
         {/* Drag & Drop Area */}
         <div
-          className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+          className={`border-2 border-dashed  p-6 text-center transition-colors ${
             dragActive
               ? "border-blue-500 bg-blue-500/10"
               : "border-slate-700 hover:border-slate-500 bg-slate-800/50"
@@ -296,7 +296,7 @@ export function GalleryUploadModal({ isOpen, onClose }: GalleryUploadModalProps)
           </div>
         )}
         {showSettings && images.length > 0 && (
-          <div className="p-3 bg-slate-800/50 rounded-md border border-slate-700/50">
+          <div className="p-3 bg-slate-800/50  border border-slate-700/50">
             <div className="flex items-center justify-between mb-2">
               <label htmlFor="quality" className="text-xs text-slate-300">
                 WebP Quality: {quality}%
@@ -334,7 +334,7 @@ export function GalleryUploadModal({ isOpen, onClose }: GalleryUploadModalProps)
             <div className="grid grid-cols-3 gap-2 max-h-60 overflow-y-auto p-1">
               {images.map((image) => (
                 <div key={image.id} className="relative group">
-                  <div className="aspect-square overflow-hidden rounded-sm border border-slate-700/50 bg-slate-900/50">
+                  <div className="aspect-square overflow-hidden -sm border border-slate-700/50 bg-slate-900/50">
                     <img
                       src={image.optimizedUrl || image.url}
                       alt={image.name}
@@ -368,7 +368,7 @@ export function GalleryUploadModal({ isOpen, onClose }: GalleryUploadModalProps)
                       e.stopPropagation();
                       removeImage(image.id);
                     }}
-                    className="absolute top-1 right-1 p-1 bg-red-500/80 hover:bg-red-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-1 right-1 p-1 bg-red-500/80 hover:bg-red-600 -full opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -376,7 +376,7 @@ export function GalleryUploadModal({ isOpen, onClose }: GalleryUploadModalProps)
               ))}
               <div
                 onClick={triggerFileInput}
-                className="aspect-square flex items-center justify-center border border-dashed border-slate-700/50 rounded-sm bg-slate-800/30 hover:bg-slate-800/50 cursor-pointer"
+                className="aspect-square flex items-center justify-center border border-dashed border-slate-700/50 -sm bg-slate-800/30 hover:bg-slate-800/50 cursor-pointer"
               >
                 <Plus className="w-6 h-6 text-slate-500" />
               </div>
@@ -388,14 +388,14 @@ export function GalleryUploadModal({ isOpen, onClose }: GalleryUploadModalProps)
         <div className="flex justify-end space-x-2 pt-4 border-t border-slate-700/30">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm rounded-sm bg-slate-700 hover:bg-slate-600 text-slate-300"
+            className="px-4 py-2 text-sm -sm bg-slate-700 hover:bg-slate-600 text-slate-300"
           >
             Cancel
           </button>
           <button
             onClick={uploadImages}
             disabled={images.length === 0 || uploading}
-            className={`px-4 py-2 text-sm rounded-sm flex items-center ${
+            className={`px-4 py-2 text-sm -sm flex items-center ${
               images.length === 0 || uploading
                 ? "bg-blue-700/50 text-blue-300/50 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700 text-white"
