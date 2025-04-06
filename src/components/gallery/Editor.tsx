@@ -15,22 +15,24 @@ import { useEditorStore } from "../../stores/editorStore";
 import { EditorBoxCollider } from "../editor/EditorBoxCollider";
 
 interface EditorSceneProps {
-  showGrid?: boolean;
-  gridSnap?: boolean;
   transformMode?: "translate" | "rotate" | "scale";
 }
 
-export function ArtEditor({
-  showGrid = true,
-  gridSnap = false,
-  transformMode = "translate",
-}: EditorSceneProps = {}) {
+export function ArtEditor({ transformMode = "translate" }: EditorSceneProps = {}) {
   const { camera } = useThree();
 
   // State for tracking transform operations
   const [, setIsDragging] = useState(false);
-  const { scenes, currentSceneId, updateObject, setSelectedObject, selectedObjectId, brushActive } =
-    useEditorStore();
+  const {
+    scenes,
+    currentSceneId,
+    gridSnap,
+    showGrid,
+    updateObject,
+    setSelectedObject,
+    selectedObjectId,
+    brushActive,
+  } = useEditorStore();
   const setSelectedObjectId = useEditorStore((state) => state.setSelectedObject);
 
   // References
@@ -69,7 +71,7 @@ export function ArtEditor({
       <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
 
       {/* Grid */}
-      {showGrid && (
+      {(showGrid || gridSnap) && (
         <Grid
           position={[0, 0.5, 0]}
           args={[100, 100]}

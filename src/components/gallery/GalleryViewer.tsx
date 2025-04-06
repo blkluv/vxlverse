@@ -55,7 +55,7 @@ export function GalleryViewer() {
         id,
         name: `Painting ${imageId.slice(-6)}`,
         modelUrl: "", // We'll use a plane with the image as texture
-        type: "prop",
+        type: "painting",
         description: "Gallery painting",
         position: new THREE.Vector3(0, 1, 0),
         rotation: new THREE.Euler(0, 0, 0),

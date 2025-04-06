@@ -29,13 +29,58 @@ export function ArtGallery() {
 
 export function _ArtGallery() {
   const [showMetrics, setShowMetrics] = useState(false);
-  const [forceUpdate] = useState(0);
   const [transformMode, setTransformMode] = useState<"translate" | "rotate" | "scale">("translate");
-  const [showGrid] = useState(true);
-  const [gridSnap] = useState(false);
   const [showModerationAlert, setShowModerationAlert] = useState(false);
   const [moderationMessage] = useState("");
   const orbitControlsRef = useRef<any>(null);
+
+  // Get the selected object from the editor store
+  const { selectedObjectId, scenes, currentSceneId } = useEditorStore();
+  const currentScene = scenes.find((scene) => scene.id === currentSceneId);
+
+  // Handle keyboard controls
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Focus on painting when F key is pressed
+      if (e.code === "KeyF") {
+        focusOnSelectedPainting();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedObjectId, currentScene]);
+
+  // Function to focus camera on the selected painting
+  const focusOnSelectedPainting = () => {
+    if (!selectedObjectId || !currentScene || !orbitControlsRef.current) return;
+
+    const selectedObject = currentScene.objects.find((obj) => obj.id === selectedObjectId);
+
+    // Only focus if it's a painting
+    if (selectedObject && (selectedObject.type === "painting" || selectedObject.imageUrl)) {
+      const { position } = selectedObject;
+
+      // Set orbit controls target to the painting position
+      orbitControlsRef.current.target.set(position.x, position.y, position.z);
+
+      // Position camera to face the painting from a good viewing distance
+      const cameraDistance = 15; // Adjust this value as needed
+      const cameraHeight = position.y + 10.5; // Position camera slightly above the painting center
+
+      // Calculate camera position based on painting rotation
+      const { rotation } = selectedObject;
+      const angle = rotation.y || 0;
+
+      // Position camera in front of the painting based on its rotation
+      const cameraX = position.x - Math.sin(angle) * cameraDistance;
+      const cameraZ = position.z - Math.cos(angle) * cameraDistance;
+
+      // Animate camera to new position
+      orbitControlsRef.current.object.position.set(cameraX, cameraHeight, cameraZ);
+      orbitControlsRef.current.update();
+    }
+  };
 
   return (
     <div className="flex flex-col w-full h-screen bg-slate-900">
@@ -79,19 +124,14 @@ export function _ArtGallery() {
           <Canvas
             shadows
             gl={{ preserveDrawingBuffer: true, antialias: true }}
-            camera={{ position: [5, 5, 5], fov: 50 }}
+            camera={{ position: [0, 10, -22], fov: 75 }}
             className="w-full relative h-full"
           >
             {showMetrics && <Perf className="absolute z-10 w-80 top-0 left-0" />}
 
-            <ArtEditor transformMode={transformMode} showGrid={showGrid} gridSnap={gridSnap} />
+            <ArtEditor transformMode={transformMode} />
             <Environment preset="apartment" background={false} />
-            <OrbitControls
-              ref={orbitControlsRef}
-              makeDefault
-              minPolarAngle={0}
-              maxPolarAngle={Math.PI / 1.75}
-            />
+            <OrbitControls ref={orbitControlsRef} makeDefault />
           </Canvas>
         </div>
         <GalleryPropertiesPanel />
