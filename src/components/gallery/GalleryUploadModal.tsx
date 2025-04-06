@@ -2,7 +2,6 @@ import { useState, useRef, useCallback } from "react";
 import { Modal } from "../UI/Modal";
 import { Upload, X, Plus, Check, Settings, AlertCircle } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
-import { usePaintingsStore } from "../../stores/paintingsStore";
 import { pb } from "../../lib/pocketbase";
 import { useGallery } from "../../hooks/useGallery";
 
@@ -32,7 +31,6 @@ export function GalleryUploadModal({ isOpen, onClose }: GalleryUploadModalProps)
   const [quality, setQuality] = useState(80); // WebP quality (0-100)
   const [showSettings, setShowSettings] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { addPainting } = usePaintingsStore();
 
   // Drag & drop handlers
   const handleDrag = useCallback((e: React.DragEvent) => {
@@ -222,7 +220,6 @@ export function GalleryUploadModal({ isOpen, onClose }: GalleryUploadModalProps)
       onClose();
     } catch (error) {
       console.error("Error uploading images:", error);
-      alert("Failed to upload images. Please try again.");
     } finally {
       setUploading(false);
     }
@@ -317,31 +314,6 @@ export function GalleryUploadModal({ isOpen, onClose }: GalleryUploadModalProps)
               onChange={(e) => handleQualityChange(parseInt(e.target.value))}
               className="w-full accent-blue-500"
             />
-          </div>
-        )}
-
-        {/* Gallery Images */}
-        {galleryImages && galleryImages.length > 0 && !images.length && (
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <h3 className="text-sm font-medium text-blue-300">
-                Gallery Images ({galleryImages.length})
-              </h3>
-            </div>
-            <div className="grid grid-cols-3 gap-2 max-h-60 overflow-y-auto p-1">
-              {galleryImages.slice(0, 5).map((image) => (
-                <div key={image.id} className="relative group">
-                  <div className="aspect-square overflow-hidden rounded-sm border border-slate-700/50 bg-slate-900/50">
-                    <img src={image.imageUrl} alt="" className="w-full h-full object-cover" />
-                  </div>
-                </div>
-              ))}
-              {galleryImages.length > 5 && (
-                <div className="aspect-square flex items-center justify-center border border-slate-700/50 rounded-sm bg-slate-800/50 text-slate-400">
-                  +{galleryImages.length - 5} more
-                </div>
-              )}
-            </div>
           </div>
         )}
 

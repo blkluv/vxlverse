@@ -8,7 +8,6 @@ import { ObjectSettingsPanel } from "../editor/properties/ObjectSettingsPanel";
 import { TransformPanel } from "../editor/properties/transform";
 import { NoSelected } from "../no-selected";
 import { GalleryUploadModal } from "./GalleryUploadModal";
-import { usePaintingsStore } from "../../stores/paintingsStore";
 import { useGallery } from "../../hooks/useGallery";
 import { pb } from "../../lib/pocketbase";
 import { ConfirmationModal } from "../shared/ConfirmationModal";
@@ -21,73 +20,28 @@ export function GalleryPropertiesPanel() {
   );
 
   // Get paintings store state and actions
-  const { addPainting, selectPainting } = usePaintingsStore();
   const [activeTab, setActiveTab] = useState<TabType>("transform");
   const hasSelectedObject = Boolean(selectedObjectId);
 
   // Gallery state
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const { images: galleryImages, isLoading, isError, mutate } = useGallery();
-  const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
+  const { mutate } = useGallery();
   const [imageToDelete, setImageToDelete] = useState<string | null>(null);
-  const [refreshing, setRefreshing] = useState(false);
-
-  // Track recently added objects to the scene
-  const [recentlyAdded, setRecentlyAdded] = useState<any[]>([]);
-
-  // Function to add an image to the scene
-  const addImageToScene = useCallback(
-    (image: { id: string; imageUrl: string }) => {
-      // Add the painting using the paintingsStore
-      const paintingId = addPainting(image.imageUrl, image.id);
-
-      // Select the newly added painting
-      selectPainting(paintingId);
-
-      // Add to recently added
-      setRecentlyAdded((prev) => [
-        {
-          id: paintingId,
-          name: image.id,
-          modelUrl: image.imageUrl,
-        },
-        ...prev.slice(0, 7),
-      ]);
-    },
-    [addPainting, selectPainting]
-  );
-
-  // Function to show delete confirmation
-  const confirmDelete = useCallback((id: string) => {
-    setImageToDelete(id);
-  }, []);
 
   // Function to remove an image from the gallery
   const removeGalleryImage = useCallback(async () => {
     if (!imageToDelete) return;
 
     try {
-      setDeleteLoading(imageToDelete);
       await pb.collection("gallery").delete(imageToDelete);
       // Refresh the gallery data
       mutate();
     } catch (error) {
       console.error("Error deleting image:", error);
     } finally {
-      setDeleteLoading(null);
       setImageToDelete(null);
     }
   }, [imageToDelete, mutate]);
-
-  // Function to refresh gallery images
-  const refreshGallery = useCallback(async () => {
-    setRefreshing(true);
-    try {
-      await mutate();
-    } finally {
-      setTimeout(() => setRefreshing(false), 500); // Add a small delay for better UX
-    }
-  }, [mutate]);
 
   const selectObject = useCallback(
     (dir: "next" | "prev") => {

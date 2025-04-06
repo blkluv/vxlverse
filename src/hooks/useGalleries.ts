@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
-
+import { Object3D } from "three";
+const ID = new Object3D().uuid;
 // Sample galleries for demo purposes
 const sampleGalleries = [
   {
-    id: uuidv4(),
+    id: ID,
     title: "Modern Art Collection",
     description: "A collection of contemporary art pieces showcasing modern artistic expressions",
     thumbnailUrl:
@@ -18,7 +18,7 @@ const sampleGalleries = [
     tags: ["modern", "abstract", "contemporary"],
   },
   {
-    id: uuidv4(),
+    id: ID,
     title: "Nature Landscapes",
     description: "Beautiful landscapes capturing the essence of nature in various seasons",
     thumbnailUrl:
@@ -32,7 +32,7 @@ const sampleGalleries = [
     tags: ["nature", "landscape", "seasons"],
   },
   {
-    id: uuidv4(),
+    id: ID,
     title: "Portrait Studies",
     description: "A series of portrait studies exploring human emotions and expressions",
     thumbnailUrl:
@@ -46,7 +46,7 @@ const sampleGalleries = [
     tags: ["portrait", "human", "emotion"],
   },
   {
-    id: uuidv4(),
+    id: ID,
     title: "Abstract Expressions",
     description: "Bold and vibrant abstract expressions pushing the boundaries of form and color",
     thumbnailUrl:
@@ -60,7 +60,7 @@ const sampleGalleries = [
     tags: ["abstract", "vibrant", "experimental"],
   },
   {
-    id: uuidv4(),
+    id: ID,
     title: "Digital Art Showcase",
     description: "Cutting-edge digital art created using various digital techniques and tools",
     thumbnailUrl:
@@ -74,7 +74,7 @@ const sampleGalleries = [
     tags: ["digital", "technology", "modern"],
   },
   {
-    id: uuidv4(),
+    id: ID,
     title: "Classical Masterpieces",
     description: "Recreations and studies of classical art masterpieces throughout history",
     thumbnailUrl:

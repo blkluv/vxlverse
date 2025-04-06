@@ -2,7 +2,6 @@ import { create } from "zustand";
 import * as THREE from "three";
 import { Scene, GameObject } from "../types";
 import { pb } from "../lib/pocketbase";
-
 const DEFAULT_SCENES = [] as Scene[];
 
 // Helper function to create a new scene with default values

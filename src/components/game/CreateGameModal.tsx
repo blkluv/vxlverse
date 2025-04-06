@@ -82,7 +82,6 @@ export function CreateGameModal({ isOpen, onClose, onSuccess }: CreateGameModalP
       setThumbnail(null);
       setThumbnailPreview("");
       setSelectedTags([]);
-      console.log(x);
       navigate(`/editor/${x.id}`);
     } catch (error) {
       console.error("Failed to create game:", error);

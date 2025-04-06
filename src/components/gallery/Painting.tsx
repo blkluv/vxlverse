@@ -20,8 +20,8 @@ export const Painting = forwardRef<THREE.Group, PaintingProps>(
       position,
       rotation = [0, 0, 0],
       scale = [1, 1, 1],
-      width = 1,
-      height = 1.5,
+      width = 10,
+      height = 10,
       isSelected = false,
       onClick,
     },
@@ -69,7 +69,7 @@ export const Painting = forwardRef<THREE.Group, PaintingProps>(
 
         {/* Canvas/Painting */}
         <mesh position={[0, 0, 0.01]}>
-          <planeGeometry args={[width, height]} />
+          <planeGeometry args={[10, 10]} />
           <meshStandardMaterial
             map={texture}
             emissive="#ffffff"

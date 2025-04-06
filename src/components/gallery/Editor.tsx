@@ -6,13 +6,12 @@ import {
   TransformControls,
 } from "@react-three/drei";
 import { ArtGalleryModel } from "./ArtGalleryModel";
-import { usePaintingsStore } from "../../stores/paintingsStore";
 import { Painting } from "./Painting";
 import { useRef, useState } from "react";
 import * as THREE from "three";
 import { PhysicsArea } from "./PhysicsArea";
-import { useEditorStore } from "../../stores/editorStore";
 import { useThree } from "@react-three/fiber";
+import { useEditorStore } from "../../stores/editorStore";
 
 interface EditorSceneProps {
   showGrid?: boolean;
@@ -25,21 +24,21 @@ export function ArtEditor({
   gridSnap = false,
   transformMode = "translate",
 }: EditorSceneProps = {}) {
-  // Get paintings from store
-  const { paintings, selectedPaintingId, selectPainting, updatePainting, placeWithBrush } =
-    usePaintingsStore();
-  const { brushActive } = useEditorStore();
   const { camera } = useThree();
 
   // State for tracking transform operations
   const [, setIsDragging] = useState(false);
+  const { scenes, currentSceneId, updateObject, setSelectedObject, selectedObjectId, brushActive } =
+    useEditorStore();
 
   // References
   const selectedPaintingRef = useRef<THREE.Group | null>(null);
   const galleryModelRef = useRef<THREE.Group | null>(null);
+  if (!scenes || !currentSceneId) return null;
 
+  const objects = scenes.find((scene) => scene.id === currentSceneId)?.objects;
   // Get the selected painting
-  const selectedPainting = paintings.find((p) => p.id === selectedPaintingId);
+
   return (
     <>
       {/* Sky */}
@@ -74,29 +73,29 @@ export function ArtEditor({
       </group>
 
       {/* Render all paintings from the store */}
-      {paintings
-        ?.filter((p) => p.id !== selectedPaintingId && brushActive)
-        .map((painting) => (
+      {objects?.map((painting) =>
+        painting.id === selectedObjectId && brushActive ? null : (
           <Painting
             key={painting.id}
-            imageUrl={painting.imageUrl}
+            imageUrl={painting.imageUrl ?? ""}
             position={painting.position}
             rotation={painting.rotation}
             scale={painting.scale}
-            width={painting.width}
-            height={painting.height}
-            isSelected={painting.id === selectedPaintingId}
-            onClick={() => selectPainting(painting.id)}
+            width={1}
+            height={1}
+            isSelected={painting.id === selectedObjectId}
+            onClick={() => setSelectedObject(painting.id)}
             ref={
-              painting.id === selectedPaintingId
+              painting.id === selectedObjectId
                 ? (selectedPaintingRef as React.RefObject<THREE.Group>)
                 : undefined
             }
           />
-        ))}
+        )
+      )}
 
       {/* Transform Controls */}
-      {!brushActive && selectedPaintingId && selectedPainting && selectedPaintingRef.current && (
+      {!brushActive && selectedObjectId && selectedPaintingRef.current && (
         <TransformControls
           object={selectedPaintingRef.current}
           mode={transformMode}
@@ -109,7 +108,7 @@ export function ArtEditor({
             setIsDragging(true);
           }}
           onMouseUp={() => {
-            if (selectedPaintingRef.current && selectedPaintingId) {
+            if (selectedPaintingRef.current && selectedObjectId) {
               const position = selectedPaintingRef.current.position.toArray() as [
                 number,
                 number,
@@ -121,8 +120,11 @@ export function ArtEditor({
                 selectedPaintingRef.current.rotation.z,
               ] as [number, number, number];
               const scale = selectedPaintingRef.current.scale.toArray() as [number, number, number];
-
-              updatePainting(selectedPaintingId, { position, rotation, scale });
+              updateObject(currentSceneId, selectedObjectId, {
+                position: new THREE.Vector3(...position),
+                rotation: new THREE.Euler(...rotation),
+                scale: new THREE.Vector3(...scale),
+              });
               setIsDragging(false);
             }
           }}

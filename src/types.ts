@@ -274,6 +274,7 @@ export interface GameObject {
     click?: string;
     hit?: string;
   };
+  imageUrl?: string;
   interactionSound?: string;
   physics?: {
     enabled: boolean;
