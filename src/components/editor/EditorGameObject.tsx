@@ -191,9 +191,9 @@ export function EditorGameObject({
       <group
         key={id}
         ref={objectRef}
-        position={position}
-        rotation={rotation}
-        scale={scale}
+        position={[position.x, position.y, position.z]}
+        rotation={[rotation.x, rotation.y, rotation.z]}
+        scale={[scale.x, scale.y, scale.z]}
         onDoubleClick={(e) => {
           if (!brushActive) e.stopPropagation();
           document.body.style.cursor = "pointer";
