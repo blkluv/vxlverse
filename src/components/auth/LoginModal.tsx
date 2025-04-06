@@ -2,7 +2,6 @@ import { useState } from "react";
 import { GoogleSignIn } from "./GoogleSignIn";
 import { UsernamePasswordSignIn } from "./UsernamePasswordSignIn";
 import { Modal } from "../UI/Modal";
-import { cn } from "../UI";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -11,73 +10,38 @@ interface LoginModalProps {
   onSuccess?: () => void;
 }
 
-type AuthTab = "login" | "register";
-
-export function LoginModal({
-  onSuccess,
-  isOpen,
-  onClose,
-  message = "Sign in to continue",
-}: LoginModalProps) {
-  const [activeTab, setActiveTab] = useState<AuthTab>("login");
+export function LoginModal({ isOpen, onClose, message = "Sign in to continue" }: LoginModalProps) {
+  const [isRegister, setIsRegister] = useState(false);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={activeTab === "login" ? "Sign In" : "Register"}>
-      <div className="p-6">
-        <p className="text-gray-300 mb-4 text-center">{message}</p>
+    <Modal isOpen={isOpen} onClose={onClose} title={isRegister ? "Create Account" : "Sign In"}>
+      <div className="p-4">
+        {/* Simple Form */}
+        <UsernamePasswordSignIn onSuccess={onClose} isRegister={isRegister} />
 
-        {/* Simple Tab Navigation */}
-        <div className="flex border-b border-gray-700 mb-6">
-          <button
-            onClick={() => setActiveTab("login")}
-            className={cn(
-              "flex-1 py-2 text-sm font-medium",
-              activeTab === "login"
-                ? "text-blue-400 border-b-2 border-blue-400"
-                : "text-gray-400 hover:text-gray-300"
-            )}
-          >
-            Login
-          </button>
-          <button
-            onClick={() => setActiveTab("register")}
-            className={cn(
-              "flex-1 py-2 text-sm font-medium",
-              activeTab === "register"
-                ? "text-blue-400 border-b-2 border-blue-400"
-                : "text-gray-400 hover:text-gray-300"
-            )}
-          >
-            Register
-          </button>
-        </div>
-
-        {/* Username/Password Authentication */}
-        <div className="mb-6">
-          <UsernamePasswordSignIn
-            className="w-full"
-            onSuccess={onClose}
-            isRegister={activeTab === "register"}
-          />
-        </div>
-
-        {/* Divider */}
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-700"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-gray-900 text-gray-400">or</span>
-          </div>
+        {/* Simple Divider */}
+        <div className="flex items-center my-4">
+          <div className="flex-grow border-t border-gray-700"></div>
+          <span className="px-2 text-sm text-gray-500">or</span>
+          <div className="flex-grow border-t border-gray-700"></div>
         </div>
 
         {/* Google Sign In */}
-        <div>
-          <GoogleSignIn className="w-full" onSuccess={onClose} />
+        <GoogleSignIn onSuccess={onClose} />
+
+        {/* Toggle Login/Register */}
+        <div className="mt-4 text-center">
+          <button
+            onClick={() => setIsRegister(!isRegister)}
+            className="text-sm text-blue-400 hover:text-blue-300"
+          >
+            {isRegister ? "Already have an account? Sign in" : "Need an account? Register"}
+          </button>
         </div>
 
-        <div className="text-xs text-gray-500 text-center mt-6">
-          By signing in, you agree to our Terms of Service and Privacy Policy
+        {/* Terms */}
+        <div className="text-xs text-gray-500 text-center mt-4">
+          By continuing, you agree to our Terms and Privacy Policy
         </div>
       </div>
     </Modal>
