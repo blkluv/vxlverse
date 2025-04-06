@@ -56,16 +56,16 @@ export function GoogleSignIn({
       onClick={handleGoogleLogin}
       disabled={loading}
       className={cn(
-        "flex items-center justify-center gap-1 px-3 py-1.5 text-sm text-white bg-blue-600 hover:bg-blue-700 sm disabled:opacity-50 transition-colors",
+        "flex items-center justify-center gap-2 px-4 py-2 text-gray-800 bg-white hover:bg-gray-100 border border-gray-300 rounded-md transition-colors disabled:opacity-50",
         className
       )}
     >
       {loading ? (
-        "Signing in..."
+        "Connecting..."
       ) : (
         <>
           <img src="https://www.google.com/favicon.ico" alt="Google" className="w-4 h-4" />
-          Sign in
+          Sign in with Google
         </>
       )}
     </button>

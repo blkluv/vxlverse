@@ -8,6 +8,7 @@ import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
 import { Gamepad2, ArrowRight, Image, Paintbrush } from "lucide-react";
 import "../styles/animations.css";
+import { Link } from "react-router-dom";
 import { useGames } from "../hooks/useGames";
 import { GameCard } from "../components/game/GameCard";
 import { useGalleries } from "../hooks/useGalleries";
@@ -83,66 +84,70 @@ export function Home() {
 
             <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               {/* 3D Games Card */}
-              <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-blue-500/20 rounded-xl overflow-hidden group hover:border-blue-500/40 transition-all shadow-lg hover:shadow-blue-500/10">
-                <div className="h-48 bg-gradient-to-br from-blue-900/30 to-blue-700/20 flex items-center justify-center">
-                  <Gamepad2 className="w-24 h-24 text-blue-400 opacity-75 group-hover:scale-110 transition-transform duration-300" />
-                </div>
-                <div className="p-8">
-                  <h3 className="text-2xl font-bold text-white mb-4">3D Game Creation</h3>
-                  <p className="text-gray-300 mb-6">
-                    Design immersive 3D games with intuitive tools. Place objects, create
-                    interactions, and share your game with the world.
-                  </p>
-                  <div className="flex flex-wrap gap-3 mb-6">
-                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
-                      Interactive Objects
-                    </span>
-                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
-                      Physics
-                    </span>
-                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
-                      Multiplayer
-                    </span>
+              <Link to="/games/demo">
+                <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-blue-500/20 rounded-xl overflow-hidden group hover:border-blue-500/40 transition-all shadow-lg hover:shadow-blue-500/10">
+                  <div className="h-48 bg-gradient-to-br from-blue-900/30 to-blue-700/20 flex items-center justify-center">
+                    <Gamepad2 className="w-24 h-24 text-blue-400 opacity-75 group-hover:scale-110 transition-transform duration-300" />
                   </div>
-                  <a
-                    href="/editor/demo"
-                    className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium group-hover:translate-x-1 transition-transform"
-                  >
-                    Try Game Editor <ArrowRight className="w-4 h-4" />
-                  </a>
+                  <div className="p-8">
+                    <h3 className="text-2xl font-bold text-white mb-4">3D Game Creation</h3>
+                    <p className="text-gray-300 mb-6">
+                      Design immersive 3D games with intuitive tools. Place objects, create
+                      interactions, and share your game with the world.
+                    </p>
+                    <div className="flex flex-wrap gap-3 mb-6">
+                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
+                        Interactive Objects
+                      </span>
+                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
+                        Physics
+                      </span>
+                      <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full">
+                        Multiplayer
+                      </span>
+                    </div>
+                    <a
+                      href="/editor/demo"
+                      className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium group-hover:translate-x-1 transition-transform"
+                    >
+                      Try Game Editor <ArrowRight className="w-4 h-4" />
+                    </a>
+                  </div>
                 </div>
-              </div>
+              </Link>
 
               {/* Art Gallery Card */}
-              <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-purple-500/20 rounded-xl overflow-hidden group hover:border-purple-500/40 transition-all shadow-lg hover:shadow-purple-500/10">
-                <div className="h-48 bg-gradient-to-br from-purple-900/30 to-purple-700/20 flex items-center justify-center">
-                  <Paintbrush className="w-24 h-24 text-purple-400 opacity-75 group-hover:scale-110 transition-transform duration-300" />
-                </div>
-                <div className="p-8">
-                  <h3 className="text-2xl font-bold text-white mb-4">3D Art Gallery</h3>
-                  <p className="text-gray-300 mb-6">
-                    Create stunning virtual art galleries to showcase your artwork in an immersive
-                    3D environment that visitors can explore.
-                  </p>
-                  <div className="flex flex-wrap gap-3 mb-6">
-                    <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
-                      Custom Layouts
-                    </span>
-                    <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
-                      Image Upload
-                    </span>
-                    <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
-                      Virtual Tours
-                    </span>
+              <Link to="/gallery/demo">
+                <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-purple-500/20 rounded-xl overflow-hidden group hover:border-purple-500/40 transition-all shadow-lg hover:shadow-purple-500/10">
+                  <div className="h-48 bg-gradient-to-br from-purple-900/30 to-purple-700/20 flex items-center justify-center">
+                    <Paintbrush className="w-24 h-24 text-purple-400 opacity-75 group-hover:scale-110 transition-transform duration-300" />
                   </div>
-                  <a
-                    href="/gallery/demo"
-                    className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 font-medium group-hover:translate-x-1 transition-transform"
-                  >
-                    Try Gallery Editor <ArrowRight className="w-4 h-4" />
-                  </a>
+                  <div className="p-8">
+                    <h3 className="text-2xl font-bold text-white mb-4">3D Art Gallery</h3>
+                    <p className="text-gray-300 mb-6">
+                      Create stunning virtual art galleries to showcase your artwork in an immersive
+                      3D environment that visitors can explore.
+                    </p>
+                    <div className="flex flex-wrap gap-3 mb-6">
+                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
+                        Custom Layouts
+                      </span>
+                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
+                        Image Upload
+                      </span>
+                      <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full">
+                        Virtual Tours
+                      </span>
+                    </div>
+                    <a
+                      href="/gallery/demo"
+                      className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 font-medium group-hover:translate-x-1 transition-transform"
+                    >
+                      Try Gallery Editor <ArrowRight className="w-4 h-4" />
+                    </a>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
         </section>

@@ -1,13 +1,15 @@
-import { LogOut } from "lucide-react";
+import { useState } from "react";
+import { LogOut, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { pb } from "../../lib/pocketbase";
 import { useAuthStore } from "../../stores/authStore";
-import { GoogleSignIn } from "../auth/GoogleSignIn";
+import { LoginModal } from "../auth/LoginModal";
 
 export function Header() {
   const location = useLocation();
   const { user, logout } = useAuthStore();
   const isAuthenticated = pb.authStore.isValid;
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const handleLogout = () => {
     pb.authStore.clear();
@@ -78,18 +80,32 @@ export function Header() {
             <div className="flex items-center">
               {isAuthenticated && user ? (
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-white mr-2">{user.name}</span>
+                  <span className="text-sm text-white mr-2">{user.username || user.name}</span>
                   <button
                     onClick={handleLogout}
-                    className="text-sm text-red-400 hover:text-red-300"
+                    className="text-sm text-red-400 hover:text-red-300 flex items-center gap-1"
+                    title="Logout"
                   >
                     <LogOut className="w-4 h-4" />
                   </button>
                 </div>
               ) : (
-                <GoogleSignIn />
+                <button
+                  onClick={() => setIsLoginModalOpen(true)}
+                  className="flex items-center gap-2 px-4 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-full shadow-md hover:shadow-purple-500/20 transition-all"
+                >
+                  <User className="w-4 h-4" />
+                  Sign In
+                </button>
               )}
             </div>
+
+            {/* Login Modal */}
+            <LoginModal
+              isOpen={isLoginModalOpen}
+              onClose={() => setIsLoginModalOpen(false)}
+              message="Sign in to access your account"
+            />
           </div>
         </div>
       </div>
