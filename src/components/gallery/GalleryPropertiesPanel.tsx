@@ -190,18 +190,7 @@ export function GalleryPropertiesPanel() {
                 <>
                   {/* Image Library Section - Now First */}
 
-                  {/* Scene Hierarchy */}
-                  <div className="bg-slate-800/80 border border-slate-700/50 -sm overflow-hidden">
-                    <div className="p-3 pb-2 border-b border-slate-700/30 mb-1">
-                      <div className="flex items-center">
-                        <List className="w-4 h-4 mr-2 text-blue-400" />
-                        <h3 className="text-sm font-medium bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
-                          Scene Hierarchy
-                        </h3>
-                      </div>
-                    </div>
-                    <ObjectHierarchyPanel />
-                  </div>
+                  <ObjectHierarchyPanel />
                 </>
               )}
               {activeTab === "transform" &&

@@ -4,6 +4,7 @@ import { useEditorStore } from "../../../stores/editorStore";
 import { Input } from "../../UI/input";
 import { Select } from "../../UI/select";
 import { Textarea } from "../../UI";
+import { GameObject } from "../../../types";
 
 export function ObjectSettingsPanel() {
   const [expanded, setExpanded] = useState(true);
@@ -29,7 +30,7 @@ export function ObjectSettingsPanel() {
 
   const handleTypeChange = (value: string) => {
     if (currentSceneId && selectedObjectId) {
-      updateObject(currentSceneId, selectedObjectId, { type: value });
+      updateObject(currentSceneId, selectedObjectId, { type: value as GameObject["type"] });
       showSaveAnimation();
     }
   };
@@ -112,6 +113,8 @@ export function ObjectSettingsPanel() {
                   <option value="item">Item</option>
                   <option value="portal">Portal</option>
                   <option value="trigger">Trigger</option>
+                  <option value="painting">Painting</option>
+                  <option value="boxCollider">Box Collider</option>
                 </Select>
               </div>
             </div>

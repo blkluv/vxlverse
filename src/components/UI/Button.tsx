@@ -34,18 +34,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles = `inline-flex items-center justify-center gap-2  font-medium transition-all duration-200 ${sizes[size]}`;
 
     const variants = {
-      primary: `bg-gradient-to-r from-blue-500 via-violet-500 to-purple-500 text-white hover:brightness-110 
-                active:brightness-90 disabled:opacity-50 disabled:hover:brightness-100 
-                shadow-[0_0_0_1px_rgba(255,255,255,0.1)] backdrop-blur-sm`,
-      secondary: `bg-gradient-to-br from-gray-900/90 via-gray-800/90 to-gray-900/90 text-white hover:bg-white/10 
-                  active:bg-white/5 disabled:opacity-50 disabled:hover:bg-white/5 
-                  shadow-[0_0_0_1px_rgba(255,255,255,0.1)] backdrop-blur-sm border border-white/10`,
-      outline: `border border-white/10 text-gray-300 hover:bg-white/5 hover:text-white 
-                active:bg-transparent disabled:opacity-50 disabled:hover:bg-transparent 
+      primary: `bg-blue-500 text-white hover:bg-blue-600 
+                active:bg-blue-700 disabled:opacity-50 
+                shadow-sm`,
+      secondary: `bg-gray-700 text-white hover:bg-gray-800 
+                  active:bg-gray-900 disabled:opacity-50 
+                  border border-gray-600`,
+      outline: `border border-gray-600 text-white hover:bg-gray-800/20 
+                active:bg-transparent disabled:opacity-50 
                 backdrop-blur-sm`,
-      ghost: `text-gray-300 hover:bg-white/5 hover:text-white 
-                active:bg-transparent disabled:opacity-50 disabled:hover:bg-transparent 
-                backdrop-blur-sm`,
+      ghost: `text-white hover:bg-gray-800/20 
+                active:bg-transparent disabled:opacity-50`,
     };
 
     const content = (

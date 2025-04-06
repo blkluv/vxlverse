@@ -5,6 +5,7 @@ import { useThree } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
 import { useEditorStore } from "../../stores/editorStore";
 import { useSound } from "../../hooks/useSound";
+import { GameObject } from "../../types";
 
 /**
  * Custom hook to load and clone a GLTF model.
@@ -39,7 +40,7 @@ interface EditorGameObjectProps {
   rotation: THREE.Euler;
   scale: THREE.Vector3;
   isSelected: boolean;
-  type?: "prop" | "npc" | "enemy" | "item" | "portal" | "trigger";
+  type?: GameObject["type"];
   thumbnail?: string;
   onClick?: (e: THREE.Event) => void;
   transformMode?: "translate" | "rotate" | "scale";
@@ -209,9 +210,9 @@ export function EditorGameObject({
         <primitive object={scene} />
       </group>
 
-      {isSelected && (
+      {isSelected && objectRef.current && (
         <TransformControls
-          object={objectRef}
+          object={objectRef.current}
           onObjectChange={handleObjectChange}
           mode={transformMode}
           size={0.7}

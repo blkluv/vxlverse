@@ -12,6 +12,7 @@ import * as THREE from "three";
 import { PhysicsArea } from "./PhysicsArea";
 import { useThree } from "@react-three/fiber";
 import { useEditorStore } from "../../stores/editorStore";
+import { EditorBoxCollider } from "../editor/EditorBoxCollider";
 
 interface EditorSceneProps {
   showGrid?: boolean;
@@ -30,10 +31,29 @@ export function ArtEditor({
   const [, setIsDragging] = useState(false);
   const { scenes, currentSceneId, updateObject, setSelectedObject, selectedObjectId, brushActive } =
     useEditorStore();
+  const setSelectedObjectId = useEditorStore((state) => state.setSelectedObject);
 
   // References
   const selectedPaintingRef = useRef<THREE.Group | null>(null);
-  const galleryModelRef = useRef<THREE.Group | null>(null);
+  // Handle object selection and transformation
+  const handleObjectClick = (objectId: string) => {
+    setSelectedObjectId(objectId);
+  };
+
+  const handleObjectTransform = (
+    objectId: string,
+    position: THREE.Vector3,
+    rotation: THREE.Euler,
+    scale: THREE.Vector3
+  ) => {
+    if (currentSceneId) {
+      updateObject(currentSceneId, objectId, {
+        position,
+        rotation,
+        scale,
+      });
+    }
+  };
   if (!scenes || !currentSceneId) return null;
 
   const objects = scenes.find((scene) => scene.id === currentSceneId)?.objects;
@@ -71,24 +91,44 @@ export function ArtEditor({
       <ArtGalleryModel />
 
       {/* Render all paintings from the store */}
-      {objects?.map((painting) => (
-        <Painting
-          key={painting.id}
-          imageUrl={painting.imageUrl ?? ""}
-          position={painting.position}
-          rotation={painting.rotation}
-          scale={painting.scale}
-          width={1}
-          height={1}
-          isSelected={painting.id === selectedObjectId}
-          onClick={() => setSelectedObject(painting.id)}
-          ref={
-            painting.id === selectedObjectId
-              ? (selectedPaintingRef as React.RefObject<THREE.Group>)
-              : undefined
-          }
-        />
-      ))}
+      {objects
+        ?.filter((obj) => obj.type === "painting")
+        ?.map((painting) => (
+          <Painting
+            key={painting.id}
+            imageUrl={painting.imageUrl ?? ""}
+            position={painting.position}
+            rotation={painting.rotation}
+            scale={painting.scale}
+            width={1}
+            height={1}
+            isSelected={painting.id === selectedObjectId}
+            onClick={() => setSelectedObject(painting.id)}
+            ref={
+              painting.id === selectedObjectId
+                ? (selectedPaintingRef as React.RefObject<THREE.Group>)
+                : undefined
+            }
+          />
+        ))}
+
+      {/* Box Colliders */}
+      {objects
+        ?.filter((object) => object.type === "boxCollider")
+        ?.map((boxCollider) => (
+          <EditorBoxCollider
+            id={boxCollider.id}
+            position={boxCollider.position}
+            rotation={boxCollider.rotation}
+            scale={boxCollider.scale}
+            isSelected={boxCollider.id === selectedObjectId}
+            transformMode={transformMode}
+            onClick={() => handleObjectClick(boxCollider.id)}
+            onTransform={(position, rotation, scale) =>
+              handleObjectTransform(boxCollider.id, position, rotation, scale)
+            }
+          />
+        ))}
 
       {/* Transform Controls */}
       {!brushActive && selectedObjectId && selectedPaintingRef.current && (

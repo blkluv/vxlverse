@@ -65,9 +65,11 @@ export function GameScene({ sceneData }: SceneProps) {
           ))}
         </Suspense>
         {/* Scene Objects */}
-        {sceneData.objects.map((object) => (
-          <GameObject key={object.id} {...object} />
-        ))}
+        {sceneData.objects
+          .filter((object) => object.type !== "boxCollider")
+          .map((object) => (
+            <GameObject key={object.id} {...object} />
+          ))}
       </Physics>
     </>
   );
